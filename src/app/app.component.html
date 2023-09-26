@@ -1,0 +1,256 @@
+<router-outlet></router-outlet>
+
+<!-- image upload progress bar --> 
+<div class="progress-bar-position col-3" *ngIf="_sharedService.showUploadPercentage == true">
+  <progress-bar [progress]="_sharedService.uploadPercentage" [color]="'#488aff'"> </progress-bar>
+</div>
+
+<simple-notifications [options]="options"></simple-notifications>
+<div *ngIf="_sharedService.loading == true">
+  <div class="centerspinner">
+    <div class="spinnerposition">
+      <app-loader></app-loader>
+    </div>
+  </div>
+</div>
+
+<button type="button" id="processNotificationBtn" class="d-none"
+  (click)="openProcessModal(processNotification)"></button>
+
+<button type="button" id="taskNotificationBtn" class="d-none" (click)="openTaskModal(taskNotification)"></button>
+
+
+<ng-template #processNotification let-c="close" let-d="dismiss">
+  <audio id="alertAudioSup" class="d-none" controls autoplay loop>
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/ogg">
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header process-alert">
+      <h5 class="modal-title text-center">New Car Assigned</h5>
+      <button type="button" class="close" (click)="closeProcessModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body  px-0 py-0">
+      <div class="fluid-container modal_container ">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-3">
+            <table class="table primary-font page-animation">
+              <thead class="text-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Notification</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr scope="row" *ngFor="let item of _sharedService.notifications; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.TextData}}</td>
+                  <td>
+                    <ng-container
+                      *ngIf="_sharedService.logged_user_role_id != 4 && _sharedService.logged_user_role_id != 5">
+                      <span>
+                        <button class="a-button btn btn-primary btn-round btn-simple px-3 py-2"
+                          (click)="acceptJP(16, item, item.IsNew, item.NotificationID)">Accept</button>
+                      </span>
+                      <span>
+                        <button class="a-button btn btn-primary btn-round btn-simple px-3 py-2"
+                          (click)="acceptJP(18, item, item.IsNew, item.NotificationID); closeProcessModal()">
+                          Reject</button>
+                      </span>
+                    </ng-container>
+                    
+                    
+                    <ng-container
+                      *ngIf="_sharedService.logged_user_role_id == 4 || _sharedService.logged_user_role_id == 5">
+                      <button class="a-button btn btn-primary btn-round btn-simple col-6"
+                        (click)="closeProcessModal(); refreshJobList();">
+                        OK
+                      </button>
+                    </ng-container>
+
+                    <!-- <i class="far fa-edit mr-2" title="Edit" (click)="openEdit(item)"></i>
+                    <i class="far fa-trash-alt" title="Delete" (click)="openDeleteConcern(warningDelete,item)"></i> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #taskNotification let-c="close" let-d="dismiss">
+  <audio id="alertAudioTask" class="d-none" controls autoplay loop>
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/ogg">
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header process-alert">
+      <h5 class="modal-title text-center">New Car Assigned</h5>
+      <button type="button" class="close" (click)="closeTaskModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container ">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-3">
+            <table class="table primary-font page-animation">
+              <thead class="text-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Notification</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr scope="row" *ngFor="let item of _sharedService.notifications; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.TextData}}</td>
+                  <td>
+                    <span>
+                      <span>
+                        <button class="a-button btn btn-primary btn-round btn-simple px-3 py-2"
+                          (click)="taskStatusID = 16; acceptAllTasks(taskStatusID, item.JobCardID); closeTaskModal();">
+                          Accept
+                        </button>
+                      </span>
+                      <button class="a-button btn btn-primary btn-round btn-simple px-3 py-2"
+                        (click)="taskStatusID = 18; acceptAllTasks(taskStatusID, item.JobCardID); closeTaskModal()">
+                        Reject
+                      </button>
+                    </span>
+
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+            <!-- <h5 class="text-center col-12 heading-20 bold text-primary-0 m-b-10">
+              {{_sharedService.notification.TextData}}
+            </h5>
+            <ng-container *ngIf="_sharedService.logged_user_role_id != 4 && _sharedService.logged_user_role_id != 5">
+              <div class="col-6 float-left text-left ">
+                <button class="a-button btn btn-primary btn-round btn-simple col-6"
+                  (click)="taskStatusID = 18; acceptAllTasks(taskStatusID); closeTaskModal()">
+                  Reject</button>
+              </div>
+              <div class="col-6 float-left text-right">
+                <button class="a-button btn btn-primary btn-round btn-simple col-6"
+                  (click)="taskStatusID = 16; acceptAllTasks(taskStatusID); closeTaskModal();">Accept</button>
+              </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<button type="button" id="processReminderBtn" class="d-none"
+  (click)="openProcessReminderModal(processReminder)"></button>
+
+<ng-template #processReminder let-c="close" let-d="dismiss">
+  <!-- <audio id="alertAudioSup" class="d-none" controls autoplay loop>
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/ogg">
+    <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> -->
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header process-alert">
+      <h5 class="modal-title text-center">Notification</h5>
+      <button type="button" class="close" (click)="closeProcessReminderModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body  px-0 py-0">
+      <div class="fluid-container modal_container ">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-3">
+            <table class="table primary-font page-animation">
+              <thead class="text-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Notification</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr scope="row" *ngFor="let item of _sharedService.notifications; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.TextData}}</td>
+
+                </tr>
+              </tbody>
+            </table>
+            <ng-container
+              *ngIf="_sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 4 || _sharedService.logged_user_role_id == 5">
+              <div class="col-12 text-center">
+                <button class="a-button btn btn-primary btn-round btn-simple col-4"
+                  (click)="closeProcessReminderModal();">
+                  OK
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #queueReminderModal let-c="close" let-d="dismiss">
+
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header process-alert">
+      <h5 class="modal-title text-center">Queue Reminder</h5>
+      <button type="button" class="close" (click)="closeQueueReminderModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body  px-0 py-0">
+      <div class="fluid-container modal_container ">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-3">
+            <table class="table primary-font page-animation">
+              <thead class="text-center">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Plate Number</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col">Vehicle</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr scope="row" *ngFor="let item of appointments; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>{{item.PlateNumber}}</td>
+                  <td>{{item.CustomerMobile}}</td>
+                  <td> <img class="vehicleImage"
+                      [src]="item.VehicleFront ? _sharedService.baseUrl + item.VehicleFront :  _sharedService.default_img">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-12 text-center">
+              <button class="a-button btn btn-primary btn-round btn-simple col-4" (click)="closeQueueReminderModal();">
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,357 @@
+@import "variables";
+
+.list-card {
+  margin-bottom: 0px !important;
+  border-radius: 0;
+  // box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+  display: flex;
+}
+
+.navbar-brand {
+  color: white !important;
+}
+
+.card-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.information {
+  border-right: 1px solid lightgray;
+}
+
+// side scroll bar
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: none;
+  // background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: lightgray;
+  // background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+// job process icon size
+.icon-size {
+  transform: scale(1);
+}
+
+//tasks table padding
+table td,
+table th {
+  padding: 4px !important;
+}
+
+.card-body-font {
+  font-size: 13px;
+}
+
+tr.hovered:hover td {
+  background: $primary-font !important;
+  color: white !important;
+}
+tr.hovered:hover i {
+  color: white !important;
+  transform: none;
+}
+
+// collapsible card design
+.collapse-tabset {
+  position: absolute;
+  margin-top: -5px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: $white-color;
+}
+.collapse-margin-top {
+  margin-top: -18px;
+}
+
+.nav-bar-border {
+  border-top: 2px solid $primary-color;
+}
+
+.progress-abbr {
+  display: none;
+}
+
+// technician accept reject buttons
+.btn-accept {
+  background-color: $white-color;
+  color: #7fc6a6;
+  border: 1px solid #7fc6a6;
+  // padding: 0px 7px 2px 7px !important;
+}
+
+.btn-reject {
+  background-color: $white-color;
+  color: $hover-color;
+  border: 1px solid $hover-color;
+  // padding: 0px 7px 2px 7px !important;
+}
+
+.reject-btn {
+  margin-left: 2px;
+}
+
+.nav-tabs > .nav-item > .nav-link.active {
+  border: 0px !important;
+}
+.nav-tabs > .nav-item > .nav-link.active {
+  /* font-size: 14px; */
+  // color: ;
+  border-radius: 0px !important;
+  background: #ffb093 !important;
+  // border-bottom: 3px solid #f96332 !important;
+  padding: 6px 20px 6px 20px !important;
+}
+.jl-tabset > .nav-tabs > .nav-item > .nav-link {
+  font-size: 14px;
+  padding: 5px 50px !important;
+  font-weight: 600;
+  color: #686c74 !important;
+}
+
+.plate-Number {
+  border-radius: 8px;
+  background-color: $secondary-color;
+  color: $dark-font;
+  font-weight: 600;
+  padding: 1px 8px;
+}
+
+.normal-font {
+  font-size: 14px !important;
+}
+
+.sup {
+  border: 1px solid $primary-dark-font;
+  color: $primary-dark-font;
+  padding: 0px 2px;
+  border-radius: 5px;
+  background: $white-color !important;
+}
+
+input:checked + .radio-tabset .sup {
+  border: 1px solid $hover-color;
+  color: $hover-color !important;
+}
+.radio-tabset {
+  color: $primary-font !important;
+}
+.radio-tabset:hover .sup {
+  color: $hover-color;
+  border: 1px solid $hover-color;
+}
+
+.radio-tabset:hover {
+  color: $hover-color !important;
+}
+
+.jl-main-tabset input:checked + .radio-tabset {
+  border-bottom: 3px solid $hover-color !important;
+}
+
+//process scrollbar
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+// ::-webkit-scrollbar-thumb {
+//   background: $input-field-color;
+// }
+
+.card-number {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px 4px;
+  background: coral;
+  color: white;
+  border-bottom-right-radius: 35% 100%;
+  border-top-right-radius: 0% 100%;
+}
+
+.divider {
+  width: 96%;
+}
+
+.current-process {
+  box-shadow: 0px -13px 11px -3px $hover-color;
+  color: $hover-color;
+}
+.completed-process {
+  border-bottom: 5px solid $hover-color !important;
+}
+
+//assigntask select
+
+.ng-select-disabled {
+  background: lightgray !important;
+}
+
+//image of results
+.result-img {
+  width: 231px;
+  height: 191px;
+}
+
+.pn-ProductNav_Contents {
+  float: none !important;
+}
+
+.nav-tabset {
+  border-radius: 6px;
+}
+
+.jl-main-tabset {
+  justify-content: left;
+  display: flex;
+}
+
+.radio-tabset {
+  color: $primary-dark-font !important;
+}
+
+.dropdown-scale {
+  transform: scale(0.8) !important;
+}
+
+.font-8 {
+  font-size: 8px;
+}
+
+.gallery-img-queue {
+  height: 115px;
+  border-radius: 0%;
+  width: 100%;
+}
+
+.img-fluid {
+  height: 400px !important;
+}
+
+.editPadding {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.createPadding {
+  padding-left: 22px;
+  padding-right: 22px;
+}
+.deletePadding {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.imageSize {
+  width: 175px;
+  height: 125px;
+}
+@media only screen and (max-width: 992px) {
+  .t-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table .th1 {
+    padding: 10px 20px !important;
+  }
+  table .td1 {
+    padding: 10px 20px !important;
+  }
+}
+.contract-number {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 0px 4px;
+  background: coral;
+  color: white;
+  border-bottom-left-radius: 0% 100%;
+  border-top-left-radius: 0% 100%;
+}
+
+.serial-number {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+
+  padding: 0px 4px;
+  background: coral;
+  color: white;
+  border-bottom-left-radius: 0% 100%;
+  border-top-left-radius: 0% 100%;
+}
+.queuem {
+  padding-top: 12px !important;
+}
+@media screen and(max-width:1050px) {
+  .list-card-header {
+    padding: 12px 0px 12px 0px !important;
+  }
+  .ipad {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+  .col-1,
+  .col-2,
+  .col-3,
+  .col-4,
+  .col-5,
+  .col-6,
+  .col-7,
+  .col-8,
+  .col-9,
+  .col-10,
+  .col-11,
+  .col-12,
+  .col {
+    padding-right: 0px;
+    padding-left: 1px;
+  }
+  .pn-ProductNav_LinkOne {
+    padding: 0 0px !important;
+  }
+  .radio-tabset {
+    padding: 2px 5px 7px 0px;
+    margin: 0px 6px 0px 5px;
+  }
+
+  .input:checked + .radio-tabset {
+    font-size: 13px;
+
+    padding: 0px 10px 15px 9px;
+  }
+
+  input:checked + .radio-tabset {
+    font-size: 13px;
+    padding: 0px 10px 15px 9px;
+  }
+  .cardcreateDate {
+    font-size: 1.4vw;
+  }
+  .editPadding {
+    padding-left: 31px;
+    padding-right: 30px;
+  }
+  .radio-tabset[_ngcontent-vdv-c8] {
+    padding: 2px 5px 7px 0px;
+    margin: 6px 6px 8px 5px;
+    padding: 15px 10px 15px 10px;
+  }
+}

@@ -1,0 +1,154 @@
+<div class="row justify-content-center h-100 align-items-center page-animation">
+    <div class="col-11 mt-3 card outer-card-shadow">
+        <div class="row">
+            <div class="col-lg-3 col-12 col-sm-12 col-md-12 mb-3 align-self-center">
+                <div class="our-team d-flex flex-column text-left">
+                    <div class="single-vendor-picture text-center mt-3">
+                        <img class="img-fluid"
+                            src="{{vendorObj.LogoURL ? _sharedService.baseUrl + vendorObj.LogoURL : _sharedService.default_img}}">
+
+                        <h5 class="primary-color mt-3" title="Vendor Name">{{vendorObj.VendorName}}</h5>
+                    </div>
+                    <div class="row border-top border-bottom justify-content-center py-2">
+                        <div class="form-check col-lg-8 col-md-8 col-sm-8 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellNew"
+                                    [(ngModel)]="vendorObj.IsSellNew" disabled>
+                                <span class="form-check-sign vendor-checkbox">New Parts</span>
+                            </label>
+                        </div>
+
+                        <div class="form-check col-lg-8 col-md-8 col-sm-8 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellUsed"
+                                    [(ngModel)]="vendorObj.IsSellUsed" disabled>
+                                <span class="form-check-sign vendor-checkbox">Old Parts</span>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-9 col-12 col-sm-12 col-md-12 my-3 border-left">
+
+                <div class="row w-100 mx-0">
+                    <hr class="w-100">
+                    <h4 class="card-sub-heading">Vendor Information</h4>
+                </div>
+                <ng-container>
+                    <div class="row card">
+                        <div class="row card-body">
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-4 px-0 pb-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Vendor Name</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box custom-font primary-font my-0" title="">
+                                                {{vendorObj.CPFirstName}} {{vendorObj.CPLastName}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 px-0 pb-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Position</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box custom-font primary-font my-0" title="">
+                                                {{vendorObj.TypeNameEnglish}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 px-0 pb-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Email</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box custom-font primary-font my-0" title="" *ngIf="vendorObj.CPEmail != undefined ; else elseHyphen">
+                                                {{vendorObj.CPEmail}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 px-0 pb-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Phone</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box custom-font primary-font my-0" title="" *ngIf="vendorObj.CPPhone != undefined ; else elseHyphen">
+                                                {{vendorObj.CPPhone}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="row w-100 mx-0">
+                        <hr class="w-100">
+                        <h4 class="card-sub-heading">Vendor Information</h4>
+                    </div>
+
+                    <div class="row border-bottom pb-3">
+                          
+                        <div class="col-4 px-0">
+                            <div class="primary-font ml-3 smaller-font">
+                                <span>Country</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="part-detail-box custom-font primary-font my-0" title="">
+                                    {{vendorObj.CountryName}}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-4 px-0">
+                            <div class="primary-font ml-3 smaller-font">
+                                <span>City</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="part-detail-box custom-font primary-font my-0" title="">
+                                    {{vendorObj.CityName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row border-bottom mt-3">
+                        <div class="col-4 px-0 py-2">
+                            <div class="primary-font ml-3 smaller-font">
+                                <span>Address 1</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="part-detail-box custom-font primary-font my-0" title=""
+                                    *ngIf="vendorObj.Address1 != undefined ; else elseHyphen">
+                                    {{vendorObj.Address1}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-4 px-0">
+                            <div class="primary-font ml-3 smaller-font">
+                                <span>Address 2</span>
+                            </div>
+                            <div class="ml-3">
+                                <p class="part-detail-box custom-font primary-font my-0" title=""
+                                    *ngIf="vendorObj.Address2 != undefined ; else elseHyphen">
+                                    {{vendorObj.Address2}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </ng-container>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #elseHyphen>
+    <span class="px-1">-</span>
+</ng-template>

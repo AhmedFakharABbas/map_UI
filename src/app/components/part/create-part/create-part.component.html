@@ -1,0 +1,1874 @@
+<div class="row justify-content-center align-items-center page-animation">
+  <form
+    #partForm="ngForm"
+    (ngSubmit)="
+      partForm.valid
+        ? partInfoObj.AutomotivePart.AutomotivePartID == undefined
+          ? onSavePartInfo()
+          : onUpdatePart()
+        : ''
+    "
+    class="col-lg-11 col-11"
+    id="append"
+  >
+    <div class="row w-100 mt-3">
+      <hr class="w-100" />
+      <h4 class="sub-heading">Create Part</h4>
+    </div>
+
+    <ngb-tabset class="sub-tabset" (tabChange)="cPage = 1">
+      <ngb-tab title="Part Information">
+        <ng-template ngbTabContent>
+          <div class="row m-0 justify-content-around">
+            <div class="row w-100 mx-0 mt-4">
+              <hr class="w-100" />
+              <h4 class="sub-heading">Part Information</h4>
+            </div>
+            <div class="card pt-3">
+              <div class="row justify-content-center mx-0">
+                <div class="col-12 d-flex justify-content-center mb-4 default">
+                  <div class="our-team col-md-5 col-sm-5 mt-3">
+                    <!-- <div class="picture"> -->
+                    <!-- <img class="img-fluid" src="https://picsum.photos/900/900?random&t=${Math.random()}`"> -->
+                    <label class="hoverable">
+                      <img
+                        class="upload-image"
+                        [src]="
+                          partInfoObj.AutomotivePart.LogoImageURL
+                            ? _sharedService.baseUrl +
+                              partInfoObj.AutomotivePart.LogoImageURL
+                            : _sharedService.default_img
+                        "
+                      />
+
+                      <input
+                        type="file"
+                        class="file-choose"
+                        id="files"
+                        accept="image/jpeg,image/png"
+                        (change)="uploadImage($event)"
+                      />
+                      <div class="hover-text" for="files">
+                        Choose file
+                        <!-- <h4 class="success-message" *ngIf="url"> Uploaded Successfully </h4> -->
+                      </div>
+                      <div class="background"></div>
+                    </label>
+                    <!-- </div> -->
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Main Category"
+                    name="maincategory"
+                    appendTo="#append"
+                    [addTag]="true"
+                    [(ngModel)]="partInfoObj.AutomotivePart.MainCategoryID"
+                    #maincategory="ngModel"
+                    (change)="resetFieldsMain()"
+                    required
+                  >
+                    <ng-option
+                      *ngFor="let item of _meta.MainCategories"
+                      [value]="item.MainCategoryID"
+                    >
+                      {{ item.MainCategoryNameArabic }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || maincategory.touched) &&
+                        maincategory.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Sub Category"
+                    name="subcategory"
+                    appendTo="#append"
+                    [addTag]="true"
+                    [(ngModel)]="partInfoObj.AutomotivePart.SubCategoryID"
+                    #subcategory="ngModel"
+                    required
+                  >
+                    <ng-option
+                      *ngFor="
+                        let item of _meta.SubCategories
+                          | filter
+                            : partInfoObj.AutomotivePart.MainCategoryID
+                            : 'MainCategoryID'
+                      "
+                      [value]="item.SubCategoryID"
+                      >{{ item.SubCategoryNameArabic }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || subcategory.touched) &&
+                        subcategory.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Part"
+                    name="part"
+                    appendTo="#append"
+                    [addTag]="true"
+                    [(ngModel)]="partInfoObj.AutomotivePart.MainPartID"
+                    #part="ngModel"
+                    required
+                  >
+                    <ng-option
+                      *ngFor="
+                        let item of _meta.MainParts
+                          | filter
+                            : partInfoObj.AutomotivePart.SubCategoryID
+                            : 'SubCategoryID'
+                      "
+                      [value]="item.MainPartID"
+                      >{{ item.ItemNameArabic }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || part.touched) &&
+                        subcategory.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <!-- <ng-select class="custom input-border-color" id="part_name"
+                                appendTo="body"
+                                name="part_name" [addTag]="true" #partID="ngModel" required
+                                [(ngModel)]="partInfoObj.AutomotivePart.MainPartID" [items]="partInfoObj.AutomotivePart.SubCategoryID"
+                                bindLabel="ItemNameArabic" bindValue="ItemNameArabic"
+                                [clearable] = "false" placeholder="Part">
+                                <ng-template ng-option-tmp let-item="item"
+                                    let-index="index">
+                                    {{item.ItemNameArabic}}
+                                </ng-template>
+                            </ng-select> -->
+
+                <!-- <div class="floating-label form-group col-lg-5 col-sm-6">
+                                    <ng-select class="custom" placeholder="Sub Sub Category" name="subSubCategory"
+                                        appendTo="#append" [addTag]="true"
+                                        [(ngModel)]="partInfoObj.AutomotivePart.SubSubCategoryID"
+                                        #subSubCategory="ngModel">
+                                        <ng-option
+                                            *ngFor="let item of _meta.SubSubCategories | filter: partInfoObj.AutomotivePart.SubCategoryID : 'SubCategoryID'"
+                                            [value]="item.SubSubCategoryID">{{item.SubSubCategoryNameArabic}}
+                                        </ng-option>
+                                    </ng-select>
+                                </div> -->
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="partNameEnglish"
+                    maxlength="15"
+                    [(ngModel)]="partInfoObj.AutomotivePart.PartNameEnglish"
+                    #partNameEnglish="ngModel"
+                    (keypress)="block_special_char($event)"
+
+                    required
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Part Name English</label>
+                  <div class="error-block text-danger">
+                    <small
+                      *ngIf="
+                        (partForm.submitted || partNameEnglish.touched) &&
+                        partNameEnglish.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Part Brand"
+                    name="partbrand"
+                    appendTo="#append"
+                    [addTag]="true"
+                    [(ngModel)]="partInfoObj.AutomotivePart.BrandID"
+                    #part_brand="ngModel"
+                    required
+                    (keypress)="_sharedService.CheckInputCharacters($event)"
+                  >
+                    <ng-option
+                      *ngFor="
+                        let item of _meta.PartBrand"
+                      [value]="item.PartBrandID"
+                      >{{ item.BrandName }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || part_brand.touched) &&
+                        part_brand.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="Item_Code"
+                    maxlength="15"
+                    [(ngModel)]="partInfoObj.AutomotivePart.ItemCode"
+                    #itemCode="ngModel"
+                    (keypress)="block_special_char($event)"
+                    (blur)="checkItemCode(partInfoObj.AutomotivePart.ItemCode)"
+                    required
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Item Code</label>
+                  <div class="error-block text-danger">
+                    <small
+                      *ngIf="
+                        (partForm.submitted || itemCode.touched) &&
+                        itemCode.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="DescriptionEnglish"
+                    (keypress)="_sharedService.CheckInputCharacters($event)"
+                    maxlength="2000"
+                    [(ngModel)]="partInfoObj.AutomotivePart.DescriptionEng"
+                    #DescriptionEnglish="ngModel"
+                    required
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Description English</label>
+                  <div class="error-block text-danger">
+                    <small
+                      *ngIf="
+                        (partForm.submitted || DescriptionEnglish.touched) &&
+                        DescriptionEnglish.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="DescriptionArabic"
+                    (keypress)="_sharedService.CheckInputCharacters($event)"
+                    maxlength="2000"
+                    [(ngModel)]="partInfoObj.AutomotivePart.DescriptionArabic"
+                    #DescriptionArabic="ngModel"
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Description Arabic</label>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="OEM"
+                    maxlength="20"
+                    [(ngModel)]="partInfoObj.AutomotivePart.OEMNumber"
+                    (keypress)="block_special_char($event)"
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">OEM Number</label>
+                  <!-- <div class="error-block text-danger">
+                                <small
+                                    *ngIf="(partForm.submitted || itemCode.touched) && itemCode.errors?.required">*Required</small>
+                            </div> -->
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Manufacturer"
+                    name="manufacturer"
+                    appendTo="#append"
+                    [(ngModel)]="partInfoObj.AutomotivePart.ManufacturerID"
+                    #manufacturer="ngModel"
+                    required
+                    (keypress)="_sharedService.CheckInputCharacters($event)"
+                  >
+                    <ng-option
+                      *ngFor="let item of _meta.PartManufacturer"
+                      [value]="item.PartManufacturerID"
+                      >{{ item.PartManufacturerName }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || manufacturer.touched) &&
+                        manufacturer.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <ng-select
+                    class="custom"
+                    placeholder="Origin"
+                    name="origin"
+                    appendTo="#append"
+                    [(ngModel)]="partInfoObj.AutomotivePart.OrigionID"
+                    #origin="ngModel"
+                    required
+                  >
+                    <ng-option
+                      *ngFor="
+                        let item of _sharedService._commonMeta.objectTypes
+                          | filter: 'PartBrandOrigin':'ObjectNameEnglish'
+                      "
+                      [value]="item.ObjectTypeID"
+                      >{{ item.TypeNameEnglish }}</ng-option
+                    >
+                  </ng-select>
+                  <div class="error-block-ng-select text-danger">
+                    <small
+                      class="text-danger ml-3"
+                      *ngIf="
+                        (partForm.submitted || origin.touched) &&
+                        origin.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="viscosity"
+                    maxlength="200"
+                    [(ngModel)]="partInfoObj.AutomotivePart.Viscosity"
+                    #viscosity="ngModel"
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Viscosity</label>
+                  <!-- <div class="error-block text-danger">
+                                        <small
+                                            *ngIf="(partForm.submitted || viscosity.touched) && viscosity.errors?.required">*Required</small>
+                                    </div> -->
+                </div>
+
+                <!-- <div class="floating-label form-group col-lg-5 col-sm-6">
+                                    <ng-select class="custom" placeholder="Viscosity" name="viscosity" appendTo="#append"
+                                        [(ngModel)]="partInfoObj.AutomotivePart.OrigionID" #viscosity="ngModel" required>
+                                        <ng-option
+                                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'PartBrandOrigin' : 'ObjectNameEnglish'"
+                                            [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                    </ng-select>
+                                    <div class="error-block-ng-select text-danger">
+                                        <small class="text-danger ml-3"
+                                            *ngIf="(partForm.submitted || viscosity.touched) && viscosity.errors?.required">*Required</small>
+                                    </div>
+                                </div> -->
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="unit_quantity"
+                    (keypress)="_sharedService.CheckInputCharacters($event)"
+                    maxlength="50"
+                    [(ngModel)]="partInfoObj.AutomotivePart.UnitQuantity"
+                    #unit_quantity="ngModel"
+                    required
+                    pattern="\d*"
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Unit Quantity</label>
+                  <div class="error-block text-danger">
+                    <small
+                      *ngIf="
+                        (partForm.submitted || unit_quantity.touched) &&
+                        unit_quantity.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <!-- <div class="floating-label form-group col-lg-5 col-sm-6">
+                                    <ng-select class="custom" placeholder="Unit Quantity" name="unit_quantity" appendTo="#append"
+                                        [(ngModel)]="partInfoObj.AutomotivePart.OrigionID" #unit_quantity="ngModel" required>
+                                        <ng-option
+                                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'PartBrandOrigin' : 'ObjectNameEnglish'"
+                                            [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                    </ng-select>
+                                    <div class="error-block-ng-select text-danger">
+                                        <small class="text-danger ml-3"
+                                            *ngIf="(partForm.submitted || unit_quantity.touched) && unit_quantity.errors?.required">*Required</small>
+                                    </div>
+                                </div> -->
+
+                <div
+                  class="form-group col-lg-5 col-md-7 col-sm-6 align-self-start"
+                >
+                  <div class="row col-12 mx-0 px-0">
+                    <div class="col-lg-6 col-md-4 col-sm-4 mt-2 pt-1 px-0">
+                      <p class="input-label">Condition Type</p>
+                    </div>
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3 mt-2">
+                                            
+                                        <div class="radio">
+                                            <input type="radio" name="basic-radio-1 form-check-input" class="" id="radio1" checked>
+                                            <label class="form-check-sign form-check-label" for="radio1">New</label>
+                                          </div>
+                                        </div> -->
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3 mt-2">
+                                          <div class="radio">
+                                            <input type="radio" name="basic-radio-1 form-check-input" id="radio2">
+                                            <label class="form-check-sign form-check-label" for="radio2">Used</label>
+                                          </div>
+                                        </div> -->
+
+                    <div class="form-check col-lg-3 col-md-4 col-sm-3">
+                     
+                      <div class="col-4 px-0 form-check form-check-radio mt-0">
+                        <label class="form-check-label mx-2">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="IsNew"
+                            id="IsNew"
+                            [checked]="partInfoObj.AutomotivePart.IsNew == true"
+                            (change)="partInfoObj.AutomotivePart.IsUsed = false; partInfoObj.AutomotivePart.IsNew = true"
+                          />
+                          <span
+                            class="form-check-sign primary-font"
+                            >New</span
+                          >
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-check col-lg-3 col-md-4 col-sm-3">
+                      
+                      <div class="col-4 px-0 form-check form-check-radio mt-0">
+                        <label class="form-check-label mx-2">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="IsUsed"
+                            id="IsUsed"
+                            [checked]="partInfoObj.AutomotivePart.IsUsed == true"
+                            (change)="partInfoObj.AutomotivePart.IsNew = false; partInfoObj.AutomotivePart.IsUsed = true;"
+                          />
+                          <span
+                            class="form-check-sign primary-font"
+                            >Used</span
+                          >
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row w-100 mx-0">
+              <hr class="w-100" />
+              <h4 class="sub-heading">Price Information</h4>
+            </div>
+
+            <div class="card pt-4">
+              <div class="col-12">
+                <div class="row px-5">
+                  <div class="floating-label form-group col-lg-3 col-sm-6">
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="purchase_price"
+                      maxlength="20"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      (change)="calcNetPrice()"
+                      [(ngModel)]="partInfoObj.AutomotivePart.PurchasePrice"
+                      #PurchasePrice="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Purchase Price</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || PurchasePrice.touched) &&
+                          PurchasePrice.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="floating-label form-group col-lg-3 col-sm-6">
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="selling_price"
+                      maxlength="20"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      (change)="calcNetPrice()"
+                      [(ngModel)]="partInfoObj.AutomotivePart.SellingPrice"
+                      #SellingPrice="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Selling Price</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || SellingPrice.touched) &&
+                          SellingPrice.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="floating-label form-group col-lg-3 col-sm-6">
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="tax"
+                      maxlength="5"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      (change)="calcNetPrice()"
+                      [(ngModel)]="partInfoObj.AutomotivePart.Tax"
+                      #Tax="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Tax %</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || Tax.touched) &&
+                          Tax.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="floating-label form-group col-lg-3 col-sm-6">
+                    <input
+                      type="text"
+                      maxlength="20"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="net-price"
+                      [(ngModel)]="partInfoObj.AutomotivePart.NetPrice"
+                      value="+partInfoObj.AutomotivePart.PurchasePrice + +partInfoObj.AutomotivePart.PurchasePrice * ((+partInfoObj.AutomotivePart.Tax)/100)"
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Net Price</label>
+                  </div>
+
+                  <div class="floating-label form-group col-lg-6 col-sm-6">
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="labor_cost"
+                      [maxlength]="20"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="partInfoObj.AutomotivePart.LaborCost"
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Labor Cost</label>
+                  </div>
+
+                  <!-- <div class="floating-label form-group col-lg-5 col-sm-6">
+                                    <input type="time" placeholder=" " class="floating-input form-control"
+                                        name="laborTime" [(ngModel)]="partInfoObj.AutomotivePart.LaborTime" />
+                                    <span class="highlight"></span>
+                                    <label class="input-label">Labor Time</label>
+                                </div> -->
+                  <!-- class="col-12 floating-label form-group col-sm-11 time-div floating-input form-control input-border-color mx-3" -->
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-6 col-sm-6
+                      floating-input
+                    "
+                  >
+                    <div class="input-group-append Country-code-prepend">
+                      <div class="custom custom-append">Time</div>
+                    </div>
+                    <div class="time">
+                      <input
+                        id="time"
+                        class="time-input ml-1"
+                        type="number"
+                        name="hour"
+                        min="0"
+                        max="99"
+                        placeholder="00"
+                        [(ngModel)]="partInfoObj.AutomotivePart.Hours"
+                      />
+                      <span class="align-self-center">:</span>
+                      <input
+                        id="time2"
+                        class="time-input"
+                        type="number"
+                        name="mins"
+                        min="0"
+                        max="59"
+                        placeholder="00"
+                        [(ngModel)]="partInfoObj.AutomotivePart.Minutes"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-lg-5 col-sm-6"></div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Vendor Information">
+        <ng-template ngbTabContent>
+          <div class="row w-100 mt-3 mx-0">
+            <hr class="w-100" />
+            <h5 class="sub-heading">Part Vendors</h5>
+            <button
+              type="button"
+              class="btn btn-primary btn-round sub-heading-btn"
+              (click)="openAddVendorModel(addVendor)"
+            >
+              <i class="fas fa-plus" title="Add Part prices"></i>
+            </button>
+          </div>
+
+          <div class="row card  text-nowrap responsive-table">
+            <table class="table primary-font mx-3 text-left">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Vendor Name</th>
+                  <th scope="col">Part Price</th>
+                  <th scope="col">Purchase Price</th>
+                  <!-- <th scope="col">Condition</th> -->
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let item of partInfoObj.VendorPartPrice
+                      | slice: (cPage - 1) * 10:(cPage - 1) * 10 + 10;
+                    let i = index
+                  "
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.VendorName }}</td>
+                  <td>{{ item.PartPrice }}</td>
+                  <td>{{ item.PurchasePrice }}</td>
+                  <!-- <td><span *ngIf="item.IsNew == true">New</span> <span *ngIf="item.IsUsed == true">Used</span></td> -->
+                  <td>
+                    <i
+                      class="far fa-edit mr-2"
+                      title="Edit"
+                      (click)="editVendorModel(addVendor, item)"
+                    ></i>
+                    <i
+                      class="far fa-trash-alt"
+                      title="Delete"
+                      (click)="openDeleteVendorModel(deleteVendorPart, item)"
+                    ></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody
+                *ngIf="
+                  partInfoObj.VendorPartPrice == undefined ||
+                  (partInfoObj.VendorPartPrice != undefined &&
+                    partInfoObj.VendorPartPrice.length == 0)
+                "
+              >
+                <tr>
+                  <td colspan="12" class="text-center">No vendor found!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="row justify-content-center mb-3"
+            *ngIf="
+              partInfoObj.VendorPartPrice != undefined &&
+              partInfoObj.VendorPartPrice.length > 10
+            "
+          >
+            <ngb-pagination
+              [(page)]="cPage"
+              [pageSize]="10"
+              [maxSize]="5"
+              [collectionSize]="partInfoObj.VendorPartPrice.length"
+              [rotate]="true"
+              [ellipses]="false"
+              [boundaryLinks]="true"
+              aria-label="Vendor List Pagination"
+              class="pagination-primary"
+            >
+            </ngb-pagination>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Vehicle Information">
+        <ng-template ngbTabContent>
+          <div class="row w-100 mt-3 mx-0">
+            <hr class="w-100" />
+            <h5 class="sub-heading">Vehicle Information</h5>
+            <button
+              type="button"
+              class="btn btn-primary btn-round sub-heading-btn"
+              (click)="openAddVehicleModel(addVehicle)"
+            >
+              <i class="fas fa-plus" title="Add Part prices"></i>
+            </button>
+          </div>
+
+          <div class="row card text-nowrap responsive-table">
+            <table class="table primary-font mx-3 text-left">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Make</th>
+                  <th scope="col">Model</th>
+                  <th scope="col">Year Range</th>
+                  <th scope="col">SeriesID</th>                   
+                  <th scope="col">Engine Type</th>
+                  <th scope="col">Vehicle Type</th>
+                  <th scope="col">Engine Capacity</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let item of partInfoObj.AutomotivePartVehicle
+                      | slice: (cPage - 1) * 10:(cPage - 1) * 10 + 10;
+                    let i = index
+                  "
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.EnglishMakeName }}</td>
+                  <td>{{ item.EnglishModelName }}</td>
+                  <td>{{ this.MinYear }}-{{this.MaxYear}}</td>
+                  <td>{{ this.SeriesID }}</td>
+                  <td>{{ EngineTypeName }}</td>
+                  <td>{{ VehicleTypeName }}</td>
+                  <td>{{ item.EngineCapacity }}</td>
+                  <td>
+                    <i
+                      class="far fa-edit mr-2"
+                      title="Edit"
+                      (click)="editVehicleModel(addVehicle, item)"
+                    ></i>
+                    <i
+                      class="far fa-trash-alt"
+                      title="Delete"
+                      (click)="openDeleteVehicleModel(deleteVehiclePart, item)"
+                    ></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody
+                *ngIf="
+                  partInfoObj.AutomotivePartVehicle == undefined ||
+                  (partInfoObj.AutomotivePartVehicle != undefined &&
+                    partInfoObj.AutomotivePartVehicle.length == 0)
+                "
+              >
+                <tr>
+                  <td colspan="12" class="text-center">No vehicle found!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="row justify-content-center mb-3"
+            *ngIf="
+              partInfoObj.AutomotivePartVehicle != undefined &&
+              partInfoObj.AutomotivePartVehicle.length > 10
+            "
+          >
+            <ngb-pagination
+              [(page)]="cPage"
+              [pageSize]="10"
+              [maxSize]="5"
+              [collectionSize]="partInfoObj.AutomotivePartVehicle.length"
+              [rotate]="true"
+              [ellipses]="false"
+              [boundaryLinks]="true"
+              aria-label="vehicle List Pagination"
+              class="pagination-primary"
+            >
+            </ngb-pagination>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Substitute Part">
+        <ng-template ngbTabContent>
+          <div class="row w-100 mt-3 mx-0">
+            <hr class="w-100" />
+            <h5 class="sub-heading">Substitute Parts</h5>
+            <button
+              type="button"
+              class="btn btn-primary btn-round sub-heading-btn"
+              (click)="openSubstitutePartModel(addSubstitutePart)"
+            >
+              <i class="fas fa-plus" title="Add substitute Part"></i>
+            </button>
+          </div>
+
+          <div class="row card text-nowrap responsive-table">
+            <table class="table primary-font mx-3 text-left">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Part Name</th>
+                  <th scope="col">Item Code</th>
+                  <th scope="col">Purchase Price</th>
+                  <th scope="col">Selling Price</th>
+                  <th scope="col">Vendors</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of partInfoObj.SubstitutePart; let i = index"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.PartNameEnglish }}</td>
+                  <td>{{ item.ItemCode }}</td>
+                  <td>{{ item.PurchasePrice }}</td>
+                  <td>{{ item.SellingPrice }}</td>
+                  <td>{{ item.Vendors }}</td>
+                  <td>
+                    <i
+                      class="far fa-edit mr-2"
+                      title="Edit"
+                      (click)="editSubstituteModel(addSubstitutePart, item)"
+                    ></i>
+                    <i
+                      class="far fa-trash-alt"
+                      title="Delete"
+                      (click)="
+                        openDeleteSubstitutePartModel(delSubstitutePart, item)
+                      "
+                    ></i>
+                  </td>
+                </tr>
+              </tbody>
+              <tbody
+                *ngIf="
+                  partInfoObj.SubstitutePart == undefined ||
+                  (partInfoObj.SubstitutePart != undefined &&
+                    partInfoObj.SubstitutePart.length == 0)
+                "
+              >
+                <tr>
+                  <td colspan="12" class="text-center">
+                    No substitute part found!
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="row justify-content-center mb-3"
+            *ngIf="
+              partInfoObj.SubstitutePart != undefined &&
+              partInfoObj.SubstitutePart.length > 10
+            "
+          >
+            <ngb-pagination
+              [(page)]="cPage"
+              [pageSize]="10"
+              [maxSize]="5"
+              [collectionSize]="partInfoObj.SubstitutePart.length"
+              [rotate]="true"
+              [ellipses]="false"
+              [boundaryLinks]="true"
+              aria-label="substitute List Pagination"
+              class="pagination-primary"
+            >
+            </ngb-pagination>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+    <div class="col-11 text-right px-0 mb-lg-3 mb-5">
+      <button
+        type="submit"
+        class="btn btn-primary btn-round btn-simple mb-md-4"
+        *ngIf="partInfoObj.AutomotivePart.AutomotivePartID == undefined"
+      >
+        Create
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary btn-round btn-simple mb-md-4"
+        *ngIf="partInfoObj.AutomotivePart.AutomotivePartID != undefined"
+      >
+        Update
+      </button>
+    </div>
+  </form>
+</div>
+<!-- deleteVendorPartPrice -->
+<ng-template #deleteVendorPart let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Part Vendor</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this Part?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deleteVendorPartPrice()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- deletePartVehicle -->
+<ng-template #deleteVehiclePart let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Part Vehicle</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this Part?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deletePartVehicle()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Parts Vendor Price Modal -->
+<ng-template
+  #addVendor
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header primary-font">
+    <!-- <h5 class="modal-title">Vendor Part Price</h5> -->
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="row w-100 mt-1">
+      <hr class="w-100" />
+      <h4 class="modal-title card-sub-heading">Vendor Part Price</h4>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <form
+      #vendorPartForm="ngForm"
+      (ngSubmit)="
+        vendorPartForm.valid
+          ? VendorPartPriceObj.VendorPartPriceID == undefined
+            ? onSaveVendorPart()
+            : onEditVendorPart()
+          : ''
+      "
+    >
+      <div class="row justify-content-center">
+        <div class="floating-label form-group col-4">
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            name="models"
+            placeholder="Vendor Name"
+            [(ngModel)]="VendorPartPriceObj.VendorID"
+            #vendorname="ngModel"
+            required
+          >
+            <ng-option
+              *ngFor="
+                let pp of _meta.PartsVendors
+                  | duplicateDropdown
+                    : partInfoObj.VendorPartPrice
+                    : 'VendorID'
+                    : VendorPartPriceObj.VendorID
+              "
+              [value]="pp.VendorID"
+            >
+              {{ pp.VendorName }}
+            </ng-option>
+            <!-- <ng-container *ngIf="this.VendorVar == true">
+                            <ng-option *ngFor="let pp of _meta.PartsVendors" [value]="pp.VendorID">
+                                {{pp.VendorName}}
+                            </ng-option>
+                        </ng-container> -->
+          </ng-select>
+          <div class="error-block-ng-select text-danger">
+            <small
+              class="text-danger ml-3"
+              *ngIf="
+                (vendorPartForm.submitted || vendorname.touched) &&
+                vendorname.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <div class="floating-label form-group col-4">
+          <input
+            type="text"
+            placeholder=" "
+            class="floating-input form-control input-border-color"
+            maxlength="5"
+            name="PartPrice"
+            [(ngModel)]="VendorPartPriceObj.PartPrice"
+            #partPrice="ngModel"
+            required
+            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+          />
+          <span class="highlight"></span>
+          <label class="input-label">Part Price</label>
+          <div class="error-block text-danger">
+            <small
+              *ngIf="
+                (vendorPartForm.submitted || partPrice.touched) &&
+                partPrice.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <div class="floating-label form-group col-4">
+          <input
+            type="text"
+            placeholder=" "
+            class="floating-input form-control input-border-color"
+            maxlength="5"
+            name="PurchasePrice"
+            [(ngModel)]="VendorPartPriceObj.PurchasePrice"
+            #purchasePrice="ngModel"
+            required
+            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+          />
+          <span class="highlight"></span>
+          <label class="input-label">Purchase Price</label>
+          <div class="error-block text-danger">
+            <small
+              *ngIf="
+                (vendorPartForm.submitted || purchasePrice.touched) &&
+                purchasePrice.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+        <!-- <div class="col-12 ">
+                    <div class="row col-6 ml-3">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <p class="input-label">Part Type</p>
+                        </div>
+                        <div class="form-check col-lg-3 col-md-3 col-sm-3 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellNew"
+                                    [(ngModel)]="VendorPartPriceObj.IsNew">
+                                <span class="form-check-sign">New</span>
+                            </label>
+                        </div>
+                        <div class="form-check col-lg-3 col-md-3 col-sm-3 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellUsed"
+                                    [(ngModel)]="VendorPartPriceObj.IsUsed">
+                                <span class="form-check-sign">Used</span>
+                            </label>
+                        </div>
+                    </div>
+                </div> -->
+
+        <div class="row col-12 justify-content-end">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round btn-simple m-0"
+            *ngIf="VendorPartPriceObj.VendorPartPriceID == undefined"
+          >
+            Create
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-round btn-simple m-0"
+            *ngIf="VendorPartPriceObj.VendorPartPriceID != undefined"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!--  Vehicle Part  Modal -->
+<ng-template
+  #addVehicle
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header primary-font">
+    <!-- <h5 class="modal-title text-center">Vehicle Price</h5> -->
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="row w-100 mt-1">
+      <hr class="w-100" />
+      <h4 class="modal-title card-sub-heading">Vehicle Information</h4>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <form
+      #vehiclePartForm="ngForm"
+      (ngSubmit)="
+        vehiclePartForm.valid
+          ? AutomotivePartVehicleObj.AutomotivePartVehicleID == undefined
+            ? onSaveVehiclePart()
+            : onEditVehiclePart()
+          : ''
+      "
+    >
+      <div class="row">
+        <div
+          class="floating-label form-group col-sm-6"
+          [ngClass]="this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'"
+        >
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            name="make"
+            placeholder="Make"
+            [(ngModel)]="AutomotivePartVehicleObj.MakeID"
+            #vehiclemake="ngModel"
+            (change)="resetModel()"
+            (change)="changeMake()"
+            required
+          >
+            <ng-option
+              *ngFor="let item of _sharedService._commonMeta.Makes"
+              [value]="item.MakeID"
+            >
+              {{ item.EnglishMakeName }}</ng-option
+            >
+          </ng-select>
+          <div class="error-block-ng-select text-danger">
+            <small
+              class="text-danger ml-3"
+              *ngIf="
+                (vehiclePartForm.submitted || vehiclemake.touched) &&
+                vehiclemake.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <div
+          class="floating-label form-group col-lg-3 col-md-3"
+          *ngIf="this.groupnameCount > 0"
+        >
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            name="groupName"
+            placeholder="Group Name"
+            [(ngModel)]="AutomotivePartVehicleObj.GroupName"
+            #groupName="ngModel"
+          >
+            <ng-option
+              *ngFor="
+                let item of _sharedService._commonMeta.GroupName
+                  | filter: AutomotivePartVehicleObj.MakeID:'MakeID'
+              "
+              [value]="item.GroupName"
+            >
+              {{ item.GroupName }}</ng-option
+            >
+          </ng-select>
+          <!-- <div class="error-block-ng-select text-danger">
+            <small
+              class="text-danger ml-3"
+              *ngIf="
+                (vehiclePartForm.submitted || groupName.touched) &&
+                groupName.errors?.required
+              "
+              >*Required</small
+            >
+          </div> -->
+        </div>
+
+        <div
+          class="floating-label form-group col-6"
+          [ngClass]="
+            this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'
+          "
+        >
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            name="model"
+            placeholder="Model"
+            (change)="
+              changeModel();
+              this.AutomotivePartVehicleObj.ProductionYear = undefined;
+              this.AutomotivePartVehicleObj.EngineTypeID = undefined;
+              this.AutomotivePartVehicleObj.VehicleTypeID = undefined;
+              getProductionYears();
+              AutomotivePartVehicleObj.ProductionYear = null
+            "
+            [(ngModel)]="AutomotivePartVehicleObj.ModelID"
+            #vehiclemodel="ngModel"
+            required
+          >
+            <ng-option
+              *ngFor="
+                let item of _sharedService._commonMeta.Models
+                  | filter: AutomotivePartVehicleObj.MakeID:'MakeID'
+                  | filter: AutomotivePartVehicleObj.GroupName:'GroupName'
+                  | duplicateDropdown
+                    : partInfoObj.AutomotivePartVehicle
+                    : 'ModelID'
+                    : AutomotivePartVehicleObj.ModelID
+              "
+              [value]="item.ModelID"
+            >
+              {{ item.EnglishModelName }}</ng-option
+            >
+          </ng-select>
+          <div class="error-block-ng-select text-danger">
+            <small
+              class="text-danger ml-3"
+              *ngIf="
+                (vehiclePartForm.submitted || vehiclemodel.touched) &&
+                vehiclemodel.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <div
+        class="floating-label form-group col-sm-6"
+        [ngClass]="this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'"
+      >
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            placeholder="Production Year"
+            name="productionYear"
+            (change)="getSeries()"
+            [clearable]="false"
+            [(ngModel)]="AutomotivePartVehicleObj.ProductionYear"
+            #prodYear="ngModel"
+            required
+          >
+            <ng-option
+              *ngFor="
+                let item of _sharedService._commonMeta.Years
+                  | between: MinYear:MaxYear:'YearCode'
+              "
+              [value]="item.YearCode"
+            >
+              {{ item.YearCode }}</ng-option
+            >
+          </ng-select>
+          <i
+            class="fa fa-times remove-year"
+            (click)="onRemoveYear()"
+            *ngIf="AutomotivePartVehicleObj.ProductionYear != undefined"
+          ></i>
+          <div class="error-block-ng-select text-danger">
+            <small
+              *ngIf="
+                (vehiclePartForm.submitted || prodYear.touched) &&
+                prodYear.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <!-- <div class="floating-label form-group col-lg-6 col-sm-6">
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            placeholder="Engine Type"
+            name="engineType"
+            [(ngModel)]="AutomotivePartVehicleObj.EngineTypeID"
+            #engType="ngModel"
+            required
+          >
+            <ng-option
+              *ngFor="
+                let item of _sharedService._commonMeta.objectTypes
+                  | filter: 'Engine':'ObjectNameEnglish'
+              "
+              [value]="item.ObjectTypeID"
+            >
+              {{ item.TypeNameEnglish }}
+            </ng-option>
+          </ng-select>
+          <div class="error-block-ng-select text-danger">
+            <small
+              *ngIf="
+                (vehiclePartForm.submitted || engType.touched) &&
+                engType.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div> -->
+
+        <!-- <div class="floating-label form-group col-lg-6 col-sm-6">
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            placeholder="Vehicle Type"
+            name="vehicleType"
+            [(ngModel)]="AutomotivePartVehicleObj.VehicleTypeID"
+            #vehcType="ngModel"
+            required
+          >
+            <ng-option
+              *ngFor="
+                let item of _sharedService._commonMeta.objectTypes
+                  | filter: 'Body':'ObjectNameEnglish'
+              "
+              [value]="item.ObjectTypeID"
+            >
+              {{ item.TypeNameEnglish }}
+            </ng-option>
+          </ng-select>
+          <div class="error-block-ng-select text-danger">
+            <small
+              *ngIf="
+                (vehiclePartForm.submitted || vehcType.touched) &&
+                vehcType.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div> -->
+
+        <div class="floating-label form-group col-4">
+          <input
+            type="text"
+            list="Capacitys"
+            type="number"
+            step="1"
+            min="0"
+            id="engine_capacity"
+            placeholder=" "
+            class="floating-input custom input-border-color pl-2"
+            name="engine_capacity"
+            [(ngModel)]="AutomotivePartVehicleObj.EngineCapacity"
+            #engineCap="ngModel"
+            ngModel
+            [maxlength]="4"
+            required
+          />
+
+          <div class="input-group-append price-perpend">CC</div>
+          <datalist id="Capacitys">
+            <option
+              *ngFor="let item of generalVehicle.GeneralVehicles"
+              value="{{ item.EngineCapacity }}"
+            ></option>
+          </datalist>
+
+          <span class="highlight"></span>
+          <label class="input-label">Engine Capacity</label>
+
+          <div class="error-block-append text-danger">
+            <small
+              *ngIf="
+                (vehiclePartForm.submitted || engineCap.touched) &&
+                engineCap.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+        <div class="floating-label form-group col-4">
+          <input
+            type="text"
+            list="Enginecode"
+            type="text"
+            step="1"
+            min="0"
+            id="engine_code"
+            placeholder=" "
+            name="engine_code"
+            class="floating-input custom input-border-color pl-2"
+            [(ngModel)]="AutomotivePartVehicleObj.EngineCode"
+            #engineCode="ngModel"
+            ngModel
+            [maxlength]="50"
+            required
+          />
+          <datalist id="Enginecode">
+            <option
+              *ngFor="let item of generalVehicle.GeneralVehicles"
+              value="{{ item.EngineCode }}"
+            ></option>
+          </datalist>
+
+          <span class="highlight"></span>
+          <label class="input-label">Engine Code</label>
+
+          <div class="error-block-append text-danger">
+            <small
+              *ngIf="
+                (vehiclePartForm.submitted || engineCode.touched) &&
+                engineCode.errors?.required
+              "
+              >*Required</small
+            >
+          </div>
+        </div>
+
+
+        <div class="floating-label form-group col-4">
+          <div class="row pb-3 px-3 pt-2">
+            <label for="facelift"> <span> Facelift </span></label>
+            <div
+              class="col-4 px-0 form-check form-check-radio mt-0"
+              *ngFor="
+                let type of _sharedService._commonMeta.objectTypes
+                  | filter: 'FaceLift':'ObjectNameEnglish'
+              "
+            >
+              <label class="form-check-label mx-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="jcType"
+                  id="{{ type.TypeNameEnglish }}"
+                  [(ngModel)]="AutomotivePartVehicleObj.FaceLiftTypeID"
+                  [value]="type.ObjectTypeID"
+                  [disabled]="_sharedService.jobObj.JCBasicInfo.JobCardID > 0"
+                  [checked]="
+                    _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+                    type.ObjectTypeID
+                  "
+                />
+                <span
+                  class="form-check-sign primary-font"
+                  [ngClass]="
+                    _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+                    type.ObjectTypeID
+                      ? 'active-text'
+                      : ''
+                  "
+                  >{{ type.TypeNameEnglish == "false" ? "No" : "Yes" }}</span
+                >
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 mt-0">
+          <label class="mt-3 mb-0 primary-dark-font bold-font big-font">
+            Vehicle Type</label
+          >
+      
+          <ul role="tablist" class="row justify-content-start nav nav-pills">
+            <li class="nav-item pointer mx-2 d-flex vehicleList" name="vehicle_type">
+            
+              <ng-container
+                *ngFor="
+                  let item of _sharedService._commonMeta.objectTypes
+                    | filter: 'Body':'ObjectNameEnglish'
+                "
+              >
+                <div
+                  class="text-center mx-3"
+                  *ngIf="
+                    ShowMoreBodyType == true ||
+                    generalVehicle.GeneralVehicles == undefined ||
+                    generalVehicle.GeneralVehicles.length == 0 ||
+                    ( generalVehicle.GeneralVehicles| filter: item.TypeNameEnglish:'BodyType').length > 0 ||  
+                    AutomotivePartVehicleObj.VehicleTypeID ==item.ObjectTypeID 
+                  "
+                >
+                  <a
+                    class="role-selector mr-0"
+                    [class.checked]="
+                      AutomotivePartVehicleObj.VehicleTypeID ==
+                      item.ObjectTypeID
+                    "
+                    id="{{ item.TypeNameEnglish }}1"
+                    name="vehicle_type"
+                  >
+                    <i
+                      class="px-3 ts {{ item.Icon }}"
+                      title="{{ item.TypeNameEnglish }}"
+                      (click)="
+                        AutomotivePartVehicleObj.VehicleTypeID =
+                          item.ObjectTypeID
+                      "
+                    ></i
+                  ></a>
+                  <label
+                    for=""
+                    class="role-name smaller-font"
+                    [class.icon-checked]="
+                      AutomotivePartVehicleObj.VehicleTypeID ==
+                      item.ObjectTypeID
+                    "
+                    >{{ item.TypeNameEnglish }}</label
+                  > 
+                </div>
+              </ng-container>
+            </li>
+            
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-1 padding_0">
+              <button
+                *ngIf="
+                  ShowMoreBodyType == false &&
+                  generalVehicle.GeneralVehicles != undefined &&
+                  generalVehicle.GeneralVehicles.length > 0 &&
+                  generalVehicle.GeneralVehicles != null
+                "
+                title="Show More"
+                class="btn btn-primary btn-round btn-simple"
+                type="button"
+                (click)="ShowMoreBodyType = true"
+                style="border-radius: 7px"
+              >
+                Show More
+              </button>
+              <button
+                *ngIf="ShowMoreBodyType == true"
+                title="Show Less"
+                class="btn btn-primary btn-round btn-simple"
+                type="button"
+                (click)="ShowMoreBodyType = false"
+                style="border-radius: 7px"
+              >
+                Show Less
+              </button>
+            </div>
+          </ul>
+        </div>
+
+        <div class="col-12 form-check form-check-radio floating-label mt-0">
+          <label class="mt-3 mb-0 primary-dark-font bold-font big-font"
+            >Engine Type</label
+          >
+          <div class="row p-3">
+            <label
+              class="form-check-label mr-3 primary-font"
+              *ngFor="
+                let item of _sharedService._commonMeta.objectTypes
+                  | filter: 'Engine':'ObjectNameEnglish'
+              "
+            >
+              <input
+                class="form-check-input"
+                type="radio"
+                id="{{ item.TypeNameEnglish }}1"
+                name="engine_type"
+                [(ngModel)]="AutomotivePartVehicleObj.EngineTypeID"
+                [value]="item.ObjectTypeID"
+              />
+              <span
+                class="form-check-sign mx-3"
+                [ngClass]="
+                  AutomotivePartVehicleObj.EngineTypeID == item.ObjectTypeID
+                    ? 'active-text'
+                    : ''
+                "
+                >{{ item.TypeNameEnglish }}</span
+              >
+            </label>
+          </div>
+        </div>
+
+        <div class="row col-12 justify-content-end">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round btn-simple m-0"
+            *ngIf="
+              AutomotivePartVehicleObj.AutomotivePartVehicleID == undefined
+            "
+            (click)="addvehicleTable()"
+          >
+            Create
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-round btn-simple m-0"
+            *ngIf="
+              AutomotivePartVehicleObj.AutomotivePartVehicleID != undefined
+            "
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!-- substitute part model -->
+<ng-template
+  #addSubstitutePart
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header primary-font">
+    <!-- <h5 class="modal-title text-center">Substitute Part</h5> -->
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="row w-100 mt-1">
+      <hr class="w-100" />
+      <h4 class="modal-title card-sub-heading">Substitute Part</h4>
+    </div>
+  </div>
+  <div class="modal-body">
+    <form
+      #substitutePartForm="ngForm"
+      (ngSubmit)="
+        substitutePartForm.valid
+          ? SubstitutePartObj.SubstitutePartID == undefined
+            ? onSaveSubstitutePart()
+            : onEditSubstitutePart()
+          : ''
+      "
+    >
+      <div class="row justify-content-center mt-4">
+        <div class="floating-label form-group col-10">
+          <ng-select
+            class="custom input-border-color"
+            id="applications"
+            name="substitutePart"
+            placeholder="Select Part"
+            [hideSelected]="true"
+            [(ngModel)]="SubstitutePartObj.SubstituteID"
+            #substitutePart="ngModel"
+          >
+            <ng-option
+              *ngFor="
+                let parts of _meta.AutomotivePart
+                  | filter
+                    : partInfoObj.AutomotivePart.MainCategoryID
+                    : 'MainCategoryID'
+                  | filter
+                    : partInfoObj.AutomotivePart.SubCategoryID
+                    : 'SubCategoryID'
+              "
+              class="ng-value-label"
+              [value]="parts.AutomotivePartID"
+            >
+              {{ parts.ItemCode }} - {{ parts.PartNameEnglish }}
+            </ng-option>
+          </ng-select>
+          <!-- <div class="error-block-ng-select text-danger">
+                        <small class="text-danger ml-3"
+                            *ngIf="(substitutePartForm.submitted || substitutePart.touched) && substitutePart.errors?.required">*Required</small>
+                    </div> -->
+        </div>
+      </div>
+      <div class="col-11 text-right px-0">
+        <button
+          type="submit"
+          class="btn btn-primary btn-round btn-simple m-0"
+          *ngIf="SubstitutePartObj.SubstitutePartID == undefined"
+        >
+          Create
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-simple btn-round m-0"
+          *ngIf="SubstitutePartObj.SubstitutePartID != undefined"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<!-- delete substitute part model -->
+<ng-template #delSubstitutePart let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Substitute Part</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this substitute Part?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deleteSubstitutePart()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- preview image modal -->
+<!-- <ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid"
+            [src]="partInfoObj.AutomotivePart.LogoImageURL ? _sharedService.baseUrl + partInfoObj.AutomotivePart.LogoImageURL : _sharedService.default_img">
+    </div>
+    <div class="row footer-buttons">
+        <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png" (change)="uploadImage($event)">
+        <label for="files" class="btn btn-primary btn-sm btn-round btn-simple upl-btn">Upload</label>
+        <button class="btn btn-primary btn-round btn-sm btn-simple dlt-btn" *ngIf="partInfoObj.LogoImageURL"
+            (click)="delete()">Delete</button>
+    </div>
+</ng-template> -->

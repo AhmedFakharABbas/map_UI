@@ -1,0 +1,75 @@
+@import "./variables";
+
+.radio-tab-text {
+  color: #888888;
+  margin: 0;
+  margin-left: 5px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  font-size: 14px;
+  line-height: 1.5;
+  // padding: 10px 5px;
+  padding: 4px 12px;
+  border: 1px solid;
+  font-weight: bold;
+}
+input + .radio-tab-text{
+  font-size: 12px;
+}
+input:checked + .radio-tab-text {
+  //pill-design
+  border: 2px solid $hover-color;
+    margin-bottom: -3px;
+    color: $hover-color;
+    font-weight: bold;
+    box-shadow: 4px -7px 9px -5px #cecece;
+// tab-design-start
+  // border: 2px solid $primary-color; 
+  // margin-bottom: -3px;
+  // color: $primary-color;
+  // font-size: 14px;
+  // font-weight: bold;
+  // border-bottom: 5px solid #fff6ea;
+  // border-top-right-radius: 20px !important;
+  // border-top-left-radius: 20px !important;
+  // border-bottom-left-radius: 0px !important;
+  // border-bottom-right-radius: 0px !important;
+  // box-shadow: 4px -7px 9px -5px #cecece;
+  // padding-top: 11px !important;
+//tab-design end
+
+
+  // margin-top: 8px;
+  // border-radius: 20px !important;
+  // border: 2px solid $primary-color;
+  // color: $primary-color;
+  // border-radius: 20px !important;
+  // font-weight: bold;
+  // border-bottom: 0;
+  // border-bottom-left-radius: 0px !important;
+  // border-bottom-right-radius: 0px !important;
+  // box-shadow: 2px 0px 2px 1px #00000033;
+}
+
+input + .radio-tab-text:hover{
+  color: white;
+  // box-shadow: 1px -4px 6px -3px #00000033;
+  padding-top: 4px;
+  // border-radius: 20px 20px 0px 0px;
+  background: $hover-color;
+  border: none;
+}
+
+.tabset-radio {
+  // margin-bottom: 20px !important;
+  // border-bottom: 2px solid $primary-color;
+  // box-shadow: 0 0 8px 2px #00000033;
+  padding: 0;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+}
+
+.tabset-radio input[type="radio"] {
+display: none;
+}

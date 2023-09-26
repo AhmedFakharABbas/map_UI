@@ -1,0 +1,1067 @@
+<ng-container
+  *ngIf="
+    _sharedService.jobObj.JCBasicInfo.StatusID == 25 &&
+    _sharedService.logged_user_role_id != 1 &&
+    _sharedService.logged_user_role_id != 2
+  "
+>
+  <app-basic-info-view></app-basic-info-view>
+</ng-container>
+<div class="row" id="appendOp">
+  <div
+    class="col-12 page-animation"
+    id="append"
+    *ngIf="
+      _sharedService.jobObj.JCBasicInfo.StatusID != 25 ||
+      _sharedService.logged_user_role_id == 1 ||
+      _sharedService.logged_user_role_id == 2
+    "
+  >
+    <form
+      class=""
+      #jobCardForm="ngForm"
+      name="jobCardForm"
+      (ngSubmit)="(jobCardForm.valid ? '' : '')"
+    >
+      <!-- job card type  -->
+
+      <div class="row mx-0">
+        <div class="col-12 card inner-card-shadow">
+          <h5 class="primary-dark-font m-3 bold-font">Job Card</h5>
+          <div class="row mx-0 justify-content-between">
+            <div
+              class="
+                floating-label
+                form-group
+                col-lg-4
+                align-self-center
+                page-animation
+              "
+              *ngIf="_sharedService.jobObj.JCBasicInfo.JobCardID == null"
+            >
+              <input
+                type="text"
+                placeholder=" "
+                class="floating-input form-control"
+                name="contact_mobile"
+                [(ngModel)]="_sharedService.customerFilter"
+                #ContactPersonMobile="ngModel"
+                maxlength="20"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                onkeypress="return ((event.keyCode == 32) || (event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode >= 48 && event.charCode <= 57))"
+                (keyup.enter)="
+                  _sharedService.customerFilter != undefined &&
+                  _sharedService.customerFilter != ''
+                    ? getJobMetaData()
+                    : ''
+                "
+              />
+              <div class="input-group-append price-perpend">
+                <i
+                  class="fas fa-search pt-1"
+                  (click)="
+                    _sharedService.customerFilter != undefined &&
+                    _sharedService.customerFilter != ''
+                      ? getJobMetaData()
+                      : ''
+                  "
+                ></i>
+              </div>
+              <span class="highlight"></span>
+              <label class="input-label">Mobile, Plate No or VIN</label>
+            </div>
+
+            <div class="col-lg-6 col-md-12">
+              <div class="row pb-3 px-3">
+                <div class="col-12">
+                  <label class="primary-font">Job Card Type</label>
+                </div>
+                <div
+                  class="col-4 px-0 form-check form-check-radio"
+                  *ngFor="
+                    let type of _sharedService._commonMeta.objectTypes
+                      | filter: 'JobCard':'ObjectNameEnglish'
+                  "
+                >
+                  <label class="form-check-label mx-2">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="jcType"
+                      id="{{ type.TypeNameEnglish }}"
+                      [disabled]="
+                        jcIsNew == false ||
+                        _sharedService.jobObj.JCBasicInfo.JobCardID > 0
+                      "
+                      (change)="
+                        _sharedService.jobObj.JCBasicInfo.JobCardTypeID =
+                          type.ObjectTypeID;
+                        checkCardType()
+                      "
+                      [checked]="
+                        _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+                        type.ObjectTypeID
+                      "
+                    />
+                    <span
+                      class="form-check-sign primary-font"
+                      [ngClass]="
+                        _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+                        type.ObjectTypeID
+                          ? 'active-text'
+                          : ''
+                      "
+                      >{{ type.TypeNameEnglish }}</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Info -->
+      <div
+        class="row mx-0 w-100"
+        *ngIf="_sharedService.logged_user_role_id != 4"
+      >
+        <div class="col-12 card inner-card-shadow">
+          <div class="row mx-0">
+            <h5 class="m-3 bold-font primary-dark-font">
+              Customer Information
+            </h5>
+
+            <div
+              class="col-12 page-animation"
+              *ngIf="
+                _sharedService.jcCustomerMode == false &&
+                this._sharedService.jobObj.jcCustomerObj.CustomerID != 0
+              "
+            >
+              <app-jc-create-customer></app-jc-create-customer>
+            </div>
+            <div
+              class="col-12 card page-animation"
+              *ngIf="_sharedService.jcCustomerMode == true"
+            >
+              <app-jc-view-customer></app-jc-view-customer>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Vehicle Info -->
+      <div class="row mx-0">
+        <div class="col-12 card inner-card-shadow">
+          <div class="row mx-0 justify-content-between">
+            <h5 class="m-3 bold-font primary-dark-font">Vehicle Information</h5>
+            <div>
+              <!-- <ng-container *ngIf=" _sharedService.jobObj.jcVehicleObj.IsContractVehicle == true ">
+                                <i class="ts crown mx-3 hoverable" title="View Contract Details"
+                                    (click)="ContractDetailsModal(contractDetails)"></i>
+                            </ng-container> -->
+
+              <button
+                type="button"
+                class="btn btn-primary btn-round btn-simple px-3 py-1 h-55 mt-3"
+                *ngIf="
+                  _sharedService.jobObj.JCBasicInfo.JobCardTypeID == 33 &&
+                  _sharedService.jobObj.JCBasicInfo.JobCardID == null &&
+                  _sharedService.jcVehicleMode == true
+                "
+                (click)="showMore = !showMore; createNewVehicle()"
+              >
+                <i class="fas fa-plus more" title="Add Vehicle"></i>
+              </button>
+
+              <ng-container
+                *ngIf="_sharedService.jobObj.jcVehicleList != undefined"
+              >
+                <button
+                  type="button"
+                  class="
+                    btn btn-primary btn-round btn-simple
+                    px-3
+                    py-1
+                    h-50
+                    mt-3
+                  "
+                  *ngIf="
+                    _sharedService.jobObj.JCBasicInfo.JobCardTypeID == 33 &&
+                    _sharedService.jobObj.JCBasicInfo.JobCardID == null &&
+                    _sharedService.jcVehicleMode == false &&
+                    _sharedService.jobObj.jcVehicleList.length > 0
+                  "
+                  (click)="showMore = !showMore; searchVehicleList()"
+                >
+                  <i class="fas fa-search more" title="Add Vehicle"></i>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="row mx-0 w-100">
+            <div
+              class="floating-label form-group col-lg-4 col-sm-6 mb-0 pb-0"
+              *ngIf="
+                (_sharedService.jobObj.JCBasicInfo.JobCardTypeID == 34 ||
+                  _sharedService.jobObj.JCBasicInfo.JobCardTypeID == 35 ||
+                  _sharedService.jcVehicleMode == true) &&
+                _sharedService.jobObj.JCBasicInfo.JobCardID == undefined
+              "
+            >
+              <ng-select
+                placeholder="Plate Number"
+                class="custom"
+                name="plate_number"
+                (change)="selectPlateNumber(_sharedService.selectedPlateNum)"
+                [(ngModel)]="_sharedService.selectedPlateNum"
+              >
+                <ng-option
+                  *ngFor="let v of _sharedService.jobObj.jcVehicleList"
+                  [value]="v.PlateNumber"
+                >
+                  {{ v.PlateNumber }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <!-- old job card  -->
+            <div
+              class="floating-label form-group col-lg-4 col-sm-6"
+              *ngIf="
+                _sharedService.jobObj.JCBasicInfo.JobCardTypeID == 34 ||
+                (_sharedService.jobObj.JCBasicInfo.JobCardTypeID == 35 &&
+                  _sharedService._basicInfoMeta.JobCard != undefined)
+              "
+            >
+              <ng-select
+                placeholder="Old Job Card"
+                class="custom"
+                name="OldJobCardID"
+                (change)="
+                  _sharedService.jobObj.JCBasicInfo.IsModified = true;
+                  getOldJobCardData()
+                "
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.OldJobCardID"
+                #oldJobCard="ngModel"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService._basicInfoMeta.JobCard
+                      | filter
+                        : _sharedService.jobObj.jcVehicleObj.VehicleID
+                        : 'VehicleID'
+                  "
+                  [value]="item.JobCardID"
+                >
+                  {{ item.JobCardNumber }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div
+              class="col-12 page-animation"
+              *ngIf="_sharedService.jcVehicleMode == false"
+            >
+              <app-jc-create-vehicle></app-jc-create-vehicle>
+            </div>
+            <div
+              class="col-12 card page-animation"
+              *ngIf="_sharedService.jcVehicleMode == true"
+            >
+              <app-jc-view-vehicle></app-jc-view-vehicle>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Info  -->
+      <div class="row mx-0">
+        <div class="col-12 card inner-card-shadow pb-2">
+          <h5 class="m-3 bold-font primary-dark-font">Job Information</h5>
+
+          <div class="row col-12 pr-0 justify-content-around">
+            <div class="col-lg-8 col-md-12">
+              <div class="row p-3">
+                <div class="col-12 px-0">
+                  <label class="primary-font">Service Type</label>
+                </div>
+                <!-- *ngIf="_sharedService.jobObj.jcVehicleObj.IsContractVehicle == false ? type.ObjectTypeID == 42 ? false : true : true" -->
+                <ng-container
+                  *ngFor="
+                    let type of _sharedService._commonMeta.objectTypes
+                      | filter: 'JCService':'ObjectNameEnglish';
+                    let id = index
+                  "
+                >
+                  <div
+                    class="
+                      form-check form-check-radio
+                      px-0
+                      col-lg-3 col-md-4
+                      text-center
+                    "
+                    *ngIf="type.ObjectTypeID != 42"
+                  >
+                    <label class="form-check-label">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="serviceType"
+                        id="{{ type.TypeNameEnglish }}"
+                        (change)="
+                          checkContract(
+                            _sharedService.jobObj.JCBasicInfo.ServiceTypeID
+                          ) == 1
+                            ? ContractVerificationModal(contractVerification)
+                            : '';
+                          _sharedService.jobObj.JCBasicInfo.ServiceTypeID =
+                            type.ObjectTypeID;
+                          _sharedService.jobObj.JCBasicInfo.IsModified = true
+                        "
+                        [checked]="
+                          _sharedService.jobObj.JCBasicInfo.ServiceTypeID ==
+                          type.ObjectTypeID
+                        "
+                      />
+                      <span
+                        class="form-check-sign primary-font"
+                        *ngIf="type.ObjectTypeID != 42"
+                        [ngClass]="
+                          _sharedService.jobObj.JCBasicInfo.ServiceTypeID ==
+                          type.ObjectTypeID
+                            ? 'active-text'
+                            : ''
+                        "
+                      >
+                        {{ type.TypeNameEnglish }}
+                      </span>
+                      <!-- <ng-container *ngIf="type.ObjectTypeID == 42">
+                                                <span class="form-check-sign primary-font">
+                                                    <i class="ts contract_360 mx-3 hoverable"
+                                                        title="View Contract Details"
+                                                        (click)="ContractDetailsModal(contractDetails)"></i>
+                                                </span>
+                                            </ng-container> -->
+                    </label>
+                  </div>
+                </ng-container>
+
+                <!-- <div class="form-check form-check-radio px-0 col-3 text-center mt-1">
+                                    <ng-container *ngIf="_sharedService.jobObj.jcVehicleObj.IsContractVehicle == true">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="radio" name="serviceType"
+                                                id="Service Contract"
+                                                (change)=" checkContract(_sharedService.jobObj.JCBasicInfo.ServiceTypeID) == 1 ? ContractVerificationModal(contractVerification): '' ; _sharedService.jobObj.JCBasicInfo.ServiceTypeID = type.ObjectTypeID; _sharedService.jobObj.JCBasicInfo.IsModified = true;"
+                                                [checked]="_sharedService.jobObj.JCBasicInfo.ServiceTypeID == 42">
+                                        </label>
+                                        <span class="form-check-sign primary-font"
+                                            [ngClass]="_sharedService.jobObj.JCBasicInfo.ServiceTypeID == 42 ? 'active-text' : ''">
+                                            <i class="ts contract_360 mx-3 hoverable" title="View Contract Details"
+                                                (click)="ContractDetailsModal(contractDetails)"></i>
+                                        </span>
+                                    </ng-container>
+                                   
+                                    <ng-container
+                                        *ngIf="_sharedService.jobObj.jcVehicleObj.IsContractVehicle == false && _sharedService.jobObj.jcVehicleObj.VehicleID > 0">
+                                        <button type="button"
+                                            (click)="createContract(_sharedService.jobObj.jcVehicleObj.VehicleID)"
+                                            class="btn btn-round btn-simple btn-primary mt-0" title="Create Contract">
+                                            <span class=""><i class="fas fa-plus primary-text-0"></i> </span>
+                                            Create Contract
+                                        </button>
+                                    </ng-container>
+                                </div> -->
+
+                <!-- <ng-container
+                                    *ngIf="_sharedService.jobObj.jcVehicleObj != undefined &&  _sharedService.jobObj.jcVehicleObj.IsContractVehicle && _sharedService.jobObj.jcVehicleObj.IsContractVehicle == true && _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 42">
+                                    <i class="ts contract_360 mx-3 hoverable" title="View Contract Details"
+                                        (click)="ContractDetailsModal(contractDetails)"></i>
+                                </ng-container> -->
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-12">
+              <div class="row p-3">
+                <div class="col-12 px-0">
+                  <label class="primary-font">Priority</label>
+                </div>
+                <div
+                  class="col-6 form-check form-check-radio px-0"
+                  *ngFor="
+                    let type of _sharedService._commonMeta.objectTypes
+                      | filter: 'JobPriority':'ObjectNameEnglish'
+                  "
+                >
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      name="priority"
+                      id="{{ type.TypeNameEnglish }}"
+                      (change)="
+                        _sharedService.jobObj.JCBasicInfo.PriorityTypeID =
+                          type.ObjectTypeID;
+                        _sharedService.jobObj.JCBasicInfo.IsModified = true
+                      "
+                      [checked]="
+                        _sharedService.jobObj.JCBasicInfo.PriorityTypeID ==
+                        type.ObjectTypeID
+                      "
+                    />
+                    <span
+                      class="form-check-sign primary-font"
+                      [ngClass]="
+                        _sharedService.jobObj.JCBasicInfo.PriorityTypeID ==
+                        type.ObjectTypeID
+                          ? 'active-text'
+                          : ''
+                      "
+                      >{{ type.TypeNameEnglish }}</span
+                    >
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0">
+            <div
+              class="
+                floating-label
+                form-group
+                col-lg-4 col-sm-6
+                mb-0
+                align-self-center
+              "
+            >
+              <input
+                type="text"
+                placeholder=" "
+                class="floating-input form-control"
+                name="Reference"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Reference"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                (keypress)="_sharedService.CheckInputCharacters($event)"
+                maxlength="100"
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Referral</label>
+            </div>
+
+            <!-- <div class="floating-label form-group col-lg-4 col-sm-6 input-group mb-0 align-self-center">
+                            <input type="text" placeholder=" " class="floating-input form-control custom-input"
+                                name="engine_capacity" [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Mileage"
+                                maxlength="10" onkeypress='return (event.charCode >= 48 && event.charCode <= 57)' />
+                            <span class="highlight"></span>
+                            <label class="input-label">Mileage</label>
+                            <div class="input-group-append right-dropdown">
+                                <ng-select [searchable]="false" [clearable]="false"
+                                    class="custom custom-append custom-dropdown unit-dropdown side-dropdown rightDropdown-color"
+                                    id="applications" name="engnine_capacity_unit"
+                                    [(ngModel)]="_sharedService.jobObj.JCBasicInfo.MileageUnit">
+                                    <ng-option
+                                        *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'MileageUnit' : 'ObjectNameEnglish'"
+                                        [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                </ng-select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-4 col-sm-6 mb-2 pb-0">
+                            <div class="our-team">
+                                <label class="hoverable">
+                                    <img class="upload-image"
+                                        [src]="_sharedService.jobObj.JCBasicInfo.MileageImageURL?  _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.MileageImageURL :_sharedService.default_img">
+                                    <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                                        (change)="uploadImage($event, 1)">
+
+                                    <div class="hover-text" for="files2">
+                                        Mileage
+                                    </div>
+                                    <div class="background"></div>
+                                </label>
+                            </div>
+                        </div>
+                                -->
+            <ng-container *ngIf="_sharedService.jobObj.Notes.length == 0">
+              <div
+                class="col-lg-4 col-sm-6 floating-label form-group mb-0"
+                (click)="addNote()"
+              >
+                <input
+                  class="floating-input form-control"
+                  type="text"
+                  maxlength="256"
+                  name="note"
+                  placeholder=" "
+                  disabled
+                  required
+                />
+                <span class="highlight"></span>
+                <label class="input-label px-2">Note</label>
+              </div>
+            </ng-container>
+
+            <ng-container
+              *ngFor="
+                let note of _sharedService.jobObj.Notes
+                  | filter: 82:'ObjectTypeID';
+                index as i
+              "
+            >
+              <div
+                class="col-lg-4 col-sm-6 floating-label form-group d-flex mb-0"
+              >
+                <input
+                  class="floating-input form-control"
+                  type="text"
+                  [(ngModel)]="note.NoteInfo"
+                  maxlength="2000"
+                  id="note_value{{ note.NoteID }}"
+                  name="note_value{{ note.NoteID }}"
+                  placeholder=" "
+                  (change)="note.IsModified = true"
+                />
+                <span class="highlight"></span>
+                <i
+                  class="delete-note fas fa-times primary-font pt-3"
+                  (click)="removeNote(note)"
+                ></i>
+                <label class="input-label pl-2">Note</label>
+              </div>
+            </ng-container>
+
+            <div class="col-2 justify-content-between w-100">
+              <button
+                type="button"
+                (click)="addNote()"
+                class="btn btn-round btn-simple btn-primary mt-0"
+                title="Add Note"
+              >
+                <span class=""
+                  ><i class="fas fa-plus primary-text-0"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="row col-12 mx-0 px-0"></div>
+          <div class="form-check d-flex col-12">
+            <label class="d-flex form-check-label">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                name="IsUsedParts"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.IsUsedParts"
+              />
+              <span class="form-check-sign primary-font"
+                >Do you want old parts?</span
+              >
+            </label>
+          </div>
+
+          <!-- <div class="form-check col-12 mb-3">
+                        <label class="d-flex form-check-label">
+                            <input type="checkbox" class="form-check-input" name="IsRegularInspection"
+                                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.IsRegularInspection">
+                            <span class="form-check-sign  primary-font">Do you want to do periodic maintenance
+                                inspection?</span>
+                        </label>
+                    </div> -->
+
+          <div class="form-check col-12 d-flex mb-3">
+            <label class="d-flex form-check-label">
+              <input
+                type="checkbox"
+                class="form-check-input"
+                name="IsTaxFree"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.IsTaxFree"
+              />
+              <span class="form-check-sign primary-font"
+                >Is this job card Tax free?</span
+              >
+            </label>
+          </div>
+
+          <div class="mx-2" *ngIf="_sharedService.jobObj.JCBasicInfo.IsTaxFree">
+            <div class="row mx-3">
+              <h5 class="primary-dark-font">Add Evidence</h5>
+            </div>
+            <!-- <button type="button" class="btn btn-primary btn-round sub-heading-btn btn-simple">
+                            <i class="fas fa-plus" title="Add Customer Concern"></i></button> -->
+
+            <!-- <div *ngIf="_sharedService.jobObj.JCBasicInfo.IsTaxFree"
+                            class="floating-label form-group col-lg-12 d-flex col-sm-6 mb-0 align-self-center">
+
+                        </div> -->
+            <div class="row mx-0">
+              <div class="col-6  col-md-8 align-self-center mt-5 ">
+                <input
+                  type="text"
+                  placeholder=" "
+                  class="floating-input form-control mb-5"
+                  name="Reference"
+                  [(ngModel)]="_sharedService.jobObj.JCBasicInfo.TaxFreeNote"
+                  (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                  (keypress)="_sharedService.CheckInputCharacters($event)"
+                  maxlength="500"
+                />
+                <span class="highlight"></span>
+              </div>
+              <div class="col-6  col-md-4 d-flex">
+                <div
+                  class="col-1 px-0 align-self-center"
+                  *ngIf="
+                    _sharedService.jobObj.JCBasicInfo.IsTaxFreeApproved == false
+                  "
+                >
+                  <label
+                    ><i class="fas fa-camera fa-lg mt-3 "></i>
+                    <input
+                      type="file"
+                      name="Upload File"
+                      class="py-2 my-0 w-100 d-none"
+                      id="Front"
+                      (change)="uploadTaxFile($event)"
+                    />
+                   
+                  </label>
+                </div>
+                <!-- <div class="col-3 px-0 text-right">
+                  <span
+                    class="btn btn-primary btn-round btn-simple"
+                    (click)="openFile()"
+                    *ngIf="
+                      _sharedService.jobObj.JCBasicInfo.TaxDocumentURL !=
+                        undefined &&
+                      _sharedService.jobObj.JCBasicInfo.TaxDocumentURL != ''
+                    "
+                  >
+                    <i class="far fa-eye" title="View document"></i>
+                    
+                  </span>
+                   (click)="
+                      previewImage(imagePreview, 'Evidence of Tax-free vehicle', 'TaxDocumentURL')
+                    "
+                </div> -->
+                <div class="col-8 text-left pl-0">
+                  <div class="px-md-2" *ngIf=' _sharedService.jobObj.JCBasicInfo.TaxDocumentURL != undefined'>
+                  <div class="col-12 " >
+                    <label class="primary-font mb-0">Evidence</label>
+                  </div>
+
+                  <img
+                    class="fuel-tank-image"
+                    (click)="openFile()"
+                    [src]="
+                    _sharedService.jobObj.JCBasicInfo.TaxDocumentURL != undefined
+                        ? _sharedService.baseUrl +
+                        _sharedService.jobObj.JCBasicInfo.TaxDocumentURL
+                        : _sharedService.default_img
+                    "
+                  />
+                 
+                  </div>
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+      <div
+        class="row mx-0"
+        *ngIf="
+          _sharedService.logged_user_role_id == 1 ||
+          _sharedService.logged_user_role_id == 2 ||
+          _sharedService.logged_user_role_id == 3 ||
+          _sharedService.logged_user_role_id == 4
+        "
+      >
+        <div class="col-12 card inner-card-shadow">
+          <h5 class="m-3 bold-font primary-dark-font">Operators Information</h5>
+          <div class="row mx-0">
+            <div
+              class="floating-label form-group col-lg-4 col-sm-6"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2
+              "
+            >
+              <ng-select
+                placeholder="Advisor"
+                class="custom"
+                name="AdvisorName"
+                appendTo="#appendOp"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.AdvisorID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService.jobObj.UserRoles
+                      | filter: '3':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div
+              class="floating-label form-group col-lg-4 col-sm-6"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3
+              "
+            >
+              <ng-select
+                placeholder="Supervisor"
+                class="custom"
+                name="Supervisor"
+                appendTo="#appendOp"
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.SupervisorID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService.jobObj.UserRoles
+                      | filter: '4':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div
+              class="floating-label form-group col-lg-4 col-sm-6"
+              *ngIf="_sharedService.logged_user_role_id != 3"
+            >
+              <ng-select
+                placeholder="Foreman"
+                class="custom"
+                name="Foreman"
+                appendTo="#appendOp"
+                [disabled]="
+                  _sharedService.jobObj.JCBasicInfo.VIStatusID != 17 &&
+                  (
+                    _sharedService.jobObj.JobTasks
+                    | filter
+                      : _sharedService.jobObj.JCBasicInfo.JobCardID
+                      : 'JobCardID'
+                    | filter: true:'IsInclude'
+                  ).length == 0
+                "
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="
+                  _sharedService.jobObj.JCBasicInfo.PreferredForemanID
+                "
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService.jobObj.UserRoles
+                      | filter: '5':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <ng-container *ngFor="let jp of _sharedService.jobObj.JobProcess">
+              <div
+                class="floating-label form-group col-lg-4 col-sm-6"
+                *ngIf="
+                  (_sharedService.logged_user_role_id == 3 &&
+                    jp.ProcessTypeID == 8) ||
+                  _sharedService.logged_user_role_id != 3
+                "
+              >
+                <ng-select
+                  selected
+                  placeholder="{{ jp.TypeNameEnglish }}"
+                  class="custom"
+                  appendTo="#appendOp"
+                  name="{{ jp.TypeNameEnglish }}"
+                  [(ngModel)]="jp.EmployeeID"
+                  [disabled]="
+                    !(
+                      jp.ProcessTypeID != 8 ||
+                      _sharedService.jobObj.JCBasicInfo.VIStatusID != 17
+                    )
+                  "
+                  (change)="
+                    jp.IsModified = true;
+                    _sharedService.jobObj.JCBasicInfo.IsModified = true
+                  "
+                >
+                  <ng-option
+                    *ngFor="
+                      let emp of _sharedService.jobObj.Employees
+                        | employeeFilter
+                          : jp.ProcessTypeID
+                          : 'RoleID'
+                          : _sharedService.jobObj.UserRoles
+                    "
+                    [value]="emp.UserID"
+                  >
+                    {{ emp.EmployeeFullName }}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<button
+  type="button"
+  id="hidden-btn"
+  class="d-none"
+  (click)="openAddCustomer(addCustomer)"
+></button>
+
+<ng-template #addCustomer let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">No Record Found</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              No {{ message }} found against '{{
+                _sharedService.customerFilter
+              }}'. Create new customer?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="addNewCustomer()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contractDetails let-c="close" let-d="dismiss">
+  <app-contract-consumption
+    [vehicleID]="_sharedService.jobObj.jcVehicleObj.VehicleID"
+    [contractPlanID]="_sharedService.jobObj.jcVehicleObj.ContractPlanID"
+    (closeContractDetails)="closeContractDetailsModal($event)"
+  ></app-contract-consumption>
+</ng-template>
+
+<ng-template #contractVerification let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Contract will not apply if you change.
+            </h5>
+            <div class="col-12 float-left text-center">
+              <button
+                (click)="closContractVerificationModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-3"
+              >
+                Ok
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<button
+  type="button"
+  id="customerList-btn"
+  class="d-none"
+  (click)="openSelectCustomersModal(selectCustomerList)"
+></button>
+
+<ng-template #selectCustomerList let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Please Select Customer</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="closeSelectCustomersModal()"
+        title="Cancel"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <table class="table mx-3 text-left primary-font page-animation">
+              <thead>
+                <tr>
+                  <!-- <th scope="col"></th> -->
+                  <th scope="col" class="action-model">Plate Number</th>
+                  <th scope="col" class="action-model">Customer Name</th>
+                  <th scope="col" class="action-model">Car Name</th>
+                  <th scope="col" class="action-model">VIN</th>
+                  <th scope="col" class="action-model">Total Visits</th>
+                  <!-- <th scope="col">Total Costs</th> -->
+                  <th scope="col" class="action-model">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- id 49 for External Task task0 -->
+                <tr
+                  *ngFor="
+                    let v of _sharedService.jobObj.jcVehicleList;
+                    let i = index
+                  "
+                >
+                  <!-- <td>
+                                        <div class="form-check bt-0">
+                                            <label class="d-flex form-check-label">
+                                                <input type="checkbox" class="form-check-input"
+                                                    name="jp{{jp.JobPartID}}" id="jp{{jp.JobPartID}}" value=""
+                                                    (change)="jp.IsModified = true; jp.AddPartTask = !jp.AddPartTask"
+                                                    [checked]="jp.AddPartTask == true">
+                                                <span class="form-check-sign primary-font">Is this part is free to fitin
+                                                    and has no repair?</span>
+                                            </label>
+                                        </div>
+                                    </td> -->
+                  <td
+                    class="pointer action-model"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.PlateNumber }}
+                  </td>
+                  <td
+                    class="pointer action-model"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.CustomerFullName }}
+                  </td>
+                  <td
+                    class="pointer action-model"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.EnglishMakeName }} {{ v.EnglishModelName }}
+                  </td>
+                  <td
+                    class="pointer action-model"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.VIN }}
+                  </td>
+
+                  <td
+                    class="pointer action-model"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.NumberOfServices }}
+                  </td>
+
+                  <!-- <td
+                    class="pointer"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.TotalCosts }}
+                  </td> -->
+
+                  <td>
+                    <div class="row action-model">
+                    <button
+                      (click)="selectVehicleCustomer(0, v.VehicleID)"
+                      class="
+                        a-button
+                        btn btn-primary btn-round btn-simple
+                        col-06
+                      "
+                    >
+                      Transfer Owner
+                    </button>
+
+                    <button
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                    class="
+                      a-button
+                      btn btn-primary btn-round btn-simple
+                      col-06
+                    "
+                  >
+                    Existing Owner
+                  </button>
+                </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-12 float-left text-center">
+              <button
+                (click)="closeSelectCustomersModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Create New Customer
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- preview image modal -->
+<!-- <ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ modalHeader }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="img-fluid"
+      [src]="
+        _sharedService.jobObj.JCBasicInfo.TaxDocumentURL 
+          ? _sharedService.baseUrl +
+            _sharedService.jobObj.JCBasicInfo.TaxDocumentURL
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template> -->

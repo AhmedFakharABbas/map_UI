@@ -1,0 +1,678 @@
+<div class="row justify-content-center align-items-center page-animation">
+  <div class="col-lg-11 col-12">
+    <div class="row card-body pb-0 justify-content-center">
+      <div class="row w-100">
+        <hr class="w-100" />
+        <h4 class="sub-heading">Employees</h4>
+      </div>
+      <div class="row col-12">
+        <!-- Filters -->
+        <!-- <div class="col-md-3 col-sm-5 p-2">
+          <div class="sticky-top pt-3">
+            <div class="row w-100 m-0">
+              <hr class="w-100">
+              <h4 class="sub-heading mb-2">Filters</h4>
+              <button type="button" class="btn btn-primary btn-round sub-heading-btn" (click)="clearFilters()"
+                title="Clear">x</button>
+            </div>
+
+            <div id="accordion_employee" class="accordion">
+              <div class="card mb-0 mt-2 heading-accordion-padding">
+                <div class="card-header collapsed accordian-container p-2  arrow" aria-expanded="false"
+                  data-toggle="collapse" href="#employee">
+                  <a class="card-title">
+                    <span class="filter_title">Employee</span>
+                  </a>
+                </div>
+                <div id="employee" class="panel card-body collapse p-0 small-font" data-parent="#accordion_employee">
+                  <div class="bg accordian-padding ">
+                    <div class="chiller_cb d-flex">
+                      <input type="text" class="mr-1 form-control" placeholder="Employee" name="first_name"
+                        [(ngModel)]="filter.EmployeeName" #EmployeeName="ngModel"
+                        (keyup.enter)="getAllEmployeesData()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="accordion_phone" class="accordion">
+              <div class="card mb-0 mt-2 heading-accordion-padding">
+                <div class="card-header collapsed accordian-container p-2  arrow" aria-expanded="false"
+                  data-toggle="collapse" href="#phone">
+                  <a class="card-title">
+                    <span class="filter_title">Phone Number</span>
+                  </a>
+                </div>
+                <div id="phone" class="panel card-body collapse p-0 small-font" data-parent="#accordion_phone">
+                  <div class="bg accordian-padding ">
+                    <div class="chiller_cb d-flex">
+                      <input type="text" class="mr-1 form-control" placeholder="Phone Number" name="phone"
+                        [(ngModel)]="filter.ContactMobile" #ContactMobile="ngModel"
+                        (keyup.enter)="getAllEmployeesData()" maxlength="15"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row w-100 m-0">
+              <hr class="w-100">
+              <button type="button" class="btn btn-primary btn-round sub-heading-btn" (click)="getAllEmployeesData()"
+                title="Apply filters">Apply</button>
+            </div>
+
+          </div>
+        </div> -->
+        <!-- Employee card -->
+        <div class="col-md-12 col-sm-12">
+          <div class="row justify-content-between">
+            <div class="d-flex">
+              <div
+                *ngFor="
+                  let is of _sharedService._commonMeta.ObjectStatus
+                    | filter: 'EmployeeAccount':'ObjectNameEnglish'
+                "
+              >
+                <div class="form-check">
+                  <label class="form-check-label orange">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      (change)="
+                        tabID = is.ObjectStatusID;
+                        isActive = is.ObjectStatusID == 13 ? true : false
+                      "
+                      id="{{ is.StatusNameEnglish }}"
+                      name="empStatus"
+                      [checked]="is.ObjectStatusID == 13"
+                    />
+                    <span class="form-check-sign"></span>
+                    <label
+                      for="{{ is.StatusNameEnglish }}"
+                      class=""
+                      [ngClass]="{
+                        green: is.ObjectStatusID === 13,
+                        red: is.ObjectStatusID === 14
+                      }"
+                      title="Status"
+                      >{{ is.StatusNameEnglish }}
+                    </label>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="">
+              <div class="form-group mx-5 mb-0">
+                <input
+                  type="text"
+                  class="floating-input form-control input-label"
+                  placeholder="Employee"
+                  name="first_name"
+                  [(ngModel)]="searchQuery"
+                  #search="ngModel"
+                  (keyup.enter)="getAllEmployeesData()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- old design of active in-active tabs -->
+          <!-- <div class="row tabset-radio">
+            <div
+              *ngFor="let is of _sharedService._commonMeta.ObjectStatus | filter : 'EmployeeAccount' : 'ObjectNameEnglish'">
+              <input type="radio" (change)="tabID = is.ObjectStatusID; isActive = is.ObjectStatusID == 13? true : false"
+                id="{{is.StatusNameEnglish}}" name="empStatus" [checked]="is.ObjectStatusID == tabID">
+              <label for="{{is.StatusNameEnglish}}" class="radio-tab-text pointer px-3 mx-3"
+                title="Status">{{is.StatusNameEnglish}}
+              </label>
+            </div>
+          </div> -->
+          <div class="pt-3">
+            <div
+              class="row justify-content-center mt-4"
+              *ngIf="
+                employeeArray == undefined ||
+                (employeeArray != undefined &&
+                  (
+                    employeeArray
+                    | filter: isActive:'IsActive'
+                    | searchEmployeeFilter: searchQuery
+                  ).length == 0)
+              "
+            >
+              <div class="col-lg-12 no-record-error">No record found!</div>
+            </div>
+            <ng-container
+              *ngIf="employeeArray != undefined && employeeArray.length > 0"
+            >
+              <div class="row">
+                <div
+                  class="col-lg-4 col-md-6 col-sm-6 mb-card card-responsive"
+                  *ngFor="
+                    let emp of employeeArray
+                      | filter: isActive:'IsActive'
+                      | searchEmployeeFilter: searchQuery
+                      | slice
+                        : (cPage - 1) * _sharedService.pageSize
+                        : (cPage - 1) * _sharedService.pageSize +
+                            _sharedService.pageSize;
+                    let i = index
+                  "
+                >
+                  <div class="card inner-card-shadow">
+                    <!-- <div class="card-header list-card-header">
+                  <div class="row">
+                    <div class="col-3" title="Employee Name">
+                      <h5><i class="ts smaller ts-l user"></i>{{emp.FirstName}} {{emp.LastName}}</h5>
+                    </div>
+                    <div class="col-6 text-center align-self-center"
+                      title="Position">
+                      <ng-container *ngFor="let role of emp.Roles; let idx = index">
+                        <span class="badge badge-pill badge-primary ml-1 role-badge">
+                          <i class="{{role.Icon}} large" title="{{role.RoleName}}"></i>
+                          {{role.RoleName}} </span>
+                      </ng-container>
+                    </div>
+                    <div class="col-3 px-0 align-self-center">
+                      <span (click)="openModal(changStatus,emp)" class="badge badge-pill badge-primary mr-2"
+                        [class.active]="emp.IsActive == true" [class.inActive]="emp.IsActive == false">
+                        <ng-container *ngIf="emp.IsActive == true">Active</ng-container>
+                        <ng-container *ngIf="emp.IsActive == false">Inactive</ng-container>
+                      </span>
+                      <i class="far fa-eye mr-2" title="View" [routerLink]="['/','user','view-user']"
+                        [queryParams]="{ UserID: emp.UserID}"></i>
+                      <i class="far fa-edit mr-2" title="Edit" [routerLink]="['/','user','update-user']"
+                        [queryParams]="{ UserID: emp.UserID}"></i>
+                      <i class="far fa-trash-alt" title="Delete" (click)="openModal(warningDelete,emp.UserID)"></i>
+                    </div>
+                  </div>
+                </div> -->
+                    <!-- <div class="card-body card-body-padding small-font">
+                  <div class="row">
+
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">Salary</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.Salary}}</p>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">Mobile</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.ContactMobile}}</p>
+                    </div>
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">Zipcode</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.Zipcode}}</p>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">City</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.CityName}}</p>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">Country</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.CountryName}}</p>
+                    </div>
+
+                    <div class="col-lg-2 col-sm-3 col-3">
+                      <span class="small bold-font">Address1</span>:
+                    </div>
+                    <div class="col-lg-4 col-sm-9 col-9 p-0">
+                      <p class="m-0" title="">{{emp.Address1}}</p>
+                    </div>
+                  </div>
+                </div> -->
+
+                    <div class="card-content">
+                      <div class="text-start p-3">
+                        <ng-template #mobileNo>
+                          <span
+                            *ngIf="
+                              emp.ContactMobile != undefined &&
+                                emp.ContactMobile != '';
+                              else elseHyphen
+                            "
+                          >
+                            <b>{{ emp.ContactMobile }}</b></span
+                          >
+                        </ng-template>
+                        <span
+                          class="label-color p-2"
+                          placement="right"
+                          [ngbTooltip]="mobileNo"
+                        >
+                          <i class="fas fa-mobile-alt primary-font"></i>
+                        </span>
+
+                        <ng-template #address>
+                          <span
+                            *ngIf="
+                              emp.Address1 != undefined && emp.Address1 != '';
+                              else elseHyphen
+                            "
+                          >
+                            <b> {{ emp.Address1 }}</b></span
+                          >
+                        </ng-template>
+                        <span
+                          class="label-color p-2"
+                          placement="right"
+                          [ngbTooltip]="address"
+                        >
+                          <i class="fas fa-map-marker-alt primary-font"></i>
+                        </span>
+                      </div>
+
+                      <div class="circle-picture row justify-content-center">
+                        <img
+                          class="img-fluid"
+                          src="{{
+                            emp.ImageURL
+                              ? _sharedService.baseUrl + emp.ImageURL
+                              : _sharedService.default_img
+                          }}"
+                        />
+                      </div>
+                      <div class="">
+                        <div
+                          class="text-center px-2 mt-3"
+                          title="Employee Name"
+                        >
+                          <h5 class="primary-color mb-0 eclipse bold-font">
+                            {{ emp.FirstName }} {{ emp.LastName }}
+                          </h5>
+                        </div>
+                        <!-- <div class="row justify-content-center pt-0">    
+                        <ng-container *ngFor="let role of emp.Roles; let idx = index">    
+                              <span class="  mx-1"><i class="{{role.Icon}} large" title="{{role.RoleName}}"></i>
+                              {{role.RoleName}} </span>
+                          </ng-container>
+                      </div> -->
+
+                        <div class="text-center pt-0 px-3">
+                          <ng-container
+                            *ngFor="
+                              let role of emp.Roles | slice: 0:isSpliced - 1;
+                              let isLast = last;
+                              let idx1 = index
+                            "
+                          >
+                            <span class="" title="Role">
+                              <span class="gray-font">
+                                {{ role.RoleName }}</span
+                              >
+                              <span *ngIf="!isLast">,</span>
+                            </span>
+                            <span
+                              (click)="toggleSplice()"
+                              *ngIf="isLast"
+                              id="{{ idx1 }}"
+                              [class.d-none]="emp.Roles.length < isSpliced"
+                              class="part-label-expanded"
+                              title="View more"
+                              ><span class="white-font px-1 pointer"
+                                >+
+                                {{ emp.Roles.length - idx1 - 1 }}
+                              </span>
+                            </span>
+                          </ng-container>
+                        </div>
+                        <hr />
+                        <div class="row mx-2 pb-3">
+                          <!-- <div class="col-4" title="Status"><span (click)="openModal(changeStatus,emp)"
+                            class="badge badge-pill badge-primary" [class.active]="emp.IsActive == true"
+                            [class.inActive]="emp.IsActive == false">
+                            <ng-container *ngIf="emp.IsActive == true"><span class="active-label"></span>
+                            </ng-container>
+                            <ng-container *ngIf="emp.IsActive == false"><span class="inactive-label"></span>
+                            </ng-container>
+                          </span>
+                        </div> -->
+                          <div class="col-4 px-0">
+                            <div class="row status-bg ml-1 pl-2">
+                              <div class="toggle-switch" id="change-status">
+                                <input
+                                  type="checkbox"
+                                  (change)="openModal(changeStatus, emp.UserID)"
+                                  id="status{{ emp.EmployeeID }}"
+                                  name="status{{ emp.EmployeeID }}"
+                                  [checked]="emp.IsActive === true"
+                                />
+                                <label
+                                  for="status{{ emp.EmployeeID }}"
+                                  class="mb-0"
+                                >
+                                  <span
+                                    class="mt-1 toggle-track"
+                                    [ngClass]="
+                                      emp.IsActive == true
+                                        ? 'toggle-track-active toggle-track-1'
+                                        : 'toggle-track-inActive toggle-track-2'
+                                    "
+                                  ></span>
+                                </label>
+                              </div>
+                              <div class="pl-3">
+                                <span class="bold-font">
+                                  <ng-container *ngIf="emp.IsActive == true"
+                                    ><span class="smaller-font hover-color"
+                                      >Active</span
+                                    >
+                                  </ng-container>
+                                  <ng-container *ngIf="emp.IsActive == false"
+                                    ><span class="smaller-font">Inactive</span>
+                                  </ng-container>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-8 px-0 text-right">
+                            <i
+                              class="fas fa-eye primary-dark-font px-2"
+                              title="View"
+                              [routerLink]="['/', 'user', 'view-user']"
+                              [queryParams]="{ UserID: emp.UserID }"
+                            ></i>
+                            <i
+                              class="fas fa-edit primary-dark-font px-2"
+                              title="Edit"
+                              [routerLink]="['/', 'user', 'update-user']"
+                              [queryParams]="{ UserID: emp.UserID }"
+                            ></i>
+                            <i
+                              class="fas fa-trash-alt primary-dark-font px-2"
+                              title="Delete"
+                              (click)="openModal(warningDelete, emp.UserID)"
+                            ></i>
+                            <i
+                              class="fas fa-unlock-alt primary-dark-font px-2"
+                              title="Reset Password"
+                              (click)="openModal(resetPassword, emp.UserID)"
+                            ></i>
+                          </div>
+                        </div>
+                        <!-- <hr> -->
+                        <!-- <div class="card-body pt-0 pr-0">
+                          <div class="row mb-2">
+                            <span class="label-color  px-2">
+                              <i class="fas ts wallet-solid primary-font" title="Salary"></i>
+                            </span>
+                            <span class="primary-color px-1">
+                              <ng-container *ngIf="emp.Salary != undefined; else elseHyphen">
+                                {{emp.Salary}}</ng-container>
+                            </span>
+                          </div>
+                          <div class="row mb-2">
+                            <span class="label-color px-2">
+                              <i class="fas ts zip-code primary-font" title="Zipcode"></i>
+                            </span>
+                            <span class=" primary-color px-1">
+                              <ng-container *ngIf="emp.Zipcode != undefined; else elseHyphen">
+                                {{emp.Zipcode}}</ng-container>
+                            </span>
+                          </div>
+                          <div class="row  mb-2">
+                            <span class="label-color px-2">
+                              <i class="fas ts globe primary-font" title="City,Country"></i> </span>
+                            <span class="primary-color px-1">
+                              <ng-container
+                                *ngIf="emp.CityName != undefined && emp.CountryName != undefined ; else elseHyphen">
+                                {{emp.CityName}},{{emp.CountryName}}</ng-container>
+
+                            </span>
+                          </div>
+                          <div class="row mb-2">
+                            <span class="label-color  px-2">
+                              <i class="fas fa-map-marker-alt primary-font" title="Address"></i> </span>
+                            <span class="primary-color px-2  eclipse" title="{{emp.Address1}}">
+                              <ng-container *ngIf="emp.Address1 != undefined && emp.Address1 != ''; else elseHyphen">
+                                {{emp.Address1}}
+                              </ng-container>
+                            </span>
+                          </div>
+                          <div class="row ">
+                            <span class="label-color  px-2">
+                              <i class="fas fa-mobile-alt primary-font" title="Mobile No"></i>
+                            </span>
+                            <span class="primary-color px-2">
+                              <ng-container
+                                *ngIf="emp.ContactMobile != undefined && emp.ContactMobile != ''; else elseHyphen">
+                                {{emp.ContactMobile}}</ng-container>
+
+                            </span>
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- pagination -->
+    <div
+      class="row justify-content-center mb-3"
+      *ngIf="
+        employeeArray != undefined &&
+        (
+          employeeArray
+          | filter: isActive:'IsActive'
+          | searchEmployeeFilter: searchQuery
+        ).length > 10
+      "
+    >
+      <ngb-pagination
+        [(page)]="cPage"
+        [pageSize]="_sharedService.pageSize"
+        [collectionSize]="
+          (
+            employeeArray
+            | filter: isActive:'IsActive'
+            | searchEmployeeFilter: searchQuery
+          ).length
+        "
+        aria-label="Employee List Pagination"
+        class="pagination-primary"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel modal-lg" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Employee</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this user?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deleteEmployee(userID)"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #changeStatus let-c="close" let-d="dismiss">
+  <div class="adOptionModel modal-lg" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Change Status</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to change the employee status?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="changeEmployeeStatus()"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #resetPassword let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">Reset Password</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form
+      #resetPasswordForm="ngForm"
+      (ngSubmit)="resetPasswordForm.valid ? resetEmployeePassword() : ''"
+    >
+      <div class="row justify-content-center">
+        <div class="floating-label form-group col-12">
+          <input
+            type="password"
+            value=""
+            placeholder=" "
+            class="floating-input form-control input-border-color"
+            name="password_2"
+            [(ngModel)]="password"
+            #password_1="ngModel"
+            onCopy="return false"
+            onDrag="return false"
+            onDrop="return false"
+            onPaste="return false"
+            required
+          />
+          <span class="highlight"></span>
+          <label class="input-label">Password</label>
+          <div class="error-block text-danger">
+            <small
+              *ngIf="
+                (resetPasswordForm.submitted || password_1.touched) &&
+                password_1.errors?.required
+              "
+              class="mr-2"
+              >*Required</small
+            >
+            <small
+              *ngIf="password != undefined && password.length < 6"
+              class="mr-2"
+              >*Minimum 6 characters required</small
+            >
+          </div>
+        </div>
+
+        <div class="floating-label form-group col-12">
+          <input
+            type="password"
+            value=""
+            placeholder=" "
+            class="floating-input form-control input-border-color"
+            name="confirm_password"
+            [(ngModel)]="confirmPassword"
+            #password_confirm="ngModel"
+            onCopy="return false"
+            onPaste="return false"
+            required
+          />
+          <span class="highlight"></span>
+          <label class="input-label">Confirm Password</label>
+          <div class="error-block text-danger">
+            <small
+              *ngIf="
+                (resetPasswordForm.submitted || password_confirm.touched) &&
+                password_confirm.errors?.required
+              "
+              class="mr-2"
+              >*Required</small
+            >
+            <small
+              *ngIf="
+                (resetPasswordForm.submitted || password_confirm.touched) &&
+                confirmPassword != password
+              "
+              class="mr-2"
+              >*Password not matched</small
+            >
+          </div>
+        </div>
+        <div class="col-12 text-right">
+          <button
+            type="submit"
+            [disabled]="
+              confirmPassword != password ||
+              (password != undefined && password.length < 6)
+            "
+            class="btn btn-primary btn-round m-0"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <span class="px-2">-</span>
+</ng-template>

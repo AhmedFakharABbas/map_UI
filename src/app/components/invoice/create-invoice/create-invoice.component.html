@@ -1,0 +1,566 @@
+<div class="row justify-content-center h-100 align-items-center">
+  <div class="row w-100">
+    <hr class="w-100" />
+    <h4 class="sub-heading mb-0">Create Invoice</h4>
+  </div>
+  <div class="col-lg-11 col-12 card outer-card-shadow">
+    <div class="row mx-3 my-3" id="InvoceToDownload">
+      <div class="col-9 border-right">
+        <div class="row card-margin">
+          <div class="col-6 border-bottom primary-color">
+            <p>
+              {{ jobObj.JobInvoice.CustomerFullName }}
+              {{ jobObj.JobInvoice.EnglishModelName }}
+            </p>
+          </div>
+
+          <div class="col-6 border-bottom">
+            <p class="plate-number px-2 py-1">
+              {{ jobObj.JobInvoice.PlateNumber }}
+            </p>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span>Name</span>
+            </div>
+            <div class="custom-font">
+              <span>{{ jobObj.JobInvoice.CustomerFullName }}</span>
+            </div>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span>Mobile</span>
+            </div>
+            <div class="custom-font">
+              <span>{{ jobObj.JobInvoice.ContactMobile }}</span>
+            </div>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span>Vin</span>
+            </div>
+            <div class="custom-font">
+              <span>{{ jobObj.JobInvoice.VIN }}</span>
+            </div>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span>Payment Method</span>
+            </div>
+            <div class="custom-font">
+              <span>{{ jobObj.JobInvoice.PaymentMethodName }}</span>
+            </div>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span>Color</span>
+            </div>
+            <div class="custom-font">
+              <span>{{ jobObj.JobInvoice.Color }}</span>
+            </div>
+          </div>
+
+          <div class="col-6 border-bottom py-3">
+            <div class="smaller-font">
+              <span></span>
+            </div>
+            <div class="custom-font">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-3 text-center align-self-center">
+        <!-- <img class="img-fluid" [src]="_sharedService.default_img"> -->
+        <ngb-carousel
+          class="results"
+          *ngIf="
+            _sharedService.jobObj.Gallery != undefined &&
+            _sharedService.jobObj.Gallery.length > 0
+          "
+        >
+          <ng-template
+            ngbSlide
+            *ngFor="let image of _sharedService.jobObj.Gallery; let idx = index"
+          >
+            <div class="picsum-img-wrapper">
+              <img
+                [src]="
+                  image
+                    ? _sharedService.baseUrl + image.ImageURL
+                    : _sharedService.default_img
+                "
+                class="gallery-img"
+              />
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+    </div>
+  </div>
+  <div class="row w-100">
+    <hr class="w-100" />
+    <h4 class="sub-heading mb-0">Repairs <small>External</small></h4>
+  </div>
+  <div class="row col-11 px-0 card">
+    <table class="table text-left mb-0">
+      <thead class="part-card-header text-white text-center">
+        <tr>
+          <th scope="col" class="col-4">Result</th>
+          <th scope="col" class="col-4">Location</th>
+          <th scope="col" class="col-4">Total Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="bg-white primary-font text-center"
+          *ngFor="let task of jobObj.JobTasks | filter: 52: 'JobTaskTypeID'"
+        >
+          <td>{{ task.LaborDescriptionEng }}</td>
+          <td>{{ task.Location }}</td>
+          <td>{{ task.NetAmount }} </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row mx-0" *ngIf="(jobObj.JobTasks | filter: 52: 'JobTaskTypeID').length == 0">
+      <div class="col-12 text-center p-3">No result Added!</div>
+    </div>
+  </div>
+
+  <div class="row w-100">
+    <hr class="w-100" />
+    <h4 class="sub-heading mb-0">Repairs <small>Internal</small></h4>
+  </div>
+  <div class="row col-11 px-0 card">
+    <table class="table text-left mb-0">
+      <thead class="part-card-header text-white text-center">
+        <tr>
+          <th scope="col" class="col-4">Result</th>
+          <th scope="col" class="col-4">Concern</th>
+          <th scope="col" class="col-4">Total Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="bg-white primary-font text-center"
+          *ngFor="let task of jobObj.JobTasks | filter: 51: 'JobTaskTypeID'"
+        >
+          <td>{{ task.LaborDescriptionEng }}</td>
+          <td>{{ task.ConcernTypeName }}</td>
+          <td>{{ task.NetAmount }} </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="row mx-0" *ngIf="(jobObj.JobTasks | filter: 51: 'JobTaskTypeID').length == 0">
+      <div class="col-12 text-center p-3">No result Added!</div>
+    </div>
+  </div>
+
+  <div class="row w-100">
+    <hr class="w-100" />
+    <h4 class="sub-heading mb-0">Parts Detail</h4>
+  </div>
+
+  <div class="row col-11 px-0 card">
+    <table class="table text-left mb-0">
+      <thead class="part-card-header text-white text-center">
+        <tr>
+          <th scope="col">Part Name</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Condition</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Selling Price</th>
+          <th scope="col">Total Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="bg-white primary-font text-center"
+          *ngFor="let part of jobObj.JobParts"
+        >
+          <td>{{ part.PartNameEnglish }}</td>
+          <td>{{ part.Quantity }}</td>
+          <td>{{ part.Condition }}</td>
+          <td>{{ part.DiscountAmount }}</td>
+          <td>{{ part.SellingPrice| number: "1.2-2" }}</td>
+          <td>{{ part.NetAmount| number: "1.2-2" }}</td>
+        </tr>
+        <tr class="bg-silver text-center"  *ngIf="jobObj.JobParts != undefined && jobObj.JobParts.length > 0">
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+          <th scope="col">Total</th>.
+          <!-- <th scope="col">{{jobObj.JobInvoice.NetAmount}}</th> -->
+          <th scope="col">{{ jobObj.JobInvoice.TotalPartsNetAmount| number: "1.2-2" }}</th>
+        </tr>
+      </tbody>
+    </table>
+    <div class="row mx-0" *ngIf="jobObj.JobParts.length == 0">
+      <div class="col-12 text-center p-3">No part Added!</div>
+    </div>
+  </div>
+
+  <div class="row col-11 card">
+    <div class="row pt-3">
+      <div class="col-6 primary-font">
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Total External Task Cost</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.ExternalTasksCost | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Total Internal Task Cost</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.InternalTasksCost | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>16% Tasks Tax</label>
+          </div>
+          <div class="col-3" >
+            JOD. {{ jobObj.JobInvoice.TotalTasksTax | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>16% Parts Tax</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.TotalPartsTax | number: "1.2-2" }}
+          </div>
+        </div>
+        <!-- <span class="primary-font"> Thank You for your business ! </span> -->
+      </div>
+      <div class="col-6 primary-font">
+        
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Total Parts Price</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.TotalPartsNetAmount | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Amount Paid</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.AmountPaid | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Pending Amount</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.RemainingAmount | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div
+          class="row justify-content-end"
+          *ngIf="
+            jobObj.JobInvoice.TotalAmount > 0 &&
+            jobObj.JobInvoice.TotalAmount != undefined
+          "
+        >
+          <div class="col-5 bold-font">
+            <label>Total Amount</label>
+          </div>
+          <div class="col-3">
+            JOD. {{ jobObj.JobInvoice.TotalAmount | number: "1.2-2" }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font">
+            <label>Discount</label>
+          </div>
+          <div class="col-3">
+            JOD.
+            {{
+              jobObj.JobInvoice.TotalPartsDiscount +
+                jobObj.JobInvoice.TotalTasksDiscount +
+                jobObj.JobInvoice.AdditionalPartDiscount +
+                jobObj.JobInvoice.AdditionalTaskDiscount | number: "1.2-2"
+            }}
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-5 bold-font net-amount-style">
+            <label>Net Amount</label>
+          </div>
+          <div class="col-3 net-amount-style">
+            JOD. {{ (jobObj.JobInvoice.TotalCost.toFixed(2)) }}
+          </div>
+          <!-- | number: "1.2-2" -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <form
+    #invoiceForm="ngForm"
+    (ngSubmit)="invoiceForm.valid ? updateInvoice() : ''"
+    class="col-11"
+  >
+    <div class="row" *ngIf="jobObj.JobInvoice.InvoiceStatusID != 7">
+      <div class="floating-label form-group col-4">
+        <input
+          placeholder=" "
+          class="floating-input form-control"
+          name="AmountPaid"
+          [(ngModel)]="invoiceObj.AmountPaid"
+          #AmountPaid="ngModel"
+          (paste)="onAmountEnter($event)"
+          (keypress)="onAmountEnter($event)"
+          type="number" maxlength="12"
+          min="0"
+          max="100"
+          required
+        />
+        <span class="highlight"></span>
+        <label class="input-label">Amount Paid </label>
+        <div class="error-block text-danger"> 
+          <small
+            *ngIf="
+              (invoiceForm.submitted || AmountPaid.touched) &&
+              AmountPaid.errors?.required
+            "
+            >*Required</small
+          >
+        </div>
+      </div>
+      <!--
+           (keyup)="if(invoiceObj.AmountPaid.length==10) return false;"
+           <div class="floating-label form-group col-4">
+                <input type="text" placeholder=" " class="floating-input form-control" name="discount"
+                    [(ngModel)]="invoiceObj.DiscountAmount" maxlength="18" #discount="ngModel"/>
+                <span class="highlight"></span>
+                <label class="input-label">Discount</label>
+                 <div class="error-block text-danger">
+                    <small
+                        *ngIf="(invoiceForm.submitted || discount.touched) && discount.errors?.required">*Required</small>
+                </div> 
+            </div> -->
+      <div class="floating-label form-group col-8">
+        <textarea
+          rows="2"
+          cols="50"
+          type="text"
+          placeholder=" "
+          class="floating-input form-control"
+          name="Comments"
+          [(ngModel)]="invoiceObj.Comments"
+          maxlength="300"
+          onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 &&event.charCode<= 122) || (event.charCode == 32)"
+        ></textarea>
+
+        <span class="highlight"></span>
+        <label class="input-label">Comments</label>
+      </div>
+    </div>
+
+    <!-- <div class="row justify-content-end pb-3 px-3">
+            <img style="width:200px" *ngIf="jobObj.JobInvoice.CustomerSignatureURL != undefined"
+                src="{{_sharedService.baseUrl}}{{jobObj.JobInvoice.CustomerSignatureURL}}">
+            <button class="btn btn-primary btn-round btn-simple m-0" (click)="openModel(ESignatureModel)"
+                type="button">Customer Signature</button>
+        </div> -->
+
+    <div class="row pb-3">
+      <div class="col-6">
+        <button
+          type="button"
+          class="btn btn-primary btn-round btn-simple"
+          (click)="open(returnInvoice)"
+        >
+          Return Invoice
+        </button>
+      </div>
+
+      <div
+        class="col-6 text-right"
+        *ngIf="jobObj.JobInvoice.InvoiceStatusID != 7"
+      >
+        <button type="submit" class="btn btn-primary btn-round btn-simple">
+          Submit
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template #ESignatureModel let-c="close" let-d="dismiss">
+  <!--Modal Header -->
+  <div>
+    <div class="modal-header">
+      <h4 class="modal-title">E-Signature</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="d('Cross click'); closeSignatureModal()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--Modal Body -->
+    <div class="modal-body">
+      <div class="row justify-content-center" style="margin-top: 0px">
+        <!--E-Signature Content -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <canvas id="sig-canvas" style="width: 100%; height: 200px">
+                Get a better browser, bro.
+              </canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <input hidden id="sig-dataUrl" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Modal Footer -->
+    <div class="modal-footer modal-end-footer">
+      <button type="button" class="btn btn-primary btn-round" id="sig-clearBtn">
+        Clear
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary btn-round"
+        id="sig-submitBtn"
+        (click)="onSubmitSignature()"
+      >
+        Submit
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary btn-round"
+        (click)="c('Close click'); closeSignatureModal()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #returnInvoice
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <h5 class="modal-title text-center">Customer Concern</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form
+      #returnInvoiceForm="ngForm"
+      (ngSubmit)="returnInvoiceForm.valid ? returnJobInvoice() : ''"
+    >
+      <div class="floating-label form-group col-12">
+        <input
+          type="number"
+          placeholder=" "
+          class="floating-input form-control"
+          name="ReturnAmount"
+          [(ngModel)]="returnInvoiceObj.ReturnAmount"
+          maxlength="10"
+          #ReturnAmount="ngModel"
+          required
+        />
+        <span class="highlight"></span>
+        <label class="input-label">Return Amount</label>
+        <div class="error-block text-danger">
+          <small
+            *ngIf="
+              (returnInvoiceForm.submitted || ReturnAmount.touched) &&
+              ReturnAmount.errors?.required
+            "
+            >*Required</small
+          >
+        </div>
+      </div>
+      <div class="floating-label form-group col-12">
+        <input
+          type="password"
+          placeholder=" "
+          class="floating-input form-control"
+          name="Password"
+          [(ngModel)]="returnInvoiceObj.Password"
+          maxlength="18"
+          #Password="ngModel"
+          required
+        />
+        <span class="highlight"></span>
+        <label class="input-label">Password</label>
+        <div class="error-block text-danger">
+          <small
+            *ngIf="
+              (returnInvoiceForm.submitted || Password.touched) &&
+              Password.errors?.required
+            "
+            >*Required</small
+          >
+        </div>
+      </div>
+      <div class="floating-label form-group col-12">
+        <input
+          type="text"
+          placeholder=" "
+          class="floating-input form-control"
+          name="Comments"
+          [(ngModel)]="returnInvoiceObj.Comments"
+          maxlength="300"
+          onkeypress="return (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 &&event.charCode<= 122) || (event.charCode == 32)"
+        />
+        <span class="highlight"></span>
+        <label class="input-label">Comments</label>
+      </div>
+
+      <div class="col-12 text-right">
+        <button type="submit" class="btn btn-primary btn-round m-0">
+          Return Invoice
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <span class="px-3">-</span>
+</ng-template>

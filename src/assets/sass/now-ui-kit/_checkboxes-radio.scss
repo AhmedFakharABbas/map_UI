@@ -1,0 +1,246 @@
+@import 'variables';
+
+.form-check{
+ margin-top: .65rem;
+}
+
+.form-check .form-check-label{
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  padding-left: 35px;
+  line-height: 26px;
+  margin-bottom: 0;
+  -webkit-transition: color 0.3s linear;
+  -moz-transition: color 0.3s linear;
+  -o-transition: color 0.3s linear;
+  -ms-transition: color 0.3s linear;
+  transition: color 0.3s linear;
+}
+.radio .form-check-sign{
+    padding-left: 28px;
+}
+// .form-check .form-check-sign:checked{
+// background-color: orangered;
+// }
+
+.form-check .vendor-checkbox::before{
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 0;
+  cursor: pointer;
+  border-radius: 3px;
+  top: 0;
+  background-color: $white-color;
+  // background: orangered;
+  border: 1px solid grey !important;
+  -webkit-transition: opacity 0.3s linear;
+  -moz-transition: opacity 0.3s linear;
+  -o-transition: opacity 0.3s linear;
+  -ms-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+}
+
+
+
+
+
+.form-check .form-check-sign::before,
+.form-check .form-check-sign::after{
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 0;
+  cursor: pointer;
+  border-radius: 3px;
+  top: 0;
+  background-color: $white-color;
+  // background: orangered;
+  border: 1px solid $hover-color;
+  -webkit-transition: opacity 0.3s linear;
+  -moz-transition: opacity 0.3s linear;
+  -o-transition: opacity 0.3s linear;
+  -ms-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+}
+
+ .form-check .form-check-sign::after{
+  font-family: 'Nucleo Outline';
+  content: "\ea22";
+  top: 0px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0;
+  color: $hover-color;
+  border: 0;
+  background-color: inherit;
+}
+
+.form-check .form-check-sign:hover::before {
+  border: 5px solid  $primary-font !important;
+  // color: white !important;
+  // background-color: $primary-font !important;
+}
+
+.form-check.disabled .form-check-label,
+.form-check.disabled .form-check-label {
+    color: $dark-gray;
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+.form-check input[type="checkbox"],
+.form-check input[type="radio"]{
+  opacity: 0;
+  position: absolute;
+  visibility: hidden;
+}
+
+// initial checklist checkboxes styling
+.form-check input[type="checkbox"]:checked + .form-check-sign::after{
+  opacity: 1;
+  background-color: $hover-color;
+  color: #fff;
+}
+.form-check input[type="checkbox"]:checked + .vendor-checkbox::after{
+  opacity: 1;
+  background-color: grey;
+  color: #fff;
+}
+
+
+
+// inspection result radio button style
+
+.form-check-radio input[type="radio"]:checked + .form-check-sign::before{
+  background-color:$hover-color;
+  border: 1px solid $hover-color !important;
+  opacity: 1;
+}
+
+
+// .form-check input[type="radio"]:checked + .form-check-input::after{
+//   opacity: 1;
+//   background-color: orangered;
+//   color: #fff;
+// }
+.orange input[type="radio"]:checked + .form-check-sign::after{
+  opacity: 1;
+  background-color:$hover-color;
+  color: #fff;
+}
+
+// inspection points radio buttons lable styling
+.good input[type="radio"]:checked + .form-check-sign::after{
+  opacity: 1;
+  background-color:$green-color;
+  color: #fff;
+}
+
+.need-maintainance input[type="radio"]:checked + .form-check-sign::after{
+  opacity: 1;
+  background-color:$red-color;
+  color: #fff;
+}
+
+.not-available input[type="radio"]:checked + .form-check-sign::after{
+  opacity: 1;
+  background-color:gray;
+  color: #fff;
+}
+
+.red{
+  color: $red-color;
+}
+
+.green{
+  color:$green-color;
+}
+
+
+.form-control input[type="checkbox"]:disabled + .form-check-sign::before,
+.checkbox input[type="checkbox"]:disabled + .form-check-sign::after{
+    cursor: not-allowed;
+}
+
+.form-check input[type="checkbox"]:disabled + .form-check-sign,
+.form-check input[type="radio"]:disabled + .form-check-sign{
+    pointer-events: none;
+}
+
+.form-check-radio .form-check-sign::before,
+.form-check-radio .form-check-sign::after{
+  content: " ";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #cecece;
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  top: 1px !important;
+  padding: 1px;
+  -webkit-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+  -webkit-transition: opacity 0.3s linear;
+  -moz-transition: opacity 0.3s linear;
+  -o-transition: opacity 0.3s linear;
+  -ms-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+}
+
+.form-check-radio .form-check-sign::before{
+  content: " ";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #cecece;
+  display: inline-block;
+  position: absolute;
+  left: 4px;
+  top: 3px !important;
+  padding: 1px;
+  -webkit-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+  -webkit-transition: opacity 0.3s linear;
+  -moz-transition: opacity 0.3s linear;
+  -o-transition: opacity 0.3s linear;
+  -ms-transition: opacity 0.3s linear;
+  transition: opacity 0.3s linear;
+
+}
+
+.form-check-radio input[type="radio"] + .form-check-sign:after,
+.form-check-radio input[type="radio"] {
+    opacity: 0;
+}
+.form-check-radio input[type="radio"]:checked + .form-check-sign::after {
+  width: 8px;
+  height: 8px;
+  background-color: $secondary-color;
+  // border-color: #555555;
+  border: 1px solid $hover-color !important;
+  top: 8px !important;
+  left: 9px;
+  /* background: orange; */
+  opacity: 1;
+}
+
+
+.form-check-radio input[type="radio"]:checked + .form-check-sign::after{
+    opacity: 1;
+}
+
+.form-check-radio input[type="radio"]:disabled + .form-check-sign {
+  color: $dark-gray;
+}
+
+.form-check-radio input[type="radio"]:disabled + .form-check-sign::before,
+.form-check-radio input[type="radio"]:disabled + .form-check-sign::after {
+  color: $dark-gray;
+}

@@ -1,0 +1,45 @@
+@import "variables";
+body {
+    position: relative;
+    background: $secondary-color;
+}
+
+.process-alert {
+    color: #000;
+    font-weight: bold;
+    animation: blinkingText 2s infinite;
+}
+@keyframes blinkingText {
+    0% {
+        background: #ef0a1a;
+        color: #ffffff;
+    }
+    25% {
+        background: #ffffff;
+        color: #ef0a1a;
+    }
+    50% {
+        background: #ef0a1a;
+        color: #ffffff;
+    }
+    75% {
+        background: #ffffff;
+        color: #ef0a1a;
+    }
+    100% {
+        background: #ef0a1a;
+        color: #ffffff;
+    }
+}
+
+.vehicleImage {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+.progress-bar-position{
+    z-index: 9;
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+}

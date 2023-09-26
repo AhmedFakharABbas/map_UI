@@ -1,0 +1,58 @@
+// .a-button-s:hover .button-icon {
+//   color     : $white-color !important;
+//   opacity   : 0.9;
+//   transition: all 0.8s;
+// }
+
+// .a-button {
+//   background                 : $primary-color;
+//   cursor                     : pointer;
+//   color                      : white !important;
+//   text-decoration            : none !important;
+//   border-radius              : $border-radius-large;
+//   text-align                 : center;
+//   font-size                  : $font-size-base;
+//   line-height                : 1.8;
+//   font-weight                : bolder;
+//   font-family                : lato;
+//   padding                    : 6px 0px;
+//   -webkit-transition-duration: 0.4s;
+//   /* Safari */
+//   transition-duration: 0.4s;
+//   -webkit-appearance : none !important;
+//   display            : inline-block;
+//   border             : 0px;
+// }
+
+.a-button:hover {
+  opacity   : 0.9;
+  transition: all 0.8s;
+  background: $hover-color;
+}
+
+.a-button-s {
+  background: $white-color
+    /* */
+  ;
+  text-decoration            : none !important;
+  color                      : $primary-color;
+  border-radius              : $border-radius-large;
+  text-align                 : center;
+  font-size                  : $font-size-base;
+  line-height                : 1.8;
+  font-family                : lato;
+  padding                    : 6px 0px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  -webkit-appearance : none !important;
+  display            : inline-block;
+  border             : 1px solid;
+}
+
+.a-button-s:hover {
+  opacity   : 0.9;
+  transition: all 0.8s;
+  background: $primary-color;
+  color     : white !important;
+}

@@ -1,0 +1,248 @@
+<div class="row justify-content-center h-100 align-items-center"  id="InvoiceToDownload">
+    <div class="row w-100 mt-3">
+        <hr class="w-100">
+        <h4 class="sub-heading">Invoice</h4>
+    </div>
+    <div class="col-lg-11 col-12 card outer-card-shadow mt-3">
+        <div class="row mx-3 my-3">
+            <div class="col-9 border-right">
+                <div class="row card-margin">
+
+                    <div class="col-6 border-bottom primary-color">
+                        <p>{{invoiceObj.JobInvoice.EnglishMakeName}} {{invoiceObj.JobInvoice.EnglishModelName}}</p>
+                    </div>
+
+                    <div class="col-6 border-bottom">
+                        <p class="plate-number px-2 py-1">{{invoiceObj.JobInvoice.PlateNumber}}</p>
+                    </div>
+
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Name</span>
+                        </div>
+                        <div class="custom-font">
+                            <span>{{invoiceObj.JobInvoice.CustomerFullName}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Mobile</span>
+                        </div>
+                        <div class="custom-font">
+                            <span>{{invoiceObj.JobInvoice.ContactMobile}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Vin</span>
+                        </div>
+                        <div class="custom-font">
+                            <span>{{invoiceObj.JobInvoice.VIN}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Payment Method</span>
+                        </div>
+                        <div class="custom-font">
+                            <span>{{invoiceObj.JobInvoice.PaymentMethodName}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Color</span>
+                        </div>
+                        <div class="custom-font">
+                            <span>{{invoiceObj.JobInvoice.Color}}</span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span>Invoice Status</span>
+                        </div>
+                        <div class="custom-font"
+                            [ngClass]= "invoiceObj.JobInvoice.InvoiceStatusID == 7 ? 'green-color' : invoiceObj.JobInvoice.InvoiceStatusID == 8 ? 'primary-color' : 'red-color '">
+                            <span>{{invoiceObj.JobInvoice.InvoiceStatusName}}</span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-6 border-bottom py-3">
+                        <div class="smaller-font">
+                            <span></span>
+                        </div>
+                        <div class="custom-font">
+                            <span></span>
+                        </div>
+                    </div> -->
+
+                </div>
+            </div>
+
+            <div class="col-3 text-center align-self-center">
+                <img class="img-fluid" [src]="_sharedService.default_img">
+            </div>
+        </div>
+
+    </div>
+
+    <ng-container *ngIf="invoiceObj.JobParts != undefined && invoiceObj.JobParts.length > 0">
+
+        <div class="row w-100 mt-3">
+            <hr class="w-100">
+            <h4 class="sub-heading">Parts Detail</h4>
+        </div>
+
+        <div class="row col-11 px-0">
+            <table class="table mb-5 mt-3 text-left">
+                <thead class="part-card-header text-white">
+                    <tr>
+                        <th scope="col">Part Name</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Condition</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Selling Price</th>
+                        <th scope="col">Total Amount</th>
+
+                    </tr>
+                </thead> 
+                <tbody>
+                    <tr class="bg-white primary-font" *ngFor="let part of invoiceObj.JobParts">
+                        <td> <span *ngIf="part.PartNameEnglish != undefined; else elseHyphen"> {{part.PartNameEnglish}}</span></td>
+                        <td> <span *ngIf="part.Quantity != undefined; else elseHyphen"> {{part.Quantity}}</span></td>
+                        <td> <span *ngIf="part.Condition != undefined; else elseHyphen"> {{part.Condition}}</span></td>
+                        <td> <span *ngIf="part.DiscountAmount != undefined; else elseHyphen"> {{part.DiscountAmount}}</span></td>
+                        <td> <span *ngIf="part.SellingPrice != undefined; else elseHyphen"> {{part.SellingPrice}}</span></td>
+                        <td> <span *ngIf="part.NetAmount != undefined; else elseHyphen"> {{part.NetAmount}}</span></td>
+                    </tr>
+                    <tr class="bg-silver">
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">Total</th>
+                        <th scope="col">{{invoiceObj.JobInvoice.NetAmount}}</th>
+                        <th scope="col">{{invoiceObj.JobInvoice.TotalPartsPrice}}</th>
+
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </ng-container>
+    <div class="card col-11">
+        <div class="row card-margin px-0">
+            <div class="col-4 text-center">
+                <span class="primary-font">
+                    Thank You for your business !
+                </span>
+            </div>
+            <div class="col-7 primary-font">
+                <div class="row justify-content-end">
+                    <div class="col-5 bold-font">
+                        <label>Total External Task Cost</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.ExternalTasksCost}}</div>
+                </div>
+
+                <div class="row justify-content-end">
+                    <div class="col-5 bold-font">
+                        <label>Total Internal Task Cost</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.InternalTasksCost}}</div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-5 bold-font">
+                        <label>Total Parts Price</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.TotalPartsNetAmount}}</div>
+                </div>
+
+                <div class="row justify-content-end">
+                    <div class="col-5 bold-font">
+                        <label>Amount Paid</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.AmountPaid != null ? invoiceObj.JobInvoice.AmountPaid : '0' }}</div>
+                </div>
+
+                <!-- <div class="row justify-content-end">
+                    <div class="col-5 bold-font">
+                        <label>Total Amount</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.TotalAmount != null ? invoiceObj.JobInvoice.TotalAmount : '0' }}</div>
+                </div> -->
+
+                <div class="row justify-content-end ">
+                    <div class="col-5 bold-font">
+                        <label>Net Amount</label>
+                    </div>
+                    <div class="col-3">JOD. {{invoiceObj.JobInvoice.TotalCost}}</div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <!-- <div class="row col-11 justify-content-end">
+        <img style="width:200px" *ngIf="invoiceObj.JobInvoice.CustomerSignatureURL != undefined"
+            src="{{_sharedService.baseUrl}}{{invoiceObj.JobInvoice.CustomerSignatureURL}}">
+        <label class="formGroupExampleInput mr-3">Customer Signatures</label>
+        <i class="fas fa-pencil-alt " (click)="openModel(ESignatureModel)" title="Signatures"></i>
+
+    </div> -->
+</div>
+
+<div class="row col-12 justify-content-end px-4 py-4">
+    <button type="submit" class="btn btn-primary btn-round mr-3" (click)="downloadInvoice()">Download</button>
+</div>
+
+<!-- <ng-template #ESignatureModel let-c="close" let-d="dismiss">
+   
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title">E-Signature</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click'); closeSignatureModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row justify-content-center" style="margin-top: 0px;">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <canvas id="sig-canvas" style="width:100%; height: 200px;">
+                                Get a better browser, bro.
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input hidden id="sig-dataUrl" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer modal-end-footer">
+
+            <button type="button" class="btn btn-primary btn-round" id="sig-clearBtn">Clear</button>
+
+            <button type="button" class="btn btn-primary btn-round" id="sig-submitBtn"
+                (click)="onSubmitSignature()">Submit</button>
+
+            <button type="button" class="btn btn-primary btn-round"
+                (click)="c('Close click'); closeSignatureModal()">Close</button>
+        </div>
+    </div>
+</ng-template>  -->
+
+<ng-template #elseHyphen>
+    <span class="px-3">-</span>
+</ng-template>

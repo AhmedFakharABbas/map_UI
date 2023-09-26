@@ -1,0 +1,44 @@
+@import "variables";
+.labels {
+  border-bottom: 1px solid gray;
+  padding: 1%;
+}
+.card-detail {
+  border-radius: 2em;
+  padding: 3%;
+}
+
+.font {
+  font-weight: bold;
+}
+
+.nav-pills .nav-item .nav-link {
+  margin: auto !important;
+  padding: 0 18.5px;
+  text-align: center;
+  height: 70px;
+  width: 70px; 
+  margin-right: 19px;
+  background-color: $white-color;
+  border: 2px solid $primary-font;
+  border-radius: 50%;
+}  
+
+.footer-buttons {
+  justify-content: space-around;
+}
+.role-name {
+  font-size: 10px;
+  font-weight: bold;
+}
+.file-choose {
+  visibility: hidden;
+  display: none;
+}
+.role-selector:hover {
+  background: $hover-color !important;
+}
+
+.hoverable .background { 
+  border-radius: 50% !important;
+}

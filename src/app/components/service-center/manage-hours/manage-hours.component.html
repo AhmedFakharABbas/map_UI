@@ -1,0 +1,57 @@
+<div class="row justify-content-center align-items-center">
+    <div class="row w-100 mt-3">
+        <hr class="w-100">
+        <h4 class="sub-heading">Working Hours</h4>
+    </div>
+    <form (ngSubmit)="manageHours.valid ? onSaveManageHours() : '' " #manageHours="ngForm"
+        class="col-lg-10 col-12 card outer-card-shadow mt-3 px-0">
+        <div class="row card-body  m-0">
+
+            <!-- <h1 class="mt-3 mb-2 text-center w-100">Working Hours</h1> -->
+            <div class="row w-100 mx-0 bold-font dark-font">
+                <div class="offset-4 col-4 pl-0">
+                    <label>From</label>
+                </div>
+                <div class="col-4 pl-0">
+                    <label>To</label>
+                </div>
+            </div>
+
+            <div class="row mb-3 w-100" *ngFor="let obj of saveWorkingHours.WorkingHours; let i=index">
+                <div class="offset-1 col-2 align-self-center">
+                    <label class="form-check-label">
+                        {{obj.EnglishDayName}}
+                    </label>
+                </div>
+                <div class="form-check mt-0 row col-9" ng-app='myApp' ng-controller="ArrayController">
+                    <label class="d-flex form-check-label col-12">
+                        <input class="form-check-input" type="checkbox" name="{{obj.EnglishDayName}}"
+                            [checked]="obj.IsOpened == true" id="{{obj.EnglishDayName}}" value=""
+                            (change)="obj.IsOpened = !obj.IsOpened; duplicateHours($event,i)">
+                        <span class="form-check-sign"></span>
+                        <div class="col-6">
+                            <input type="time" class="form-control" name="StartTime{{i}}" [(ngModel)]="obj.StartTime"
+                                [required]="obj.IsOpened == true">
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="obj.IsOpened == true && (obj.StartTime == undefined || obj.StartTime == '')">*required</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <input type="time" class="form-control" name="EndTime{{i}}" [(ngModel)]="obj.EndTime"
+                                [required]="obj.IsOpened == true" />
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="obj.IsOpened == true && (obj.EndTime == undefined || obj.EndTime == '')">*required</small>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mx-0 w-100">
+                <button type="submit" class="btn btn-primary btn-round btn-simple">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,306 @@
+@import "variables";
+
+.list-card {
+  margin-bottom: 0px !important;
+  border-radius: 0;
+  // box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+  display: flex;
+}
+
+.navbar-brand {
+  color: white !important;
+}
+
+.card-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.information {
+  border-right: 1px solid lightgray;
+}
+
+// side scroll bar
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+// job process icon size
+.icon-size {
+  transform: scale(1);
+}
+
+//tasks table padding
+table td,
+table th {
+  padding: 4px !important;
+}
+
+.card-body-font {
+  font-size: 13px;
+}
+
+tr.hovered:hover td {
+  background: $primary-font !important;
+  color: white !important;
+}
+tr.hovered:hover i {
+  color: white !important;
+  transform: none;
+}
+
+// collapsible card design
+.collapse-tabset {
+  position: absolute;
+  margin-top: -5px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: $white-color;
+}
+.collapse-margin-top {
+  margin-top: -18px;
+}
+
+.nav-bar-border {
+  border-top: 2px solid $primary-color;
+}
+
+.progress-abbr {
+  display: none;
+}
+
+// technician accept reject buttons
+.btn-accept {
+  background-color: $white-color;
+  color: #7fc6a6;
+  border: 1px solid #7fc6a6;
+  // padding: 0px 7px 2px 7px !important;
+}
+
+.btn-reject {
+  background-color: $white-color;
+  color: $hover-color;
+  border: 1px solid $hover-color;
+  // padding: 0px 7px 2px 7px !important;
+}
+
+.reject-btn {
+  margin-left: 2px;
+}
+
+.nav-tabs > .nav-item > .nav-link.active {
+  font-size: 14px !important;
+  border: 0px !important;
+}
+.nav-tabs > .nav-item > .nav-link.active {
+  font-size: 14px !important;
+  // color: ;
+  border-radius: 0px !important;
+  background: #ffb093 !important;
+  // border-bottom: 3px solid #f96332 !important;
+  padding: 6px 20px 6px 20px !important;
+}
+.jl-tabset > .nav-tabs > .nav-item > .nav-link {
+  font-size: 14px;
+  padding: 5px 50px !important;
+  font-weight: 600;
+  color: #686c74 !important;
+}
+
+.plate-Number {
+  border-radius: 8px;
+  background-color: $secondary-color;
+  color: $dark-font;
+  font-weight: 600;
+  padding: 1px 8px;
+}
+
+.normal-font {
+  font-size: 14px !important;
+}
+
+.sup {
+  border: 1px solid $primary-font;
+  color: $primary-font;
+  padding: 0px 2px;
+  border-radius: 5px;
+  background: $secondary-color !important;
+}
+
+input:checked + .radio-tabset .sup {
+  border: 1px solid $hover-color;
+  color: $hover-color !important;
+}
+.radio-tabset {
+  color: $primary-font !important;
+}
+.radio-tabset:hover .sup {
+  color: $hover-color;
+  border: 1px solid $hover-color;
+}
+
+.radio-tabset:hover {
+  color: $hover-color !important;
+}
+
+input:checked + .radio-tabset {
+  border-radius: 0px !important;
+  border-top: 2px solid white;
+}
+
+.card-number {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px 4px;
+  background: coral;
+  color: white;
+  border-bottom-right-radius: 35% 100%;
+  border-top-right-radius: 0% 100%;
+}
+
+.card-height {
+  height: 140px !important;
+}
+
+.tgl-flip:checked + .tgl-btn:after {
+  border: 0px !important;
+}
+
+.sd::after {
+  content: " ";
+  width: 25px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+//assigntask select
+.ng-select.choose-tech {
+  transform: scale(0.8);
+}
+.ng-select-disabled {
+  background: lightgray !important;
+}
+
+.success,
+.success:hover {
+  color: #7fc6a6 !important;
+}
+
+//image of results
+.result-img {
+  width: 231px;
+  height: 191px;
+}
+
+.current-process {
+  box-shadow: 0px -3px 8px -3px $hover-color;
+  color: $hover-color;
+}
+.completed-process {
+  border-bottom: 5px solid $hover-color !important;
+}
+
+.process-nav {
+  overflow-x: scroll;
+}
+
+// side scroll bar
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+
+.dropdown-scale {
+  transform: scale(0.8) !important;
+}
+
+.tbl-header {
+  background: $primary-color;
+  color: $white-color;
+}
+.part-selection {
+  background: $secondary-color;
+}
+
+.selectedPartPill {
+  background: #7fc6a6;
+  border-radius: 50px;
+}
+.partPill {
+  background: $secondary-color;
+  border-radius: 50px;
+}
+
+// .priHigh {
+//     border-left: 7px solid #ff3333;
+// }
+// .priMedium {
+//     border-left: 7px solid #ffcc33;
+// }
+
+table td.priMedium {
+  border-left: 5px solid #ffcc33;
+  border-top: 6px solid white;
+}
+
+table td.priHigh {
+  border-left: 5px solid #ff3333;
+  border-top: 6px solid white;
+}
+
+.gallery-img {
+  height: 115px;
+  border-radius: 0%;
+  width: 50%;
+}
+.review {
+  color: #ff3333 !important;
+}
+
+.imageSize {
+  width: 175px;
+  height: 125px;
+}
+@media screen and(max-width:1050px) {
+  .radio-tabset {
+    font-size: 12px !important;
+
+    padding-top: 17px;
+    padding-bottom: 11px;
+    width: 150px;
+  }
+  .radio-tabset {
+    border-top: none !important;
+  }
+  .list-card-header {
+    padding-left: 0px !important;
+    padding-right: 19px !important;
+  }
+  .technicianTab {
+    overflow-x: auto;
+    // padding-right: 94px;
+  }
+  // .rejectedtab {
+  //   margin-right: 35px;
+  // }
+}

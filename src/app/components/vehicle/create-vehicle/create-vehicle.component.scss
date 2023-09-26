@@ -1,0 +1,176 @@
+@import "variables";
+
+.input-group .form-control:first-child,
+.input-group-text:first-child {
+  border-right: 1px solid #dddddd;
+}
+
+//ng-select
+.ng-select.custom-append {
+  border-radius: 0px 8px 8px 0 !important;
+  border-left: 0px;
+  background: $primary-font;
+}
+.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+  color: white !important;
+}
+.ng-select.custom-append .ng-value-label {
+  color: white !important;
+}
+.custom-input {
+  border-right: 0 !important;
+}
+.unit-error {
+  position: relative;
+  left: -13px;
+  z-index: 3;
+  top: -29px;
+  height: 0;
+  pointer-events: none;
+  top: 10px;
+  left: -68px;
+  text-align: right;
+  margin-right: 20px !important;
+}
+.color-box {
+  width: 30px;
+  height: 30px;
+  margin-right: 9px;
+  margin-left: 9px;
+  margin-top: 4px;
+  border-radius: 4px;
+  // border: 1px solid lightgray;
+  // box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
+}
+
+.selected-color {
+  box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
+  border: 1px solid $primary-font;
+  width: 12px;
+  height: 12px;
+  display: inline-flex;
+  transform: translate(4px, 2px);
+}
+.selected-border {
+  padding: 10px;
+  border: 3px solid $hover-color;
+}
+.icon-checked {
+  color: $hover-color !important;
+}
+
+.icon-animation {
+  animation: popup ease 0.6s;
+  animation-iteration-count: 1;
+}
+.selected-icon {
+  position: absolute;
+}
+@keyframes popup {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.labels {
+  border-bottom: 1px solid gray;
+  padding: 1%;
+}
+.card-detail {
+  border-radius: 2em;
+  padding: 3%;
+}
+
+.font {
+  font-weight: bold;
+}
+
+.nav-pills .nav-item .nav-link {
+  margin: auto !important;
+  padding: 0 18.5px;
+  text-align: center;
+  height: 70px;
+  width: 70px;
+  color: #9a9a9a;
+  margin-right: 19px;
+  background-color: #f2f2fa;
+  border: 1px solid #bdb4b4;
+  border-radius: 50%;
+}
+.footer-buttons {
+  justify-content: space-around;
+}
+.role-name {
+  font-size: 10px;
+  font-weight: bold;
+}
+.file-choose {
+  visibility: hidden;
+  display: none;
+}
+.role-selector:hover {
+  background: $hover-color !important;
+}
+.border-dotted {
+  border: 2px dashed $primary-font !important;
+  border-radius: 8px;
+  // border-color: ;
+}
+
+.upload-image {
+  height: 88px !important;
+  width: 136px !important;
+  border-radius: 4px !important;
+}
+
+.top {
+  top: -12px;
+}
+
+.region-top {
+  position: relative;
+  top: -20px;
+}
+.color-box2 {
+  border: 1px solid $hover-color;
+  color: $hover-color;
+  border-radius: 4px;
+}
+.white-border {
+  border: 1px solid grey;
+}
+
+.checked {
+  border: none !important;
+}
+.remove-year {
+  position: absolute;
+  top: 18px;
+  right: 52px;
+  font-size: 10px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+.error-block-ng-select {
+  left: -21px;
+}
+@media screen and(max-width:1050px) {
+  .vehicleList {
+    overflow-x: scroll;
+  }
+}

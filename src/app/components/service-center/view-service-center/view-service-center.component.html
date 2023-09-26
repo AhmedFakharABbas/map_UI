@@ -1,0 +1,504 @@
+<div class="row justify-content-center h-100 mt-3 page-animation">
+    <div class="col-11 ">
+        <div class="row w-100 ">
+            <hr class="w-100">
+            <h4 class="sub-heading">View Service Center</h4>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 mb-3">
+                <div class="card">
+                    <div class="circle-picture row justify-content-center mt-3">
+                        <img class="img-fluid"
+                            src="{{serviceCenterObj.LogoImageURL ? _sharedService.baseUrl + serviceCenterObj.LogoImageURL: _sharedService.default_img}}">
+                    </div>
+                  
+                        <div class="mt-3" title="Employee Name">
+                            <h5 class="primary-color text-center mb-1"> {{serviceCenterObj.EnglishName}}</h5>
+                            <p class="mb-0 mt-1 px-2"> <i class="fas fa-phone primary-font px-2" title="Phone"></i> {{serviceCenterObj.Phone}}
+                                {{serviceCenterObj.ContactPhone}}</p>
+                            <p class="small px-2"> <i class="fas fa-envelope primary-font px-2" title="mail"></i> {{serviceCenterObj.Email}}
+                            </p>
+                        </div>
+
+                    <div class="team-sub px-2">
+                        <h6 class="primary-color">
+                            {{serviceCenterObj.ContactPersonFirstName}}</h6>
+                        <p class="small-font mb-0"> <i class="fas fa-mobile-alt primary-font px-2" title="Mobile"></i>
+                            {{serviceCenterObj.ContactPersonLastName}}</p>
+                        <p class="small-font mb-0"> <i class="fas fa-building primary-font px-2" title="Address 1"></i>
+                            {{serviceCenterObj.Address1}}
+                        </p>
+                        <p class="small-font mb-0"> <i class="fas fa-building primary-font px-2" title="Address 2"></i>
+                            {{serviceCenterObj.Address2}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-9">
+
+                <!-- <div class="row ">
+                    <div class="col-lg-4 col-xs-6">
+                        <div class="rad-info-box my-3 px-3 py-2">
+                            <div class="col-12 px-0">
+                                <span class="heading">Inspections</span>
+                            </div>
+                            <div class="d-flex">
+                                <div class="col-6">
+                                    <i class="fas fa-car" title="Total Inspections"></i>
+                                </div>
+                                <div class="col-6 align-self-center">
+                                    <span class="value"><span>4949</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xs-6">
+                        <div class="rad-info-box my-3 px-3 py-2">
+                            <div class="col-12 px-0">
+                                <span class="heading">Working Hours</span>
+                            </div>
+                            <div class="d-flex">
+                                <div class="col-6">
+                                    <i class="fas fa-clock" title="Working Hours"></i>
+                                </div>
+                                <div class="col-6 align-self-center">
+                                    <span class="value"><span>4949</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-xs-6">
+                        <div class="rad-info-box my-3 px-3 py-2">
+                            <div class="col-12 px-0"><span class="heading">Earnings</span></div>
+                            <div class="d-flex">
+                                <div class="col-6">
+                                    <i class="fas fa-chart-bar" title="Earning"></i>
+                                </div>
+                                <div class="col-6 align-self-center">
+                                    <span class="value"><span>4949</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="row ">
+                    <div class="col-4">
+                        <div class="rad-info-box mb-3 px-3 py-2 card">
+                            <div class="row">
+                                <div class="col-4">
+                                    <i class="ts inspections" title="Total Inspections"></i>
+                                </div>
+                                <div class="col-8">
+                                    <div class="text-center">
+                                        <label>Inspections</label>
+                                    </div>
+                                    <div class="text-center custom-font">
+                                        <span>-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rad-info-box mb-3 px-3 py-2 card">
+                            <div class="row">
+                                <div class="col-4">
+                                    <i class="ts working-hours" title="Working Hours"></i>
+                                </div>
+                                <div class="col-8">
+                                    <div class="text-center">
+                                        <label>Working Hours</label>
+                                    </div>
+                                    <div class="text-center custom-font">
+                                        <span>-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="rad-info-box mb-3 px-3 py-2 card">
+                            <div class="row">
+                                <div class="col-4">
+                                    <i class="ts earnings" title="Earnings"></i>
+                                </div>
+                                <div class="col-8">
+                                    <div class="text-center">
+                                        <label>Earnings</label>
+                                    </div>
+                                    <div class="text-center custom-font">
+                                        <span>-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row px-3">
+                    <div class="card inner-card-shadow">
+                        <div class="row card-body-font m-0">
+                            <span class=" p-2 mx-2">Activity</span>
+                            <div class="col-12">
+                                <div class="row justify-content-end w-100">
+
+                                    <div class="form-check form-check-radio m-0">
+                                        <label class="primary-font px-2"
+                                            (click)="isTableCollapsed = false ; isCardCollapsed = true"
+                                            [attr.aria-expanded]="isCardCollapsed" aria-controls="collapseExample"
+                                            [class.toggle-button-active]="isCardCollapsed==true">
+                                            <input class="form-check-input" type="radio" name="Internal Task"
+                                                id="internalTask" value="48" checked=true>
+                                            <span class="form-check-sign">Graphical</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-radio m-0">
+                                        <label class="primary-font px-2"
+                                            (click)="isCardCollapsed = false ; isTableCollapsed = true"
+                                            [attr.aria-expanded]="isTableCollapsed" aria-controls="collapseExample"
+                                            [class.toggle-button-active]="isTableCollapsed==true">
+                                            <input class="form-check-input" type="radio" name="Internal Task"
+                                                id="internalTask" value="48">
+                                            <span class="form-check-sign">Tabular</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <section id="collapseExample" [ngbCollapse]="isTableCollapsed">
+                                    <ngb-tabset class="sub-tabset">
+                                        <ngb-tab title="Your Activity">
+                                            <ng-template ngbTabContent  class="drop-down-animation">
+
+                                                <div class="col-12 d-flex small">
+                                                    <div class="legend-text a" (click)="toggleRedFun()">IC </div>
+                                                    <span class="legend-a" (click)="toggleRedFun()"
+                                                        title="IC">&nbsp;</span>
+                                                    <div class="legend-text b" (click)="toggleGreenFun()">PS</div>
+                                                    <span class="legend-b" (click)="toggleGreenFun()"
+                                                        title="PS">&nbsp;</span>
+                                                    <div class="legend-text c" (click)="toggleBlackFun()">Requests
+                                                    </div>
+                                                    <span class="legend-c" (click)="toggleBlackFun()"
+                                                        title="Requests">&nbsp;</span>
+                                                    <div class="legend-text d" (click)="toggleBlueFun()">Demands
+                                                    </div> <span class="legend-d" (click)="toggleBlueFun()"
+                                                        title="Demands">&nbsp;</span>
+                                                </div>
+                                                <div class="drop-down-animation">
+                                                    <x-chartist class="py-5 my-5" [type]="'Bar'" [data]="data"
+                                                        [options]="options" [events]="events"></x-chartist>
+                                                </div>
+
+                                            </ng-template>
+                                        </ngb-tab>
+                                        <ngb-tab title="Your Activity">
+                                            <ng-template ngbTabContent>
+
+                                                <div class="col-12 d-flex small my-3">
+                                                    <div class="legend-text a" (click)="toggleRedFun()">IC </div><span
+                                                        class="legend-a" (click)="toggleRedFun()"
+                                                        title="IC">&nbsp;</span>
+                                                    <div class="legend-text b" (click)="toggleGreenFun()">PS</div> <span
+                                                        class="legend-b" (click)="toggleGreenFun()"
+                                                        title="PS">&nbsp;</span>
+                                                    <div class="legend-text c" (click)="toggleBlackFun()">Requests
+                                                    </div>
+                                                    <span class="legend-c" (click)="toggleBlackFun()"
+                                                        title="Requests">&nbsp;</span>
+                                                    <div class="legend-text d" (click)="toggleBlueFun()">Demands</div>
+                                                    <span class="legend-d" (click)="toggleBlueFun()"
+                                                        title="Demands">&nbsp;</span>
+                                                </div>
+                                                <div class="drop-down-animation">
+                                                    <x-chartist class="py-5 my-5" [type]="type" [data]="data"
+                                                        [options]="options" [events]="events"></x-chartist>
+                                                </div>
+
+                                            </ng-template>
+                                        </ngb-tab>
+                                    </ngb-tabset>
+                                </section>
+                                
+                                <section id="collapseExample" [ngbCollapse]="isCardCollapsed" >
+                                    <ngb-tabset class="sub-tabset">
+
+                                        <ngb-tab title="Today Activity">
+                                            <ng-template ngbTabContent>
+                                                <table class="table text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>
+                                                            <th scope="col">Name</th>
+                                                            <th scope="col">Start Time</th>
+                                                            <th scope="col">End Time</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="drop-down-animation">
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>Hamdah</td>
+                                                            <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                            <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/admin/view-user']"></i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ng-template>
+                                        </ngb-tab>
+                                    </ngb-tabset>
+                                </section>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- <div class="row px-3">
+                    <div class="card inner-card-shadow">
+
+                        <div class="row card-body-font m-0">
+
+                            <div class="col-12">
+                                <ngb-tabset class="sub-tabset"> 
+                                    <ngb-tab title="Your Activity">
+                                        <ng-template ngbTabContent>
+
+                                            <div class="col-12 d-flex small my-3">
+                                                <div class="legend-text a" (click)="toggleRedFun()">IC </div><span
+                                                    class="legend-a" (click)="toggleRedFun()" title="IC">&nbsp;</span>
+                                                <div class="legend-text b" (click)="toggleGreenFun()">PS</div> <span
+                                                    class="legend-b" (click)="toggleGreenFun()" title="PS">&nbsp;</span>
+                                                <div class="legend-text c" (click)="toggleBlackFun()">Requests </div>
+                                                <span class="legend-c" (click)="toggleBlackFun()"
+                                                    title="Requests">&nbsp;</span>
+                                                <div class="legend-text d" (click)="toggleBlueFun()">Demands</div> <span
+                                                    class="legend-d" (click)="toggleBlueFun()"
+                                                    title="Demands">&nbsp;</span>
+                                            </div>
+
+                                            <x-chartist [type]="type" [data]="data" [options]="options"
+                                                [events]="events"></x-chartist>
+
+                                        </ng-template>
+                                    </ngb-tab>
+
+                                    <ngb-tab title="Today Activity">
+                                        <ng-template ngbTabContent>
+
+                                            <table class="table text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Id</th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Start Time</th>
+                                                        <th scope="col">End Time</th>
+                                                        <th scope="col">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>Hamdah</td>
+                                                        <td>{{'2019-12-04 12:35:24.823' | date:'short'}}</td>
+                                                        <td>{{'2019-12-04 14:47:20.320' | date:'short'}}</td>
+                                                        <td>
+                                                            <i class="fas fa-eye mr-2" title=""
+                                                                [routerLink]="['/admin/view-user']"></i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </ng-template>
+                                    </ngb-tab>
+
+
+                                    <ngb-tab title="Your Activity">
+                                        <ng-template ngbTabContent>
+
+                                            <div class="col-12 d-flex small my-3">
+                                                <div class="legend-text a" (click)="toggleRedFun()">IC </div><span
+                                                    class="legend-a" (click)="toggleRedFun()" title="IC">&nbsp;</span>
+                                                <div class="legend-text b" (click)="toggleGreenFun()">PS</div> <span
+                                                    class="legend-b" (click)="toggleGreenFun()" title="PS">&nbsp;</span>
+                                                <div class="legend-text c" (click)="toggleBlackFun()">Requests </div>
+                                                <span class="legend-c" (click)="toggleBlackFun()"
+                                                    title="Requests">&nbsp;</span>
+                                                <div class="legend-text d" (click)="toggleBlueFun()">Demands</div> <span
+                                                    class="legend-d" (click)="toggleBlueFun()"
+                                                    title="Demands">&nbsp;</span>
+                                            </div>
+                                            <x-chartist [type]="'Bar'" [data]="data" [options]="options"
+                                                [events]="events"></x-chartist>
+
+                                        </ng-template>
+                                    </ngb-tab>
+                                </ngb-tabset>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+</div>

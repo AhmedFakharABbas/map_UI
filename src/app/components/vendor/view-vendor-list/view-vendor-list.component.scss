@@ -1,0 +1,22 @@
+
+.card-radius{
+    border-radius: 10px !important;
+  }
+
+.eclipse {
+    display:inline-block;
+    width:180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+.globe{
+  font-size: 10px;
+}
+@media only screen and (min-width: 768px) and (max-width: 787px) {
+  .card-responsive {
+    min-width: 85% !important;
+    margin-left: 30px !important;
+ 
+  }
+}

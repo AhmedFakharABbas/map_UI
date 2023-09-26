@@ -1,0 +1,181 @@
+@import "variables";
+ 
+.list-card {
+  margin-bottom: 0px !important;
+  border-radius: 0;
+  // box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: none;
+  display: flex;
+}
+
+.navbar-brand {
+  color: white !important;
+}
+
+.card-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.information {
+  border-right: 1px solid lightgray;
+}
+
+// side scroll bar
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+// job process icon size
+.icon-size{
+  transform: scale(1);
+}
+
+//tasks table padding
+table td,
+table th {
+  padding: 4px !important;
+}
+
+.card-body-font {
+  font-size: 13px;
+}
+
+tr.hovered:hover td {
+  background: $primary-font !important;
+  color: white !important;
+}
+tr.hovered:hover i {
+  color: white !important;
+  transform: none;
+}
+
+// collapsible card design
+.collapse-tabset {
+  position: absolute;
+  margin-top: -5px;
+  left: 50%;
+  transform: translate(-50% , 0);
+  background-color: $white-color;
+}
+.collapse-margin-top{
+  margin-top: -18px;
+}
+
+.nav-bar-border {
+  border-top: 2px solid $primary-color;
+} 
+
+.progress-abbr {
+  display: none;
+}
+ 
+ 
+
+
+.nav-tabs > .nav-item > .nav-link.active {
+  border: 0px !important;
+}
+.nav-tabs > .nav-item > .nav-link.active {
+  /* font-size: 14px; */
+  // color: ; 
+  border-radius: 0px !important;
+  background: #ffb093 !important;
+  // border-bottom: 3px solid #f96332 !important;
+  padding: 6px 20px 6px 20px !important;
+}
+.jl-tabset > .nav-tabs > .nav-item > .nav-link {
+  font-size: 14px;
+  padding: 5px 50px !important;
+  font-weight: 600;
+  color: #686c74 !important;
+}
+
+.plate-Number{  
+  border-radius: 8px;
+  background-color: $secondary-color;
+  color: $dark-font;
+  font-weight: 600; 
+  padding: 1px 8px;
+}
+
+.normal-font{
+  font-size: 14px !important;
+}
+
+.sup{
+  border: 1px solid $primary-font;
+  color: $primary-font;
+  padding: 0px 2px;
+  border-radius: 5px;
+  background: $secondary-color !important;
+}
+
+input:checked + .radio-tabset .sup{
+  border: 1px solid $hover-color;
+  color: $hover-color !important;
+}
+.radio-tabset{
+  color: $primary-font !important;
+}
+.radio-tabset:hover .sup{
+  color: $hover-color;
+  border: 1px solid $hover-color;
+}
+
+.radio-tabset:hover{
+  color: $hover-color !important;
+}
+
+input:checked + .radio-tabset{
+  border-radius: 0px !important;
+}
+
+
+
+//process scrollbar 
+::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: $input-field-color;
+}
+
+.card-number {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px 10px;
+  background: coral;
+  color: white;
+  border-bottom-right-radius: 35% 100%;
+  border-top-right-radius: 0% 100%; 
+}
+ 
+.green-color{
+  background: green;
+  color: white;
+
+}
+.red-color{
+  background: red;
+  color: white;
+}

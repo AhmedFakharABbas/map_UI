@@ -1,0 +1,371 @@
+<form
+  (ngSubmit)="
+    customerForm.valid
+      ? _sharedService.jobObj.jcCustomerObj.CustomerID == undefined
+        ? onSaveCustomer()
+        : onUpdateCustomer()
+      : ''
+  "
+  #customerForm="ngForm"
+  class="row"
+  *ngIf="_sharedService.jobObj.jcCustomerObj"
+>
+  <div
+    class="col-lg-4 col-md-11"
+    *ngIf="_sharedService.jobObj.jcCustomerObj != undefined"
+  >
+    <div class="row p-3">
+      <div
+        class="col-6 mt-1 px-0 form-check form-check-radio"
+        *ngFor="
+          let type of _sharedService._commonMeta.objectTypes
+            | filter: 'Customer':'ObjectNameEnglish'
+        "
+      >
+        <label class="form-check-label mx-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="customerType"
+            id="{{ type.TypeNameEnglish }}"
+            [disabled]="
+              _sharedService.jobObj.jcCustomerObj.CustomerID != undefined
+            "
+            (change)="
+              _sharedService.jobObj.jcCustomerObj.CustomerTypeID =
+                type.ObjectTypeID
+            "
+            [checked]="
+              _sharedService.jobObj.jcCustomerObj.CustomerTypeID ==
+              type.ObjectTypeID
+            "
+          />
+          <span
+            class="form-check-sign primary-font"
+            [ngClass]="
+              _sharedService.jobObj.jcCustomerObj.CustomerTypeID ==
+              type.ObjectTypeID
+                ? 'active-text'
+                : ''
+            "
+            >{{ type.TypeNameEnglish }}</span
+          >
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5 col-md-1"></div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="company_name"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.CompanyName"
+      #companyName="ngModel"
+      minlength="1"
+      maxlength="20"
+      (keypress)="_sharedService.CheckInputCharacters($event)"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Company Name</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || companyName.touched) &&
+          companyName.errors?.required
+        "
+        >*Required</small
+      >
+      <small *ngIf="companyName.errors?.minlength"
+        >*At-least 1 characters are allowed</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="cp_name"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.ContactPersonName"
+      #cpName="ngModel"
+      minlength="1"
+      maxlength="20"
+      (keypress)="_sharedService.CheckInputCharacters($event)"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Contact Person</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || cpName.touched) && cpName.errors?.required
+        "
+        >*Required</small
+      >
+      <small *ngIf="cpName.errors?.minlength"
+        >*At-least 1 characters are allowed</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="first_name"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.FirstName"
+      #fName="ngModel"
+      minlength="1"
+      maxlength="20"
+      (keypress)="_sharedService.CheckInputCharacters($event)"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label">First Name</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || fName.touched) && fName.errors?.required
+        "
+        >*Required</small
+      >
+      <small *ngIf="fName.errors?.minlength"
+        >*At-least 1 characters are allowed</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="last_name"
+      maxlength="20"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.LastName"
+      (keypress)="_sharedService.CheckInputCharacters($event)"
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Last Name</label>
+  </div>
+
+  <div class="floating-label form-group col-lg-4">
+    <div class="input-group-append Country-code-prepend">
+      <div
+        class="custom custom-append"
+        *ngFor="
+          let code of _sharedService._commonMeta.Countries
+            | filter: _sharedService.jobObj.jcCustomerObj.CountryID:'CountryID'
+        "
+      >
+        {{ code.CountryCode }}
+      </div>
+    </div>
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control phone-number-prepend"
+      name="mobile"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.ContactMobile"
+      #mobile="ngModel"
+      maxlength="9"
+      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label text-prepend">Mobile Number</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || mobile.touched) && mobile.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div class="floating-label form-group col-lg-4">
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="email"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.ContactEmail"
+      #email="ngModel"
+      pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+      maxlength="50"
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Email</label>
+    <div class="error-block text-danger">
+      <small
+        class="text-danger ml-3"
+        *ngIf="
+          (customerForm.submitted || email.touched) && email.errors?.required
+        "
+        >*Required</small
+      >
+      <small class="text-danger ml-3" *ngIf="email.errors?.pattern"
+        >*Invalid Format</small
+      >
+    </div>
+  </div>
+
+  <div class="col-lg-4 mb-3 floating-label form-group">
+    <ng-select
+      class="custom"
+      placeholder="Country"
+      name="country"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.CountryID"
+      #country="ngModel"
+      required
+    >
+      <ng-option
+        *ngFor="let country of _sharedService._commonMeta.Countries"
+        [value]="country.CountryID"
+      >
+        {{ country.CountryName }}</ng-option
+      >
+    </ng-select>
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || country.touched) &&
+          country.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div class="col-lg-4 mb-3 floating-label form-group">
+    <ng-select
+      class="custom"
+      placeholder="City"
+      name="city"
+      appendTo="#append"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.CityID"
+      #city="ngModel"
+    >
+      <ng-option
+        *ngFor="let city of _sharedService._commonMeta.Cities"
+        [value]="city.CityID"
+        >{{ city.CityName }}</ng-option
+      >
+    </ng-select>
+    <!-- <div class="error-block-ng-select text-danger">
+            <small *ngIf="(customerForm.submitted || city.touched) && city.errors?.required">*Required</small>
+        </div> -->
+  </div>
+
+  <!-- <div class="floating-label form-group col-lg-4" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="datepicker-container ">
+            <div class="form-group mb-0 pb-0">
+                <input class="floating-input form-control " type="date" placeholder=" " name="birthday"
+                    [(ngModel)]="_sharedService.jobObj.jcCustomerObj.Birthday" ngbDatepicker #Birthday="ngbDatepicker"
+                    #birthday="ngModel">
+                <span class="highlight"></span>
+                <label class="input-label birthday-input">Birthday</label>
+            </div>
+        </div>
+    </div> -->
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="credit_limit"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.MaxCreditLimit"
+      #creditLimit="ngModel"
+      maxlength="5"
+      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57 || (event.charCode == 43)"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Credit Limit</label>
+    <div class="input-group-perpend price-perpend">
+      <div class="custom custom-perpend">JOD</div>
+    </div>
+    <div class="error-block-price text-danger">
+      <small
+        *ngIf="
+          (customerForm.submitted || creditLimit.touched) &&
+          creditLimit.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="zipcode"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.Zipcode"
+      maxlength="7"
+      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+    />
+    <span class="highlight"></span>
+    <label class="input-label">ZIP Code</label>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4"
+    *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="address_1"
+      maxlength="200"
+      [(ngModel)]="_sharedService.jobObj.jcCustomerObj.Address1"
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Address</label>
+  </div>
+
+  <div class="col-12 text-right">
+    <button
+      type="submit"
+      class="btn btn-primary btn-round btn-simple"
+      *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerID == undefined"
+    >
+      Save
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary btn-round btn-simple"
+      *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerID != undefined"
+    >
+      Update
+    </button>
+  </div>
+</form>

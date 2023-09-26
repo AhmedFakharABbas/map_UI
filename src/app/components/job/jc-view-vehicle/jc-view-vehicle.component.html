@@ -1,0 +1,358 @@
+<div class="row p-3" *ngIf="_sharedService.jobObj.jcVehicleObj">
+  <div
+    class="col-12 d-flex text-right pr-0"
+    style="justify-content: space-between;"
+    *ngIf="
+      _sharedService.jobObj.JCBasicInfo.JobCardID == null &&
+      _sharedService.jobObj.jcVehicleObj.VehicleID != undefined
+    "
+  >
+  <div class="py-2" style="align-self: center;"><span>Series ID: </span>
+    {{_sharedService.jobObj.jcVehicleObj.SeriesID}}</div>
+
+    <i
+      class="fas fa-edit primary-font pointer"
+      title="Edit"
+      (click)="_sharedService.jcVehicleMode = false"
+      style="align-self: center;"
+    ></i>
+  </div>
+
+
+  <div class="bb-1 col-4 py-2">
+    <div class="primary-font ml-3 smaller-font">
+      <span>Make/ Model/ Year</span>
+    </div>
+    <div class="ml-3">
+      <p class="part-detail-box big-font light-bold primary-font my-0" title="">
+        {{ _sharedService.jobObj.jcVehicleObj.EnglishMakeName }}
+        {{ _sharedService.jobObj.jcVehicleObj.EnglishModelName }}
+        {{ _sharedService.jobObj.jcVehicleObj.ProductionYear }}
+      </p>
+    </div>
+  </div>
+
+  <div class="bb-1 col-4 py-2">
+    <div class="primary-font ml-3 smaller-font">
+      <span>Plate Number</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.PlateNumber != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.PlateNumber }}
+      </p>
+    </div>
+  </div>
+
+  <div class="bb-1 col-4 py-2">
+    <div class="primary-font ml-3 smaller-font">
+      <span>VIN</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.VIN != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.VIN }}
+      </p>
+    </div>
+  </div>
+
+  <!-- <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Model</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcVehicleObj.EnglishModelName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcVehicleObj.EnglishModelName}}</p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Production Year</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcVehicleObj.ProductionYear != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcVehicleObj.ProductionYear}} </p>
+        </div>
+    </div> -->
+
+  <div class="bb-1 col-4 py-3">
+    <div class="primary-font ml-3 smaller-font">
+      <span>Color</span>
+    </div>
+    <div class="">
+      <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcVehicleObj.Color != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcVehicleObj.Color}} </p>
+      <!-- <div
+        class="color-box pointer mb-2"
+        title="{{ _sharedService.jobObj.jcVehicleObj.Color }}"
+        [style.background]="'#' + _sharedService.jobObj.jcVehicleObj.ColorCode"
+      ></div> -->
+    </div>
+  </div>
+
+  <div class="bb-1 col-4 py-3">
+    <div class="primary-font ml-3 smaller-font">
+      <span>Vehicle Type</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.VehicleTypeName != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.VehicleTypeName }}
+      </p>
+    </div>
+  </div>
+
+  <div class="bb-1 col-4 py-3">
+    <div class="primary-font ml-3 smaller-font">
+      <span>Engine Type</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.EngineTypeName != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.EngineTypeName }}
+      </p>
+    </div>
+  </div>
+
+  <!-- <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Region</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcVehicleObj.VehicleRegionName != undefined; else elseHyphen" title="">                
+                {{_sharedService.jobObj.jcVehicleObj.VehicleRegionName}}
+            </p>
+        </div>
+    </div> -->
+
+  <div
+    class="bb-1 col-4 py-3"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <div class="primary-font ml-3 smaller-font">
+      <span>Engine Number</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.EngineNumber != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.EngineNumber }}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="bb-1 col-4 py-3"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <div class="primary-font ml-3 smaller-font">
+      <span>Engine Capacity</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.EngineCapacity != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        {{ _sharedService.jobObj.jcVehicleObj.EngineCapacity }}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="col-4 py-3 bb-1"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <div class="primary-font ml-3 smaller-font">
+      <span>Cylinder Type</span>
+    </div>
+    <div class="ml-3">
+      <p
+        class="part-detail-box big-font light-bold primary-font my-0"
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.CylinderTypeID != undefined;
+          else elseHyphen
+        "
+        title=""
+      >
+        <!-- {{ (_sharedService._commonMeta.objectTypes | filter : _sharedService.jobObj.jcVehicleObj.CylinderTypeID : 'ObjectTypeID').TypeNameEnglish }}  -->
+        {{ _sharedService.jobObj.jcVehicleObj.CylinderTypeName }}
+      </p>
+    </div>
+  </div>
+
+  <div
+    class="col-2 py-3"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <div class="primary-font ml-lg-3 smaller-font">
+      <span>Contract Details</span>
+    </div>
+    <div class="ml-lg-4 mt-4">
+      <ng-container
+        *ngIf="_sharedService.jobObj.jcVehicleObj.IsContractVehicle == true"
+      >
+        <span
+          class="form-check-sign primary-font"
+          [ngClass]="
+            _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 42
+              ? 'active-text'
+              : ''
+          "
+        >
+          <i
+            *ngIf="_sharedService.jobObj.jcVehicleObj.ServiceContractID == 1"
+            class="ts contract_360 mx-3 hoverable"
+            title="View Contract Details"
+            (click)="ContractDetailsModal(contractDetails)"
+          ></i>
+          <i
+            *ngIf="_sharedService.jobObj.jcVehicleObj.ServiceContractID == 2"
+            class="ts pro mx-3 hoverable"
+            title="View Contract Details"
+            (click)="ContractDetailsModal(contractDetails)"
+          ></i>
+          <i
+            *ngIf="_sharedService.jobObj.jcVehicleObj.ServiceContractID == 3"
+            class="ts eco mx-3 hoverable"
+            title="View Contract Details"
+            (click)="ContractDetailsModal(contractDetails)"
+          ></i>
+        </span>
+      </ng-container>
+
+      <ng-container
+        *ngIf="
+          _sharedService.jobObj.jcVehicleObj.IsContractVehicle == false &&
+          _sharedService.jobObj.jcVehicleObj.VehicleID > 0
+        "
+      >
+        <button
+          type="button"
+          (click)="createContract(_sharedService.jobObj.jcVehicleObj.VehicleID)"
+          class="btn btn-round btn-simple btn-primary mt-0"
+          title="Create Contract"
+        >
+          <span class=""><i class="fas fa-plus primary-text-0"></i> </span>
+          Create Contract
+        </button>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="col-lg-5 col-sm-4 pt-3 text-center">
+    <div class="primary-font smaller-font px-4 pb-3 text-left">
+      <span>License ID Back</span>
+    </div>
+    <img
+      [src]="
+        _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+          ? _sharedService.baseUrl +
+            _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+          : _sharedService.default_img
+      "
+      id="back-plate"
+      class="gallery-img hoverable"
+      (click)="
+        galleryPreviewModal(
+          imagePreview,
+          _sharedService.jobObj.jcVehicleObj.LicensePlateBack,
+          'License Plate Back'
+        )
+      "
+    />
+  </div>
+  <div class="col-lg-5 col-sm-4 pt-3 text-center">
+    <div class="primary-font smaller-font px-4 pb-3 text-left">
+      <span>License ID Front</span>
+    </div>
+    <img
+      [src]="
+        _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+          ? _sharedService.baseUrl +
+            _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+          : _sharedService.default_img
+      "
+      id="front-plate"
+      class="gallery-img hoverable"
+      (click)="
+        galleryPreviewModal(
+          imagePreview,
+          _sharedService.jobObj.jcVehicleObj.LicensePlateFront,
+          'License Plate Front'
+        )
+      "
+    />
+  </div>
+</div>
+<div class="row" *ngIf="_sharedService.jobObj.jcVehicleObj == undefined">
+  <div class="card primary-font p-3 text-center">No Vehicle Found</div>
+</div>
+<ng-template #elseHyphen>
+  <span class="px-3">-</span>
+</ng-template>
+
+<!-- image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ title }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="galImg"
+      [src]="
+        currentImg != undefined
+          ? _sharedService.baseUrl + currentImg
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>
+
+<ng-template #contractDetails let-c="close" let-d="dismiss">
+  <app-contract-consumption
+    [vehicleID]="_sharedService.jobObj.jcVehicleObj.VehicleID"
+    [contractPlanID]="_sharedService.jobObj.jcVehicleObj.ContractPlanID"
+    (closeContractDetails)="closeContractDetailsModal($event)"
+  ></app-contract-consumption>
+</ng-template>

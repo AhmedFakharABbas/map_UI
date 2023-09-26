@@ -1,0 +1,607 @@
+<div class="row justify-content-center h-100 mt-3 page-animation">
+  <div class="col-11">
+    <div class="row w-100">
+      <hr class="w-100" />
+      <h4 class="sub-heading">Vehicle Profile</h4>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 mb-3">
+        <div class="card px-2 py-3">
+          <h4
+            class="primary-color text-center pb-3 mt-3 mb-2 border-bottom"
+            title="Plate Number"
+          >
+            <span>{{ vehicleObj.jcVehicleObj.PlateNumber }}</span>
+          </h4>
+          <p class="primary-font pb-2 text-center border-bottom">
+            {{ vehicleObj.jcVehicleObj.EnglishMakeName }}
+            {{ vehicleObj.jcVehicleObj.EnglishModelName }}
+            {{ vehicleObj.jcVehicleObj.ProductionYear }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-car primary-font px-2" title="VIN"></i>
+            {{ vehicleObj.jcVehicleObj.VIN }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-paint-brush primary-font px-2" title="Color"></i>
+            {{ vehicleObj.jcVehicleObj.Color }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-car primary-font px-2" title="Engine Number"></i>
+            {{ vehicleObj.jcVehicleObj.EngineNumber }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-car primary-font px-2" title="Vehicle Type"></i>
+            {{ vehicleObj.jcVehicleObj.VehicleTypeName }}
+          </p>
+          <p
+            *ngIf="vehicleObj.jcVehicleObj.IsContractVehicle == true"
+            class="small-font px-3 py-2 mb-0 hoverable mx-4"
+          >
+            <i
+              *ngIf="vehicleObj.jcVehicleObj.ServiceContractID == 1"
+              class="ts contract_360 primary-font px-2"
+              (click)="ContractDetailsModal(contractDetails)"
+              title="Contract"
+            ></i>
+            <i
+              *ngIf="vehicleObj.jcVehicleObj.ServiceContractID == 2"
+              class="ts pro mx-3 hoverable"
+              title="View Contract Details"
+              (click)="ContractDetailsModal(contractDetails)"
+            ></i>
+            <i
+              *ngIf="vehicleObj.jcVehicleObj.ServiceContractID == 3"
+              class="ts eco mx-3 hoverable"
+              title="View Contract Details"
+              (click)="ContractDetailsModal(contractDetails)"
+            ></i>
+            <!-- <span (click)="ContractDetailsModal(contractDetails)">
+                            View Contract
+                        </span> -->
+          </p>
+        </div>
+
+        <div class="card px-2 py-3">
+          <h4
+            class="primary-color text-center pb-3 mt-3 mb-2 border-bottom"
+            title="Customer"
+          >
+            <span *ngIf="vehicleObj.jcCustomerObj.CustomerTypeID == 68"
+              >{{ vehicleObj.jcCustomerObj.FirstName }}
+              {{ vehicleObj.jcCustomerObj.LastName }}</span
+            >
+            <span *ngIf="vehicleObj.jcCustomerObj.CustomerTypeID == 67">{{
+              vehicleObj.jcCustomerObj.CompanyName
+            }}</span>
+          </h4>
+          <p
+            class="primary-font pb-2 text-center border-bottom"
+            title="Customer Type"
+          >
+            {{ vehicleObj.jcCustomerObj.CustomerTypeName }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-mobile-alt primary-font px-2" title="Mobile"></i>
+            {{ vehicleObj.jcCustomerObj.ContactMobile }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i class="fas fa-at primary-font px-2" title="Email"></i>
+            {{ vehicleObj.jcCustomerObj.ContactEmail }}
+          </p>
+          <p class="small-font px-3 py-2 mb-0">
+            <i
+              class="fas fa-map-marker-alt primary-font px-2"
+              title="Address"
+            ></i>
+            {{ vehicleObj.jcCustomerObj.Address1 }}
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="row">
+          <div class="col-4">
+            <div class="px-3 py-2 card">
+              <div class="row">
+                <div class="col-4 p-3 text-center align-self-center br-1">
+                  <i class="ts fa-2x inspections" title="Total Jobs"></i>
+                </div>
+                <div class="col-8 align-self-center">
+                  <div class="text-center primary-font">
+                    <label>Total Jobs</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    <h5 class="my-0">
+                      {{ vehicleObj.JCBasicInfoList.length }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4" *ngIf="vehicleObj.jcVehicleObj.EngineTypeID != 29">
+            <div class="px-3 py-2 card">
+              <div class="row">
+                <div class="col-4 p-3 text-center align-self-center br-1">
+                  <i
+                    class="fa-3x fa fa-credit-card hover-color"
+                    title="Credit Amount"
+                  ></i>
+                </div>
+                <div class="col-8 align-self-center">
+                  <div class="text-center primary-font">
+                    <label>Engine Capacity</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    <h5 class="my-0">
+                      {{ vehicleObj.jcVehicleObj.EngineCapacity }} cc
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="px-3 py-2 card">
+              <div class="row">
+                <div class="col-4 p-3 text-center align-self-center br-1">
+                  <i
+                    class="hover-color fa-3x fas fa-money-bill"
+                    title="Max Credit Limit"
+                  ></i>
+                </div>
+                <div class="col-8 align-self-center">
+                  <div class="text-center primary-font">
+                    <label>Engine Type</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    <h5 class="my-0">
+                      {{ vehicleObj.jcVehicleObj.EngineTypeName }}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <ng-container
+              *ngFor="
+                let jc of vehicleObj.JCBasicInfoList
+                  | slice
+                    : (cPage - 1) * _sharedService.pageSize
+                    : (cPage - 1) * _sharedService.pageSize +
+                        _sharedService.pageSize;
+                let i = index
+              "
+            >
+              <div class="card inner-card-shadow mb-3">
+                <div
+                  class="card-header list-card-header light-bold bg-white bb-0"
+                >
+                  <span class="card-number small">{{ i + 1 }}</span>
+                  <div class="row">
+                    <div class="col-12 pt-1 pl-4">
+                      <div class="row primary-font">
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-4">
+                              <i
+                                class="fas fa-wrench mr-2 primary-font"
+                                title="Service Type"
+                              ></i>
+                              <label>{{ jc.ServiceTypeName }}</label>
+                            </div>
+
+                            <div
+                              class="col-4 align-self-center"
+                              title="Check in time"
+                            >
+                              <i class="fas fa-angle-right mr-1"></i
+                              ><i class="fas fa-clock mr-1"></i>
+                              <label>{{
+                                jc.JobOpenDate | date: "short"
+                              }}</label>
+                            </div>
+
+                            <div
+                              class="col-4 align-self-center"
+                              title="Check out time"
+                            >
+                              <i class="fas fa-angle-left mr-1"></i
+                              ><i class="fas fa-clock mr-1"></i>
+                              <label>{{
+                                jc.JobCloseDate | date: "short"
+                              }}</label>
+                            </div>
+
+                            <div class="col-4 align-self-center">
+                              <label>
+                                Concerns:
+                                <span class="dark-font">{{
+                                  (
+                                    vehicleObj.JobConcerns
+                                    | filter: jc.JobCardID:"JobCardID"
+                                  ).length
+                                }}</span></label
+                              >
+                            </div>
+
+                            <div class="col-4 align-self-center">
+                              <label
+                                >Tasks:
+                                <span class="dark-font">{{
+                                  (
+                                    vehicleObj.JobTasks
+                                    | filter: jc.JobCardID:"JobCardID"
+                                  ).length
+                                }}</span></label
+                              >
+                            </div>
+
+                            <div class="col-4 align-self-center">
+                              <label
+                                >Parts:
+                                <span class="dark-font">{{
+                                  (
+                                    vehicleObj.JobParts
+                                    | filter: jc.JobCardID:"JobCardID"
+                                  ).length
+                                }}</span></label
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row w-100 mx-0 collapse-margin-top">
+                  <hr class="w-100" />
+                  <a
+                    class="collapse-tabset"
+                    data-toggle="collapse"
+                    href="#card{{ jc.JobCardID }}"
+                    role="button"
+                    (click)="showMore = !showMore"
+                    aria-expanded="false"
+                    aria-controls="jc.JobCardID"
+                  >
+                    <i
+                      class="fas fa-chevron-down hover-color"
+                      [ngClass]="{
+                        'fa-chevron-up': showMore,
+                        'fa-chevron-down': !showMore
+                      }"
+                    ></i>
+                  </a>
+                </div>
+                <div class="collapse" id="card{{ jc.JobCardID }}">
+                  <div class="row card-body-font m-0 bb-1">
+                    <div class="col-lg-12 col-sm-12 px-2">
+                      <ngb-tabset class="jl-tabset">
+                        <ngb-tab title="Tasks">
+                          <ng-template ngbTabContent>
+                            <div class="card main-card no-border list-card">
+                              <div class="p-0 card-scroll card-height">
+                                <table class="table table-striped primary-font">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Name</th>
+                                      <th scope="col">Labor</th>
+                                      <th scope="col">Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody
+                                    *ngIf="
+                                      vehicleObj.JobTasks == undefined ||
+                                      (vehicleObj.JobTasks != undefined &&
+                                        (
+                                          vehicleObj.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                        ).length == 0)
+                                    "
+                                  >
+                                    <tr scope="row">
+                                      <td colspan="12" class="text-center">
+                                        No Task Added!
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                  <tbody>
+                                    <tr
+                                      class="hovered"
+                                      title="Task"
+                                      *ngFor="
+                                        let jt of vehicleObj.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                          | filter: 51:'JobTaskTypeID';
+                                        let idx = index
+                                      "
+                                    >
+                                      <td>{{ idx + 1 }}</td>
+                                      <td>{{ jt.TaskDescription }}</td>
+                                      <td>{{ jt.LaborPrice }}</td>
+                                      <td *ngIf="jt.IsAccepted == true">
+                                        Accepted
+                                      </td>
+                                      <td
+                                        *ngIf="
+                                          jt.IsAccepted != true &&
+                                          jt.IsAccepted == undefined
+                                        "
+                                      >
+                                        Pending
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+
+                        <ngb-tab title="Customer Concerns">
+                          <ng-template ngbTabContent>
+                            <div class="p-0 card-scroll card-height">
+                              <table class="table table-striped primary-font">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Complaint</th>
+                                  </tr>
+                                </thead>
+
+                                <tbody>
+                                  <tr
+                                    class="hovered"
+                                    title="Inprogress"
+                                    *ngFor="
+                                      let concern of vehicleObj.JobConcerns
+                                        | filter: jc.JobCardID:'JobCardID';
+                                      let idx = index
+                                    "
+                                  >
+                                    <td>{{ idx + 1 }}</td>
+                                    <td>{{ concern.ConcernDescription }}</td>
+                                  </tr>
+                                </tbody>
+                                <tbody
+                                  *ngIf="
+                                    vehicleObj.JobConcerns == undefined ||
+                                    (vehicleObj.JobConcerns != undefined &&
+                                      (
+                                        vehicleObj.JobConcerns
+                                        | filter: jc.JobCardID:'JobCardID'
+                                      ).length == 0)
+                                  "
+                                >
+                                  <tr scope="row">
+                                    <td colspan="12" class="text-center">
+                                      No Concern Added!
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+
+                        <ngb-tab title="Parts">
+                          <ng-template ngbTabContent>
+                            <div class="card main-card no-border list-card">
+                              <div class="p-0 card-scroll card-height">
+                                <table class="table table-striped primary-font">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Part Description</th>
+                                      <th scope="col">Price</th>
+                                    </tr>
+                                  </thead>
+
+                                  <tbody
+                                    *ngIf="
+                                      vehicleObj.JobParts == undefined ||
+                                      (vehicleObj.JobParts != undefined &&
+                                        (
+                                          vehicleObj.JobParts
+                                          | filter: jc.JobCardID:'JobCardID'
+                                        ).length == 0)
+                                    "
+                                  >
+                                    <tr scope="row">
+                                      <td colspan="12" class="text-center">
+                                        No Part Added!
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                  <tbody>
+                                    <tr
+                                      class="hovered"
+                                      *ngFor="
+                                        let jp of vehicleObj.JobParts
+                                          | filter: jc.JobCardID:'JobCardID';
+                                        let idx = index
+                                      "
+                                    >
+                                      <td>{{ idx + 1 }}</td>
+                                      <td>{{ jp.Notes }}</td>
+                                      <td>
+                                        {{ jp.SellingPrice }}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+                        <ngb-tab title="External Tasks">
+                          <ng-template ngbTabContent>
+                            <div class="card main-card no-border list-card">
+                              <div class="p-0 card-scroll card-height">
+                                <table class="table table-striped primary-font">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Task</th>
+                                      <th scope="col">Location</th>
+                                    </tr>
+                                  </thead>
+
+                                  <tbody
+                                    *ngIf="
+                                      vehicleObj.JobTasks == undefined ||
+                                      (vehicleObj.JobTasks != undefined &&
+                                        (
+                                          vehicleObj.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                          | filter: 52:'JobTaskTypeID'
+                                        ).length == 0)
+                                    "
+                                  >
+                                    <tr scope="row">
+                                      <td colspan="12" class="text-center">
+                                        No External Task Added!
+                                      </td>
+                                    </tr>
+                                  </tbody>
+
+                                  <tbody>
+                                    <tr
+                                      class="hovered"
+                                      *ngFor="
+                                        let jt of vehicleObj.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                          | filter: 52:'JobTaskTypeID';
+                                        let idx = index
+                                      "
+                                    >
+                                      <td>{{ idx + 1 }}</td>
+                                      <td>{{ jt.TaskDescription }}</td>
+                                      <td>{{ jt.Location }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+                      </ngb-tabset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div
+              class="card inner-card-shadow mb-3 p-3 text-center primary-font"
+              *ngIf="
+                vehicleObj.JCBasicInfoList == undefined ||
+                vehicleObj.JCBasicInfoList.length == 0
+              "
+            >
+              No job card created!
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="row justify-content-center mb-md-5 my-3"
+          *ngIf="
+            vehicleObj != undefined &&
+            vehicleObj.JCBasicInfoList != undefined &&
+            vehicleObj.JCBasicInfoList.length > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="cPage"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="vehicleObj.JCBasicInfoList.length"
+            aria-label="Job List Pagination"
+            class="pagination-primary"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template #contractDetails let-c="close" let-d="dismiss">
+    <div class="adOptionModel contract-modal" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h2 class="modal-title text-center col-12 hover-color">
+                {{vehicleObj.jcVehicleObj != undefined ? vehicleObj.jcVehicleObj.ContractFullName
+                : ''}}
+            </h2>
+            <button type="button" class="close" (click)="closeContractDetailsModal()" title="Cancel">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="fluid-container modal_container ">
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12">
+                        <div
+                            *ngFor="let ob of _sharedService._commonMeta.objectTypes | filter : 'ServiceCategory' : 'ObjectNameEnglish'; let i=index">
+                            <div class="card px-2 py-2 text-center text-white heading-color">
+                                <label for="">{{ob.TypeNameEnglish}} </label>
+                            </div>
+                            <table class="table text-left primary-font page-animation">
+                                <thead class="col-12">
+                                    <tr class="row">
+                                        <th scope="col" class="col-1">#</th>
+                                        <th scope="col" class="col-4">Name</th>
+                                        <th scope="col" class="col-3">Allowed Units</th>
+                                        <th scope="col" class="col-3">Total Used</th>
+                                        <th scope="col" class="col-1"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody *ngIf="vehicleObj.PlanFeatures != undefined">
+                                    <tr class="row"
+                                        *ngFor="let pl of vehicleObj.PlanFeatures | filter : ob.ObjectTypeID : 'CategoryID'; let i=index">
+                                        <td class="col-1">{{i+1}}</td>
+                                        <td class="col-4">{{pl.PartNameEnglish != undefined ? pl.PartNameEnglish :
+                                            pl.LaborDescriptionEng != undefined ? pl.LaborDescriptionEng :
+                                            pl.FeatureNameEng }}
+                                        </td>
+                                        <td class="col-3">{{pl.NumberOfUnits != undefined ? pl.NumberOfUnits + ' (Qty)'
+                                            : pl.Discount != undefined ? pl.Discount + ' %' : pl.IsInclude == true ?
+                                            '&#10003;' : pl.AssistTypeName}}</td>
+                                        <td class="col-3">{{pl.NumberOfUnits != undefined ? pl.TotalUsage + ' (Qty)' :
+                                            pl.Discount != undefined ? ' - ' : pl.IsInclude == true ? ' - ' : ' - '}}
+                                        </td>
+                                        <td class="col-1">
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-12 float-left text-center">
+                            <button (click)="closeContractDetailsModal()"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">
+                                OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-template> -->
+
+<ng-template #contractDetails let-c="close" let-d="dismiss">
+  <app-contract-consumption
+    [vehicleID]="vehicleObj.jcVehicleObj.VehicleID"
+    [contractPlanID]="vehicleObj.jcVehicleObj.ContractPlanID"
+    (closeContractDetails)="closeContractDetailsModal($event)"
+  ></app-contract-consumption>
+</ng-template>

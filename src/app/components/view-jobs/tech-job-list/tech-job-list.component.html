@@ -1,0 +1,2906 @@
+<div
+  class="row justify-content-center align-items-center mt-3 page-animation p-3"
+>
+  <div class="col-lg-11" id="append">
+    <button
+      class="btn btn-primary"
+      id="togglefilter"
+      data-toggle="collapse"
+      aria-expanded="false"
+      href="#filterView"
+    >
+      Filter<i class="fa fa-filter hover-none ml-2" aria-hidden="true"></i>
+    </button>
+    <div class="row mx-0 my-3 collapse" id="filterView">
+      <div class="col-4 chiller_cb">
+        <ng-select
+          class="custom search-dropdown"
+          id="job-make-applications"
+          placeholder="Make"
+          name="Make"
+          resolution="duplicate"
+          [(ngModel)]="filter.MakeID"
+          #MakeName="ngModel"
+          (change)="filter.ModelID = null"
+        >
+          <ng-option
+            *ngFor="let item of _sharedService._commonMeta.Makes"
+            [value]="item.MakeID"
+            >{{ item.EnglishMakeName }}</ng-option
+          >
+        </ng-select>
+      </div>
+      <div class="col-4 chiller_cb">
+        <ng-select
+          class="custom search-dropdown"
+          id="job-model-applications"
+          placeholder="Model"
+          name="model"
+          resolution="duplicate"
+          [(ngModel)]="filter.ModelID"
+          #ModelName="ngModel"
+        >
+          <ng-option
+            *ngFor="
+              let item of _sharedService._commonMeta.Models
+                | filter: filter.MakeID:'MakeID'
+            "
+            [value]="item.ModelID"
+            >{{ item.EnglishModelName }}</ng-option
+          >
+        </ng-select>
+      </div>
+      <div class="col-4 chiller_cb">
+        <ng-select
+          class="custom search-dropdown"
+          id="job-year-applications"
+          placeholder="Year"
+          name="year"
+          resolution="duplicate"
+          [(ngModel)]="filter.ProductionYear"
+          #YearName="ngModel"
+        >
+          <ng-option
+            *ngFor="let item of _sharedService._commonMeta.Years"
+            [value]="item.YearCode"
+            >{{ item.YearCode }}</ng-option
+          >
+        </ng-select>
+      </div>
+      <div class="col-sm-6 pt-2 mt-3">
+        <div class="form-group">
+          <input
+            type="text"
+            class="floating-input form-control input-label"
+            placeholder="Card Number, Plate Number Or Car Name"
+            name="first_name"
+            [(ngModel)]="filter.SearchQuery"
+            #search="ngModel"
+            (keypress)="onKeypressEvent($event)"
+          />
+        </div>
+      </div>
+      <div class="col-sm-4 mt-3">
+        <!--  (click)="getJobCards((_sharedService.techJobCardTab = 1))" -->
+        <button
+          type="button"
+          id="getJobListBtn"
+          class="btn btn-primary"
+          (click)="applyFilter()"
+        >
+          Apply
+        </button>
+        <!-- clear(); _sharedService.techJobCardTab = 1 -->
+        <u class="mx-4 primary-color mt-3 font-16 cursor" (click)="clear()"
+          >Clear</u
+        >
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-3 mx-lg-3">
+      <!-- <div class="col-sm-4">
+                <div class="form-group">
+                    <input type="text" class="floating-input form-control input-label"
+                        placeholder="Card Number, Plate Number Or Car Name" name="first_name" [(ngModel)]="searchQuery"
+                        #search="ngModel" (keypress)="onKeypressEvent($event)" />
+                </div>
+            </div> -->
+    </div>
+
+    <!-- technician tabset -->
+    <div class="border-bottom radio-bg mb-4 mx-0 d-flex technicianTab">
+      <!--  [ngClass]="_sharedService.logged_user_role_id == 6 ? 'mx-2' : ''" -->
+      <div
+        class="justify-content-center"
+        *ngIf="_sharedService.logged_user_role_id == 6"
+      >
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="_sharedService.techJobCardTab = 7"
+          id="queue"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 7"
+          (change)="radioTab = true"
+        />
+        <label for="queue" class="radio-tabset"
+          >&nbsp;Queue
+
+          <sup class="sup" *ngIf="AppointmentTotal != undefined">{{
+            AppointmentTotal
+          }}</sup>
+        </label>
+      </div>
+      <div class="justify-content-center">
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 1;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 1))
+          "
+          id="pending"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 1"
+          (change)="radioTab = true"
+        />
+        <label for="pending" class="radio-tabset"
+          >&nbsp;Pending
+          <sup class="sup">{{ pending != undefined ? pending : 0 }}</sup>
+        </label>
+      </div>
+      <div class="justify-content-center p-0">
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 2;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 2))
+          "
+          id="inProgress"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 2"
+          (change)="radioTab = true"
+        />
+        <label for="inProgress" class="radio-tabset"
+          >&nbsp;
+          <span *ngIf="_sharedService.logged_user_role_id == 7"
+            >In Pricing
+          </span>
+          <span *ngIf="_sharedService.logged_user_role_id != 7"
+            >In Progress
+          </span>
+          <sup class="sup">{{ inProgress != undefined ? inProgress : 0 }}</sup>
+        </label>
+      </div>
+      <div class="justify-content-center">
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 3;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 3))
+          "
+          id="completed"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 3"
+          (change)="radioTab = true"
+        />
+        <label for="completed" class="radio-tabset"
+          >&nbsp;
+          <span *ngIf="_sharedService.logged_user_role_id == 7"
+            >Awaiting For
+          </span>
+          <span *ngIf="_sharedService.logged_user_role_id != 7"
+            >Completed
+          </span>
+          <sup class="sup">{{ completed != undefined ? completed : 0 }}</sup>
+        </label>
+        <!-- *ngIf="(jobCardArray.JCBasicInfoList  |
+                    searchTechJobCards : searchQuery).length>0" -->
+      </div>
+      <!--  [ngClass]="_sharedService.logged_user_role_id == 7 ? 'mx-2' : ''" -->
+      <div
+        class="justify-content-center"
+        *ngIf="_sharedService.logged_user_role_id == 7"
+      >
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 5;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 5))
+          "
+          id="preparing"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 5"
+          (change)="radioTab = true"
+        />
+        <label for="preparing" class="radio-tabset"
+          >&nbsp;
+          <span>Preparing </span>
+          <sup class="sup">{{ prepering != undefined ? prepering : 0 }}</sup>
+        </label>
+      </div>
+      <!--  [ngClass]="_sharedService.logged_user_role_id == 7 ? 'mx-2' : ''" -->
+      <div
+        class="justify-content-center"
+        *ngIf="_sharedService.logged_user_role_id == 7"
+      >
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 6;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 6))
+          "
+          id="delivered"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 6"
+          (change)="radioTab = true"
+        />
+        <label for="delivered" class="radio-tabset"
+          >&nbsp;
+          <span>Delivered </span>
+          <sup class="sup">{{ deleverd != undefined ? deleverd : 0 }}</sup>
+        </label>
+      </div>
+
+      <div class="justify-content-center">
+        <input
+          class="radio-btn"
+          type="radio"
+          (click)="
+            _sharedService.techJobCardTab = 4;
+            filter.pageNumber = 1;
+            getJobCards((_sharedService.techJobCardTab = 4))
+          "
+          id="rejected"
+          name="jcStatus"
+          [checked]="_sharedService.techJobCardTab == 4"
+          (change)="radioTab = true"
+        />
+        <label for="rejected" class="radio-tabset"
+          >&nbsp;Rejected
+          <sup class="sup">{{ rejected != undefined ? rejected : 0 }}</sup>
+        </label>
+      </div>
+    </div>
+
+    <!-- job list cards -->
+    <div class="pt-3" *ngIf="_sharedService.techJobCardTab != 7">
+      <div
+        *ngIf="
+          jobCardArray == undefined ||
+          (jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList == undefined) ||
+          (jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            (
+              jobCardArray.JCBasicInfoList
+              | filter: _sharedService.techJobCardTab:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length == 0)
+        "
+      >
+        <h5 class="no-record-error">No data found</h5>
+      </div>
+      <ng-container
+        *ngFor="
+          let jc of jobCardArray.JCBasicInfoList
+            | searchTechJobCards: searchQuery
+            | slice
+              : (cPage - 1) * _sharedService.pageSize
+              : (cPage - 1) * _sharedService.pageSize + _sharedService.pageSize;
+          let i = index
+        "
+      >
+        <div class="card inner-card-shadow mb-0">
+          <!-- card-header -->
+          <div class="card-header list-card-header light-bold bg-white px-md-0">
+            <span class="card-number">{{ jc.JobCardNumber }}</span>
+            <div class="row primary-font px-3 pt-2">
+              <div class="col-11 row mx-0 px-md-0">
+                <div
+                  class="col-4 align-self-center pointer"
+                  title="Make Model Year"
+                >
+                  <a>
+                    <i
+                      class="fas fa-car mr-2 fa-lg"
+                      title="Make Model Year"
+                    ></i>
+                    <label class="pointer"
+                      >{{ jc.EnglishMakeName }}
+                      {{ jc.EnglishModelName }}
+                      {{ jc.ProductionYear }}</label
+                    >
+                  </a>
+                </div>
+
+                <div class="col-4 align-self-center">
+                  <i class="ts plate-number-icon mr-2" title="Plate Number"></i>
+                  <label>{{ jc.PlateNumber }}</label>
+                </div>
+
+                <div class="col-4 align-self-center">
+                  <i class="sd vin-icon mr-2" title="VIN"></i>
+                  <label>{{ jc.VIN }}</label>
+                </div>
+                <div class="col-4 align-self-center">
+                  <i class="ts e-type-icon mr-2 fa-lg" title="Engine Type"></i>
+                  <label>{{ jc.EngineTypeName }}</label>
+                </div>
+                <div
+                  class="col-4 align-self-center"
+                  *ngIf="jc.EngineTypeID != 29"
+                >
+                  <i
+                    class="ts e-capacity-icon mr-2 fa-lg"
+                    title="Engine Capacity"
+                  ></i>
+                  <label>{{ jc.EngineCapacity }} cc</label>
+                </div>
+                <div class="col-4 align-self-center">
+                  <span
+                    *ngIf="
+                      jc.IRStatusID == 17 &&
+                      (_sharedService.logged_user_role_id == 5 ||
+                        _sharedService.logged_user_role_id == 8)
+                    "
+                  >
+                    <label
+                      ><i
+                        class="fas fa-check-circle fa-lg success mr-2 ml-1"
+                      ></i
+                      >Results Completed</label
+                    >
+                  </span>
+                  <!-- for foreman to assign technician -->
+                  <!-- <span *ngIf="jc.IRStatusID != 17 && _sharedService.logged_user_role_id == 5 ">
+                                        Assign Inspection <i class="fas fa-edit mx-2"
+                                            (click)="openAssignIRModal(IRAssignModal, jc.JobCardID)"></i>
+                                    </span> -->
+                  <!-- assigned advisor for valet -->
+                  <span *ngIf="_sharedService.logged_user_role_id == 6">
+                    <label
+                      ><i class="fas fa-user fa-lg mr-2 ml-1"></i
+                      ><span appElseHyphen [elseHyphen]="jc.AdvisorName"></span
+                    ></label>
+                  </span>
+                </div>
+                <!-- assign technician -->
+                <!-- <div class="col-12 row pb-2"
+                                    *ngIf="_sharedService.logged_user_role_id == 5 && jc.ApprovalStatusID == 17">
+                                    <div class="floating-label form-group col-lg-4 col-sm-6 mb-0 pb-0 pt-2 text-center" *ngIf="jc.ApprovalStatusID == 17 && (jobCardArray.JobTasks | filter : jc.JobCardID : 'JobCardID' | filter : 51: 'JobTaskTypeID' | filter : 70 : 'RepairTypeID').length > 0">
+                                        <span>Choose Mechanic <i class="fas fa-edit mx-2"                                                
+                                                (click)="openAssignTechnician(assignTechModal, jc.JobCardID, 96)"></i>
+                                    
+                                        </span>
+                                    </div>
+
+                                    <div class="floating-label form-group col-lg-4 col-sm-6 mb-0 pb-0 pt-2 text-center" *ngIf="jc.ApprovalStatusID == 17 && (jobCardArray.JobTasks | filter : jc.JobCardID : 'JobCardID' | filter : 51: 'JobTaskTypeID' | filter : 71 : 'RepairTypeID').length > 0">
+                                        <span>Choose Electrician <i class="fas fa-edit mx-2"                                                
+                                                (click)="openAssignTechnician(assignTechModal, jc.JobCardID, 95)"></i>
+                                    
+                                        </span>
+                                    </div>
+
+                                    <div class="floating-label form-group col-lg-4 col-sm-6 mb-0 pb-0 pt-2 text-center" *ngIf="jc.ApprovalStatusID == 17 && (jobCardArray.JobTasks | filter : jc.JobCardID : 'JobCardID' | filter : 51: 'JobTaskTypeID' | filter : 73 : 'RepairTypeID').length > 0">
+                                        <span>Choose Other <i class="fas fa-edit mx-2"
+                                                
+                                                (click)="openAssignTechnician(assignTechModal, jc.JobCardID, 97)"></i>
+                                    
+                                        </span>
+                                    </div>
+                                </div> -->
+              </div>
+              <div class="col-1 row mx-0 px-md-0">
+                <div class="col-12 align-self-center text-right px-0">
+                  <!-- accept process -->
+                  <span
+                    class="align-self-center"
+                    *ngIf="
+                      (jc.QAStatusID == 15 &&
+                        jc.ApprovalStatusID == 17 &&
+                        _sharedService.logged_user_role_id == 9) ||
+                      (jc.VIStatusID == 15 &&
+                        _sharedService.logged_user_role_id == 6) ||
+                      (_sharedService.logged_user_role_id == 7 &&
+                        jc.ProcessStatusID == 15)
+                    "
+                  >
+                    <button
+                      type="button"
+                      title="Accept 01 "
+                      id="{{ i }}"
+                      class="
+                        btn btn-accept btn-round
+                        smaller-font
+                        my-0
+                        my-md-3
+                        mb-1
+                        px-2
+                        py-0
+                      "
+                      (click)="
+                        jc.ProcessStatusID = 16;
+                        acceptJobProcess(
+                          jc.ProcessStatusID,
+                          jc.ProcessTypeID,
+                          jc.JobCardID
+                        )
+                      "
+                    >
+                      Accept
+                    </button>
+                    <button
+                      type="button"
+                      title="Reject"
+                      id="{{ i }}"
+                      class="
+                        btn btn-reject btn-round
+                        smaller-font
+                        my-0
+                        mb-1
+                        px-2
+                        py-0
+                      "
+                      (click)="
+                        jc.ProcessStatusID = 18;
+                        acceptJobProcess(
+                          jc.ProcessStatusID,
+                          jc.ProcessTypeID,
+                          jc.JobCardID
+                        )
+                      "
+                    >
+                      Reject
+                    </button>
+                  </span>
+                  <!-- accept all tasks -->
+                  <span
+                    class="align-self-center"
+                    *ngIf="
+                      (
+                        jobCardArray.JobTasks
+                        | filter: jc.JobCardID:'JobCardID'
+                        | filter: 15:'TaskStatusID'
+                      ).length > 0 &&
+                      _sharedService.logged_user_role_id == 8 &&
+                      (
+                        jobCardArray.JobTasks
+                        | filter: jc.JobCardID:'JobCardID'
+                        | filter: _sharedService.logged_user_id:'EmployeeID'
+                      ).length > 0
+                    "
+                  >
+                    <button
+                      type="button"
+                      title="Accept All Tasks"
+                      class="
+                        btn btn-accept btn-round
+                        smaller-font
+                        my-0
+                        my-md-3
+                        mb-1
+                        px-2
+                        py-0
+                      "
+                      (click)="
+                        taskAction.TaskStatusID = 16;
+                        acceptAllTasks(jc.JobCardID)
+                      "
+                    >
+                      Accept
+                    </button>
+
+                    <button
+                      type="button"
+                      title="Reject All Tasks"
+                      class="
+                        btn btn-reject btn-round
+                        smaller-font
+                        my-0
+                        mb-1
+                        px-2
+                        py-0
+                      "
+                      (click)="
+                        taskAction.TaskStatusID = 18;
+                        acceptAllTasks(jc.JobCardID)
+                      "
+                    >
+                      Reject
+                    </button>
+                  </span>
+                  <!-- Edit button -->
+                  <!-- *ngIf="_sharedService.logged_user_role_id == 5 ? (jobCardArray.JobProcess | filter : 9 : 'ProcessTypeID' | filter : jc.JobCardID : 'JobCardID' | filter : _sharedService.logged_user_id : 'EmployeeID').length > 0 ? jc.ProcessStatusID == 16 ? true : false : true : jc.ProcessStatusID == 16 ? true : false" -->
+                  <ng-container [ngSwitch]="_sharedService.logged_user_role_id">
+                    <i
+                      *ngSwitchCase="5"
+                      class="fas fa-edit m-2 pointer font-22"
+                      title="Edit"
+                      [routerLink]="[
+                        '/',
+                        'update-job',
+                        jc.JobCardID,
+                        'customer-concerns-view'
+                      ]"
+                    ></i>
+                    <!-- *ngIf="jc.ProcessStatusID == 16" -->
+                    <span *ngIf="jc.ProcessStatusID == 16">
+                      <button
+                        *ngSwitchCase="6"
+                        type="button"
+                        (click)="
+                          (_sharedService.loading == true);
+                          _sharedService.jobCardId = jc.JobCardID
+                        "
+                        class="
+                          btn btn-simple btn-primary btn-round
+                          smaller-font
+                          my-0
+                          mb-1
+                          px-2
+                          py-0
+                        "
+                        title="Edit"
+                        [routerLink]="[
+                          '/',
+                          'update-job',
+                          jc.JobCardID,
+                          'inspection'
+                        ]"
+                      >
+                        Edit
+                      </button>
+                      <!-- <i *ngSwitchCase="6" class="fas fa-edit m-2 pointer" title="Edit"
+                                            [routerLink]="['/','update-job',jc.JobCardID,'inspection']"></i> -->
+                      <i
+                        *ngSwitchCase="9"
+                        class="fas fa-edit m-2 pointer font-22"
+                        title="Edit"
+                        [routerLink]="['/', 'update-job', jc.JobCardID, 'qa']"
+                      ></i>
+                    </span>
+                    <span
+                      *ngIf="
+                        jc.ProcessStatusID != 15 &&
+                        jc.ProcessStatusID != 18 &&
+                        jc.ApprovalStatusID != 17
+                      "
+                    >
+                      <i
+                        *ngSwitchCase="7"
+                        class="fas fa-edit m-2 pointer font-22"
+                        title="Edit"
+                        [routerLink]="[
+                          '/',
+                          'update-job',
+                          jc.JobCardID,
+                          'part-price'
+                        ]"
+                      ></i>
+
+                      <ng-container *ngSwitchCase="8">
+                        <i
+                          *ngIf="
+                            jc.ApprovalStatusID != 17 &&
+                            _sharedService.techJobCardTab != 1 &&
+                            _sharedService.techJobCardTab != 3 &&
+                            _sharedService.techJobCardTab != 4
+                          "
+                          class="fas fa-edit m-2 pointer font-22"
+                          title="Edit"
+                          [routerLink]="[
+                            '/',
+                            'update-job',
+                            jc.JobCardID,
+                            'inspection-results'
+                          ]"
+                        ></i>
+                      </ng-container>
+                    </span>
+                    <!-- <i *ngSwitchDefault class="fas fa-edit m-2 pointer" title="Edit"
+                                            [routerLink]="['/','update-job',jc.JobCardID,'inspection-results']"></i> -->
+                  </ng-container>
+
+                  <!-- review button for foreman -->
+                  <i
+                    class="ts m-2 pointer"
+                    title="Review"
+                    [ngClass]="
+                      jc.ApprovalStatusID != 17 ? 'review-icon' : 'staff-review'
+                    "
+                    (click)="openReviewModal(reviewModal, jc)"
+                    *ngIf="
+                      _sharedService.logged_user_role_id == 5 ||
+                      _sharedService.logged_user_role_id == 2
+                    "
+                  ></i>
+
+                  <!-- view button -->
+                  <!-- *ngIf="_sharedService.logged_user_role_id == 5 ? (jobCardArray.JobProcess | filter : 9 : 'ProcessTypeID' | filter : jc.JobCardID : 'JobCardID' | filter : _sharedService.logged_user_id : 'EmployeeID').length > 0 ? jc.ProcessStatusID == 16 ? true : false : true : false" -->
+                  <i
+                    *ngIf="_sharedService.logged_user_role_id == 5"
+                    class="fas fa-eye m-2 pointer font-22"
+                    title="View"
+                    [routerLink]="['/', 'job', 'detail']"
+                    [queryParams]="{ JobCardID: jc.JobCardID }"
+                  ></i>
+
+                  <!-- VIEW TASK BUTTON -->
+                  <span
+                    *ngIf="
+                      _sharedService.logged_user_role_id == 8 &&
+                      (
+                        jobCardArray.JobTasks
+                        | filter: jc.JobCardID:'JobCardID'
+                        | filter: _sharedService.logged_user_id:'EmployeeID'
+                      ).length > 0
+                    "
+                  >
+                    <i
+                      *ngIf="jc.JobTaskStatusID == 2"
+                      class="fas fa-eye m-2 pointer font-22"
+                      title="View all tasks"
+                      [routerLink]="['/', 'job', 'view-tasks']"
+                      [queryParams]="{ JobCardID: jc.JobCardID }"
+                    ></i>
+                  </span>
+                </div>
+
+                <div
+                  class="col-12 text-right px-md-0"
+                  *ngIf="
+                    (
+                      jobCardArray.JobTasks
+                      | filter: jc.JobCardID:'JobCardID'
+                      | filter: 16:'ProcessStatusID'
+                    ).length > 0
+                  "
+                >
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round btn-simple my-0 py-1 px-2"
+                    title="Complete all tasks"
+                    (click)="openModal(completeAll, jc.JobCardID)"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row w-100 mx-0 collapse-margin-top">
+            <hr class="divider" />
+            <a
+              class="collapse-tabset btn p-0"
+              data-toggle="collapse"
+              href="#card{{ jc.JobCardID }}"
+              role="button"
+              (click)="collapseJC($event, jc.JobCardID)"
+              aria-expanded="false"
+              aria-controls="jc.JobCardID"
+            >
+              <i
+                class="fas fa-chevron-down hover-color px-3 pt-3 pb-2"
+                id="{{ jc.JobCardID }}"
+              ></i>
+            </a>
+          </div>
+          <div
+            class="row card-body-font m-0 bb-1"
+            class="collapse"
+            id="card{{ jc.JobCardID }}"
+          >
+            <div class="col-lg-12 col-sm-12 px-2">
+              <ngb-tabset class="jl-tabset">
+                <ngb-tab title="Tasks">
+                  <ng-template ngbTabContent>
+                    <div class="card main-card no-border list-card">
+                      <div class="p-0 card-scroll card-height">
+                        <table class="table table-striped primary-font">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Type</th>
+                              <th scope="col">Category</th>
+                              <th scope="col">Start Time</th>
+                              <th scope="col">End Time</th>
+                              <!-- <th scope="col">QAComments</th> -->
+                              <!-- <th scope="col">Status</th> -->
+                            </tr>
+                          </thead>
+                          <tbody
+                            *ngIf="
+                              jobCardArray.JobTasks == undefined ||
+                              (jobCardArray.JobTasks != undefined &&
+                                (
+                                  jobCardArray.JobTasks
+                                  | filter: jc.JobCardID:'JobCardID'
+                                  | filter: 51:'JobTaskTypeID'
+                                ).length == 0)
+                            "
+                          >
+                            <tr scope="row">
+                              <td colspan="12" class="text-center">
+                                No Task Added!
+                              </td>
+                            </tr>
+                          </tbody>
+                          <tbody>
+                            <tr
+                              class="hovered"
+                              title="Task"
+                              
+                              *ngFor="
+                                let jt of jobCardArray.JobTasks
+                                  | filter: jc.JobCardID:'JobCardID'
+                                  | filter: 51:'JobTaskTypeID'
+                                  | notFilter: undefined:'LaborDescriptionEng';
+                                let idx = index
+                              "
+                              
+                            >
+                              <td>{{ idx + 1 }}</td>
+                              <td
+                                (click)="
+                                  jc.JobTaskStatusID != 1
+                                    ? openTaskModal(taskModel, jt.JobTaskID)
+                                    : ''
+                                "
+                              >
+                                {{ jt.LaborDescriptionEng }}
+                              </td>
+                              <td>{{ jt.JobTaskTypeName }}</td>
+                              <td>{{ jt.RepairTypeName }}</td>
+                              <td>{{ jt.StartDateTime | date: "short" }}</td>
+                              <td>{{ jt.EndDateTime | date: "short" }}</td>
+                              <!-- <td>{{jt.QAComments}}</td> -->
+                              <!-- <td> -->
+                              <!--<div class="col-1 align-self-center d-flex"
+                                                                    *ngIf="jt.CurrentEmployeeID ==  this._sharedService.logged_user_id && jt.TaskStatusID == 15">
+                                                                    <button type="button"
+                                                                        class="btn btn-accept btn-round proposal-btns my-0"
+                                                                        (click)="jt.TaskStatusID = 16; acceptJobTask(jt)"
+                                                                        title="Accept Task">✔</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-reject btn-round proposal-btns my-0"
+                                                                        (click)="jt.TaskStatusID = 18; acceptJobTask(jt)"
+                                                                        title="Reject Task">
+                                                                        <span class="reject-btn">
+                                                                            X</span></button>
+                                                                </div>-->
+                              <!-- <span
+                                                                    *ngIf=" (jt.TaskStatusID != 17 && jt.StartDateTime != undefined) && _sharedService.logged_user_role_id == 8">
+                                                                    <input class="tgl tgl-flip" id="{{idx+1}}"
+                                                                        type="checkbox" value="" name="Task{{idx+1}}"
+                                                                        [checked]="jt.TaskStatusID == 17"
+                                                                        (click)="jt.TaskStatusID = 17; isCompleted(jt)"
+                                                                        [disabled]="jt.TaskStatusID == 17" />
+                                                                    <label class="tgl-btn" data-tg-off="Mark complete"
+                                                                        data-tg-on="Completed!" for="{{idx+1}}"></label>
+                                                                </span> -->
+                              <!-- </td> -->
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="External Tasks">
+                  <ng-template ngbTabContent>
+                    <div class="card main-card no-border list-card">
+                      <div class="p-0 card-scroll card-height">
+                        <table class="table table-striped primary-font">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Task</th>
+                              <th scope="col">Location</th>
+                            </tr>
+                          </thead>
+
+                          <tbody
+                            *ngIf="
+                              jobCardArray.JobTasks == undefined ||
+                              (jobCardArray.JobTasks != undefined &&
+                                (
+                                  jobCardArray.JobTasks
+                                  | filter: jc.JobCardID:'JobCardID'
+                                  | filter: 52:'JobTaskTypeID'
+                                ).length == 0)
+                            "
+                          >
+                            <tr scope="row">
+                              <td colspan="12" class="text-center">
+                                No External Task Added!
+                              </td>
+                            </tr>
+                          </tbody>
+
+                          <tbody>
+                            <tr
+                              class="hovered"
+                              (click)="openTaskModal(taskModel, jt.JobTaskID)"
+                              *ngFor="
+                                let jt of jobCardArray.JobTasks
+                                  | filter: jc.JobCardID:'JobCardID'
+                                  | filter: 52:'JobTaskTypeID';
+                                let idx = index
+                              "
+                            >
+                              <td>{{ idx + 1 }}</td>
+                              <td>
+                                <span
+                                  appElseHyphen
+                                  [elseHyphen]="jt.LaborDescriptionEng"
+                                ></span>
+                              </td>
+                              <td>{{ jt.Location }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="Concerns">
+                  <ng-template ngbTabContent>
+                    <div class="p-0 card-scroll card-height">
+                      <table class="table table-striped primary-font">
+                        <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Complaint</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Cost</th>
+                            <th scope="col">Status</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr
+                            class="hovered"
+                            title="In Progress"
+                            *ngFor="
+                              let concern of jobCardArray.JobConcerns
+                                | filter: jc.JobCardID:'JobCardID';
+                              let idx = index
+                            "
+                          >
+                            <td>{{ idx + 1 }}</td>
+                            <td>{{ concern.ConcernDescription }}</td>
+                            <td>{{ concern.ConcernTypeName }}</td>
+                            <td>{{ concern.TotalCost }}</td>
+                            <td>
+                              <span *ngIf="concern.IsApproved == true"
+                                >Approved</span
+                              >
+                              <span *ngIf="concern.IsApproved != true"
+                                >Not Approved</span
+                              >
+                            </td>
+                          </tr>
+                        </tbody>
+                        <tbody
+                          *ngIf="
+                            jobCardArray.JobConcerns == undefined ||
+                            (jobCardArray.JobConcerns != undefined &&
+                              (
+                                jobCardArray.JobConcerns
+                                | filter: jc.JobCardID:'JobCardID'
+                              ).length == 0)
+                          "
+                        >
+                          <tr scope="row">
+                            <td colspan="12" class="text-center">
+                              No Concern Added!
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+
+                <ngb-tab title="Parts">
+                  <ng-template ngbTabContent>
+                    <div class="card main-card no-border list-card">
+                      <div class="p-0 card-scroll card-height">
+                        <table class="table table-striped primary-font">
+                          <thead>
+                            <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Part</th>
+                              <th scope="col">Concern</th>
+                              <th scope="col">Quantity</th>
+                              <th scope="col">Status</th>
+                              <th
+                                *ngIf="_sharedService.logged_user_role_id == 7"
+                                scope="col"
+                              >
+                                Total Amount
+                              </th>
+                            </tr>
+                          </thead>
+
+                          <tbody
+                            *ngIf="
+                              jobCardArray.JobParts == undefined ||
+                              (jobCardArray.JobParts != undefined &&
+                                (
+                                  jobCardArray.JobParts
+                                  | filter: jc.JobCardID:'JobCardID'
+                                ).length == 0)
+                            "
+                          >
+                            <tr scope="row">
+                              <td colspan="12" class="text-center">
+                                No Part Added!
+                              </td>
+                            </tr>
+                          </tbody>
+
+                          <tbody id="tbl">
+                            <tr
+                              class="hovered"
+                              *ngFor="
+                                let jp of jobCardArray.JobParts
+                                  | filter: jc.JobCardID:'JobCardID';
+                                let idx = index
+                              "
+                            >
+                              <td>{{ idx + 1 }}</td>
+                              <td>{{ jp.PartNameEnglish }}</td>
+                              <td>{{ jp.ConcernDescription }}</td>
+                              <td>{{ jp.Quantity }}</td>
+                              <td>
+                                <!-- for tech  -->
+                                <!-- <span
+                                                                    *ngIf="_sharedService.logged_user_role_id == 8 && jp.IsInclude == true && jp.JobPartStatusID == 26">
+                                                                    <button type="submit"
+                                                                        *ngIf="jp.JobPartStatusID != 5"
+                                                                        class="btn btn-primary btn-simple btn-round mark-complete-btn  py-1 bg-white my-0"
+                                                                        (click)="openPartDeliveredModal(partDeliveredModal, jp)">
+                                                                        Receive
+                                                                    </button>
+
+                                                                    <button
+                                                                        class="btn btn-success btn-simple btn-round mark-complete-btn  py-1 bg-white"
+                                                                        *ngIf="_sharedService.logged_user_role_id == 8 && jp.IsInclude == true && jp.JobPartStatusID == 5">
+                                                                        Delivered
+                                                                    </button>
+                                                                </span> -->
+                                <span
+                                  *ngIf="
+                                    _sharedService.logged_user_role_id == 8 &&
+                                    jp.IsInclude == true &&
+                                    jp.JobPartStatusID != 5
+                                  "
+                                  >{{ jp.JobPartStatusName }}</span
+                                >
+                                <span
+                                  *ngIf="
+                                    _sharedService.logged_user_role_id == 8 &&
+                                    jp.IsInclude == false
+                                  "
+                                  >Not Approved</span
+                                >
+                                <span
+                                  *ngIf="
+                                    _sharedService.logged_user_role_id == 5 ||
+                                    _sharedService.logged_user_role_id == 6 ||
+                                    _sharedService.logged_user_role_id == 9
+                                  "
+                                >
+                                  {{
+                                    jp.IsInclude == true
+                                      ? jp.JobPartStatusName
+                                      : "Not Approved"
+                                  }}
+                                </span>
+                                <!-- reminder btn -->
+                                <!-- <button type="submit"
+                                                                    *ngIf="_sharedService.logged_user_role_id == 8 && jp.IsInclude == true && jp.JobPartStatusID != 5 && (jobCardArray.JobTasks | filter : jp.JobTaskID : 'JobTaskID' | filter : 16 : 'TaskStatusID').length > 0"
+                                                                    title="Give Reminder to Manager"
+                                                                    class="btn btn-danger btn-simple btn-round mark-complete-btn py-1 bg-white my-0 ml-3"
+                                                                    (click)="remindPartDelivery(jp)">
+                                                                    Reminder
+                                                                </button> -->
+                                <!-- for manager -->
+                                <span
+                                  *ngIf="
+                                    _sharedService.logged_user_role_id == 7 &&
+                                    jc.ProcessStatusID == 15
+                                  "
+                                  >-</span
+                                >
+                                <ng-select
+                                  placeholder="Select Status"
+                                  *ngIf="
+                                    _sharedService.logged_user_role_id == 7 &&
+                                    jp.IsInclude == true &&
+                                    jc.ProcessStatusID != 15
+                                  "
+                                  class="custom dropdown-scale"
+                                  appendTo="#append"
+                                  name="partDelivery"
+                                  (change)="changePartStatus(jp)"
+                                  [(ngModel)]="jp.JobPartStatusName"
+                                >
+                                  <ng-option
+                                    *ngFor="
+                                      let item of _sharedService._commonMeta
+                                        .ObjectStatus
+                                        | filter
+                                          : 'PartDelivery'
+                                          : 'ObjectNameEnglish'
+                                        | notFilter
+                                          : 'Delivered'
+                                          : 'StatusNameEnglish'
+                                    "
+                                    [value]="item.StatusNameEnglish"
+                                  >
+                                    {{ item.StatusNameEnglish }}
+                                  </ng-option>
+                                </ng-select>
+                              </td>
+                              <td
+                                *ngIf="_sharedService.logged_user_role_id == 7"
+                              >
+                                {{ jp.NetAmount }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+              </ngb-tabset>
+            </div>
+          </div>
+
+          <!-- card footer -->
+          <div class="card-footer text-muted crumbs-footer bt-0">
+            <div id="crumbs" class="col-12 justify-content-center primary-font">
+              <ul class="align-self-center">
+                <nav class="d-flex process-nav pt-md-3 pb-2">
+                  <ng-container
+                    *ngFor="
+                      let jp of jobCardArray.JobProcess
+                        | filter: jc.JobCardID:'JobCardID';
+                      let id = index
+                    "
+                  >
+                    <li
+                      class="mx-1"
+                      aria-selected="true"
+                      [ngClass]="{
+                        'current-process': jp.ProcessTypeID == jc.ActiveProcess,
+                        'completed-process': jp.ProcessStatusID == 17
+                      }"
+                    >
+                      <a class="mb-2">
+                        <div
+                          class="
+                            floating-label
+                            form-group
+                            col-auto
+                            float-left
+                            d-flex
+                            align-items-center
+                            i-floating-label
+                            w-100
+                            justify-content-center
+                            flex-wrap
+                            pb-0
+                            px-lg-3
+                          "
+                        >
+                          <span class="float-left m-0 mx-lg-1">
+                            <!-- job process names -->
+                            <span class="pointer">
+                              <small
+                                class="
+                                  small-font
+                                  progress-heading
+                                  primary-dark-font
+                                "
+                                >{{ jp.TypeNameEnglish }} </small
+                              >
+
+                              <span
+                                *ngIf="
+                                  jp.ProcessTypeID == 9 &&
+                                  jc.IRStatusID != 17 &&
+                                  _sharedService.logged_user_role_id == 5
+                                "
+                              >
+                                <i
+                                  class="fas fa-edit mx-2"
+                                  (click)="
+                                    openAssignIRModal(
+                                      IRAssignModal,
+                                      jc.JobCardID
+                                    )
+                                  "
+                                ></i>
+                              </span>
+
+                              <i
+                                class="far fa-check-circle ml-1 hover-color"
+                                title="Completed"
+                                *ngIf="jp.ProcessStatusID == 17"
+                              ></i>
+
+                              <span
+                                *ngIf="jp.ProcessStatusID != 17"
+                                class="hover-color"
+                              >
+                                <br />
+                                <span *ngIf="jp.ProcessStatusID == 16">
+                                  <ng-container *ngIf="jp.ProcessTypeID == 9">
+                                    <span
+                                      *ngIf="
+                                        _sharedService.logged_user_role_id !=
+                                          5 &&
+                                        _sharedService.logged_user_role_id != 8
+                                      "
+                                      >Accepted</span
+                                    >
+                                    <span *ngIf="jc.IsIRCompleted == 1"
+                                      >{{ jp.EmployeeFullName }}
+                                      <i
+                                        class="fas fa-check"
+                                        title="Completed"
+                                      ></i
+                                    ></span>
+                                    <span *ngIf="jc.IsIRCompleted != 1"
+                                      >{{ jp.EmployeeFullName }}
+                                      <i
+                                        class="fas fa-hourglass-start"
+                                        title="In Progress"
+                                      ></i
+                                    ></span>
+                                  </ng-container>
+                                  <ng-container *ngIf="jp.ProcessTypeID != 9"
+                                    >Accepted
+                                  </ng-container>
+                                </span>
+
+                                <span *ngIf="jp.ProcessStatusID == 15"
+                                  >Pending</span
+                                >
+                                <span *ngIf="jp.ProcessStatusID == null"
+                                  >Un Assigned</span
+                                >
+                              </span>
+                              <span *ngIf="jp.ProcessTypeID == 9">
+                                <ng-container *ngIf="jp.ProcessStatusID == 17">
+                                  <br />
+                                  <span *ngIf="jc.IsIRCompleted == 1"
+                                    >{{ jp.EmployeeFullName }}
+                                    <i
+                                      class="fas fa-check"
+                                      title="Completed"
+                                    ></i
+                                  ></span>
+                                  <span *ngIf="jc.IsIRCompleted != 1"
+                                    >{{ jp.EmployeeFullName }}
+                                    <i
+                                      class="fas fa-hourglass-start"
+                                      title="In Progress"
+                                    ></i
+                                  ></span>
+                                </ng-container>
+                                <br />
+                                <span class="hover-color">Foreman</span>
+                                <span
+                                  class="hover-color ml-2"
+                                  *ngIf="jp.ProcessStatusID == 17"
+                                  ><i title="Completed" class="fas fa-check"></i
+                                ></span>
+                                <span
+                                  class="hover-color ml-2"
+                                  *ngIf="jp.ProcessStatusID != 17"
+                                  ><i
+                                    title="In Progress"
+                                    class="fas fa-hourglass-half"
+                                  ></i
+                                ></span>
+                              </span>
+                              <span
+                                *ngIf="
+                                  jp.ProcessStatusID == 17 &&
+                                  jp.ProcessTypeID == 9 &&
+                                  _sharedService.logged_user_role_id != 8
+                                "
+                              >
+                                <span *ngIf="jc.IsIRCompleted == 1"
+                                  >{{ jp.EmployeeFullName }}
+                                  <i class="fas fa-check" title="Completed"></i>
+                                </span>
+                              </span>
+                              <!-- <span
+                                                                        class="progress-abbr bold-font">{{jp.ProcessAbbrevation}}</span> -->
+                              <!-- <i class="ts check-mark" title="Job Done"></i> -->
+                            </span>
+
+                            <!-- technician name  -->
+                            <!-- <span *ngIf="jp.EmployeeID != undefined"
+                                                            class="smaller-font"><br>{{jp.EmployeeFullName}}</span>
+                                                        <span *ngIf="jp.ProcessStatusID == 17"
+                                                            class="smaller-font"><br>{{jp.ActualTimeSpent}}</span> -->
+                          </span>
+                        </div>
+                      </a>
+                    </li>
+                  </ng-container>
+                </nav>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div
+          class="row w-100 mx-0"
+          *ngIf="
+            (
+              jobCardArray.JCBasicInfoList
+              | filter: _sharedService.techJobCardTab:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 1 &&
+            (
+              jobCardArray.JCBasicInfoList
+              | filter: _sharedService.techJobCardTab:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length != i
+          "
+        >
+          <hr class="w-100" />
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 1">
+        <!-- (
+              jobCardArray.JCBasicInfoList
+              | filter: 1:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3 mb-md-5"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            pending > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="pending"
+            (pageChange)="
+              getJobCards(
+                (_sharedService.techJobCardTab = 1),
+                (_sharedService.pendingPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary mb-md-4"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 2">
+        <!--  (
+              jobCardArray.JCBasicInfoList
+              | filter: 2:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3 mb-md-5"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            inProgress > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="inProgress"
+            (pageChange)="
+              getJobCards(
+                (_sharedService.techJobCardTab = 2),
+                (_sharedService.ipPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary mb-md-4"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 3">
+        <!--  (
+              jobCardArray.JCBasicInfoList
+              | filter: 3:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3 mb-md-5"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            completed > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="completed"
+            (pageChange)="
+              getJobCards(
+                _sharedService.techJobCardTab,
+                (_sharedService.techComPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary mb-md-4"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 5">
+        <!-- (
+              jobCardArray.JCBasicInfoList
+              | filter: 5:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3 mb-md-5"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            prepering > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="prepering"
+            (pageChange)="
+              getJobCards(
+                (_sharedService.techJobCardTab = 5),
+                (_sharedService.preparingPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary mb-md-4"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 6">
+        <!--  (
+              jobCardArray.JCBasicInfoList
+              | filter: 6:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            deleverd > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="deleverd"
+            (pageChange)="
+              getJobCards(
+                (_sharedService.techJobCardTab = 6),
+                (_sharedService.deliveredPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="_sharedService.techJobCardTab == 4">
+        <!--  (
+              jobCardArray.JCBasicInfoList
+              | filter: 4:'JobTaskStatusID'
+              | searchTechJobCards: searchQuery
+            ).length > 10 -->
+        <div
+          class="row justify-content-center my-3 mb-md-5"
+          *ngIf="
+            jobCardArray != undefined &&
+            jobCardArray.JCBasicInfoList != undefined &&
+            rejected > 10
+          "
+        >
+          <ngb-pagination
+            [(page)]="filter.pageNumber"
+            [pageSize]="_sharedService.pageSize"
+            [collectionSize]="rejected"
+            (pageChange)="
+              getJobCards(
+                (_sharedService.techJobCardTab = 4),
+                (_sharedService.rejPage = $event)
+              )
+            "
+            aria-label="Job List Pagination"
+            class="pagination-primary mb-md-4"
+          >
+          </ngb-pagination>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- queue list  -->
+    <div class="pt-3" *ngIf="_sharedService.techJobCardTab == 7">
+      <div
+        *ngIf="
+          jobCardArray == undefined ||
+          jobCardArray.Appointments == undefined ||
+          jobCardArray.Appointments.length == 0
+        "
+      >
+        <h5 class="no-record-error">No data found</h5>
+      </div>
+      <ng-container *ngFor="let ap of jobCardArray.Appointments; let i = index">
+        <div class="card inner-card-shadow mb-3">
+          <!-- card-header -->
+          <div class="card-header list-card-header light-bold bg-white">
+            <span class="card-number"> {{ ap.PlateNumber }}</span>
+            <div class="row primary-font px-3 pt-2">
+              <div class="col-12 row mx-0">
+                <div
+                  class="col-lg-2 col-md-6 order-md-1 px-md-0 align-self-center"
+                  title="Make Model Year"
+                >
+                  <div class="row mx-0">
+                    <div class="col-lg-12 col-md-6 order-md-1">
+                      <a>
+                        <i class="fas fa-car mr-3 fa-lg" title="Mileage"></i>
+                        <label class="pointer"
+                          >{{ ap.Mileage }}
+                          {{ ap.MileageUnitName }}
+                        </label>
+                      </a>
+                    </div>
+                    <div
+                      class="col-lg-12 col-md-6 order-md-2 px-md-0 px-lg-3"
+                      title="Appointment Time"
+                    >
+                      <i class="fas fa-angle-right mr-1 primary-font"></i>
+                      <i class="fas fa-clock mr-2 primary-font"></i>
+                      <label>{{ ap.CreatedOn | date: "short" }}</label>
+                    </div>
+                    <!-- <div class="col-lg-12 col-md-6 order-md-1">
+                                            <a>
+                                                <i class="fas fa-car mr-3 fa-lg" title="Mileage"></i>
+                                                <label class="pointer">{{ap.PlateNumber}} 
+                                                </label>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-12 col-md-6 order-md-1">
+                                            <a>
+                                                <i class="fas fa-car mr-3 fa-lg" title="Mileage"></i>
+                                                <label class="pointer">{{ap.CustomerMobile}} 
+                                                </label>
+                                            </a>
+                                        </div> -->
+                  </div>
+                </div>
+
+                <div
+                  class="
+                    col-lg-2 col-md-3
+                    text-center
+                    align-self-center
+                    order-md-4 order-lg-2
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                   
+                    <img
+                      [src]="
+                        ap.MileageImageURL != undefined
+                          ? _sharedService.baseUrl + ap.MileageImageURL
+                          : _sharedService.default_img
+                      "
+                      class="gallery-img-queue imageSize"
+                      (click)="
+                      ap.MileageImageURL != undefined
+                          ? open(imagePreview, ap.MileageImageURL, 'Mileage Image')
+                          :''
+                        
+                      "
+                    />
+                  </div>
+                  <!-- <div *ngIf="ap.MileageImageURL == undefined">
+                                        <img [src]="_sharedService.default_img" class="gallery-img"
+                                            alt="Vehicle Images">
+                                    </div> -->
+                </div>
+
+                <div
+                  class="
+                    col-lg-2 col-md-3
+                    text-center
+                    align-self-center
+                    order-md-5 order-lg-3
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                    <img
+                      [src]="
+                        ap.LicensePlateBack != undefined
+                          ? _sharedService.baseUrl + ap.LicensePlateBack
+                          : _sharedService.default_img
+                      "
+                      class="gallery-img-queue imageSize"
+                      (click)="
+                      ap.LicensePlateBack != undefined
+                      ? open(
+                        imagePreview,
+                        ap.LicensePlateBack,
+                        'License Plate Back'
+                      )
+                      : '' "
+                    />
+                  </div>
+                  <!-- <div *ngIf="ap.LicensePlateBack == undefined">
+                                        <img [src]="_sharedService.default_img" class="gallery-img"
+                                            alt="Vehicle Images">
+                                    </div> -->
+                </div>
+
+                <div
+                  class="
+                    col-lg-2 col-md-3
+                    text-center
+                    align-self-center
+                    order-md-6 order-lg-4
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                    <img
+                      [src]="
+                        ap.LicensePlateFront != undefined
+                          ? _sharedService.baseUrl + ap.LicensePlateFront
+                          : _sharedService.default_img
+                      "
+                      class="gallery-img-queue imageSize"
+                      (click)="
+                      ap.LicensePlateFront != undefined
+                      ?  open(
+                        imagePreview,
+                        ap.LicensePlateFront,
+                        'License Plate Front'
+                      )
+                      :''"
+                    />
+                  </div>
+                  <!-- <div *ngIf="ap.LicensePlateFront == undefined">
+                                        <img [src]="_sharedService.default_img" class="gallery-img"
+                                            alt="Vehicle Images">
+                                    </div> -->
+                </div>
+
+                <div
+                  class="
+                    col-lg-2 col-md-3
+                    text-center
+                    align-self-center
+                    order-md-7 order-lg-5
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                    <img
+                      [src]="
+                        ap.VehicleFront != undefined
+                          ? _sharedService.baseUrl + ap.VehicleFront
+                          : _sharedService.default_img
+                      "
+                      class="gallery-img-queue imageSize"
+                      (click)="
+                      ap.VehicleFront != undefined
+                      ?  open(imagePreview, ap.VehicleFront, 'Vehicle Front')
+                      : ''"
+                    />
+                  </div>
+                  <!-- <div *ngIf="ap.VehicleFront == undefined">
+                                        <img [src]="_sharedService.default_img" class="gallery-img"
+                                            alt="Vehicle Images">
+                                    </div> -->
+                </div>
+
+                <div
+                  class="
+                    col-lg-2 col-md-6
+                    text-center
+                    align-self-center
+                    order-md-3 order-lg-6
+                  "
+                >
+                  <div class="row mx-0">
+                    <div
+                      class="col-lg-12 col-md-6"
+                      *ngIf="_sharedService.logged_user_role_id != 6"
+                    >
+                      <button
+                        type="button"
+                        title="Accept"
+                        id="{{ i }}"
+                        class="btn btn-accept btn-round px-4"
+                        (click)="setAppointmentData(ap.AppointmentID)"
+                        [routerLink]="['/', 'create-job', 'basic-info']"
+                      >
+                        Create Job
+                      </button>
+                    </div>
+
+                    <!-- [queryParams]='{id: ap.AppointmentID}' -->
+                    <div
+                      class="col-lg-12 col-md-6"
+                      *ngIf="_sharedService.logged_user_role_id == 6"
+                    >
+                      <button
+                        type="button"
+                        title="Accept"
+                        id="{{ i }}"
+                        class="btn btn-accept btn-round px-4"
+                        (click)="setAppointmentData(ap.AppointmentID)"
+                        [routerLink]="['/', 'queue', 'create-queue']"
+                      >
+                        Edit
+                      </button>
+                    </div>
+
+                    <!-- <div class="col-lg-12 col-md-6" *ngIf="_sharedService.logged_user_role_id !=6">
+                                            <button type="button" title="Accept" id="{{i}}"
+                                                class="btn btn-reject btn-round px-3"
+                                                (click)="deleteAppointment(ap.AppointmentID)">
+                                                Delete <i class="px-2 fas fa-trash pointer" title="delete"></i>
+                                            </button>
+                                        </div> -->
+                  </div>
+                </div>
+
+                <!-- <div class="col-4 text-center align-self-center">
+                                    <ngb-carousel class="results"
+                                        *ngIf="ap.LicensePlateFront != undefined || ap.LicensePlateBack != undefined">
+                                        <ng-template ngbSlide>
+                                            <div class="picsum-img-wrapper">
+                                                <img [src]="ap.LicensePlateBack != undefined ? _sharedService.baseUrl + ap.LicensePlateBack : _sharedService.default_img"
+                                                    class="gallery-img-queue">
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template ngbSlide>
+
+                                            <div class="picsum-img-wrapper">
+                                                <img [src]="ap.LicensePlateFront != undefined ? _sharedService.baseUrl + ap.LicensePlateFront : _sharedService.default_img"
+                                                    class="gallery-img-queue">
+                                            </div>
+                                        </ng-template>
+                                    </ngb-carousel>
+                                    <div *ngIf="ap.LicensePlateFront == undefined || ap.LicensePlateBack == undefined">
+                                        <img [src]="_sharedService.default_img" class="gallery-img"
+                                            alt="Vehicle Images">
+                                    </div>
+                                </div> -->
+
+                <!-- <div class="col-1 text-center align-self-center">
+                                    <i class="px-2 fas fa-eye pointer" title="View"
+                                        [routerLink]="['/','update-job','inspection-results'] "></i>
+
+                                </div> -->
+
+                <!-- <div class="col-4 align-self-center" *ngIf="jc.EngineTypeID != 29">
+                                    <i class="ts e-capacity-icon mr-2 fa-lg" title="Engine Capacity"></i>
+                                    <label>{{jc.EngineCapacity}} cc</label>
+                                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row w-100 mx-0"
+                    *ngIf="(jobCardArray.JCBasicInfoList | filter : _sharedService.techJobCardTab : 'JobTaskStatusID' | searchTechJobCards : searchQuery).length > 1 && (jobCardArray.JCBasicInfoList | filter : _sharedService.techJobCardTab : 'JobTaskStatusID' | searchTechJobCards : searchQuery).length != i">
+                    <hr class="w-100">
+                </div> -->
+      </ng-container>
+
+      <!--  (jobCardArray.Appointments | searchTechJobCards: searchQuery).length>10 -->
+      <div
+        class="row justify-content-center my-3 mb-md-5"
+        *ngIf="
+          jobCardArray != undefined &&
+          jobCardArray.Appointments != undefined &&
+          AppointmentTotal > 10
+        "
+      >
+        <ngb-pagination
+          [(page)]="cPage"
+          [pageSize]="_sharedService.pageSize"
+          [collectionSize]="AppointmentTotal"
+          (pageChange)="getJobCards((filter.queuePageNumber = $event))"
+          aria-label="Job List Pagination"
+          class="pagination-primary mb-md-4"
+        >
+        </ngb-pagination>
+      </div>
+    </div>
+
+    <!-- <div class="row justify-content-center my-3"
+            *ngIf="jobCardArray != undefined && jobCardArray.JCBasicInfoList != undefined 
+        && (jobCardArray.JCBasicInfoList | filter : _sharedService.techJobCardTab : 'JobTaskStatusID' | searchTechJobCards : searchQuery).length > 0">
+            <ngb-pagination [(page)]="cPage" [pageSize]="_sharedService.pageSize"
+                [collectionSize]="(jobCardArray.JCBasicInfoList | filter : _sharedService.techJobCardTab : 'JobTaskStatusID' | searchTechJobCards : searchQuery).length"
+                aria-label="Job List Pagination" class="pagination-primary">
+            </ngb-pagination>
+        </div> -->
+  </div>
+</div>
+
+<ng-template #completeAll let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Complete Tasks</h5>
+      <button type="button" class="close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to complete all tasks?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="completeTasks()"
+                class="a-button btn btn-primary btn-round col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #assignTechModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">
+        Select
+        {{
+          TechTypeID == 96
+            ? "Mechanical"
+            : TechTypeID == 95
+            ? "Electrical"
+            : "Other"
+        }}
+        Technician
+      </h5>
+      <button
+        type="button"
+        class="close"
+        (click)="closeAssignTechModal()"
+        title="Cancel"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <div
+              class="floating-label form-group col-12"
+              *ngIf="TechTypeID == 96"
+            >
+              <ng-select
+                placeholder="Mechanic"
+                class="custom"
+                name="Mechanic"
+                (change)="changeAssignment = true"
+                [(ngModel)]="JobCard.MechanicID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of jobCardArray.UserRoles | filter: '8':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div
+              class="floating-label form-group col-12"
+              *ngIf="TechTypeID == 95"
+            >
+              <ng-select
+                placeholder="Electrician"
+                class="custom"
+                name="Electrician"
+                (change)="changeAssignment = true"
+                [(ngModel)]="JobCard.ElectricianID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of jobCardArray.UserRoles | filter: '8':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div
+              class="floating-label form-group col-12"
+              *ngIf="TechTypeID == 97"
+            >
+              <ng-select
+                placeholder="Other"
+                class="custom"
+                name="Other"
+                (change)="changeAssignment = true"
+                [(ngModel)]="JobCard.OtherTechID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of jobCardArray.UserRoles | filter: '8':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeAssignTechModal(); changeAssignment = false"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="assignTasks(JobCard, true)"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #IRAssignModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Assign Inspection Result</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <div class="floating-label form-group col-12">
+              <ng-select
+                class="custom"
+                (change)="changeAssignment = true"
+                name="inspectionResult"
+                placeholder="Assign Inspection Result"
+                id="ir"
+                [(ngModel)]="currentProcess.EmployeeID"
+              >
+                <ng-container
+                  *ngFor="
+                    let emp of jobCardArray.UserRoles | userRoleFilter: 5:8
+                  "
+                >
+                  <ng-option [value]="emp.UserID">
+                    {{ emp.EmployeeFullName }}
+                  </ng-option>
+                </ng-container>
+              </ng-select>
+            </div>
+
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal(); changeAssignment = false"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="
+                  currentProcess.ProcessStatusID = 15; assignJP(currentProcess)
+                "
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #taskModel let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Task Detail</h5>
+      <button type="button" class="close" (click)="closeTaskModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row card mx-0 my-2">
+          <div class="row">
+            <div class="col-3 text-center align-self-center">
+              <ngb-carousel
+                class="results"
+                *ngIf="
+                  taskProfile.Gallery != undefined &&
+                  taskProfile.Gallery.length > 0
+                "
+              >
+                <ng-template
+                  ngbSlide
+                  *ngFor="
+                    let image of taskProfile.Gallery
+                      | filter: taskProfile.JobTask.JobTaskID:'ObjectID'
+                      | filter: 50:'GalleryTypeID';
+                    let idx = index
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                    <div *ngIf="image.IsVideo == false">
+                      <img
+                        [src]="
+                          image
+                            ? _sharedService.baseUrl + image.ImageURL
+                            : _sharedService.default_img
+                        "
+                        class="result-img"
+                      />
+                    </div>
+                    <div *ngIf="image.IsVideo == true">
+                      <video
+                        class="result-img"
+                        controls
+                        multiple
+                        [src]="_sharedService.baseUrl + image.ImageURL"
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-carousel>
+              <div
+                *ngIf="
+                  taskProfile.Gallery == undefined ||
+                  (
+                    taskProfile.Gallery
+                    | filter: taskProfile.JobTask.JobTaskID:'ObjectID'
+                    | filter: 50:'GalleryTypeID'
+                  ).length == 0
+                "
+              >
+                <img [src]="_sharedService.default_img" alt="Results Images" />
+              </div>
+            </div>
+            <div
+              class="col-9 row"
+              *ngIf="
+                taskProfile != undefined && taskProfile.JobTask != undefined
+              "
+            >
+              <!-- <div class="col-12 pt-2 text-right">
+                            <i class="far fa-edit mr-2 collapse-tabset" title="Edit"
+                                (click)=" openEditTask(taskProfile.JobTask); showMore = true;clickToggle()"></i>
+                            <i class="far fa-trash-alt" title="Delete"
+                                (click)="openDeleteTask(warningDelete,taskProfile.JobTask)"></i>
+                        </div> -->
+              <div class="col-6 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Task</span>
+                </div>
+                <div class="ml-3">
+                  <p
+                    class="part-detail-box custom-font my-0"
+                    title=""
+                    appElseHyphen
+                    [elseHyphen]="taskProfile.JobTask.LaborDescriptionEng"
+                  ></p>
+                </div>
+              </div>
+
+              <div
+                class="col-3 px-0 pb-3"
+                *ngIf="_sharedService.logged_user_role_id != 8"
+              >
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Labor</span>
+                </div>
+                <div class="ml-3">
+                  <p
+                    class="part-detail-box custom-font my-0"
+                    title=""
+                    appElseHyphen
+                    [elseHyphen]="taskProfile.JobTask.LaborCost"
+                  ></p>
+                </div>
+              </div>
+
+              <div class="col-3 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Priority</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    {{
+                      taskProfile.JobTask.PriorityTypeID == 83
+                        ? "Medium"
+                        : "High"
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Type</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    {{
+                      taskProfile.JobTask.JobTaskTypeID == 51
+                        ? "Internal"
+                        : "External"
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Category</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    {{ taskProfile.JobTask.RepairTypeName }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Assigned To</span>
+                </div>
+                <div class="ml-3">
+                  <p
+                    class="part-detail-box custom-font my-0"
+                    title=""
+                    appElseHyphen
+                    [elseHyphen]="taskProfile.JobTask.EmployeeFullName"
+                  >
+                    {{ taskProfile.JobTask.EmployeeFullName }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Start Time</span>
+                </div>
+                <div class="ml-3">
+                  <p
+                    class="part-detail-box custom-font my-0"
+                    title=""
+                    appElseHyphen
+                    [elseHyphen]="
+                      taskProfile.JobTask.AcceptedDateTime | date: 'short'
+                    "
+                  ></p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>End Time</span>
+                </div>
+                <div class="ml-3">
+                  <p
+                    class="part-detail-box custom-font my-0"
+                    title=""
+                    appElseHyphen
+                    [elseHyphen]="
+                      taskProfile.JobTask.EndDateTime | date: 'short'
+                    "
+                  ></p>
+                </div>
+              </div>
+
+              <div class="col-4 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Concern</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    <span
+                      class="font-14"
+                      appElseHyphen
+                      [elseHyphen]="taskProfile.JobTask.ConcernDescription"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-6 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>QA Comments</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    <span
+                      class="font-14"
+                      appElseHyphen
+                      [elseHyphen]="taskProfile.JobTask.QAComments"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-6 px-0 pb-3">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Description</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    <span
+                      class="font-14"
+                      appElseHyphen
+                      [elseHyphen]="taskProfile.JobTask.TaskDescription"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="col-12 px-0 pb-3"
+                *ngIf="taskProfile.JobTask.JobTaskTypeID == 52"
+              >
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Address</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box custom-font my-0" title="">
+                    <span
+                      class="font-14"
+                      appElseHyphen
+                      [elseHyphen]="taskProfile.JobTask.Location"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 py-3">
+              <table class="table mx-3 text-left primary-font page-animation">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Part</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Note</th>
+                    <!-- <th scope="col">Action</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- id 49 for External Task task0 -->
+                  <tr *ngFor="let jp of taskProfile.JobParts; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ jp.PartNameEnglish }}</td>
+                    <td>{{ jp.Quantity }}</td>
+                    <td>{{ jp.Notes }}</td>
+                    <!-- <td><i class="far fa-edit mr-2 collapse-tabset" title="Edit"
+                                                (click)="onEditPart(jp); showMore = true;clickToggle()"></i>
+                                            <i class="far fa-trash-alt" title="Delete"
+                                                (click)="openDeletePart(deletePart,jp)"></i>
+                                        </td> -->
+                  </tr>
+                </tbody>
+                <tbody
+                  *ngIf="
+                    taskProfile.JobParts == undefined ||
+                    (taskProfile.JobParts != undefined &&
+                      taskProfile.JobParts.length == 0)
+                  "
+                >
+                  <tr scope="row">
+                    <td colspan="12" class="text-center">No part added!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #partDeliveredModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Part Delivery</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <div class="row pl-4 pb-4">Are you sure part is Deliverd?</div>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closePartDeliveredModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="
+                  currentPart.JobPartStatusID = 5; changePartStatus(currentPart)
+                "
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #reviewModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header pb-0 d-flex justify-content-between">
+      <h5 class="modal-title text-center">
+        {{ jcReviewObj.JCBasicInfo.PlateNumber }}
+      </h5>
+      <h5 class="modal-title text-center">
+        {{ jcReviewObj.JCBasicInfo.EnglishMakeName }}
+        {{ jcReviewObj.JCBasicInfo.EnglishModelName }}
+        {{ jcReviewObj.JCBasicInfo.ProductionYear }}
+      </h5>
+      <span
+        class="px-3 hover-color font-18 bold-font pointer"
+        aria-hidden="true"
+        (click)="closeModal()"
+        title="Close"
+        >&times;</span
+      >
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 px-0">
+            <h4 class="tbl-header px-3 py-1 my-0">Services</h4>
+          </div>
+          <ng-container
+            *ngFor="
+              let ot of _sharedService._commonMeta.objectTypes
+                | filter: 'JobConcern':'ObjectNameEnglish'
+            "
+          >
+            <div
+              class="col-lg-12"
+              *ngIf="
+                jcReviewObj.JobTasks != undefined &&
+                (jcReviewObj.JobTasks | filter: ot.ObjectTypeID:'RepairTypeID')
+                  .length > 0
+              "
+            >
+              <div class="row w-100 mx-0 pt-3">
+                <hr class="w-100" />
+                <div
+                  class="
+                    sub-heading
+                    primary-color
+                    bg-white
+                    big-font
+                    y-axis-3
+                    d-flex
+                    justify-content-around
+                    bold-font
+                  "
+                >
+                  {{ ot.TypeNameEnglish }}
+                </div>
+
+                <div
+                  class="
+                    sub-heading-right
+                    primary-color
+                    bg-white
+                    big-font
+                    y-axis-3
+                    d-flex
+                    justify-content-around
+                    col-lg-3 col-md-4
+                  "
+                >
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 70 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Mechanic"
+                      class="custom"
+                      name="Mechanic"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 70)"
+                      appendTo="#adOptionModel"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.MechanicID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 71 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Electrician"
+                      class="custom"
+                      name="Electrician"
+                      appendTo="#adOptionModel"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 71)"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.ElectricianID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 102 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Other"
+                      class="custom"
+                      name="Other"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 102)"
+                      appendTo="#adOptionModel"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.OtherTechID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 139 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Inspection"
+                      class="custom"
+                      name="Inspection"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 139)"
+                      appendTo="#adOptionModel"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.InspectionTechID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 73 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Body Repair"
+                      class="custom"
+                      name="Repair"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 73)"
+                      appendTo="#adOptionModel"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.BodyRepairTechID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+
+                  <div
+                    class="floating-label form-group col-12 px-0 mb-0 pb-0"
+                    *ngIf="
+                      ot.ObjectTypeID == 72 &&
+                      jcReviewObj.JCBasicInfo.ApprovalStatusID == 17
+                    "
+                  >
+                    <ng-select
+                      placeholder="Body Repair"
+                      class="custom"
+                      name="Repair"
+                      (change)="assignAllTasks(jcReviewObj.JCBasicInfo, 72)"
+                      appendTo="#adOptionModel"
+                      [(ngModel)]="jcReviewObj.JCBasicInfo.sparePartTechID"
+                      [clearable]="false"
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of jobCardArray.UserRoles
+                            | filter: '8':'RoleID'
+                        "
+                        [value]="item.UserID"
+                        >{{ item.EmployeeFullName }}
+                      </ng-option>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <table
+                class="table primary-dark-font page-animation table-borderless"
+                id="table"
+                data-toggle="table"
+                data-height="460"
+                data-custom-sort="customSort"
+              >
+                <tbody>
+                  <ng-container
+                    *ngFor="
+                      let jt of jcReviewObj.JobTasks
+                        | filter: ot.ObjectTypeID:'RepairTypeID';
+                      let i = index
+                    "
+                  >
+                    <tr scope="row">
+                      <td
+                        [ngClass]="
+                          jt.PriorityTypeID == 83 ? 'priMedium' : 'priHigh'
+                        "
+                      >
+                        <span class="pr-2"></span>
+                      </td>
+                      <td
+                        width="10%"
+                        *ngIf="jcReviewObj.JCBasicInfo.ApprovalStatusID == 17"
+                      >
+                        {{ jt.LaborCost }} <small>JOD</small>
+                      </td>
+
+                      <td width="70%" *ngIf="jt.IsFree == false">
+                        {{ jt.LaborDescriptionEng }}
+                        <div class="row justify-content-center">
+                          <div class="col-1 hover-color">Parts:</div>
+                          <div
+                            class="col-10"
+                            *ngFor="
+                              let jp of jcReviewObj.JobParts
+                                | filter: jt.JobTaskID:'JobTaskID';
+                              let i = index
+                            "
+                          >
+                            <span
+                              class="px-2"
+                              [ngClass]="
+                                jp.IsInclude == true
+                                  ? 'selectedPartPill'
+                                  : 'partPill'
+                              "
+                            >
+                              {{ jp.PartNameEnglish }}</span
+                            >
+                          </div>
+                          <div
+                            class="col-10"
+                            *ngIf="
+                              jcReviewObj.JobParts == undefined ||
+                                (
+                                  jcReviewObj.JobParts
+                                  | filter: jt.JobTaskID:'JobTaskID'
+                                ).length == 0;
+                              let i = index
+                            "
+                          >
+                            N/A
+                          </div>
+                        </div>
+                      </td>
+
+                      <td width="70%" *ngIf="jt.IsFree == true">
+                        <div
+                          class="row"
+                          *ngFor="
+                            let jp of jcReviewObj.JobParts
+                              | filter: jt.JobTaskID:'JobTaskID';
+                            let i = index
+                          "
+                        >
+                          <span
+                            class="px-2"
+                            [ngClass]="
+                              jp.IsInclude == true
+                                ? 'selectedPartPill'
+                                : 'partPill'
+                            "
+                          >
+                            {{ jp.PartNameEnglish }}</span
+                          >
+                        </div>
+                      </td>
+
+                      <td
+                        width="30%"
+                        *ngIf="jcReviewObj.JCBasicInfo.ApprovalStatusID != 17"
+                      >
+                        <div
+                          class="
+                            floating-label
+                            form-group
+                            col-lg-12 col-sm-12
+                            mb-0
+                          "
+                        >
+                          <input
+                            type="text"
+                            value=""
+                            placeholder=" "
+                            (change)="
+                              jt.IsModified = true; jt.NetAmount = jt.LaborCost
+                            "
+                            class="
+                              floating-input
+                              form-control
+                              input-border-color
+                            "
+                            name="LaborCost"
+                            [(ngModel)]="jt.LaborCost"
+                            #LaborCost="ngModel"
+                            maxlength="5"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                          />
+                          <div class="input-group-append price-perpend">
+                            JOD
+                          </div>
+                          <span class="highlight"></span>
+                          <label class="input-label">Labor Cost</label>
+                        </div>
+                      </td>
+
+                      <td
+                        width="20%"
+                        *ngIf="jcReviewObj.JCBasicInfo.ApprovalStatusID == 17"
+                      >
+                        <div
+                          class="
+                            floating-label
+                            form-group
+                            mb-0
+                            assign-select
+                            col-12
+                          "
+                          *ngIf="_sharedService.logged_user_role_id == 5"
+                        >
+                          <ng-select
+                            class="custom assign-dropdown h-35"
+                            placeholder="Technician"
+                            name="{{ jt.LaborDescriptionEng }}{{ idx }}"
+                            [(ngModel)]="jt.EmployeeID"
+                            [disabled]="
+                              jcReviewObj.JCBasicInfo.ApprovalStatusID != 17 &&
+                              (
+                                jcReviewObj.JobTasks
+                                | filter
+                                  : jcReviewObj.JCBasicInfo.JobCardID
+                                  : 'JobCardID'
+                                | filter: true:'IsInclude'
+                              ).length == 0
+                            "
+                            (change)="assignTaskTechnician(jt)"
+                            [clearable]="false"
+                          >
+                            <ng-option
+                              *ngFor="
+                                let item of jobCardArray.UserRoles
+                                  | filter: '8':'RoleID'
+                              "
+                              [value]="item.UserID"
+                              >{{ item.EmployeeFullName }}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </td>
+                      <!-- <td>
+                                                {{(jobCardArray.UserRoles | filter : jt.EmployeeID : 'UserID')[0]?.EmployeeFullName}}
+                                            </td> -->
+                    </tr>
+                    <!-- <tr scope="row">
+                                            <td colspan="11">
+                                                <div class="row justify-content-center">
+                                                    <div class="col-1 hover-color">Parts:</div>
+                                                    <div class="col-10"
+                                                        *ngFor="let jp of jcReviewObj.JobParts | filter : jt.JobTaskID : 'JobTaskID';let i=index">
+                                                        <span class="py-1 px-2"
+                                                            [ngClass]="jp.IsInclude == true ? 'selectedPartPill' : 'partPill'">
+                                                            {{jp.PartNameEnglish}}</span>
+                                                    </div>
+                                                    <div class="col-10"
+                                                        *ngIf="jcReviewObj.JobParts == undefined || (jcReviewObj.JobParts | filter : jt.JobTaskID : 'JobTaskID').length == 0;let i=index">
+                                                        N/A
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr> -->
+                  </ng-container>
+                </tbody>
+                <tbody
+                  *ngIf="
+                    jcReviewObj.JobTasks == undefined ||
+                    (
+                      jcReviewObj.JobTasks
+                      | filter: ot.ObjectTypeID:'RepairTypeID'
+                    ).length == 0
+                  "
+                >
+                  <tr scope="row">
+                    <td colspan="12" class="text-center">No task added!</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-container>
+          <div
+            class="col-lg-12 text-center my-3"
+            *ngIf="
+              jcReviewObj.JobTasks == undefined ||
+              jcReviewObj.JobTasks.length == 0
+            "
+          >
+            <span class="p-3">No Task Added!</span>
+          </div>
+          <div
+            class="col-lg-12 px-0"
+            *ngIf="
+              jcReviewObj.JobCardCheckList == undefined ||
+              (
+                jcReviewObj.JobCardCheckList
+                | filter: 46:'CheckListTypeID'
+                | filter: 12:'StatusID'
+              ).length > 0
+            "
+          >
+            <h4 class="tbl-header px-3 py-1 my-0">Inspection Points</h4>
+          </div>
+          <div
+            class="col-12"
+            *ngIf="
+              jcReviewObj.JobCardCheckList == undefined ||
+              (
+                jcReviewObj.JobCardCheckList
+                | filter: 46:'CheckListTypeID'
+                | filter: 12:'StatusID'
+              ).length > 0
+            "
+          >
+            <table class="table primary-dark-font page-animation">
+              <tbody class="primary-font">
+                <tr
+                  *ngFor="
+                    let cl of jcReviewObj.JobCardCheckList
+                      | filter: 46:'CheckListTypeID'
+                      | filter: 12:'StatusID';
+                    let i = index
+                  "
+                >
+                  <td>{{ cl.EnglishName }}</td>
+                </tr>
+              </tbody>
+              <!-- <tbody
+                               >
+                                <tr scope="row">
+                                    <td colspan="12" class="text-center">
+                                        <div class="mt-3">No Inspection Points selected!</div>
+                                    </td>
+                                </tr>
+                            </tbody> -->
+            </table>
+          </div>
+
+          <div class="col-12 text-center d-flex justify-content-around">
+            <button
+              class="btn btn-primary btn-round btn-simple col-4"
+              (click)="closeModal()"
+            >
+              Close
+            </button>
+            <button
+              class="btn btn-primary btn-round btn-simple col-4"
+              *ngIf="jcReviewObj.JCBasicInfo.ApprovalStatusID != 17"
+              (click)="updateJC()"
+            >
+              Update
+            </button>
+            <button
+              class="btn btn-primary btn-round btn-simple col-4"
+              *ngIf="jcReviewObj.JCBasicInfo.ApprovalStatusID != 17"
+              (click)="openMarkCompleteModal(completeIR)"
+            >
+              Submit for approval
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #completeIR
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      (click)="closeMarkCompleteModal()"
+      title="Cancel"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <h5>Are you sure you want to complete Inspection Results?</h5>
+  </div>
+  <div class="modal-footer">
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple w-75"
+        (click)="closeMarkCompleteModal()"
+      >
+        No
+      </button>
+    </div>
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple w-75"
+        (click)="markIRComplete()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ heading }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="img-fluid"
+      [src]="
+        imageURL
+          ? _sharedService.baseUrl + imageURL
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>

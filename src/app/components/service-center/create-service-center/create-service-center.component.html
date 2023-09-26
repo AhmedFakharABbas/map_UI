@@ -1,0 +1,446 @@
+<div class="row justify-content-center align-self-center">
+  <div class="col-10 card d-flex flex-column align-self-center page-animation">
+    <form
+      (ngSubmit)="
+        serviceCenterForm.valid
+          ? serviceCenterObj.WorkshopID == undefined
+            ? onSaveServiceCenter()
+            : onUpdateServiceCenter()
+          : ''
+      "
+      #serviceCenterForm="ngForm"
+    >
+      <div class="row mx-3">
+        <h5 class="m-3 px-3 bold-font">General Information</h5>
+      </div>
+      <div class="col-12 d-flex justify-content-center default">
+        <div class="our-team col-md-5 col-sm-5 mt-3">
+          <!-- <div class="picture"> -->
+          <!-- <img class="img-fluid" src="https://picsum.photos/900/900?random&t=${Math.random()}`"> -->
+          <!-- (click)="open(imagePreview)" -->
+          <label class="hoverable">
+            <img
+              class="upload-image"
+              [src]="
+                serviceCenterObj.LogoImageURL
+                  ? _sharedService.baseUrl + serviceCenterObj.LogoImageURL
+                  : default_img
+              "
+            />
+            <input
+              type="file"
+              class="file-choose"
+              id="files"
+              accept="image/jpeg,image/png"
+              (change)="uploadImage($event)"
+            />
+            <div class="hover-text" for="files">
+              Choose file
+              <!-- <h4 class="success-message" *ngIf="url"> Uploaded Successfully </h4> -->
+            </div>
+            <div class="background"></div>
+          </label>
+          <!-- </div> -->
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row justify-content-around">
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="english_name"
+              [(ngModel)]="serviceCenterObj.EnglishName"
+              #englishName="ngModel"
+              required
+              maxlength="150"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">English Name</label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || englishName.touched) &&
+                  englishName.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="arabic_name"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+              [(ngModel)]="serviceCenterObj.ArabicName"
+              maxlength="150"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Arabic Name</label>
+          </div>
+
+          <div class="floating-label form-group col-lg-5 col-sm-6">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="email"
+              [(ngModel)]="serviceCenterObj.Email"
+              #email="ngModel"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+              maxlength="50"
+              required
+              [disabled]="serviceCenterObj.WorkshopID != undefined"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Email</label>
+            <div class="error-block text-danger">
+              <small
+                class="text-danger ml-3"
+                *ngIf="
+                  (serviceCenterForm.submitted || email.touched) &&
+                  email.errors?.required
+                "
+                >*Required</small
+              >
+              <small class="text-danger ml-3" *ngIf="email.errors?.pattern"
+                >*Invalid Format</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Country"
+              name="country"
+              [(ngModel)]="serviceCenterObj.CountryID"
+              #country="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="let country of _sharedService._commonMeta.Countries"
+                (change)="countryCode = country.CountryCode"
+                [value]="country.CountryID"
+              >
+                {{ country.CountryName }}</ng-option
+              >
+            </ng-select>
+            <div class="error-block-ng-select text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || country.touched) &&
+                  country.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="City"
+              name="city"
+              [(ngModel)]="serviceCenterObj.CityID"
+              #city="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="
+                  let city of _sharedService._commonMeta.Cities
+                    | filter: serviceCenterObj.CountryID:'CountryID'
+                "
+                [value]="city.CityID"
+                >{{ city.CityName }}</ng-option
+              >
+            </ng-select>
+            <div class="error-block-ng-select text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || city.touched) &&
+                  city.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <div class="input-group-append Country-code-prepend">
+              <div
+                class="custom custom-append"
+                *ngFor="
+                  let code of _sharedService._commonMeta.Countries
+                    | filter: serviceCenterObj.CountryID:'CountryID'
+                "
+              >
+                {{ code.CountryCode }}
+              </div>
+            </div>
+            <input
+              type="text"
+              PhoneMask
+              placeholder=" "
+              class="floating-input form-control phone-number-prepend"
+              name="phone"
+              [(ngModel)]="serviceCenterObj.ContactPhone"
+              maxlength="11"
+              onCopy="return false"
+              onDrag="return false"
+              onDrop="return false"
+              onPaste="return false"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label text-prepend">Phone</label>
+          </div>
+
+          <!-- <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="zipcode"
+              [(ngModel)]="serviceCenterObj.Zipcode"
+              maxlength="5"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Zipcode</label>
+          </div> -->
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="address1"
+              maxlength="150"
+              [(ngModel)]="serviceCenterObj.Address1"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Address 1</label>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="address2"
+              maxlength="150"
+              [(ngModel)]="serviceCenterObj.Address2"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Address 2</label>
+          </div>
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="password"
+              placeholder=" "
+              class="floating-input form-control"
+              name="password"
+              [(ngModel)]="serviceCenterObj.Password"
+              #password="ngModel"
+              minlength="6"
+              required
+              autocomplete="new-password"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Password </label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || password.touched) &&
+                  password.errors?.required
+                "
+                >*Required</small
+              >
+              <small *ngIf="password.errors?.minlength"
+                >*Atleast 6 characters are allowed</small
+              >
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="password"
+              placeholder=" "
+              class="floating-input form-control"
+              name="confirm_password"
+              [(ngModel)]="serviceCenterObj.ConfirmPassword"
+              #confirmPassword="ngModel"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Confirm Password</label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  confirmPassword.touched
+                    ? password.value != confirmPassword.value
+                    : ''
+                "
+                >Passwords not same</small
+              >
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || confirmPassword.touched) &&
+                  confirmPassword.errors?.required
+                "
+              >
+                *Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="zipcode"
+              [(ngModel)]="serviceCenterObj.Zipcode"
+              maxlength="5"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Zipcode</label>
+          </div>
+        </div>
+
+        <div class="row mx-0">
+          <h5 class="m-3 px-3 bold-font">Contact Person</h5>
+        </div>
+        <div class="row justify-content-around">
+          <div class="col-sm-12 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              value=""
+              placeholder=" "
+              class="floating-input form-control"
+              name="contact_person_first_name"
+              [(ngModel)]="serviceCenterObj.ContactPersonFirstName"
+              #ContactPersonFirstName="ngModel"
+              required
+              maxlength="150"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">First Name</label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted ||
+                    ContactPersonFirstName.touched) &&
+                  ContactPersonFirstName.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              value=""
+              placeholder=" "
+              class="floating-input form-control"
+              name="contact_person_last_name"
+              [(ngModel)]="serviceCenterObj.ContactPersonLastName"
+              maxlength="150"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Last Name</label>
+          </div>
+
+          <div class="col-sm-12 col-lg-5 floating-label form-group">
+            <div class="input-group-append Country-code-prepend">
+              <div
+                class="custom custom-append"
+                *ngFor="
+                  let code of _sharedService._commonMeta.Countries
+                    | filter: serviceCenterObj.CountryID:'CountryID'
+                "
+              >
+                {{ code.CountryCode }}
+              </div>
+            </div>
+            <input
+              type="text"
+              PhoneMask
+              value=""
+              placeholder=" "
+              class="floating-input form-control phone-number-prepend"
+              name="contact_phone"
+              [(ngModel)]="serviceCenterObj.ContactPersonMobile"
+              #ContactPhone="ngModel"
+              required
+              maxlength="15"
+              onCopy="return false"
+              onDrag="return false"
+              onDrop="return false"
+              onPaste="return false"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label text-prepend">Mobile</label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  (serviceCenterForm.submitted || ContactPhone.touched) &&
+                  ContactPhone.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-lg-5"></div>
+        </div>
+        <div class="row col-12 justify-content-end">
+          <button
+            type="submit"
+            class="btn btn-primary btn-round mx-3"
+            *ngIf="serviceCenterObj.WorkshopID == undefined"
+          >
+            Create
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-round mx-3"
+            *ngIf="serviceCenterObj.WorkshopID != undefined"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- preview image modal -->
+<!-- <ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid"
+            [src]="serviceCenterObj.LogoImageURL ? _sharedService.baseUrl + serviceCenterObj.LogoImageURL : _sharedService.default_img">
+    </div>
+    <div class="row footer-buttons">
+        <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png" (change)="uploadImage($event)">
+        <label for="files" class="btn btn-primary btn-sm btn-round btn-simple upl-btn">Upload</label>
+        <button class="btn btn-primary btn-round btn-sm btn-simple dlt-btn" *ngIf="serviceCenterObj.LogoImageURL"
+            (click)="delete()">Delete</button>
+    </div>
+</ng-template> -->

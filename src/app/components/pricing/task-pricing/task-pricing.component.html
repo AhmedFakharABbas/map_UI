@@ -1,0 +1,94 @@
+<!-- <div class="row justify-content-center align-self-center">
+    <div class="col-10 d-flex flex-column align-self-center page-animation">
+        <form
+            (ngSubmit)="taskPricingForm.valid ?( serviceCenterObj.WorkshopID == undefined ? onSaveServiceCenter(): onUpdateServiceCenter()) : ''"
+            #taskPricingForm="ngForm">
+
+            <div class="row w-100 mt-3">
+                <hr class="w-100">
+                <h4 class="sub-heading">Task Information</h4>
+            </div>
+            <div class="row">
+
+                <div class="col-sm-6 col-lg-5 floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="english_name"
+                        [(ngModel)]="serviceCenterObj.EnglishName" #englishName="ngModel" required maxlength="150"
+                        (keypress)="_sharedService.CheckInputCharacters($event)" />
+                    <span class="highlight"></span>
+                    <label class="input-label">English Name</label>
+                    <div class="error-block text-danger">
+                        <small
+                            *ngIf="(taskPricingForm.submitted || englishName.touched) && englishName.errors?.required">*Required</small>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-5 floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="arabic_name"
+                        (keypress)="_sharedService.CheckInputCharacters($event)"
+                        [(ngModel)]="serviceCenterObj.ArabicName" maxlength="150" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Arabic Name</label>
+                </div>
+
+                <div class="row col-6 mb-3 justify-content-end"
+                    *ngFor="let item of _sharedService._commonMeta.objectTypes | filter : 'JobConcern' : 'ObjectNameEnglish'">
+                    <div *ngIf="item.ObjectTypeID != 76 && item.ObjectTypeID != 79">
+                        <div class="form-check form-check-radio">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="repairType"
+                                    value="{{item.ObjectTypeID}}" id="{{item.TypeNameEnglish}}"
+                                    [checked]="inspectionResult.RepairTypeID == item.ObjectTypeID"
+                                    (change)="inspectionResult.Icon = item.Icon; inspectionResult.RepairTypeID = item.ObjectTypeID">
+                                <span class="form-check-sign dark-font">{{item.TypeNameEnglish}}</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row w-100 mt-3">
+                <hr class="w-100">
+                <h4 class="sub-heading">Price Information</h4>
+            </div>
+            <div class="row">
+                <div class="col-11 card form-check form-check-radio floating-label"
+                    *ngIf="vehicleObj.EngineTypeID != 29">
+                    <label class="mt-3 mb-0 primary-font">Cylinder Type</label>
+                    <div class="row p-3">
+                        <label class="form-check-label mr-3 primary-font"
+                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'CylinderCount' : 'ObjectNameEnglish'">
+                            <input class="form-check-input" type="radio" id="{{item.TypeNameEnglish}}"
+                                name="cylinderType" [(ngModel)]="vehicleObj.CylinderTypeID" [value]="item.ObjectTypeID">
+                            <span class="form-check-sign mx-3">{{item.TypeNameEnglish}}</span>
+                        </label> 
+                    </div>
+                </div>
+
+                <div class="col-5 card form-check form-check-radio floating-label">
+                    <label class="mt-3 mb-0 primary-font">Vehicle Region</label>
+                    <div class="row p-3 ml-5">
+                        <label class="form-check-label mr-3 primary-font"
+                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'VehicleRegion' : 'ObjectNameEnglish'">
+                            <input class="form-check-input" type="radio" id="{{item.TypeNameEnglish}}" name="region"
+                                [(ngModel)]="vehicleObj.VehicleRegionID" [value]="item.ObjectTypeID">
+                            <span class="form-check-sign mx-3">{{item.TypeNameEnglish}}</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="floating-label form-group col-lg-6 col-sm-12"
+                    *ngIf="repairType == 2 && _sharedService.logged_user_role_id != 8">
+                    <input type="text" value="" placeholder=" " (change)="inspectionResult.IsModified = true"
+                        class="floating-input form-control input-border-color" name="LaborPrice"
+                        [(ngModel)]="inspectionResult.LaborPrice" #LaborPrice="ngModel" maxlength="5"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                    <div class="input-group-append price-perpend">JOD</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Labor Price</label>
+                </div>
+ 
+            </div>
+        </form>
+    </div>
+</div> -->

@@ -1,0 +1,64 @@
+
+@import "variables";
+
+.tgl-flip + .tgl-btn:after,
+.tgl-flip + .tgl-btn:before {
+    left: -6%;
+    top: -6px;
+}
+
+// technician accept reject buttons
+.btn-accept {
+    background-color: $white-color;
+    color: #7fc6a6;
+    border: 1px solid #7fc6a6;
+    // padding: 0px 7px 2px 7px !important;
+}
+
+.btn-reject {
+    background-color: $white-color;
+    color: $hover-color;
+    border: 1px solid $hover-color;
+    // padding: 0px 7px 2px 7px !important;
+}
+
+.success-font{
+    color: #7fc6a6; 
+}
+
+.btn-success{
+    color: #7fc6a6 !important;
+    border-color: #7fc6a6 !important;
+  }
+
+  .con-count{
+    background: $hover-color;
+    color: $white-color;
+    padding: 5px 11px;
+}
+
+.tbl-header{
+    background: $primary-color;
+    color: $white-color;
+}
+
+.collapseButton-color {
+    color: $hover-color;
+    background: transparent;
+    border: 1px solid $hover-color;
+  }
+  
+.collapseButton-color .fas:hover{
+    color: white !important;
+    background: $hover-color;
+}
+
+.result-img {
+    width: 200px; 
+    height: 115px;
+}
+
+
+.fa-chevron-down:hover, .fa-chevron-up:hover{
+    transform: scale(1) !important;
+  }

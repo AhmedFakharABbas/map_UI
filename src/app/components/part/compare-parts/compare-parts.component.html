@@ -1,0 +1,800 @@
+<div class="row justify-content-center align-items-center page-animation">
+
+    <div class="col-lg-11 col-12">
+
+        <div class="row card-body pt-0 justify-content-center ">
+            <!-- <div class="row w-100 mx-0">
+                <hr class="w-100">
+                <h4 class="sub-heading">Search Parts</h4>
+            </div> -->
+
+            <div class="col-lg-12 col-12 mt-3">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="row">
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <!-- <div class="floating-label form-group mb-0">
+                          <input
+                            type="text"
+                            placeholder=" "
+                            class="floating-input form-control"
+                            name="SearchQuery"
+                            maxlength="200"
+                            [(ngModel)]="filter.SearchQuery"
+                            #SearchQuery="ngModel"
+                            required
+                          />
+                          <span class="highlight"></span>
+                          <label class="input-label">Item Name Or Code</label>
+                        </div> -->
+                        <div
+                        class="floating-label form-group align-self-center">
+                        <ng-select
+                          class="custom"
+                          id="make"
+                          placeholder="Make"
+                          name="make"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.MakeID"
+                          #make="ngModel"
+                          (change)="
+                            _sharedService.jobObj.jcVehicleObj.ModelID = null;
+                            _sharedService.jobObj.jcVehicleObj.ProductionYear = null;
+                            this.MinYear = null;
+                            this.MaxYear = null;
+                            _sharedService.jobObj.jcVehicleObj.GroupName = null;
+                            mapRegion(_sharedService.jobObj.jcVehicleObj.MakeID);
+                            changeMake()
+                            "
+                         
+                          [clearable]="false"
+                          required
+                        >
+                          <ng-option
+                            *ngFor="let item of _sharedService._commonMeta.Makes"
+                            [value]="item.MakeID"
+                          >
+                            {{ item.EnglishMakeName }}</ng-option
+                          >
+                        </ng-select>
+                        <i
+                          class="fa fa-times remove-make"
+                          *ngIf="_sharedService.jobObj.jcVehicleObj.MakeID != undefined"
+                          (click)="onChangeMake()"
+                        ></i>
+                        <div class="error-block-ng-select text-danger">
+
+                          
+                        </div>
+                      </div>
+                      </div>
+                        <!-- <div class="floating-label form-group">
+                          <ng-select
+                            class="custom"
+                            placeholder="Main Category"
+                            name="maincategory"
+                            [(ngModel)]="filter.MainCategoryID"
+                            #maincategory="ngModel"
+                          >
+                            <ng-option
+                              *ngFor="let item of _meta.MainCategories"
+                              [value]="item.MainCategoryID"
+                            >
+                              {{ item.MainCategoryNameArabic }}</ng-option
+                            >
+                          </ng-select>
+                        </div> -->
+
+                        <div
+                        class="floating-label col-lg-3 col-md-6 col-sm-12 col-12 form-group align-self-center"
+                        *ngIf="this.groupnameCount > 0"
+                      >
+                        <ng-select
+                          class="custom"
+                          id="groupName"
+                          placeholder="Group Name"
+                          name="groupName"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.GroupName"
+                          #groupName="ngModel"
+                          (change)="
+                            this.MinYear = null;
+                            this.MaxYear = null;
+                            _sharedService.jobObj.jcVehicleObj.ProductionYear = null;
+                            this.JobCardID = null;
+
+                            
+                          "
+                        >
+                          <ng-option
+                            *ngFor="
+                              let item of _sharedService._commonMeta.GroupName
+                                | filter: _sharedService.jobObj.jcVehicleObj.MakeID:'MakeID'
+                            "
+                            [value]="item.GroupName"
+                          >
+                            {{ item.GroupName }}</ng-option
+                          >
+                        </ng-select>
+                    
+                        <div class="error-block-ng-select text-danger">
+                          <small
+                            *ngIf="
+                              (groupName.touched) &&
+                              groupName.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+
+                        <div
+                        class="floating-label form-group align-self-center"
+                      >
+                        <ng-select
+                          class="custom"
+                          id="model"
+                          placeholder="Model"
+                          name="model"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.ModelID"
+                          #model="ngModel"
+                          (change)="
+                            getProductionYears();
+                            changeModel();
+                            _sharedService.jobObj.jcVehicleObj.ProductionYear = null;
+                          "
+                          required
+                        >
+                          <ng-option
+                            *ngFor="
+                              let item of _sharedService._commonMeta.Models
+                                | filter: _sharedService.jobObj.jcVehicleObj.MakeID:'MakeID'
+                                | filter: _sharedService.jobObj.jcVehicleObj.GroupName:'GroupName'
+                            "
+                            [value]="item.ModelID"
+                            >{{ item.EnglishModelName }}</ng-option
+                          >
+                        </ng-select>
+                        <div class="error-block-ng-select text-danger">
+                          <small
+                            *ngIf="
+                              (model.touched) && model.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+                        
+                      </div>
+              
+
+                      <!-- <div class="col-3"> 
+                       <div class="floating-label form-group">
+                      <button type="button" class="btn btn-primary m-0"
+                                              (click)="getAllParts()" title="Apply Filter">Apply</button>
+              
+                                              <button type="button" class="btn btn-primary m-0"
+                                              (click)="getAllParts()" title="Apply Filter">Apply</button>
+                                          </div>
+                 
+              </div> -->
+                      <!-- </div>
+              
+              <div class="row"> -->
+              
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div
+                        class="floating-label form-group align-self-center"
+                        
+                      >
+                        <ng-select
+                          class="custom"
+                          id="year"
+                          placeholder="Production Year"
+                          name="model_version"
+                          (change)="
+                            _sharedService.jobObj.jcVehicleObj.EngineCapacity = null;
+                            _sharedService.jobObj.jcVehicleObj.EngineCode = null;
+                          "
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.ProductionYear"
+                          #productionYear="ngModel"
+                          (change)="getSeries()"
+                          required
+                          [clearable]="false"
+                        >
+                          <ng-option
+                            *ngFor="
+                              let item of _sharedService._commonMeta.Years
+                                | between: MinYear:MaxYear:'YearCode'
+                            "
+                            [value]="item.YearCode"
+                          >
+                            {{ item.YearCode }}</ng-option
+                          >
+                        </ng-select>
+                        <i
+                          class="fa fa-times remove-year"
+                          (click)="onRemoveYear()"
+                          *ngIf="_sharedService.jobObj.jcVehicleObj.ProductionYear != undefined"
+                        ></i>
+                        <!-- <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-1 padding_0">
+                          <button title="add Model" class="btn btn-outline-secondary" (click)="onRemoveYear()" type="button">
+                              <i class="fa fa-times"></i></button>
+                        </div> -->
+                    
+                        <div class="error-block-ng-select text-danger">
+                          <small
+                            *ngIf="
+                              (productionYear.touched) &&
+                              productionYear.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+
+
+                      </div>
+                      
+                                            
+                       <div class="col-lg-3 col-md-6 col-sm-12 col-12"> 
+                        <div
+                        class="floating-label form-group align-self-center"
+                      >
+                        <ng-select
+                          class="custom"
+                          id="fuel_type"
+                          placeholder="Engine Type"
+                          name="Engine_type"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineTypeName"
+                          #fuelType="ngModel"
+                          required
+                        >
+                          <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.objectTypes
+                              | filter: 'Engine':'ObjectNameEnglish'"
+                              [value]="item.TypeNameEnglish"
+                        >
+                            
+                            {{ item.TypeNameEnglish }}
+                        </ng-option>
+
+                        </ng-select>
+                        <div class="error-block-ng-select text-danger">
+                          <small
+                            *ngIf="
+                              (fuelType.touched) && fuelType.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+                      </div> 
+                      
+                      
+                      
+                      
+                      
+                       <div class="col-lg-3 col-md-6 col-sm-12 col-12"> 
+                        <div
+                        class="floating-label form-group align-self-center"
+                      >
+                        <ng-select
+                          class="custom"
+                          id="vehicle_type"
+                          placeholder="Body Type"
+                          name="vehicletype"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.VehicleTypeName"
+                          #vehicleType="ngModel"
+                          required
+                        >
+                          <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.objectTypes
+                              | filter: 'Body':'ObjectNameEnglish'"
+                              
+                              [value]="item.TypeNameEnglish" >
+                            
+                            {{ item.TypeNameEnglish }}
+                        </ng-option>
+
+                        </ng-select>
+                        <div class="error-block-ng-select text-danger">
+                          <small
+                            *ngIf="
+                              (vehicleType.touched) && vehicleType.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+                      </div> 
+
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                         <div class="floating-label form-group mb-0">
+                          <input
+                            type="text"
+                            placeholder=" "
+                            class="floating-input form-control"
+                            name="SearchQuery"
+                            maxlength="200"
+                            [(ngModel)]="filter.SearchQuery"
+                            #SearchQuery="ngModel"
+                            required
+                          />
+                          <span class="highlight"></span>
+                          <label class="input-label">Part Search</label>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12"  *ngIf="this.groupnameCount <= 0 || this.groupnameCount == undefined"></div>
+                      
+                      <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div class="floating-label form-group text-center">
+                            <button
+                              type="button"
+                              class="btn btn-primary col-5"
+                              title="Apply Filter"
+                              (click)="getAllCompareParts()"
+  
+                            >
+                              Apply
+                            </button>
+                      
+                            <button
+                              type="button"
+                              class="btn btn-primary col-5"
+                              title="Apply Filter"
+                              (click)="clearFilters()"
+  
+                            >
+                              Clear
+                            </button>
+                          <span class="highlight"></span>
+                        </div>
+                        </div>
+
+                      
+
+                      <!-- <div class="col-3">
+                        <div
+                        class="floating-label form-group pb-0"
+                        *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+                      >
+                        <input
+                          list="Capacitys"
+                          type="text"
+                          step="1"
+                          min="0"
+                          id="engine_capacity"
+                          placeholder=" "
+                          class="floating-input"
+                          name="engine_capacity"
+                          (change)="selectCylinderType();"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCapacity"
+                          #engineCap="ngModel"
+                          ngModel
+                          required
+                          pattern="\d*"
+                          maxlength="4"
+                        />
+                    
+                        <div class="input-group-append price-perpend">CC</div>
+                        <datalist id="Capacitys">
+                          <option
+                            *ngFor="let item of generalVehicle.GeneralVehicles"
+                            value="{{ item.EngineCapacity }}"
+                          ></option>
+                        </datalist>
+                    
+                        <span class="highlight"></span>
+                        <label class="input-label">Engine Capacity</label>
+                    
+                        <div class="error-block-append text-danger">
+                          <small
+                            *ngIf="
+                              ( engineCap.touched) &&
+                              engineCap.errors?.required
+                            "
+                            >*Required</small
+                          >
+                        </div>
+                      </div>
+                    </div> -->
+
+                    <!-- <div class="col-3">
+                        <div
+                        class="floating-label form-group"
+                        *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+                      >
+                        <input
+                          type="text"
+                          list="enginecodes"
+                          step="1"
+                          min="0"
+                          placeholder=" "
+                          class="floating-input"
+                          name="engine_code"
+                          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCode"
+                          #engineCode="ngModel"
+                          ngModel
+                          maxlength="4"
+                        />
+                    
+                        <datalist id="enginecodes">
+                          <option
+                            *ngFor="let item of generalVehicle.GeneralVehicles"
+                            [value]="item.EngineCode"
+                          ></option>
+                        </datalist>
+                    
+                        <span class="highlight"></span>
+                        <label class="input-label">Engine Code</label>
+                      </div>
+
+
+
+                    </div> -->
+
+
+
+                    <!-- <div class="col-3">
+                        <div
+                        class="floating-label form-group"                      >
+                        <input type="text" 
+                        class="floating-input" 
+                        name="job-card-id" 
+                        [(ngModel)]="JobCardNumber" />
+                        <span class="highlight"></span>
+                        <label class="input-label">Job Card Number</label>
+                        </div>
+                    </div> -->
+
+
+
+
+
+
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="row">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-3 mt-2">
+                          <div class="floating-label form-group">
+                              <ng-select class="custom" id="applications" name="price"
+                                  placeholder="Sort By" [(ngModel)]="filter.Price" #Price="ngModel"
+                                  (change)="filter.Price != undefined ? getAllCompareParts() : ''">
+                                  <ng-option [value]="1">Price Asc</ng-option>
+                                  <ng-option [value]="2">Price Desc</ng-option>
+                              </ng-select>
+                          </div>
+                      </div>
+                    
+
+
+
+
+                  <div class="col-3"></div>
+                  <div class="col-3"></div>
+
+
+                    <div class="col-3">
+                      <div class="floating-label form-group text-center">
+                          <button
+                            type="button"
+                            class="btn btn-primary col-5"
+                            title="Apply Filter"
+                            (click)="getAllCompareParts()"
+
+                          >
+                            Apply
+                          </button>
+                    
+                          <button
+                            type="button"
+                            class="btn btn-primary col-5"
+                            title="Apply Filter"
+                            (click)="clearFilters()"
+
+                          >
+                            Clear All
+                          </button>
+                        <span class="highlight"></span>
+                      </div>
+                      </div>
+
+
+                    </div>
+                    </div>
+                    </div> -->
+                 
+                </div>
+
+
+              <div class="row mx-0 w-100">
+                <div
+                  class="card col-lg-6 col-md-12 col-sm-12 col-12 px-0 card-border"
+                  *ngFor="let jp of partInfoObj.mainPart; let i = index"
+                >
+                  <!-- <div class="row mx-0">
+                    <div class="row col-12 px-0 mx-0">
+                      </div>
+                      <div class="col-8 px-0">
+                        <div class="row mx-0">
+                          <div class="col-md-6 col-lg-6 col-6 px-0">
+
+                            <div class="ml-1 mt-5">
+                              <p class="font-18 font-weight-bold  sub-heading1" title="">
+                                {{ jp.ItemNameEng }} <small>{{jp.InternalCode}}</small>
+                              </p>
+                            </div>
+                          </div>
+            
+                         
+            
+                        
+                          
+                           
+                           
+            
+            
+                          <div
+                            class="col-md-12 col-lg-12 col-12 px-0 order-md-3 order-lg-6"
+                          >
+                           
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-4 px-0 mx-0 card-margin">
+                        <div class="row">{{jp.MainCategoryNameEnglish}} > {{jp.SubCategoryNameEnglish}}
+                        </div>
+
+                      </div>
+                    </div> -->
+            
+                  
+                    <div class="d-flex justify-content-between mx-2 px-2 my-2">
+                      <div class="font-18 font-weight-bold  sub-heading1">
+                        {{ jp.ItemNameEng }} <small>{{jp.InternalCode}}</small>
+                      </div>
+
+                      <div class="card-margin1" >
+                        {{jp.MainCategoryNameEnglish}} > {{jp.SubCategoryNameEnglish}}
+                      </div>
+                    </div>
+
+
+                    <div class="col-12 table-scroll">
+                      <!-- <div class="row bt-1">
+                        <div
+                          class="col-12 row mx-0 align-self-center"
+                          *ngFor="
+                            let p of partInfoObj.AutomotivePartsList
+                              | filter: jp.MainPartID:'MainPartID';
+                            let idx = index
+                          "
+                        >
+                          <div class="col-2 px-0 py-3">
+                            <div class="primary-font ml-3 smaller-font table-column py-3" *ngIf="idx == 0">
+                              <span>Item Code</span>
+                            </div>
+                            <div class="ml-3">
+                              <p class="my-0 mt-1" title="">
+                                <span appElseHyphen [elseHyphen]="p.ItemCode"></span>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-2 px-0 py-3">
+                            <div class="primary-font ml-3 smaller-font table-column py-3" *ngIf="idx == 0">
+                              <span>Brand</span>
+                            </div>
+                            <div class="ml-3">
+                              <p class=" my-0 mt-1" title="">
+                                <span appElseHyphen [elseHyphen]="p.BrandName"
+                                  >({{ p.OrigionName }})</span
+                                >
+                                &nbsp;
+                                <span
+                                  appElseHyphen
+                                  [elseHyphen]="p.Viscosity"
+                                  *ngIf="jp.SubCategoryID == 20"
+                                ></span>
+                              </p>
+                            </div>
+                          </div>
+            
+ 
+            
+                          <div class="col-3 px-0 py-3">
+                            <div class="primary-font ml-3 smaller-font table-column py-3" *ngIf="idx == 0">
+                              <span>Lowest Selling Price</span>
+                            </div>
+                            <div class="ml-3">
+                              <p class=" my-0 mt-1" title="">
+                                <span appElseHyphen [elseHyphen]="p.SellingPrice">  </span>
+                                 <small *ngIf="p.SellingPrice != undefined">  JOD </small>
+                              </p>
+                            </div>
+                          </div>
+
+                          <div class="col-3 px-0 py-3">
+                            <div class="primary-font ml-3 smaller-font table-column py-3" *ngIf="idx == 0">
+                              <span>Highest Selling Price</span>
+                            </div>
+                            <div class="ml-3">
+                              <p class=" my-0 mt-1" title="">
+                                <span appElseHyphen [elseHyphen]="p.HighestSellingPrice">  </span>
+                                 <small *ngIf="p.HighestSellingPrice != undefined">  JOD </small>
+                              </p>
+                            </div>
+                          </div>
+
+                          <div class="col-2 px-0 py-3">
+                            <div class="primary-font ml-3 smaller-font table-column py-3" *ngIf="idx == 0">
+                              <span>SeriesID</span>
+                            </div>
+                            <div class="ml-3 mt-1">
+                              {{p.SeriesID}}
+                            </div>
+                          </div>
+                         
+                        </div>
+                        <hr>
+                      </div> -->
+                      <table class="table table-responsive-md m-0 w-100 ">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>ItemCode</th>
+                            <th>Brand</th>
+                            <th>MinimumPrice</th>
+                            <th>MaximumPrice</th>
+                            <th>SeriesID</th> 
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let p of partInfoObj.AutomotivePartsList | filter: jp.MainPartID:'MainPartID';
+                            let idx = index">
+                            
+                            
+                            <td> {{idx+1}}
+                               </td>
+                            <td >
+                              <span *ngIf="p.ItemCode != undefined; else elseHyphen">
+                                {{ p.ItemCode }}
+  
+                              </span>
+                            </td>
+
+                            <td >
+                              <span *ngIf="p.BrandName != undefined; else elseHyphen">
+                                {{ p.BrandName }}
+  
+                              </span>
+                            </td>
+
+                            <td >
+                              <span *ngIf="p.SellingPrice != undefined; else elseHyphen">
+                                {{ p.SellingPrice }}
+  
+                              </span>
+                            </td>
+
+                            <td >
+                              <span *ngIf="p.HighestSellingPrice != undefined; else elseHyphen">
+                                {{ p.HighestSellingPrice }}
+  
+                              </span>
+                            </td>
+
+                            <td >
+                              <span *ngIf="p.SeriesID != undefined; else elseHyphen">
+                                {{ p.SeriesID }}
+  
+                              </span>
+                            </td>
+
+        
+                          </tr>
+          
+                          <tr
+                            *ngIf="
+                            partInfoObj.mainPart == undefined
+                            "
+                          >
+                            <td colspan="9">
+                              <p class="text-center">No result found!</p>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+
+
+
+
+
+        </div>
+        <div class="row justify-content-center mb-3"
+            *ngIf="partInfoObj.AutomotivePartsList != undefined && partInfoObj.AutomotivePartsList.length > 0">
+            <ngb-pagination 
+                [(page)]="cPage" 
+                [pageSize]="_sharedService.pageSize"
+                [collectionSize]="totalMainParts" 
+                aria-label="Compare part Pagination"
+                (pageChange)="getAllCompareParts(pageNumber = $event)"
+                [maxSize]="5"
+                [rotate]="true"
+                [ellipses]="false"
+                [boundaryLinks]="true"
+                [rotate]="true"
+                class="pagination-primary">
+            </ngb-pagination>
+        </div>
+    </div>
+<ng-template #elseHyphen>
+    <span class="px-3">-</span>
+</ng-template>
+
+<ng-template #carFilter let-c="close" let-d="dismiss">
+    <div class="adOptionModel" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h5 class="modal-title text-center">Select Makes</h5>
+            <button type="button" class="close" (click)="closeModal()" title="Cancel">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="fluid-container modal_container ">
+                <div class="row" *ngIf="attrName == 'make'">
+                    <div class="col-3 form-check mt-0 pt-1" *ngFor="let make of _sharedService._commonMeta.Makes">
+                        <label class="form-check-label orange">
+                            <input class="form-check-input" type="checkbox" id="{{make.MakeID}}"
+                                (change)="make.IsChecked = !make.IsChecked" [checked]="make.IsChecked == true"
+                                name="{{make.EnglishMakeName}}">
+                            <span class="form-check-sign"></span>
+                            <label class="mb-0" for="{{make.MakeID}}" title="Status">{{make.EnglishMakeName}}</label>
+                        </label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="attrName == 'model'">
+                    <div class="col-3 form-check mt-0 pt-1" *ngFor="let model of filteredModels">
+                        <label class="form-check-label orange">
+                            <input class="form-check-input" type="checkbox" id="{{model.ModelID}}"
+                                (change)="model.IsChecked = !model.IsChecked" [checked]="model.IsChecked == true"
+                                name="{{model.EnglishModelName}}">
+                            <span class="form-check-sign"></span>
+                            <label class="mb-0" for="{{model.ModelID}}"
+                                title="Status">{{model.EnglishModelName}}</label>
+                        </label>
+                    </div>
+                </div>
+                <div class="row" *ngIf="attrName == 'manufacturer'">
+                    <div class="col-3 form-check mt-0 pt-1" *ngFor="let manufacturer of _meta.PartManufacturer">
+                        <label class="form-check-label orange">
+                            <input class="form-check-input" type="checkbox" id="{{manufacturer.PartManufacturerID}}1"
+                                (change)="manufacturer.IsChecked = !manufacturer.IsChecked"
+                                [checked]="manufacturer.IsChecked == true" name="{{manufacturer.PartManufacturerName}}1">
+                            <span class="form-check-sign"></span>
+                            <label class="mb-0" for="{{manufacturer.PartManufacturerID}}1"
+                                title="Status">{{manufacturer.PartManufacturerName}}</label>
+                        </label>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button type="button" class="btn btn-primary btn-round btn-simple"
+                        (click)="filterCar()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

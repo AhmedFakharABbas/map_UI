@@ -1,0 +1,217 @@
+
+
+<div class="card row mx-2">
+
+    <div class="col-12">
+        <h4 class="font-weight-bold mb-4 px-5">Initial Checklist</h4>
+    </div>
+    <div class="pb-3">
+        <div class="row py-3 mx-3 checklist-highlight bb-1"
+            *ngFor="let ic of saveAppointmentData.JobCardCheckList | filter: 45 : 'CheckListTypeID'">
+            <div class="col-sm-10 d-flex page-animation">
+                <div class="mr-3">
+                    <i class="fas fa-check" *ngIf="ic.IsChecked == true"></i>
+                    <span *ngIf="ic.IsChecked != true">&nbsp;</span>
+                </div>
+                <span class="form-check-sign primary-dark-font">{{ic.EnglishName}}</span>
+            </div>
+
+            <div class="" *ngIf="ic.IsChecked == true && ic.Note != undefined && ic.Note != ''">
+                <i class="fas fa-file primary-font" (click)=viewNote(notePreview,ic)></i>
+            </div>
+        </div>
+
+        <!-- <div class="row mx-0 p-3">
+            <label class="col-3 primary-dark-font">Generic Notes:</label>
+            <p class="col-9">{{_sharedService.jobObj.JCBasicInfo.InspectionComments}}</p>
+        </div> -->
+    </div>
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Damages</h4>
+    </div>
+    <div class="row justify-content-center page-animation ">
+        <img-map #imgMap style="width: 50%;"
+        [src]="saveAppointmentData.AppointmentObj.VehicleTypeID != undefined ? saveAppointmentData.AppointmentObj.VehicleTypeID == 16 ? hatchback : 
+        saveAppointmentData.AppointmentObj.VehicleTypeID == 17 ? SUV : saveAppointmentData.AppointmentObj.VehicleTypeID == 18 ? pickup : 
+        saveAppointmentData.AppointmentObj.VehicleTypeID == 19 ? coupe : saveAppointmentData.AppointmentObj.VehicleTypeID == 20 ? twoDoorPickup : saveAppointmentData.AppointmentObj.VehicleTypeID == 21 ? bus :
+        saveAppointmentData.AppointmentObj.VehicleTypeID == 22 ? convertible : sedan : sedan "
+        [markerRadius]="_sharedService.marker_radius" [markers]="markers"
+        >
+    </img-map>
+    </div>
+
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Mileage Reading </h4>
+    </div>
+    <div class="row">
+        <!-- fuel tank  -->
+        <!-- <div class="col-6">
+            <div class="row justify-content-center pt-5">
+                <div class="col-4 text-center">
+                    <img class="fuel-tank-image"
+                        (click)="open(imagePreview, 'Fuel Tank' , saveAppointmentData.AppointmentObj.MileageImageURL)"
+                        [src]="saveAppointmentData.AppointmentObj.MileageImageURL != undefined ? _sharedService.baseUrl + saveAppointmentData.AppointmentObj.MileageImageURL : 
+                         _sharedService.default_img">
+                </div>
+            </div>
+
+            <div class="row pt-3 ">
+                <div class="col-12 py-3 text-center">
+                    <label class="primary-font bold-font">Fuel Tank Reading</label>
+                    <div class="detail-font">
+                        <span appElseHyphen [elseHyphen]="saveAppointmentData.AppointmentObj.FuelTankReading"></span>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- mileage  -->
+        <div class="col-12">
+            <div class="row justify-content-center pt-5">
+                <div class="col-4 text-center">
+                    <img class="fuel-tank-image"
+                        (click)="saveAppointmentData.AppointmentObj.MileageImageURL != undefined ? open(imagePreview, 'Mileage', saveAppointmentData.AppointmentObj.MileageImageURL) :''"
+                        [src]="saveAppointmentData.AppointmentObj.MileageImageURL != undefined ? _sharedService.baseUrl + saveAppointmentData.AppointmentObj.MileageImageURL : 
+                         _sharedService.default_img">
+                </div>
+            </div>
+
+            <div class="row pt-3 ">
+                <div class="col-12 py-3 text-center">
+                    <label class="primary-font bold-font">Mileage</label>
+                    <div class="detail-font">
+                        <span appElseHyphen [elseHyphen]="saveAppointmentData.AppointmentObj.Mileage"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Gallery</h4>
+    </div>
+    <div class="row mx-0 my-3 justify-content-center">
+        <div class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0">
+            <label>
+                <img class="gallery-img" (click)="
+                saveAppointmentData.AppointmentObj.VehicleFront != undefined ?open(imagePreview,'Front', saveAppointmentData.AppointmentObj.VehicleFront)  : ''"
+                [src]="saveAppointmentData.AppointmentObj.VehicleFront != undefined ? _sharedService.baseUrl + saveAppointmentData.AppointmentObj.VehicleFront :  _sharedService.default_img">
+                <!-- <input type='file' class="file-choose" id="Rim4" accept="image/jpeg,image/png"
+                    (change)="uploadVehicleImage($event, 117, _sharedService.jobObj.JCBasicInfo.JobCardID)"> -->
+                <div class="primary-font bold-font" for="files">
+                    Front
+                </div>
+            </label>
+        </div>
+        <div class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0"
+            *ngFor="let image of saveAppointmentData.Gallery | filter : 48 : 'GalleryTypeID'; let idx = index">
+            <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.plus_image"
+                (click)="galleryPreviewModal(galleryPreview, image); shouldUpdate = true;" class="gallery-img">
+            <!-- <span class="del"><i class="img-del" (click)="openRemoveImage(deleteImage,image)">x</i></span> -->
+        </div>
+ 
+    </div> 
+        <div class="d-flex justify-content-between button-clas mb-md-3">
+            <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn py-1 bg-white px-5 py-3 mb-md-5"
+                *ngIf="saveAppointmentData.AppointmentObj.InspectionSignatureURL == undefined"
+                (click)="openModel(ESignatureModel)">
+                Customer Signatures
+                <i class="fas fa-pencil-alt ml-3"></i>
+            </button>
+        </div>
+
+    
+
+</div>
+
+
+
+<!-- preview image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <!-- <h5 class="modal-title text-center">{{heading}}</h5> -->
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid" [src]="imageURL ? _sharedService.baseUrl + imageURL :  _sharedService.default_img">
+    </div>
+</ng-template>
+
+<!-- Gallery view image modal -->
+<ng-template #galleryPreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Gallery Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="" [src]="currentImg!= undefined ?_sharedService.baseUrl + currentImg : _sharedService.default_img">
+
+    </div>
+</ng-template>
+
+<!-- view Note -->
+<ng-template #notePreview let-d="dismiss('Cross click')">
+    <div class="modal-header ">
+        <h5 class="modal-title text-center">Note</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p class="primary-dark-font overflow-auto">{{checklist.Note}}</p>
+
+    </div>
+</ng-template>
+<ng-template #ESignatureModel let-c="close" let-d="dismiss">
+    <!--Modal Header -->
+    <div class="setScreen">
+        <div class="modal-header">
+            <h4 class="modal-title mt-0">E-Signature</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('Cross click'); closeSignatureModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <!--Modal Body -->
+        <div class="modal-body">
+            <div class="row justify-content-center" style="margin-top: 0px;">
+
+                <!--E-Signature Content -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <canvas id="sig-canvas" style="width:100%; height: 200px;">
+                                Please use the latest chrome browser version.
+                            </canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input hidden id="sig-dataUrl" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal Footer -->
+        <div class="modal-footer modal-end-footer">
+
+            <button type="button" class="btn btn-danger btn-round"
+            (click)="c('Close click'); closeSignatureModal()">Close</button>
+
+            <button type="button" class="btn btn-clear btn-round" id="sig-clearBtn">Clear</button>
+
+            <button type="button" class="btn btn-success btn-round" id="sig-submitBtn"
+                (click)="onSubmitSignature()">Submit </button>
+
+           
+        </div>
+    </div>
+</ng-template>

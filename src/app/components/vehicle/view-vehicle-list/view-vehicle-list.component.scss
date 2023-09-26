@@ -1,0 +1,48 @@
+// side scroll bar
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+// .dropdown{
+//   bottom: 446.181px;
+//   top: auto;
+//   left: 92.448px;
+//   width: 228.646px;
+//   min-width: 228.646px;
+//   opacity: 1;
+// }
+
+
+
+
+// .align-Data{
+//   text-align: end;
+//   //padding: 0px;
+// }
+
+.eclipse {
+  display:inline-block;
+  width:180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.transparrent-background {
+  background-color: #f2f2fa !important;
+}

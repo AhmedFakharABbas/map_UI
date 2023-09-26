@@ -1,0 +1,29 @@
+@import "variables";
+.card-number {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px 4px;
+    background: coral;
+    color: white;
+    border-bottom-right-radius: 35% 100%;
+    border-top-right-radius: 0% 100%;
+}
+.collapse-tabset {
+    position: absolute;
+    margin-top: 7px;
+    right: 22px;
+    background-color: $white-color;
+}
+
+.heading-color {
+    background-color: $primary-color !important;
+}
+.ts.pro::after {
+    background-image: url('../../../../assets/icons/group-22@3x.png');
+    transform: scale(2.5) translate(14px, 2px);
+}
+.ts.eco::after {
+    background-image: url('../../../../assets/icons/group-23@3x.png');
+    transform: scale(2.5) translate(14px, 2px);
+}

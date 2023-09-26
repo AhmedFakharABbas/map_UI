@@ -1,0 +1,83 @@
+.fuel-tank-image {
+  height: 110px !important;
+  width: 175px;
+  border-radius: 0% !important;
+}
+
+.upload-btn {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  bottom: -39px;
+  border: 1px solid rgba(0, 0, 0, 0.87);
+  padding: 7px;
+  border-radius: 50%;
+}
+
+.ng-select.custom-append {
+  border-radius: 0px 8px 8px 0 !important;
+  border-left: 0px;
+}
+
+.custom-input {
+  border-right: 0 !important;
+}
+.custom-dropdown .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  padding: 0 5px !important;
+}
+.rightDropdown-color {
+  background: #8e99ad !important;
+}
+.file-choose {
+  visibility: hidden;
+  display: none;
+}
+
+.gallery-img {
+  height: 115px;
+  border-radius: 0%;
+  width: 96%;
+}
+.img-del {
+  right: 12px;
+}
+
+.upload-image {
+  height: 70px !important;
+  width: 70px !important;
+}
+.plus-image {
+  max-width: 100px;
+  width: 190px !important;
+  height: 100px !important;
+  border-radius: 50%;
+}
+.checked {
+  border: none !important;
+}
+@media screen and(max-width:1050px) {
+  .form-check .form-check-label {
+    padding-left: 24px;
+  }
+  .ng-select-container .ng-value-container {
+    padding-left: 2px !important;
+    padding-right: 0px !important;
+  }
+  .form-control[disabled],
+  .form-control[readonly],
+  fieldset[disabled] .form-control {
+    color: #000000;
+  }
+
+  .input-group-append {
+    width: 0px;
+  }
+  .tab-font {
+    font-size: 13px;
+  }
+  .nav {
+    display: flex;
+
+    overflow-x: auto;
+  }
+}

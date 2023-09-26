@@ -1,0 +1,61 @@
+<div class="row mx-0">
+    <div class="col-12 card">
+        <ngb-tabset class="sub-tabset big-font">
+            <!-- initial Checklist -->
+            <ngb-tab title="QA Checklist">
+                <ng-template ngbTabContent>
+                    <div class="row primary-dark-font page-animation mb-3 mx-0"
+                        *ngIf="_sharedService.jobObj.JobCardCheckList != undefined">
+                        <div class="d-flex col-12 p-3"
+                            *ngFor="let qa of _sharedService.jobObj.JobCardCheckList | filter: 47 : 'CheckListTypeID'">
+                            <div class="mr-3">
+                                <i class="fas fa-check" *ngIf="qa.IsChecked == true"></i>
+                                <span *ngIf="qa.IsChecked != true">&nbsp;</span>
+                            </div>
+                            <span class="form-check-sign">{{qa.EnglishName}}</span>
+                        </div>
+                    </div>
+
+                </ng-template>
+            </ngb-tab>
+
+            <ngb-tab title="Tasks">
+                <ng-template ngbTabContent>
+                    <!-- *ngIf="_sharedService.jobObj.JobTasks != undefined" -->
+                    <div class="row justify-content-center mt-4 mb-4"
+                        *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks!= undefined && _sharedService.jobObj.JobTasks.length==0)">
+                        <span class="primary-font">No task found!</span>
+                    </div>
+                    <div class="row page-animation p-3"
+                        *ngFor="let qa of _sharedService.jobObj.JobTasks  | filter: true : 'IsInclude'; let idx = index">
+                        <div class="form-check col-7">
+                            <span class="pl-3 primary-font">{{qa.LaborDescriptionEng}}</span>
+                        </div>
+ 
+                        <div class="col-2">
+                            <i class="fas fa-file primary-font" *ngIf="qa.QAComments != ''" (click)=viewNote(notePreview,qa)></i>
+                        </div> 
+                        <div class="col-3 primary-dark-font align-self-center text-center">
+                            <span>{{qa.TaskStatusID != 17 ? 'Task Not Completed' : qa.QAVerify == true ? 'Verified' : 'Not Verified'}}  </span>
+                        </div>
+                         
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+</div>
+
+<!-- view Note -->
+<ng-template #notePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">QA Comments</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p class="primary-dark-font">{{task.QAComments}}</p>
+
+    </div>
+</ng-template>

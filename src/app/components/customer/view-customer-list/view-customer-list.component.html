@@ -1,0 +1,320 @@
+<div class="row justify-content-center align-items-center mt-3 page-animation">
+  <div class="col-lg-11 col-12">
+    <button
+    class="btn btn-primary"
+    id="togglefilter"
+    data-toggle="collapse"
+    aria-expanded="false"
+    href="#filterView"
+  >
+    Filter<i class="fa fa-filter hover-none ml-2" aria-hidden="true"></i>
+  </button>
+  <div class="row mx-0 my-3 collapse" id="filterView">
+
+    <div class="col-3 pt-2 mt-3">
+      <div class="form-group">
+        <input
+          type="text"
+          class="floating-input form-control input-label"
+          placeholder="Customer Name"
+          name="first_name"
+          [(ngModel)]="filter.Name"
+          #name="ngModel"
+          (keypress)="onKeypressEvent($event)"
+        />
+      </div>
+    </div>
+    <div class="col-3 pt-2 mt-3">
+      <div class="form-group">
+        <input
+          type="text"
+          class="floating-input form-control input-label"
+          placeholder="Customer Email"
+          name="first_name"
+          [(ngModel)]="filter.ContactEmail"
+          #contactEmail="ngModel"
+          (keypress)="onKeypressEvent($event)"
+        />
+      </div>
+    </div>
+    <div class="col-3 pt-2 mt-3">
+      <div class="form-group">
+        <input
+          type="text"
+          class="floating-input form-control input-label"
+          placeholder="Mobile Number"
+          name="first_name"
+          [(ngModel)]="filter.ContactMobile"
+          #contactMobile="ngModel"
+          (keypress)="onKeypressEvent($event)"
+        />
+      </div>
+    </div>
+    <div class="col-3 mt-3">
+      <button
+        type="button"
+        id="getJobListBtn"
+        class="btn btn-primary"
+        (click)="getAllCustomers()"
+
+      >
+        Apply
+      </button>
+      <u class="mx-4 primary-color mt-3 font-16 cursor" 
+        (click)="clearFilters()"
+
+        >Clear</u
+      >
+    </div>
+  </div>
+    <!-- <div class="row justify-content-center">
+        <div class="floating-label form-group  col-7">
+          <input type="text" value="" placeholder=" " class="floating-input form-control" />
+          <span class="highlight"></span>
+          <label class="input-label">Search Customer</label>
+        </div>
+        <div class="col-">
+          <button type="button" class="btn btn-primary btn-round m-0">Search</button>
+        </div>
+      </div> -->
+
+    <div class="row pb-0 justify-content-center">
+      <!-- <h1 class="text-center"></h1> -->
+      <div class="row w-100">
+        <hr class="w-100" />
+        <h4 class="sub-heading">Customers List</h4>
+      </div>
+      
+      <div class="row col-12 mt-3">
+
+        <div class="col-md-12 col-sm-12">
+          <div
+            class="row justify-content-center mt-4"
+            *ngIf="customerArray == undefined || customerArray.length == 0"
+          >
+            <!-- || ( customerArray!= undefined && customerArray | filterCustomers : FirstName : ContactEmail : ContactMobile : balanceValue : highValue).length == 0 -->
+            <div class="col-lg-12 no-record-error">No record found!</div>
+          </div>
+          <ng-container>
+            <div class="row">
+              <div
+                class="col-lg-4 col-md-6 col-sm-6 mb-card card-responsive"
+                *ngFor="let item of customerArray"
+              >
+                <div class="card inner-card-shadow card-list">
+                  <div class="list-card-header">
+                    <div class="row just justify-content-center">
+                      <div title="Customer">
+                        <h5 class="mt-2 eclipse text-center">
+                          <i class="fas fa-user mr-2 primary-color"></i>
+                          <span class="list-color bold-font"
+                            >{{ item.FirstName }} {{ item.LastName }}</span
+                          >
+                          <span
+                            *ngIf="item.CustomerTypeID == 67"
+                            class="list-color"
+                            >{{ item.CompanyName }}</span
+                          >
+                        </h5>
+                      </div>
+                    </div>
+                    <hr />
+                    <div class="row justify-content-center">
+                      <div class="pointer primary-dark-font">
+                        <!-- <i class="far fa-eye mx-2 primary-font" title="View"
+                                                    [routerLink]="['/','customer','create-customer']"></i> -->
+                        <i
+                          class="far fa-eye px-1 pointer"
+                          title="View"
+                          [routerLink]="['/', 'customer', 'customer-profile']"
+                          [queryParams]="{ CustomerID: item.CustomerID }"
+                        ></i>
+                        <i
+                          class="far fa-edit mx-2"
+                          title="Edit"
+                          [routerLink]="['/', 'customer', 'update-customer']"
+                          [queryParams]="{ CustomerID: item.CustomerID }"
+                        ></i>
+                        <i
+                          class="far fa-trash-alt"
+                          title="Delete"
+                          (click)="openModal(warningDelete, item.CustomerID)"
+                        ></i>
+                      </div>
+                    </div>
+                    <hr />
+                  </div>
+
+                  <div class="card-body card-body-padding small-font pt-0">
+                    <div class="row" *ngIf="item.CustomerTypeID == 67">
+                      <i
+                        class="col-2 mt-1 fas fa-user primary-font"
+                        title="Contact Person"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color"
+                        title="{{ item.ContactPersonName }}"
+                      >
+                        {{ item.ContactPersonName }}
+                      </p>
+                    </div>
+
+                    <div class="row mt-2" *ngIf="item.CustomerTypeID == 67">
+                      <i
+                        class="col-2 mt-1 fas fa-money-bill primary-font"
+                        title="Credit Limit"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color"
+                        title="{{ item.MaxCreditLimit }}"
+                      >
+                        {{ item.MaxCreditLimit }} JOD
+                      </p>
+                    </div>
+
+                    <div class="row mt-2">
+                      <i
+                        class="col-2 mt-1 fas fa-mobile-alt primary-font"
+                        title="Mobile"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color"
+                        title="{{ item.ContactMobile }}"
+                        *ngIf="item.ContactMobile != ''; else elseHyphen"
+                      >
+                        +962 {{ item.ContactMobile }}
+                      </p>
+                    </div>
+
+                    <!-- <div class="row mt-2">
+                                            <i class="col-2 mt-1 fas fa-phone-alt primary-font" title="Mobile"></i>
+                                            <p class="col-10 m-0 list-color" title="{{item.ContactMobile}}">{{item.ContactMobile}}</p>
+                                        </div> -->
+
+                    <div class="row mt-2">
+                      <i
+                        class="col-2 mt-1 fas fa-map-marker-alt primary-font"
+                        title="Location"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color"
+                        title="{{ item.CityName }} , {{ item.CountryName }}"
+                      >
+                        {{ item.CityName }} , {{ item.CountryName }}
+                      </p>
+                    </div>
+
+                    <div class="row mt-2" *ngIf="item.CustomerTypeID == 68">
+                      <i
+                        class="col-2 mt-1 fas fa-home primary-font"
+                        title="Address"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color eclipse"
+                        title="{{ item.Address1 }}"
+                        *ngIf="
+                          item.Address1 != undefined && item.Address1 != '';
+                          else elseHyphen
+                        "
+                      >
+                        {{ item.Address1 }}
+                      </p>
+                    </div>
+
+                    <div class="row mt-2">
+                      <i
+                        class="col-2 mt-1 fas fa-envelope primary-font"
+                        title="Email"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color eclipse"
+                        title="{{ item.ContactEmail }}"
+                      >
+                        {{ item.ContactEmail }}
+                      </p>
+                    </div>
+
+                    <div class="row mt-2" *ngIf="item.CustomerTypeID == 68">
+                      <i
+                        class="col-2 mt-1 fas fa-calendar primary-font"
+                        title="Birthday"
+                      ></i>
+                      <p
+                        class="col-10 m-0 list-color"
+                        title="{{ item.Birthday | date: 'shortDate' }}"
+                        *ngIf="item.Birthday != undefined; else elseHyphen"
+                      >
+                        {{ item.Birthday | date: "shortDate" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row justify-content-center mt-3 mb-3"
+      *ngIf="customerArray != undefined"
+    >
+      <!-- && (customerArray | filterCustomers : Name : ContactEmail : ContactMobile : balanceValue : highValue).length > 0   -->
+      <ngb-pagination
+        [(page)]="cPage"
+        [pageSize]="_sharedService.pageSize"
+        (pageChange)="getAllCustomers((filter.PageNumber = $event))"
+        [collectionSize]="totalCustomers"
+        aria-label="customer List Pagination"
+        [maxSize]="5"
+        [rotate]="true"
+        [ellipses]="false"
+        [boundaryLinks]="true"
+        class="pagination-primary"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
+</div>
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Customer</h5>
+      <button type="button" class="close" (click)="closeModal()" title="cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this customer?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deleteCustomer(customerID)"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #elseHyphen>
+  <span class="px-3">-</span>
+</ng-template>

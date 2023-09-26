@@ -1,0 +1,37 @@
+//charts
+.ct-series-a .ct-point,
+.ct-series-a .ct-line,
+.ct-series-a .ct-bar,
+.ct-series-a .ct-slice-donut {
+  stroke: rgba(255, 0, 0, 0.7) !important;
+}
+
+.ct-series-b .ct-point,
+.ct-series-b .ct-line,
+.ct-series-b .ct-bar,
+.ct-series-b .ct-slice-donut {
+  stroke: #FF9500 !important;
+}
+
+.ct-series-c .ct-point,
+.ct-series-c .ct-line,
+.ct-series-c .ct-bar,
+.ct-series-c .ct-slice-donut {
+  stroke: rgba(0, 0, 0, 0.7) !important;
+}
+
+.ct-series-d .ct-point,
+.ct-series-d .ct-line,
+.ct-series-d .ct-bar,
+.ct-series-d .ct-slice-donut {
+  stroke: rgba(0, 0, 255, 0.7) !important;
+}
+
+// ng chetist
+svg.ct-chart-line{
+  height: 180px !important;
+}
+
+svg.ct-chart-bar{
+  height: 180px !important;
+}

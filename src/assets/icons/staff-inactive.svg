@@ -1,0 +1,27 @@
+<svg id="staff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33.889 19.265">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #ced4df;
+      }
+
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <g id="_2582030527024" transform="translate(21.655)">
+    <path id="Path_14" data-name="Path 14" class="cls-1" d="M647.8,0A3.8,3.8,0,1,1,644,3.8,3.8,3.8,0,0,1,647.8,0Z" transform="translate(-643.016)"/>
+    <path id="Path_15" data-name="Path 15" class="cls-1" d="M620.781,232a7.457,7.457,0,0,1,7.453,7.453,5.959,5.959,0,0,1-.035.773h-7.242a9.491,9.491,0,0,0-4.957-6.5A7.373,7.373,0,0,1,620.781,232Z" transform="translate(-616 -223.844)"/>
+  </g>
+  <g id="_2582030528784" transform="translate(8.648 0.316)">
+    <circle id="Ellipse_8" data-name="Ellipse 8" class="cls-2" cx="4.394" cy="4.394" r="4.394" transform="translate(4.219)"/>
+    <path id="Path_16" data-name="Path 16" class="cls-1" d="M254.613,277a8.642,8.642,0,0,1,8.648,8.648,8.034,8.034,0,0,1-.07.879H246.035a7.646,7.646,0,0,1-.035-.879A8.634,8.634,0,0,1,254.613,277Z" transform="translate(-246 -267.579)"/>
+  </g>
+  <g id="_2582030528592">
+    <path id="Path_17" data-name="Path 17" class="cls-1" d="M108.762,0A3.8,3.8,0,1,1,105,3.8,3.781,3.781,0,0,1,108.762,0Z" transform="translate(-101.309)"/>
+    <path id="Path_18" data-name="Path 18" class="cls-1" d="M7.453,232a7.222,7.222,0,0,1,5.027,1.934,9.578,9.578,0,0,0-4.57,6.293H.035A5.959,5.959,0,0,1,0,239.453,7.457,7.457,0,0,1,7.453,232Z" transform="translate(0 -223.844)"/>
+  </g>
+  <circle id="Ellipse_9" data-name="Ellipse 9" class="cls-2" cx="4.394" cy="4.394" r="4.394" transform="translate(12.867 0.316)"/>
+  <path id="Path_19" data-name="Path 19" class="cls-1" d="M254.613,277a8.642,8.642,0,0,1,8.648,8.648,8.034,8.034,0,0,1-.07.879H246.035a7.646,7.646,0,0,1-.035-.879A8.634,8.634,0,0,1,254.613,277Z" transform="translate(-237.352 -267.262)"/>
+</svg>

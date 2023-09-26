@@ -1,0 +1,465 @@
+<!-- <div class="card"> -->
+<!-- <ngb-tabset class="sub-tabset big-font justify-content-around" (tabChange)="markerBinding()"> -->
+<!-- initial Checklist -->
+<!-- <ngb-tab title="Initial Checklist">
+            <ng-template ngbTabContent>
+                <div class="pb-3">
+                    <div class="row py-3 mx-3 checklist-highlight bb-1"
+                        *ngFor="let ic of _sharedService.jobObj.JobCardCheckList | filter: 45 : 'CheckListTypeID'">
+                        <div class="col-sm-10 d-flex page-animation">
+                            <div class="mr-3">
+                                <i class="fas fa-check" *ngIf="ic.IsChecked == true"></i>
+                                <span *ngIf="ic.IsChecked != true">&nbsp;</span>
+                            </div>
+                            <span class="form-check-sign primary-dark-font">{{ic.EnglishName}}</span>
+                        </div>
+
+                        <div class="" *ngIf="ic.IsChecked == true && ic.Note != undefined && ic.Note != ''">
+                            <i class="fas fa-file primary-font" (click)=viewNote(notePreview,ic)></i>
+                        </div>
+                    </div>
+
+                    <div class="row mx-0 p-3">
+                        <label class="col-3 primary-dark-font">Generic Notes:</label>
+                        <p class="col-9">{{_sharedService.jobObj.JCBasicInfo.InspectionComments}}</p>
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab>
+
+        <ngb-tab title="Damages" *ngIf="markers !=undefined ">
+            <ng-template ngbTabContent>
+                <div class="row justify-content-center page-animation ">
+                    <img-map #imgMap style="width: 50%;"
+                        [src]="_sharedService.jobObj.jcVehicleObj.VehicleTypeID == 15 ? sedan : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 16 ? hatchback : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 17 ? SUV : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 18 ? pickup: _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 19 ? coupe : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 20 ? twoDoorPickup : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 21 ? bus : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 22 ? convertible : smallVehicle"
+                        [markerRadius]="_sharedService.marker_radius" [markers]="markers">
+                    </img-map>
+                </div>
+
+            </ng-template>
+        </ngb-tab>
+
+        <ngb-tab title="Fuel Tank">
+            <ng-template ngbTabContent>
+                <div class="row justify-content-center pt-5">
+                    <div class="col-4 text-center">
+                        <img class="fuel-tank-image" (click)="open(imagePreview)"
+                            [src]="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL :  _sharedService.default_img">
+                    </div>
+                </div>
+
+                <div class="row pt-3 ">
+                    <div class="col-12 py-3 text-center">
+                        <label class="primary-font bold-font">Fuel Tank Reading</label>
+                        <div class="detail-font">
+                            <span appElseHyphen [elseHyphen]="_sharedService.jobObj.JCBasicInfo.FuelTankReading"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </ng-template>
+        </ngb-tab> -->
+
+<!-- <ngb-tab title="Gallery">
+            <ng-template ngbTabContent>
+
+                <div class="row mx-0 my-3">
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                           ----  <input type='file' class="file-choose" id="Rim4" accept="image/jpeg,image/png"
+                            (change)="uploadVehicleImage($event, 117, _sharedService.jobObj.JCBasicInfo.JobCardID)">
+                            <div class="hover-text" for="files">
+                                Front
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                           
+                            <div class="hover-text" for="RightSide">
+                                Right Side
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                          
+                            <div class="hover-text" for="files">
+                                Rear
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                           
+                            <div class="hover-text" for="LeftSide">
+                                Left Side
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                           
+                            <div class="hover-text" for="Inside">
+                                Inside
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                          
+                            <div class="hover-text" for="Roof">
+                                Roof
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                          
+                            <div class="hover-text" for="Dashboard">
+                                Dashboard
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                         
+                            <div class="hover-text" for="Rim1">
+                                Rim 1
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                          
+                            <div class="hover-text" for="Rim2">
+                                Rim 2
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                         
+                            <div class="hover-text" for="Rim3">
+                                Rim 3
+                            </div>
+                        </label>
+                    </div>
+                    <div class=" form-group col-2 text-center">
+                        <label>
+                            <img class="upload-image"
+                                [src]="(_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                           
+                            <div class="hover-text" for="Rim4">
+                                Rim 4
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <div class="row w-100 mx-0">
+                    <hr class="w-100">
+                    <h5 class="sub-heading primary-font">Gallery</h5>
+                </div>
+
+                <div class="row m-3 justify-content-around">
+                    <div class="col-11 row mx-0">
+                        <div class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0"
+                            *ngFor="let image of _sharedService.jobObj.Gallery | filter : 48 : 'GalleryTypeID'; let idx = index">
+                            <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.plus_image"
+                                (click)="galleryPreviewModal(galleryPreview, image)" class="gallery-img">
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-center primary-font"
+                        *ngIf="(_sharedService.jobObj.Gallery | filter : 48 : 'GalleryTypeID').length == 0">
+                        No image added!
+                    </div>
+                </div>
+            </ng-template>
+        </ngb-tab> -->
+<!-- </ngb-tabset> -->
+
+<!-- </div> -->
+
+
+<div class="card">
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Initial Checklist</h4>
+    </div>
+    <div class="pb-3">
+        <div class="row py-3 mx-3 checklist-highlight bb-1"
+            *ngFor="let ic of _sharedService.jobObj.JobCardCheckList | filter: 45 : 'CheckListTypeID'">
+            <div class="col-sm-10 d-flex page-animation">
+                <div class="mr-3">
+                    <i class="fas fa-check" *ngIf="ic.IsChecked == true"></i>
+                    <span *ngIf="ic.IsChecked != true">&nbsp;</span>
+                </div>
+                <span class="form-check-sign primary-dark-font">{{ic.EnglishName}}</span>
+            </div>
+
+            <div class="" *ngIf="ic.IsChecked == true && ic.Note != undefined && ic.Note != ''">
+                <i class="fas fa-file primary-font" (click)=viewNote(notePreview,ic)></i>
+            </div>
+        </div>
+
+        <div class="row mx-0 p-3">
+            <label class="col-3 primary-dark-font">Generic Notes:</label>
+            <p class="col-9">{{_sharedService.jobObj.JCBasicInfo.InspectionComments}}</p>
+        </div>
+    </div>
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Damages</h4>
+    </div>
+    <div class="row justify-content-center page-animation ">
+        <img-map #imgMap style="width: 50%;"
+            [src]="_sharedService.jobObj.jcVehicleObj.VehicleTypeID == 15 ? sedan : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 16 ? hatchback : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 17 ? SUV : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 18 ? pickup: _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 19 ? coupe : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 20 ? twoDoorPickup : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 21 ? bus : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 22 ? convertible : smallVehicle"
+            [markerRadius]="_sharedService.marker_radius" [markers]="markers">
+        </img-map>
+    </div>
+
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Fuel & Mileage </h4>
+    </div>
+    <div class="row">
+        <!-- fuel tank  -->
+        <div class="col-6">
+            <div class="row justify-content-center pt-5">
+                <div class="col-4 text-center">
+                    <img class="fuel-tank-image"
+                        (click)="_sharedService.jobObj.JCBasicInfo.MileageImageURL ? open(imagePreview, _sharedService.jobObj.JCBasicInfo.MileageImageURL, 'Fuel Tank') :''" 
+                        
+                       
+                        [src]="_sharedService.jobObj.JCBasicInfo.MileageImageURL ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.MileageImageURL :  _sharedService.default_img">
+                </div>
+            </div>
+
+            <div class="row pt-3 ">
+                <div class="col-12 py-3 text-center">
+                    <label class="primary-font bold-font">Fuel Tank Reading</label>
+                    <div class="detail-font">
+                        <span appElseHyphen [elseHyphen]="_sharedService.jobObj.JCBasicInfo.FuelTankReading"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- mileage  -->
+        <div class="col-6">
+            <div class="row justify-content-center pt-5">
+                <div class="col-4 text-center">
+                    <img class="fuel-tank-image"
+                        (click)="
+                        _sharedService.jobObj.JCBasicInfo.MileageImageURL ? open(imagePreview, _sharedService.jobObj.JCBasicInfo.MileageImageURL, 'Mileage') :''"
+                        [src]="_sharedService.jobObj.JCBasicInfo.MileageImageURL ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.MileageImageURL :  _sharedService.default_img">
+                </div>
+            </div>
+
+            <div class="row pt-3 ">
+                <div class="col-12 py-3 text-center">
+                    <label class="primary-font bold-font">Mileage</label>
+                    <div class="detail-font">
+                        <span appElseHyphen [elseHyphen]="_sharedService.jobObj.JCBasicInfo.Mileage"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="col-11">
+        <h4 class="font-weight-bold mb-4 px-5">Gallery</h4>
+    </div>
+    <div class="row mx-0 my-3">
+        <div class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0 ml-3">
+           
+            <label>
+                <img class="gallery-img" (click)="_sharedService.jobObj.JCBasicInfo.VehicleFront ?open(imagePreview, '107', 'Front', true) : ''"
+                [src]="_sharedService.jobObj.JCBasicInfo.VehicleFront ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.VehicleFront :  _sharedService.default_img">
+                <!-- <input type='file' class="file-choose" id="Rim4" accept="image/jpeg,image/png"
+                    (change)="uploadVehicleImage($event, 117, _sharedService.jobObj.JCBasicInfo.JobCardID)"> -->
+                <div class="primary-font bold-font" for="files">
+                    Vehicle Front
+                </div>
+            </label>
+        </div>
+        <div class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0"
+            *ngFor="let image of _sharedService.jobObj.Gallery | filter : 48 : 'GalleryTypeID'; let idx = index">
+            <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.plus_image"
+                (click)="galleryPreviewModal(galleryPreview, image); shouldUpdate = true;" class="gallery-img">
+            <!-- <span class="del"><i class="img-del" (click)="openRemoveImage(deleteImage,image)">x</i></span> -->
+        </div>
+        <!-- <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '109', 'Right Side', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="RightSide">
+                    Right Side
+                </div>
+            </label>
+        </div>
+
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '108', 'Rear', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="files">
+                    Rear
+                </div>
+            </label>
+        </div>
+
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '110', 'Left Side', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="LeftSide">
+                    Left Side
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '111', 'Inside', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Inside">
+                    Inside
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '112', 'Roof', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Roof">
+                    Roof
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '113', 'Dashboard', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Dashboard">
+                    Dashboard
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '114', 'Rim 1', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Rim1">
+                    Rim 1
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '115', 'Rim 2', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Rim2">
+                    Rim 2
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '116', 'Rim 3', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Rim3">
+                    Rim 3
+                </div>
+            </label>
+        </div>
+        <div class=" form-group col-1 text-center">
+            <label>
+                <img class="upload-image" (click)="open(imagePreview, '117', 'Rim 4', true)"
+                    [src]="(_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+
+                <div class="hover-text" for="Rim4">
+                    Rim 4
+                </div>
+            </label>
+        </div> -->
+    </div>
+
+</div>
+
+<!-- preview image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">{{heading}}</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid" [src]="imageURL ? _sharedService.baseUrl + imageURL :  _sharedService.default_img">
+    </div>
+</ng-template>
+
+<!-- Gallery view image modal -->
+<ng-template #galleryPreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Gallery Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="" [src]="currentImg!= undefined ?_sharedService.baseUrl + currentImg : _sharedService.default_img">
+
+    </div>
+</ng-template>
+
+<!-- view Note -->
+<ng-template #notePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Note</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p class="primary-dark-font">{{checklist.Note}}</p>
+
+    </div>
+</ng-template>

@@ -1,0 +1,810 @@
+<div class="row justify-content-center align-items-center page-animation">
+  <div class="col-lg-11 col-12">
+    <div class="row pb-0 justify-content-center">
+      <!-- <h1 class="text-center"></h1> -->
+      <div class="row w-100">
+        <hr class="w-100" />
+        <h4 class="sub-heading primary-font">Invoice List</h4>
+      </div>
+      <div class="row col-12">
+        <!-- <div class="col-3 p-2">
+
+                    <div class="row w-100 mx-0">
+                        <hr class="w-100">
+                        <h4 class="sub-heading mb-2">Filters</h4>
+                        <button type="button" class="btn btn-primary btn-round sub-heading-btn" (click)="clearFilters()"
+                            title="Clear">x</button>
+                    </div>
+
+                    <div id="accordion_customer" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="arrow card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                aria-expanded="false" data-toggle="collapse" href="#customer">
+                                <a class="card-title">
+                                    <span class="filter_title">Customer</span>
+                                </a>
+                            </div>
+                            <div id="customer" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_customer">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb d-flex">
+                                        <input type="text" class="mr-1 form-control" placeholder="Name" name="name"
+                                            [(ngModel)]="filter.CustomerName" #CustomerName="ngModel"
+                                            (keyup.enter)="filter.CustomerName != undefined && filter.CustomerName != '' ? getAllInvoice() : ''" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_plate" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#plate">
+                                <a class="card-title">
+                                    <span class="filter_title">Plate Number</span>
+                                </a>
+                            </div>
+                            <div id="plate" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_plate">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb d-flex">
+                                        <input type="text" class="mr-1 form-control" value="" placeholder="Plate"
+                                            name="name" [(ngModel)]="filter.PlateNumber" #PlateNumber="ngModel"
+                                            (keyup.enter)="filter.PlateNumber != undefined && filter.PlateNumber != '' ? getAllInvoice() : ''" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_phone" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="arrow card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                aria-expanded="false" data-toggle="collapse" href="#phone">
+                                <a class="card-title">
+                                    <span class="filter_title">Mobile Number</span>
+                                </a>
+                            </div>
+                            <div id="phone" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_phone">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb d-flex">
+                                        <input type="text" class="mr-1 form-control" value="" placeholder="Phone Number"
+                                            name="name" [(ngModel)]="filter.CustomerMobile" #CustomerMobile="ngModel"
+                                            (keyup.enter)="filter.CustomerMobile != undefined && filter.CustomerMobile != '' ? getAllInvoice() : ''" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row w-100 m-0">
+                        <hr class="w-100">
+                        <button type="button" class="btn btn-primary btn-round sub-heading-btn"
+                            (click)="getAllInvoice()" title="Apply Filter">Apply</button>
+                    </div>
+                </div> -->
+
+        <div class="col-12">
+          <div class="pt-3">
+            <div class="row justify-content-between mx-0">
+              <div class="col-lg-3 col-md-6">
+                <div class="card inner-card-shadow">
+                  <div
+                    class="
+                      card-header
+                      list-card-header
+                      text-center
+                      colored-header
+                    "
+                  >
+                    <i class="far fa-money-bill-alt ts-l" title=""></i>
+                    <span>Pending</span>
+                  </div>
+                  <div class="card-body card-body-padding">
+                    <div class="row text-center">
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="far fa-money-bill-alt ts-l" title="Cash"></i
+                          >Cash
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 6:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 6:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>-</span>
+                        </div>
+                      </div>
+                      <hr class="vertical-line" />
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="fab fa-cc-visa ts-l" title="Card"></i>Card
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 6:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 6:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>N/A</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="card inner-card-shadow">
+                  <div
+                    class="
+                      card-header
+                      list-card-header
+                      text-center
+                      colored-header
+                    "
+                  >
+                    <i class="far fa-money-bill-alt ts-l" title=""></i>
+                    <span>Partially Paid</span>
+                  </div>
+                  <div class="card-body card-body-padding">
+                    <div class="row text-center">
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="far fa-money-bill-alt ts-l" title="Cash"></i
+                          >Cash
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 8:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 8:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>-</span>
+                        </div>
+                      </div>
+                      <hr class="vertical-line" />
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="fab fa-cc-visa ts-l" title="Card"></i>Card
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 8:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 8:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="card inner-card-shadow">
+                  <div
+                    class="
+                      card-header
+                      list-card-header
+                      text-center
+                      colored-header
+                    "
+                  >
+                    <i class="far fa-money-bill-alt ts-l" title=""></i>
+                    <span>Paid</span>
+                  </div>
+                  <div class="card-body card-body-padding">
+                    <div class="row text-center">
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="far fa-money-bill-alt ts-l" title="Cash"></i
+                          >Cash
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 7:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 7:'InvoiceStatusID'
+                              | filter: 36:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>-</span>
+                        </div>
+                      </div>
+                      <hr class="vertical-line" />
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="fab fa-cc-visa ts-l" title="Card"></i>Card
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngFor="
+                            let it of invoiceArray.InvoiceTotal
+                              | filter: 7:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                          "
+                        >
+                          <span
+                            >{{ it.TotalNetCost | number: "1.2-2" }} JOD</span
+                          >
+                        </div>
+                        <div
+                          class="col-12 px-0"
+                          *ngIf="
+                            (
+                              invoiceArray.InvoiceTotal
+                              | filter: 7:'InvoiceStatusID'
+                              | filter: 37:'PaymentMethodID'
+                            ).length == 0
+                          "
+                        >
+                          <span>-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-6">
+                <div class="card inner-card-shadow">
+                  <div
+                    class="
+                      card-header
+                      list-card-header
+                      text-center
+                      colored-header
+                    "
+                  >
+                    <span
+                      ><i class="fas fa-calculator ts-l" title="Total"></i
+                      >Total</span
+                    >
+                  </div>
+                  <div class="card-body card-body-padding">
+                    <div class="row text-center">
+                      <div class="col-5 px-0">
+                        <div class="col-12 pb-4 px-1">
+                          <i class="far fa-file-word ts-l" title="Job Cards"></i
+                          >Jobs
+                        </div>
+                        <div class="col-12 px-0">
+                          {{ pendingPage + paidPage + pPaidPage }}
+                        </div>
+                      </div>
+                      <hr class="vertical-line" />
+                      <div class="col-5 px-0">
+                        <div
+                          class="col-12 pb-4 px-0 d-flex justify-content-center"
+                        >
+                          <i
+                            class="fas fa-credit-card mr-2 pt-1"
+                            title="Total Amount"
+                          ></i
+                          >Amount
+                        </div>
+                        <div class="col-12 px-0">
+                          {{ totalAmt | number: "1.2-2" }} JOD
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row border-bottom radio-bg mb-4 mx-0">
+              <div>
+                <input
+                  class="radio-btn"
+                  type="radio"
+                  id="5"
+                  name="invoiceStatus"
+                  [checked]="_sharedService.invoiceTab == 5"
+                  (change)="radioTab = true"
+                  value="0"
+                />
+                <label
+                  class="radio-tabset"
+                  (click)="
+                    tabCustom();
+                    filter.PageNumber = undefined;
+                    filter.IPPageNumber = 1;
+                    getAllInvoice()
+                  "
+                  for="InProgress"
+                  >InProgress
+                  <sup class="sup">{{ ipPage }}</sup>
+                </label>
+              </div>
+              <div
+                *ngFor="
+                  let is of _sharedService._commonMeta.ObjectStatus
+                    | filter: 'Invoice':'ObjectNameEnglish'
+                "
+              >
+                <input
+                  class="radio-btn"
+                  type="radio"
+                  (click)="
+                    _sharedService.invoiceTab = is.ObjectStatusID;
+                    filter.PageNumber = 1;
+                    filter.IPPageNumber = undefined;
+                    calcTotal();
+                    listShow = false;
+                    getAllInvoice()
+                  "
+                  id="{{ is.StatusNameEnglish }}"
+                  name="invoiceStatus"
+                  [checked]="is.ObjectStatusID === _sharedService.invoiceTab"
+                  (change)="radioTab = true"
+                  value="0"
+                />
+                <label
+                  for="{{ is.StatusNameEnglish }}"
+                  (click)="tabID = is.ObjectStatusID"
+                  class="radio-tabset"
+                  >&nbsp;{{ is.StatusNameEnglish }}
+                  <sup
+                    class="sup"
+                    *ngIf="
+                      pendingPage != undefined &&
+                      is.StatusNameEnglish == 'Pending'
+                    "
+                    >{{ pendingPage }}</sup
+                  >
+                  <sup
+                    class="sup"
+                    *ngIf="
+                      paidPage != undefined && is.StatusNameEnglish == 'Paid'
+                    "
+                    >{{ paidPage }}</sup
+                  >
+                  <sup
+                    class="sup"
+                    *ngIf="
+                      pPaidPage != undefined &&
+                      is.StatusNameEnglish == 'Partially Paid'
+                    "
+                    >{{ pPaidPage }}</sup
+                  >
+                </label>
+              </div>
+            </div>
+
+            <ng-container *ngIf="_sharedService.invoiceTab == 5">
+              <ng-container
+                *ngFor="
+                  let jc of invoiceArray.JobInvoiceList2
+                    | slice
+                      : (cPage - 1) * _sharedService.pageSize
+                      : (cPage - 1) * _sharedService.pageSize +
+                          _sharedService.pageSize
+                "
+              >
+                <div *ngIf="listShow" class="card inner-card-shadow">
+                  <div class="invoice-list-card-header">
+                    <div class="row">
+                      <div class="col-3" title="Plate Number">
+                        <span class="plate-number px-2 py-1">
+                          {{ jc.PlateNumber }}</span
+                        >
+                      </div>
+                      <div class="col-5 align-self-center" title="Clients">
+                        <i class="ts smaller ts-l user"></i>
+                        {{ jc.CustomerFullName }}
+                      </div>
+                      <div class="col-4 align-self-center text-right">
+                        <i
+                          class="far fa-eye mr-2"
+                          title="View"
+                          [routerLink]="['/', 'invoice', 'detail']"
+                          [queryParams]="{ JobInvoiceID: jc.JobInvoiceID }"
+                        ></i>
+                        <i
+                          class="far fa-edit mr-2"
+                          title="Edit"
+                          [routerLink]="['/', 'invoice', 'create-invoice']"
+                          [queryParams]="{ JobInvoiceID: jc.JobInvoiceID }"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-body card-body-padding small-font">
+                    <div class="row">
+                      <div class="col-2">
+                        <span class="small bold-font">Phone</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.ContactPhone }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Mobile</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.ContactMobile }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Job Open Date</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          {{ jc.JobOpenDate | date: "short" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Payment</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.PaymentMethodName }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Internal Task</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.InternalTasksCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Parts Price</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.TotalPartsNetAmount | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">External Cost</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.ExternalTasksCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Total</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.TotalCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div
+                class="row justify-content-center mb-lg-3 mb-5"
+                *ngIf="
+                  invoiceArray.JobInvoiceList2 != undefined &&
+                  ipPage> 10 &&
+                  listShow
+                "
+              >
+                <ngb-pagination
+                  [(page)]="filter.IPPageNumber"
+                  [pageSize]="_sharedService.pageSize"
+                  [collectionSize]="ipPage"
+                  (pageChange)="getAllInvoice((filter.IPPageNumber = $event))"
+                  aria-label="Job List Pagination"
+                  class="pagination-primary mb-md-4"
+                >
+                </ngb-pagination>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="_sharedService.invoiceTab != 5">
+              <div
+                class="card text-center p-3"
+                *ngIf="
+                  invoiceArray == undefined ||
+                  (invoiceArray != undefined &&
+                    invoiceArray.JobInvoiceList == undefined) ||
+                  (invoiceArray != undefined &&
+                    invoiceArray.JobInvoiceList != undefined &&
+                    (
+                      invoiceArray.JobInvoiceList
+                      | filter: _sharedService.invoiceTab:'InvoiceStatusID'
+                    ).length == 0 &&
+                    !listShow)
+                "
+              >
+                <span class="">No record found!</span>
+              </div>
+              <ng-container
+                *ngFor="
+                  let jc of invoiceArray.JobInvoiceList
+                    | filter: _sharedService.invoiceTab:'InvoiceStatusID'
+                    | slice
+                      : (cPage - 1) * _sharedService.pageSize
+                      : (cPage - 1) * _sharedService.pageSize +
+                          _sharedService.pageSize
+                "
+              >
+                <div class="card inner-card-shadow">
+                  <div class="invoice-list-card-header">
+                    <div class="row">
+                      <div class="col-3" title="Plate Number">
+                        <span class="plate-number px-2 py-1">
+                          {{ jc.PlateNumber }}</span
+                        >
+                      </div>
+                      <div class="col-5 align-self-center" title="Clients">
+                        <i class="ts smaller ts-l user"></i>
+                        {{ jc.CustomerFullName }}
+                      </div>
+                      <div class="col-4 align-self-center text-right">
+                        <i
+                          class="far fa-eye mr-2"
+                          title="View"
+                          [routerLink]="['/', 'invoice', 'detail']"
+                          [queryParams]="{ JobInvoiceID: jc.JobInvoiceID }"
+                        ></i>
+                        <i
+                          class="far fa-edit mr-2"
+                          title="Edit"
+                          [routerLink]="['/', 'invoice', 'create-invoice']"
+                          [queryParams]="{ JobInvoiceID: jc.JobInvoiceID }"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card-body card-body-padding small-font">
+                    <div class="row">
+                      <div class="col-2">
+                        <span class="small bold-font">Phone</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.ContactPhone }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Mobile</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.ContactMobile }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Job Open Date</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          {{ jc.JobOpenDate | date: "short" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Payment</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">{{ jc.PaymentMethodName }}</p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Internal Task</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.InternalTasksCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Parts Price</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.TotalPartsNetAmount | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">External Cost</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.ExternalTasksCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+
+                      <div class="col-2">
+                        <span class="small bold-font">Total</span>
+                      </div>
+                      <div class="col-4 p-0">
+                        <p class="m-0" title=" ">
+                          JOD. {{ jc.TotalCost | number: "1.2-2" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            
+              <ng-container *ngIf="_sharedService.invoiceTab == 6">
+                <div
+                  class="row justify-content-center mb-lg-3 mb-5"
+                  *ngIf="
+                    invoiceArray.JobInvoiceList != undefined &&
+                    pendingPage > 10
+                  "
+                >
+            
+                  <ngb-pagination
+                    [(page)]="filter.PageNumber"
+                    [pageSize]="_sharedService.pageSize"
+                    [collectionSize]="pendingPage"
+                    (pageChange)="getAllInvoice((filter.PageNumber = $event))"
+                    aria-label="Job List Pagination"
+                    class="pagination-primary mb-md-4"
+                  >
+                  </ngb-pagination>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="_sharedService.invoiceTab == 7">
+                <div
+                  class="row justify-content-center mb-lg-3 mb-5"
+                  *ngIf="
+                    invoiceArray.JobInvoiceList != undefined &&
+                    paidPage > 10
+                  "
+                >
+                  <ngb-pagination
+                    [(page)]="filter.PageNumber"
+                    [pageSize]="_sharedService.pageSize"
+                    [collectionSize]="paidPage"
+                    (pageChange)="getAllInvoice((filter.PageNumber = $event))"
+                    aria-label="Job List Pagination"
+                    class="pagination-primary mb-md-4"
+                    [maxSize]="5"
+                    [rotate]="true"
+                    [ellipses]="false"
+                    [boundaryLinks]="true"
+
+                  >
+                  </ngb-pagination>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="_sharedService.invoiceTab == 8">
+                <div
+                  class="row justify-content-center mb-lg-3 mb-5"
+                  *ngIf="invoiceArray.JobInvoiceList != undefined &&
+                  pPaidPage > 10"
+                >
+                  <ngb-pagination
+                    *ngIf="pPaidPage > 10"
+                    [(page)]="filter.PageNumber"
+                    [pageSize]="_sharedService.pageSize"
+                    [collectionSize]="pPaidPage"
+                    (pageChange)="getAllInvoice((filter.PageNumber = $event))"
+                    aria-label="Job List Pagination"
+                    class="pagination-primary mb-md-4"
+                  >
+                  </ngb-pagination>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this invoice?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button (click)="closeModal()" class="a-button col-8">No</button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button (click)="closeModal()" class="a-button col-8">Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #elseHyphen>
+  <span class="px-1">-</span>
+</ng-template>

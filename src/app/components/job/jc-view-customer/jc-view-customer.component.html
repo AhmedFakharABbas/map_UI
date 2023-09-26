@@ -1,0 +1,153 @@
+<div class="row p-3">
+    <div class="col-12 text-right pr-0" *ngIf="_sharedService.jobObj.JCBasicInfo.JobCardTypeID == 34 && _sharedService.jobObj.jcCustomerObj.CustomerID != undefined">
+        <i class="fas fa-edit primary-font pointer" title="Edit" (click)="_sharedService.jcCustomerMode = false"></i>
+    </div>
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="primary-font ml-3 smaller-font">
+            <span>First Name</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.FirstName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.FirstName}}</p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Last Name</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.LastName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.LastName}}</p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Company Name</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.CompanyName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.CompanyName}}</p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Contact Person</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.ContactPersonName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.ContactPersonName}}</p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Mobile</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.ContactMobile != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.ContactMobile}} </p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font"
+        *ngIf="_sharedService.jobObj.jcCustomerObj.ContactEmail != ''; else elseHyphen" title="">
+            <span>Email</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.ContactEmail != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.ContactEmail}} </p>
+        </div>
+    </div>
+
+    <!-- <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Date of Birth</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.Birthday != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.Birthday | date:'shortDate'}} </p>
+        </div>
+    </div> -->
+
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Zip Code</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.Zipcode != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.Zipcode}} </p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Country</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.CountryName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.CountryName}} </p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3">
+        <div class="primary-font ml-3 smaller-font">
+            <span>City</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.CityName != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.CityName}} </p>
+        </div>
+    </div>
+
+    <div class="col-4 py-3" [ngClass]="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68? 'bb-1' : ''">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Customer Type</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"  title="">
+            <span *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">Individual</span>
+            <span *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67">Commercial</span>
+            </p>
+        </div>
+    </div>
+
+    <div class="bb-1 col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Address</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.Address1 != ''; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.Address1}} </p>
+        </div>
+    </div>
+
+    <div class="col-4 py-3" *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67">
+        <div class="primary-font ml-3 smaller-font">
+            <span>Credit Limit</span>
+        </div>
+        <div class="ml-3">
+            <p class="part-detail-box big-font light-bold primary-font my-0"
+                *ngIf="_sharedService.jobObj.jcCustomerObj.MaxCreditLimit != undefined; else elseHyphen" title="">
+                {{_sharedService.jobObj.jcCustomerObj.MaxCreditLimit}} </p>
+        </div>
+    </div>
+</div>
+
+<ng-template #elseHyphen>
+    <span class="px-3">-</span>
+</ng-template>

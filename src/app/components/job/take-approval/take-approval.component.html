@@ -1,0 +1,714 @@
+<div class="row justify-content-center mx-0" id="InvoiceToDownload">
+  <div
+    class=""
+    [ngClass]="_router.url.includes('/approval') ? 'col-12' : 'col-11 card'"
+  >
+    <div
+      class="row col-12 justify-content-between py-3 mx-0 bb-1"
+      *ngIf="!_router.url.includes('/approval')"
+    >
+      <div class="col-2">
+        <img
+          class="logo-img"
+          src="../../../../assets/img/login-logo.png"
+          alt="E-Workshop"
+        />
+      </div>
+
+      <div class="col-2 col-md-4 primary-color align-self-center">
+        <div class="primary-color small-font">Quotation Number</div>
+        <div class="custom-font">
+          {{ _sharedService.jobObj.JCBasicInfo.JobCardNumber }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row card-body" *ngIf="!_router.url.includes('/approval')">
+      <div class="col-9">
+        <div class="row px-3">
+          <h3 class="primary-color bold-font col-12 mb-3">
+            {{ _sharedService.jobObj.jcVehicleObj.EnglishMakeName }}
+            {{ _sharedService.jobObj.jcVehicleObj.EnglishModelName }}
+            {{ _sharedService.jobObj.jcVehicleObj.ProductionYear }}
+          </h3>
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Plate Number</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.jcVehicleObj.PlateNumber }}
+            </div>
+          </div>
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Fuel Type</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.jcVehicleObj.EngineTypeName }}
+            </div>
+          </div>
+          <div
+            class="col-4 pb-3"
+            *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+          >
+            <div class="primary-color small-font">Engine Size</div>
+            <div class="custom-font">
+              <span
+                *ngIf="
+                  _sharedService.jobObj.jcVehicleObj.EngineCapacity != undefined
+                "
+              >
+                {{ _sharedService.jobObj.jcVehicleObj.EngineCapacity }} cc</span
+              >
+              <span
+                *ngIf="
+                  _sharedService.jobObj.jcVehicleObj.EngineCapacity == undefined
+                "
+                >-</span
+              >
+            </div>
+          </div>
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Color</div>
+            <div class="d-flex">
+              <p class="part-detail-box custom-font primary-font my-0" title="">
+                {{ _sharedService.jobObj.jcVehicleObj.Color }}
+              </p>
+              <div
+                class="color-box pointer"
+                title="{{ _sharedService.jobObj.jcVehicleObj.ColorName }}"
+                [style.background]="
+                  '#' + _sharedService.jobObj.jcVehicleObj.ColorCode
+                "
+              ></div>
+            </div>
+          </div>
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">VIN</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.jcVehicleObj.VIN }}
+            </div>
+          </div>
+
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Customer Name</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.JCBasicInfo.CustomerFullName }}
+            </div>
+          </div>
+
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Mileage (mile/KM)</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.JCBasicInfo.Mileage }}
+            </div>
+          </div>
+
+          <div class="col-4 pb-3">
+            <div class="primary-color small-font">Date</div>
+            <div class="custom-font">
+              {{ _sharedService.jobObj.JCBasicInfo.CreatedOn | date: "short" }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 text-center align-self-center">
+        <ngb-carousel
+          class="results"
+          *ngIf="
+            _sharedService.jobObj.Gallery != undefined &&
+            _sharedService.jobObj.Gallery.length > 0
+          "
+        >
+          <ng-template
+            ngbSlide
+            *ngFor="
+              let image of _sharedService.jobObj.Gallery
+                | filter: JobCardID:'ObjectID';
+              let idx = index
+            "
+          >
+            <div class="picsum-img-wrapper">
+              <img
+                [src]="
+                  image
+                    ? _sharedService.baseUrl + image.ImageURL
+                    : _sharedService.default_img
+                "
+                class="gallery-img"
+              />
+            </div>
+          </ng-template>
+        </ngb-carousel>
+        <div
+          *ngIf="
+            _sharedService.jobObj.Gallery != undefined &&
+            (_sharedService.jobObj.Gallery | filter: JobCardID:'ObjectID')
+              .length == 0
+          "
+        >
+          <img
+            [src]="_sharedService.default_img"
+            class="gallery-img"
+            alt="Vehicle Images"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="" *ngIf="!_router.url.includes('/approval')">
+      <table
+        class="
+          table
+          text-left
+          primary-dark-font
+          page-animation
+          table-borderless
+        "
+      >
+        <thead>
+          <tr class="bb-1">
+            <th scope="col">#</th>
+            <th scope="col">Concern</th>
+            <th scope="col">Type</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="_sharedService.jobObj.JobConcerns.length > 0">
+          <tr
+            *ngFor="let jc of _sharedService.jobObj.JobConcerns; let i = index"
+          >
+            <td>{{ i + 1 }} </td>
+            <td>{{ jc.ConcernDescription }}</td>
+            <td>
+              {{
+                jc.ConcernTypeID == 70
+                  ? "Mechanical"
+                  : jc.ConcernTypeID == 71
+                  ? "Electrical"
+                  : jc.ConcernTypeID == 72
+                  ? "Spare Part"
+                  : jc.ConcernTypeID == 73
+                  ? "Other"
+                  : "Body Repair"
+              }}
+            </td>
+          </tr>
+        </tbody>
+        <tbody
+          *ngIf="
+            _sharedService.jobObj.JobConcerns == undefined ||
+            _sharedService.jobObj.JobConcerns.length == 0
+          "
+        >
+          <tr scope="row">
+            <td colspan="12" class="text-center">No Concern added!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="" [ngClass]="_router.url.includes('/approval') ? 'card' : ''">
+      <table
+        class="
+          table
+          text-left
+          primary-dark-font
+          page-animation
+          table-borderless
+          bb-1
+        "
+      >
+        <thead>
+          <tr
+            class="bb-1"
+            [ngClass]="!_router.url.includes('/approval') ? 'bt-1' : ''"
+          >
+            <th scope="col">Results</th>
+            <th scope="col">Type</th>
+            <th scope="col">Priority</th>
+            <th scope="col">
+              Discount <span class="primary-font">(JOD)</span>
+            </th>
+            <th scope="col">Labor <span class="primary-font">(JOD)</span></th>
+          </tr>
+        </thead>
+        <tbody
+          *ngIf="
+            (_sharedService.jobObj.JobTasks | filter: true:'IsInclude').length >
+            0
+          "
+        >
+          <tr
+            *ngFor="
+              let jt of _sharedService.jobObj.JobTasks
+                | filter: true:'IsInclude';
+              let i = index
+            "
+          >
+            <td>
+              {{ jt.LaborDescriptionEng }}
+              <i
+                *ngIf="jt.IsContractTask == true"
+                class="ts contract contract-icon"
+                title="Contracted Repair"
+              ></i>
+            </td>
+            <td>
+              {{ jt.JobTaskTypeID == 51 ? "Internal" : "External" }}
+              <small
+                >({{
+                  jt.RepairTypeID == 70
+                    ? "Mechanical"
+                    : jt.RepairTypeID == 71
+                    ? "Electrical"
+                    : jt.RepairTypeID == 73
+                    ? "Other"
+                    : "Body Repair"
+                }})</small
+              >
+            </td>
+            <td>
+              <div
+                [ngClass]="
+                  jt.PriorityTypeID == 83 ? 'priority-med' : 'priority-high'
+                "
+              >
+                <span class="badge"></span>
+              </div>
+              {{ jt.PriorityTypeID == 83 ? "Medium" : "High" }}
+            </td>
+            <td>{{ jt.DiscountAmount }}</td>
+            <td>
+              {{ jt.LaborCost - jt.DiscountAmount }}
+              <!-- <small *ngIf="jt.LaborTime != undefined">({{jt.LaborTime}})</small> -->
+            </td>
+          </tr>
+        </tbody>
+        <tbody
+          *ngIf="
+            _sharedService.jobObj.JobTasks == undefined ||
+            (_sharedService.jobObj.JobTasks | filter: true:'IsInclude')
+              .length == 0
+          "
+        >
+          <tr scope="row">
+            <td colspan="12" class="text-center">No task added!</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="col-12 primary-dark-font">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">Labor Total Cost</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.InternalTasksCost != undefined
+                ? (_sharedService.jobObj.JCBasicInfo.InternalTasksCost
+                  | number: "1.2-2")
+                : 00.0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+      <div class="col-12 primary-dark-font">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">External Task Cost</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+                ? (_sharedService.jobObj.JCBasicInfo.ExternalTasksCost
+                  | number: "1.2-2")
+                : 00.0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+      <div class="col-12 primary-dark-font">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">Task Tax</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.InternalTasksCost !=
+                undefined ||
+              _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+                ? ((_sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                    _sharedService.jobObj.JCBasicInfo.ExternalTasksCost) *
+                    0.16 | number: "1.2-2")
+                : 00.0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+      <br />
+      <div class="col-12 primary-dark-font pb-3">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">Tasks Cost</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.InternalTasksCost !=
+                undefined ||
+              _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+                ? (_sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                    _sharedService.jobObj.JCBasicInfo.ExternalTasksCost -
+                    _sharedService.jobObj.JCBasicInfo.AdditionalTaskDiscount
+                  | number: "1.2-2")
+                : 00.0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="" [ngClass]="_router.url.includes('/approval') ? 'card' : ''">
+      <table class="table text-left primary-dark-font page-animation bb-1">
+        <thead>
+          <tr
+            class="bb-1"
+            [ngClass]="!_router.url.includes('/approval') ? 'bt-1' : ''"
+          >
+            <th scope="col px-md-1">Part</th>
+            <th scope="col px-md-1">Manufacturer</th>
+            <th scope="col px-md-1">Quantity</th>
+            <th scope="col px-md-1">Condition</th>
+            <th scope="col px-md-1">
+              Unit Price <span class="primary-font">(JOD)</span>
+            </th>
+            <th scope="col">Price <span class="primary-font">(JOD)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngFor="
+              let jp of _sharedService.jobObj.JobParts
+                | filter: true:'IsInclude'
+            "
+          >
+            <tr
+              *ngFor="
+                let ap of _sharedService.jobObj.JobPartAlternates
+                  | filter: jp.JobPartID:'JobPartID'
+                  | filter: true:'IsApproved'
+              "
+            >
+              <td>
+                {{ jp.PartNameEnglish }}
+                <i
+                  *ngIf="jp.IsContractPart == true"
+                  class="ts contract contract-icon"
+                  title="Contracted Part"
+                ></i>
+              </td>
+              <td>
+                {{ ap.BrandName }}
+                <small>({{ ap.OrigionName }})</small>
+              </td>
+              <td>
+                {{ jp.Quantity }}
+                <small *ngIf="jp.UnitTypeName != undefined"
+                  >({{ jp.UnitTypeName }})</small
+                >
+              </td>
+              <td>{{ ap.PartConditionID == 66 ? "Used" : "New" }}</td>
+              <td>
+                <span appElseHyphen [elseHyphen]="jp.SellingPrice"></span>
+              </td>
+              <td>
+                <span
+                  appElseHyphen
+                  [elseHyphen]="jp.NetAmount | number: '1.2-2'"
+                ></span>
+              </td>
+            </tr>
+          </ng-container>
+          <!-- <tr class="row w-100 justify-content-center">
+                        <table class="table mx-3 text-left primary-font page-animation part-selection"
+                            *ngIf="(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID').length > 0">
+                            <thead>
+                                <tr class="primary-font">
+                                    <th scope="col">Manufacturer</th>
+                                    <th scope="col">Price <span class="primary-font">(JOD)</span></th>
+                                    <th scope="col">Condition</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let ap of _sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID'; let i = index">
+                                    <td>
+                                        <span class="form-check-sign dark-font">{{ap.BrandName}}
+                                            <small>({{ap.OrigionName}})</small></span>
+                                    </td>
+                                    <td>
+                                        <p class="part-detail-box tbl-font my-0" title="">
+                                            <span appElseHyphen [elseHyphen]="ap.SellingPrice"></span> <small>/
+                                                {{ap.UnitTypeName}}</small>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="part-detail-box tbl-font my-0" title="">
+                                            <span>{{ap.PartConditionID == 66? 'Used' : 'New'}}</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tr> -->
+        </tbody>
+        <tbody
+          *ngIf="
+            _sharedService.jobObj.JobParts == undefined ||
+            (_sharedService.jobObj.JobParts | filter: true:'IsInclude')
+              .length == 0
+          "
+        >
+          <tr scope="row">
+            <td colspan="12" class="text-center">No part added!</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- *ngIf="_sharedService.jobObj != undefined && _sharedService.jobObj.JobProcess != undefined && _sharedService.jobObj.JobProcess.length>0 && (_sharedService.jobObj.JobProcess | filter: 10 : 'ProcessTypeID')[0].IsCompleted == true" -->
+      <!-- <div class="col-12 primary-dark-font">
+                <div class="row text-right justify-content-end">
+                    <label class="bold-font px-3 col-3">Parts Cost</label>
+                    <label class="px-3 col-2">
+                        {{_sharedService.jobObj.JCBasicInfo.TotalPartsPrice != undefined ? (this._sharedService.jobObj.JCBasicInfo.TotalPartsPrice | number : '1.2-2') : 0}}
+                        <span class="primary-font">JOD</span></label>
+                </div>
+            </div> -->
+      <div class="col-12 primary-dark-font">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">Parts Tax</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined
+                ? (this._sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount *
+                    0.16 | number: "1.2-2")
+                : 0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+      <br />
+      <div class="col-12 primary-dark-font">
+        <div class="row text-right justify-content-end">
+          <label class="bold-font px-3 col-3">Parts Net Amount</label>
+          <label class="px-3 col-2">
+            {{
+              _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined
+                ? (this._sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount
+                  | number: "1.2-2")
+                : 0
+            }}
+            <span class="primary-font">JOD</span></label
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="row ml-4">
+      <label> Total time required to complete tasks : </label>
+      <span class="ml-2">
+        <b>
+          {{ _sharedService.jobObj.JCBasicInfo.TotalTasksTime }}
+        </b>
+      </span>
+    </div>
+
+    <div
+      class="pt-3 row mx-0 justify-content-between"
+      [ngClass]="
+        _router.url.includes('/approval') ? 'inv-footer p-3 b-radius' : ''
+      "
+    >
+      <div class="col-5">
+        <label class="formGroupExampleInput mr-3 mb-0 customerSignature"
+          >Customer Signatures</label
+        >
+        <span
+          *ngIf="
+            _sharedService.jobObj.JCBasicInfo.ApprovalSignatureURL != undefined
+          "
+        >
+          <img style="width: 200px" [src]="signature" />
+        </span>
+
+        <i
+          *ngIf="_sharedService.jobObj.JCBasicInfo.ApprovalStatusID != 17"
+          class="fas fa-pencil-alt customerSignature"
+          title="Signatures"
+          (click)="openModel(ESignatureModel)"
+        ></i>
+      </div>
+      <div class="col-4 text-right">
+        <div class="col-12">
+          <label class="bold-font px-3 col-6">Discount</label>
+          <label class="px-3 col-6">
+            <!-- {{_sharedService.jobObj.JCBasicInfo.PartDiscount}} -->
+            {{
+              _sharedService.jobObj.JCBasicInfo.TotalPartsDiscount +
+                _sharedService.jobObj.JCBasicInfo.TotalTasksDiscount +
+                _sharedService.jobObj.JCBasicInfo.AdditionalPartDiscount +
+                _sharedService.jobObj.JCBasicInfo.AdditionalTaskDiscount
+                | number: "1.2-2"
+            }}
+            <span class="">JOD</span></label
+          >
+        </div>
+        <div class="col-12">
+          <label class="bold-font px-3 col-6">Total Tax</label>
+          <label class="px-3 col-6">
+            {{
+              _sharedService.jobObj.JCBasicInfo.InternalTasksCost !=
+                undefined ||
+              _sharedService.jobObj.JCBasicInfo.ExternalTasksCost !=
+                undefined ||
+              _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined
+                ? ((_sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                    _sharedService.jobObj.JCBasicInfo.ExternalTasksCost) *
+                    0.16 +
+                    _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount * 0.16
+                  | number: "1.2-2")
+                : 00.0
+            }}
+            <span class="">JOD</span></label
+          >
+        </div>
+        <div class="col-12 bold-font">
+          <label class="px-3 col-6">Total Cost</label>
+          <label class="px-0 col-6">
+            <!-- {{_sharedService.jobObj.JCBasicInfo.InternalTasksCost + _sharedService.jobObj.JCBasicInfo.ExternalTasksCost + _sharedService.jobObj.JCBasicInfo.TotalPartsPrice + _sharedService.jobObj.JCBasicInfo.TotalTaxAmount}} -->
+            {{ _sharedService.jobObj.JCBasicInfo.TotalCost | number: "1.2-2" }}
+            <span class="">JOD</span></label
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-12 text-center align-self-center">
+        </div> -->
+
+    <div
+      class="row invoice-footer p-3"
+      *ngIf="!_router.url.includes('/approval')"
+    >
+      <div class="col-4 text-center">
+        <i class="fas fa-mobile-alt pr-2" title="Phone"></i
+        >{{ _sharedService.jobObj.JCBasicInfo.WorkshopPhone }}
+      </div>
+      <div class="col-4 text-center">
+        <i class="fas fa-envelope pr-2" title="Email"></i
+        >{{ _sharedService.jobObj.JCBasicInfo.Email }}
+      </div>
+      <div class="col-4 text-center">
+        <i class="fas fa-map-marker-alt pr-2" title="Address"></i
+        >{{ _sharedService.jobObj.JCBasicInfo.WorkshopAddress }}
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="row justify-content-around mr-4 mt-4 mb-4"
+  *ngIf="!_router.url.includes('/approval')"
+>
+  <div class="col-4 text-center align-self-center">
+    <button
+      type="button"
+      class="btn btn-round btn-simple btn-primary py-2 my-0"
+      (click)="backClick()"
+    >
+      Go Back
+    </button>
+  </div>
+  <div class="col-4 text-center align-self-center">
+    <button
+      type="button"
+      (click)="downloadInvoice()"
+      class="btn btn-round btn-simple btn-primary py-2 my-0"
+      title="Print Invoice"
+    >
+      Print
+    </button>
+    <!-- [routerLink]="['/','update-job',_sharedService.jobObj.JCBasicInfo.JobCardID,'view-approval']" -->
+  </div>
+</div>
+<div
+  class="row justify-content-around mr-4 mt-4 mb-4"
+  *ngIf="_router.url.includes('/approval')"
+>
+  <button
+    type="button"
+    [routerLink]="[
+      '/',
+      'update-job',
+      _sharedService.jobObj.JCBasicInfo.JobCardID,
+      'take-approval'
+    ]"
+    class="btn btn-round btn-simple btn-primary py-2 my-0"
+    title="Print Invoice"
+  >
+    Print
+  </button>
+</div>
+
+<ng-template #ESignatureModel let-c="close" let-d="dismiss">
+  <!--Modal Header -->
+  <div>
+    <div class="modal-header">
+      <h4 class="modal-title">E-Signature</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="d('Cross click'); closeSignatureModal()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--Modal Body -->
+    <div class="modal-body">
+      <div class="row justify-content-center" style="margin-top: 0px">
+        <!--E-Signature Content -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <canvas id="sig-canvas" style="width: 100%; height: 200px">
+                Please use the latest chrome browser version.
+              </canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <input hidden id="sig-dataUrl" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Modal Footer -->
+    <div class="modal-footer modal-end-footer">
+      <button
+        type="button"
+        class="btn btn-danger btn-round"
+        (click)="c('Close click'); closeSignatureModal()"
+      >
+        Close
+      </button>
+
+      <button type="button" class="btn btn-clear btn-round" id="sig-clearBtn">
+        Clear
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-success btn-round"
+        id="sig-submitBtn"
+        (click)="
+          onSubmitSignature();
+          _sharedService.jobObj.JCBasicInfo.ApprovalStatusID = 17;
+          _sharedService.jobObj.JCBasicInfo.IsOpenedAgain = false
+        "
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</ng-template>

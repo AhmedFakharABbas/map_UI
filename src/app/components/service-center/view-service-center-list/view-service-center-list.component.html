@@ -1,0 +1,403 @@
+<div class="row justify-content-center align-items-center page-animation">
+  <!-- card outer-card-shadow mt-3 -->
+  <div class="col-lg-11 col-12">
+    <!-- <div class="row justify-content-center">
+        <div class="floating-label form-group  col-7">
+          <input type="text" value="" placeholder=" " class="floating-input form-control" />
+          <span class="highlight"></span>
+          <label class="input-label">Search Workshop </label>
+        </div>
+        <div class="col-">
+          <button type="button" class="btn btn-primary btn-round m-0">Search</button>
+        </div>
+      </div> -->
+
+    <div class="row justify-content-center">
+      <div class="row w-100 mt-3">
+        <hr class="w-100" />
+        <h4 class="sub-heading">WORKSHOP BRANCHES</h4>
+      </div>
+      <div class="row col-12">
+        <div class="col-md-3 col-sm-5 p-2">
+          <div class="sticky-top pt-3">
+            <div class="row w-100 m-0">
+              <hr class="w-100" />
+              <h4 class="sub-heading mb-2">Filters</h4>
+              <button
+                type="button"
+                class="btn btn-primary btn-round sub-heading-btn"
+                (click)="clearFilters()"
+                title="Clear"
+              >
+                x
+              </button>
+            </div>
+
+            <div id="accordion_workshop" class="accordion">
+              <div class="card mb-0 mt-2 heading-accordion-padding">
+                <div
+                  class="card-header collapsed accordian-container p-2 arrow"
+                  aria-expanded="false"
+                  data-toggle="collapse"
+                  href="#workshop"
+                >
+                  <a class="card-title">
+                    <span class="filter_title">Workshop</span>
+                  </a>
+                </div>
+                <div
+                  id="workshop"
+                  class="panel card-body collapse p-0 small-font"
+                  data-parent="#accordion_workshop"
+                >
+                  <div class="bg accordian-padding">
+                    <div class="chiller_cb d-flex">
+                      <input
+                        type="text"
+                        class="mr-1 form-control"
+                        placeholder="Workshop"
+                        name="workshop"
+                        [(ngModel)]="filter.WorkshopName"
+                        #WorkshopName="ngModel"
+                        (keyup.enter)="
+                          filter.WorkshopName != undefined &&
+                          filter.WorkshopName != ''
+                            ? getAllServiceCenters()
+                            : ''
+                        "
+                      />
+                      <!-- <button type="button" class="btn btn-primary btn-round p-1 m-0">Search</button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="accordion_cp" class="accordion">
+              <div class="card mb-0 mt-2 heading-accordion-padding">
+                <div
+                  class="card-header collapsed accordian-container p-2 arrow"
+                  aria-expanded="false"
+                  data-toggle="collapse"
+                  href="#cp"
+                >
+                  <a class="card-title">
+                    <span class="filter_title">Contact Person</span>
+                  </a>
+                </div>
+                <div
+                  id="cp"
+                  class="panel card-body collapse p-0 small-font"
+                  data-parent="#accordion_cp"
+                >
+                  <div class="bg accordian-padding">
+                    <div class="chiller_cb d-flex">
+                      <input
+                        type="text"
+                        class="mr-1 form-control"
+                        placeholder="Contact Person"
+                        name="contact_person"
+                        [(ngModel)]="filter.ContactPersonName"
+                        #ContactPersonName="ngModel"
+                        (keyup.enter)="
+                          filter.ContactPersonName != undefined &&
+                          filter.ContactPersonName != ''
+                            ? getAllServiceCenters()
+                            : ''
+                        "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div id="accordion_phone" class="accordion">
+              <div class="card mb-0 mt-2 heading-accordion-padding">
+                <div
+                  class="card-header collapsed accordian-container p-2 arrow"
+                  aria-expanded="false"
+                  data-toggle="collapse"
+                  href="#phone"
+                >
+                  <a class="card-title">
+                    <span class="filter_title">Phone Number</span>
+                  </a>
+                </div>
+                <div
+                  id="phone"
+                  class="panel card-body collapse p-0 small-font"
+                  data-parent="#accordion_phone"
+                >
+                  <div class="bg accordian-padding">
+                    <div class="chiller_cb d-flex">
+                      <input
+                        type="text"
+                        class="mr-1 form-control"
+                        placeholder="Phone Number"
+                        name="phone"
+                        [(ngModel)]="filter.ContactPersonMobile"
+                        #ContactPersonMobile="ngModel"
+                        (keyup.enter)="
+                          filter.ContactPersonMobile != undefined &&
+                          filter.ContactPersonMobile != ''
+                            ? getAllServiceCenters()
+                            : ''
+                        "
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row w-100 m-0">
+              <hr class="w-100" />
+              <button
+                type="button"
+                class="btn btn-primary btn-round sub-heading-btn"
+                (click)="getAllServiceCenters()"
+                title="Apply Filters"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-9 col-sm-12">
+          <div
+            class="row justify-content-center mt-4"
+            *ngIf="
+              serviceCenterArray == undefined ||
+              (serviceCenterArray != undefined &&
+                serviceCenterArray.length == 0)
+            "
+          >
+            <div class="col-lg-12 no-record-error">No record found!</div>
+          </div>
+          <ng-container
+            *ngIf="
+              serviceCenterArray != undefined && serviceCenterArray.length > 0
+            "
+          >
+            <div class="row">
+              <div
+                class="col-lg-4 col-md-6 col-sm-6 mb-card card-responsive"
+                *ngFor="
+                  let item of serviceCenterArray
+                    | slice
+                      : (cPage - 1) * _sharedService.pageSize
+                      : (cPage - 1) * _sharedService.pageSize +
+                          _sharedService.pageSize
+                "
+              >
+                <div class="card card-list inner-card-shadow">
+                  <div class="card-content">
+                    <div class="circle-picture text-center mt-3">
+                      <img
+                        class="img-fluid"
+                        src="{{
+                          item.LogoImageURL
+                            ? _sharedService.baseUrl + item.LogoImageURL
+                            : _sharedService.default_img
+                        }}"
+                      />
+                    </div>
+
+                    <div class="text-center px-2 mt-3" title="WorkShop Name">
+                      <h5
+                        [routerLink]="['/', 'service-center', 'view']"
+                        class="primary-color pointer"
+                        [queryParams]="{ WorkshopID: item.WorkshopID }"
+                      >
+                        {{ item.EnglishName }}
+                      </h5>
+                    </div>
+                    <hr />
+                    <div class="text-center">
+                      <i
+                        class="fas fa-eye light-primary-font px-2"
+                        title="View"
+                        [routerLink]="['/', 'service-center', 'view']"
+                        [queryParams]="{ WorkshopID: item.WorkshopID }"
+                      ></i>
+                      <i
+                        class="fas fa-hourglass light-primary-font px-2"
+                        title="Manage Working Hours"
+                        [routerLink]="['/', 'service-center', 'manage-hours']"
+                        [queryParams]="{ WorkshopID: item.WorkshopID }"
+                      ></i>
+                      <i
+                        class="fas fa-edit light-primary-font px-2"
+                        title="Edit"
+                        [routerLink]="[
+                          '/',
+                          'service-center',
+                          'update-service-center'
+                        ]"
+                        [queryParams]="{ WorkshopID: item.WorkshopID }"
+                      ></i>
+                      <i
+                        class="fas fa-trash-alt light-primary-font px-2"
+                        title="Delete"
+                        (click)="openModal(warningDelete, item.WorkshopID)"
+                      ></i>
+                    </div>
+                    <hr />
+                    <div class="card-body pt-0">
+                      <div class="row mb-2 ml-0">
+                        <span class="label-color px-2"
+                          ><i
+                            class="fas fa-user primary-font"
+                            title="Contact Person"
+                          ></i
+                        ></span>
+                        <span class="">
+                          <span class="primary-color px-2 eclipse">
+                            <ng-container
+                              *ngIf="
+                                item.ContactPersonFirstName != undefined ||
+                                  item.ContactPersonLastName != undefined;
+                                else elseHyphen
+                              "
+                            >
+                              {{ item.ContactPersonFirstName }}
+                              {{ item.ContactPersonLastName }}</ng-container
+                            >
+                          </span>
+                        </span>
+                      </div>
+                      <div class="row mb-2 ml-0">
+                        <span class="label-color px-2">
+                          <i
+                            class="fas fa-mobile-alt primary-font"
+                            title="Mobile No."
+                          ></i
+                        ></span>
+                        <span class="primary-color px-2">
+                          <ng-container
+                            *ngIf="
+                              item.ContactPersonMobile != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ item.ContactPersonMobile }}</ng-container
+                          >
+                        </span>
+                      </div>
+                      <div class="row mb-2 ml-0">
+                        <span class="label-color px-2">
+                          <i
+                            class="ts globe primary-font"
+                            title="City,Country"
+                          ></i>
+                        </span>
+                        <span
+                          class="primary-color"
+                          *ngIf="
+                            item.CityName != undefined &&
+                              item.CountryName != undefined;
+                            else elseHyphen
+                          "
+                          >{{ item.CityName }}, {{ item.CountryName }}
+                        </span>
+                      </div>
+                      <div class="row mb-2 ml-0">
+                        <span class="label-color px-2">
+                          <i
+                            class="fas fa-map-marker-alt primary-font"
+                            title="Address"
+                          ></i>
+                        </span>
+                        <span
+                          class="primary-color px-2 eclipse"
+                          title="{{ item.Address1 }}"
+                          *ngIf="
+                            item.Address1 != undefined && item.Address1 != '';
+                            else elseHyphen
+                          "
+                          >{{ item.Address1 }}</span
+                        >
+                      </div>
+                      <div class="row mb-2 ml-0">
+                        <span class="label-color px-2">
+                          <i
+                            class="fas fa-envelope primary-font"
+                            title="Email"
+                          ></i>
+                        </span>
+                        <span
+                          class="primary-color px-2 eclipse"
+                          title="{{ item.Email }}"
+                          *ngIf="item.Email != undefined; else elseHyphen"
+                          >{{ item.Email }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row justify-content-center mt-5"
+      *ngIf="serviceCenterArray != undefined && serviceCenterArray.length > 10"
+    >
+      <ngb-pagination
+        [(page)]="cPage"
+        [pageSize]="_sharedService.pageSize"
+        [collectionSize]="serviceCenterArray.length"
+        aria-label="Service Center Pagination"
+        class="pagination-primary"
+      >
+      </ngb-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Workshop</h5>
+      <button type="button" class="close" (click)="closeModal()">
+        <span aria-hidden="true" title="Cancel">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this workshop?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deleteServiceCenter(workshopID)"
+                class="btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <span class="px-2">-</span>
+</ng-template>

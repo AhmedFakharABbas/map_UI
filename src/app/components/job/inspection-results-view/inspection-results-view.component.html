@@ -1,0 +1,667 @@
+    <i id="jobProcessUpdate" class="fa-p-absolute ir-fa fa fa-edit" (click)="openProcessModal(jobProcessUpdate)"></i>
+
+<div class="row mx-0 fa-p-relative">
+    <div class="col-12">
+
+
+        <ngb-tabset class="inspectionResult-tab sub-tabset w-100">
+            <!-- inspection points -->
+            <ngb-tab>
+                <ng-template ngbTabTitle>
+                    <div>
+                        <span class="tab-title bb-0">Inspection Points </span>
+                        <sup class="sup1 font-9">
+                            <span
+                                *ngIf="(_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID' | notFilter : 0 : 'StatusID').length < 10">
+                                {{(_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID' | notFilter :
+                                0 : 'StatusID').length}}/10</span>
+                            <span
+                                *ngIf="(_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID' | notFilter : 0 : 'StatusID').length == 10">
+                                <i class="fas fa-check"></i>
+                            </span>
+                        </sup>
+                    </div>
+                </ng-template>
+
+
+                <ng-template ngbTabContent>
+
+                    <div class="row text-left pt-3 primary-dark-font page-animation card mx-0 mt-3"
+                        *ngIf="(_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID' | filter : 0 : 'StatusID').length !=  (_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID').length">
+                        <div class="col-12 d-flex justify-content-between">
+                            <div class="col-4">
+                                <p class="bold-font"></p>
+                            </div>
+                            <div class="col-3 ">
+                                <p class="bold-font">Not Inspected</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="bold-font">Good</p>
+                            </div>
+                            <div class="col-3">
+                                <p class="bold-font">Need Maintenance</p>
+                            </div>
+                        </div>
+                        <ng-container
+                            *ngFor="let ip of _sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID'">
+                            <div class="col-12 d-flex mb-3">
+                                <div class="offset-1 col-3 align-self-center">
+                                    <label class="form-check-label mt-2"
+                                        [ngClass]="{'green' : ip.StatusID === 11 , 'red font-weight-bold' : ip.StatusID === 12 , 'black' : ip.StatusID !== 11 && ip.StatusID !== 12 }"
+                                        >
+                                        {{ip.EnglishName}}
+                                    </label>
+                                </div>
+
+                                <!-- id 11 for good condition -->
+
+                                <div class="col-3 form-check mt-2 align-self-start ">
+                                    <i [ngClass]="ip.StatusID !== 11 && ip.StatusID !== 12 ? 'fas fa-check black' :' fas fa-times black'"></i>
+                                </div>
+                                <div class="col-3 form-check mt-2 align-self-start">
+                                    <i [ngClass]="ip.StatusID === 11 ? 'fas fa-check green' :' fas fa-times green'"></i>
+                                </div>
+                                <!-- id 12 for need maintenance -->
+                                <div class="col-3 form-check mt-2 d-flex">
+                                    <div class="col-6 align-self-start">
+                                    <i [ngClass]="ip.StatusID === 12 ? 'fas fa-check red' : 'fas fa-times red'" ></i>
+                                    </div>
+                                    <div class="col-6 align-self-end" *ngIf="ip.StatusID == 12 && ip.Note != ''">
+                                        <i class="fas fa-file primary-font" (click)=viewNote(notePreview,ip)></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="row col-12 p-3 primary-font justify-content-center"
+                        *ngIf="(_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID' | filter : 0 : 'StatusID').length ==  (_sharedService.jobObj.JobCardCheckList | filter: 46 : 'CheckListTypeID').length">
+                        Inspection Point not performed!
+                    </div>
+                </ng-template>
+
+
+
+            </ngb-tab>
+
+
+
+            <ngb-tab title="Results" class="mb-3">
+                <ng-template ngbTabContent>
+                    <ng-container *ngFor="let con of _sharedService.jobObj.JobConcerns;let i=index">
+                        <div class="card col-12 d-flex mt-3"
+                            *ngIf="_sharedService.jobObj != undefined && _sharedService.jobObj.JobTasks != undefined && (_sharedService.jobObj.JobTasks | filter : con.JobConcernID : 'JobConcernID').length > 0">
+
+                            <a class="row w-100 " data-toggle="collapse" id="a{{con.JobConcernID}}"
+                                href="#concern{{con.JobConcernID}}" role="button" aria-expanded="false"
+                                aria-controls="jc.JobCardID"
+                                (click)="collapseConcern(con.JobConcernID); con.addService = false ; con.addPart = false;collapseOtherForm(false, false, i)">
+                                <div class="col-11 align-self-center pl-5 primary-dark-font capital">
+                                    <b>&nbsp; {{con.ConcernDescription =='' ? con.ConcernTypeName :
+                                        con.ConcernDescription}}</b>
+                                </div>
+                                <div class="col-1 text-right">
+                                    <a class="collapse-tabset btn p-0 collapseButton-color">
+                                        <i class="fas fa-chevron-down p-2" id="chevron{{con.JobConcernID}}"></i>
+                                    </a>
+
+                                </div>
+                            </a>
+
+                            <div class="collapse bt-1" id="concern{{con.JobConcernID}}">
+                                <div class="row card mx-0 my-2"
+                                    *ngFor="let ir of _sharedService.jobObj.JobTasks | filter : con.JobConcernID : 'JobConcernID' ;let i=index">
+                                    <div class="row" [ngClass]="ir.PriorityTypeID == 83 ? 'priMedium' : 'priHigh'">
+                                        <div class="col-3 align-self-center">
+                                            <div class="ribbon_3" *ngIf="ir.IsInclude == true">
+                                                <span>
+                                                    Approved
+                                                </span>
+                                            </div>
+                                            <div class="ribbon_3" *ngIf="ir.IsInclude == false">
+                                                <span>
+                                                    Not Approved
+                                                </span>
+                                            </div>
+                                            <ngb-carousel class="results"
+                                                *ngIf="_sharedService.jobObj.Gallery != undefined && _sharedService.jobObj.Gallery.length > 0">
+                                                <ng-template ngbSlide
+                                                    *ngFor="let image of _sharedService.jobObj.Gallery | filter : ir.JobTaskID : 'ObjectID' | filter : 50 : 'GalleryTypeID' ; let idx = index">
+                                                    <div class="picsum-img-wrapper">
+                                                        <div *ngIf="image.IsVideo == false">
+                                                            <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.default_img"
+                                                                class="result-img">
+                                                        </div>
+                                                        <div *ngIf="image.IsVideo == true">
+                                                            <video class="video" controls multiple
+                                                                [src]="_sharedService.baseUrl + image.ImageURL">
+                                                                Your browser does not support the video tag.
+                                                            </video>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </ngb-carousel>
+                                            <div
+                                                *ngIf="_sharedService.jobObj.Gallery == undefined || (_sharedService.jobObj.Gallery | filter : ir.JobTaskID : 'ObjectID' | filter : 50 : 'GalleryTypeID').length == 0">
+                                                <img [src]="_sharedService.default_img" alt="Results Images"
+                                                    class="result-img">
+                                            </div>
+                                        </div>
+                                        <div class="col-9 row">
+                                            <div class="col-6 px-0 pb-3">
+                                                <div class="primary-font ml-3 smaller-font ">
+                                                    <span>Repair</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                        <span
+                                                            *ngIf="ir.LaborDescriptionEng != '' && ir.LaborDescriptionEng != undefined; else elseHyphen">{{ir.LaborDescriptionEng}}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-6 px-0 pb-3">
+                                                <div class="primary-font ml-3 smaller-font">
+                                                    <span>Type</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                        {{ir.RepairTypeID == 70 ? 'Mechanical' : ir.RepairTypeID == 71 ?
+                                                        'Electrical' : ir.RepairTypeID == 72 ? 'Spare Parts' :
+                                                        ir.RepairTypeID == 73 ? 'Others' : ir.RepairTypeID == 102 ?
+                                                        'Body Repair' : 'Inspection'}}
+                                                        <small>
+                                                            {{ir.JobTaskTypeID == 51? 'Internal' : 'External'}}</small>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 px-0 pb-3"
+                                                *ngIf="_sharedService.logged_user_role_id != 8">
+                                                <div class="primary-font ml-3 smaller-font">
+                                                    <span>Labor</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-dark-font" title=""
+                                                        *ngIf="ir.EditLabor == false || ir.EditLabor == undefined">
+                                                        <span
+                                                            *ngIf="ir.NetAmount != undefined; else elseHyphen">{{ir.NetAmount
+                                                            | number : '1.2-2'}}
+                                                            JOD</span>
+                                                    </p>
+                                                    <ng-container *ngIf="ir.EditLabor == true">
+                                                        <div class="floating-label form-group col mb-0 px-0 page-animation mt-2"
+                                                            *ngIf="_sharedService.logged_user_role_id != 8 && ir.repairType == 2">
+                                                            <input type="text" value="" placeholder=" "
+                                                                (change)="ir.IsModified = true"
+                                                                class="floating-input form-control input-border-color"
+                                                                name="LaborPrice" [(ngModel)]="ir.LaborPrice"
+                                                                #LaborPrice="ngModel" maxlength="5"
+                                                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                                                            <div class="input-group-append price-perpend">JOD</div>
+                                                            <span class="highlight"></span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-6 px-0 pb-3"
+                                                *ngIf="_sharedService.logged_user_role_id != 8">
+                                                <div class="primary-font ml-3 smaller-font">
+                                                    <span>Time</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-dark-font" title=""
+                                                        *ngIf="ir.EditTime == false || ir.EditTime == undefined">
+                                                        <span
+                                                            *ngIf="ir.LaborTime != undefined; else elseHyphen">{{ir.LaborTime
+                                                            | hourToMin}}
+                                                        </span>
+                                                    </p>
+                                                    <ng-container *ngIf="ir.EditTime == true">
+                                                        <div
+                                                            class="floating-label form-group col time-div floating-input form-control input-border-color mb-0 page-animation mt-2">
+                                                            <div class="input-group-append Country-code-prepend">
+                                                                <div class="custom custom-append">Time</div>
+                                                            </div>
+                                                            <div class="time">
+                                                                <input id="time" class="time-input ml-1" type="number"
+                                                                    name="hour" min="0" max="99" placeholder="00"
+                                                                    [(ngModel)]="ir.Hours">
+                                                                <span class="align-self-center">:</span>
+                                                                <input id="time2" class="time-input" type="number"
+                                                                    name="mins" min="0" max="59" placeholder="00"
+                                                                    [(ngModel)]="ir.Minutes">
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 px-0 pb-1">
+                                                <div class="primary-font ml-3 smaller-font">
+                                                    <span>Description</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                        <span
+                                                            *ngIf="ir.TaskDescription != undefined; else elseHyphen">{{ir.TaskDescription}}</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mx-0">
+                                        <table class="table mx-3 text-left primary-dark-font page-animation">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Part</th>
+                                                    <th scope="col">Note</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="primary-font">
+                                                <!-- id 49 for External Task task0 -->
+                                                <tr
+                                                    *ngFor="let jp of _sharedService.jobObj.JobParts | filter : ir.JobTaskID : 'JobTaskID' ;let i=index">
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{jp.PartNameEnglish}}</td>
+                                                    <td> <span appElseHyphen [elseHyphen]="jp.Notes"> </span></td>
+                                                    <td>{{jp.Quantity}} <small
+                                                            *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                                                    </td>
+                                                    <td><span appElseHyphen [elseHyphen]="jp.JobPartStatusName"></span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                            <tbody
+                                                *ngIf="_sharedService.jobObj.JobParts == undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : ir.JobTaskID : 'JobTaskID').length == 0)">
+                                                <tr scope="row">
+                                                    <td colspan="12" class="text-center primary-font">No part added!
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row text-center mx-0">
+                                    <div class="card p-3"
+                                        *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks != undefined && _sharedService.jobObj.JobTasks.length==0)">
+                                        No repair added!
+                                    </div>
+                                </div>
+                                <div class="card p-3 mb-0 text-center"
+                                    *ngIf="(_sharedService.jobObj.JobTasks | filter : con.JobConcernID : 'JobConcernID').length == 0">
+                                    No Repair Added
+                                </div>
+                            </div>
+
+                        </div>
+                    </ng-container>
+                    <div class="card col-12 d-flex bb-2">
+
+                        <!-- <a class="row w-100 collapse-tabset btn p-0 collapseButton-color" data-toggle="collapse"
+                            href="#otherRepairs" role="button" (click)="collapseOtherRepairs($event)"
+                            aria-expanded="false" aria-controls="jc.JobCardID">
+                            <div class="col-11 align-self-center pl-5">
+                                <b>Other Repairs</b>
+                            </div>
+                            <div class="col-1 text-right">
+                                <a>
+                                    <i class="fas fa-chevron-down p-2" id="chevronOtherRep"></i>
+                                </a>
+
+                            </div>
+                        </a> -->
+                        <a class="row w-100" data-toggle="collapse" id="otherRep" href="#otherRepairs" role="button"
+                            (click)="collapseOtherRepairs($event); addService = false; addPart = false; collapseOtherForm(false, false)"
+                            aria-expanded="false" aria-controls="jc.JobCardID">
+                            <div class="col-11 align-self-center pl-5">
+                                <b>Other</b>
+                            </div>
+                            <div class="col-1 text-right">
+                                <a class="collapse-tabset btn p-0 collapseButton-color">
+                                    <i class="fas fa-chevron-down p-2" id="chevronOtherRep"></i>
+                                </a>
+
+                            </div>
+                        </a>
+
+                        <div class="collapse bt-1" id="otherRepairs">
+                            <div class="row card mx-0 my-2"
+                                *ngFor="let ir of _sharedService.jobObj.JobTasks | filter : undefined : 'JobConcernID' ;let i=index">
+                                <div class="row" [ngClass]="ir.PriorityTypeID == 83 ? 'priMedium' : 'priHigh'">
+                                    <div class="col-3 text-center align-self-center">
+                                        <div class="ribbon_3" *ngIf="ir.IsInclude == true">
+                                            <span>
+                                                Approved
+                                            </span>
+                                        </div>
+                                        <div class="ribbon_3" *ngIf="ir.IsInclude == false">
+                                            <span>
+                                                Not Approved
+                                            </span>
+                                        </div>
+                                        <ngb-carousel class="results"
+                                            *ngIf="_sharedService.jobObj.Gallery != undefined && _sharedService.jobObj.Gallery.length > 0">
+                                            <ng-template ngbSlide
+                                                *ngFor="let image of _sharedService.jobObj.Gallery | filter : ir.JobTaskID : 'ObjectID' | filter : 50 : 'GalleryTypeID' ; let idx = index">
+                                                <div class="picsum-img-wrapper">
+                                                    <div *ngIf="image.IsVideo == false">
+                                                        <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.default_img"
+                                                            class="result-img">
+                                                    </div>
+                                                    <div *ngIf="image.IsVideo == true">
+                                                        <video class="video" controls multiple
+                                                            [src]="_sharedService.baseUrl + image.ImageURL">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ngb-carousel>
+                                        <div
+                                            *ngIf="_sharedService.jobObj.Gallery == undefined || (_sharedService.jobObj.Gallery | filter : ir.JobTaskID : 'ObjectID' | filter : 50 : 'GalleryTypeID').length == 0">
+                                            <img [src]="_sharedService.default_img" alt="Results Images"
+                                                class="result-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-9 row">
+
+                                        <div class="col-6 px-0 pb-3">
+                                            <div class="primary-font ml-3 smaller-font ">
+                                                <span>Repair</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                    <span
+                                                        *ngIf="ir.LaborDescriptionEng != '' && ir.LaborDescriptionEng != undefined; else elseHyphen">{{ir.LaborDescriptionEng}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-6 px-0 pb-3">
+                                            <div class="primary-font ml-3 smaller-font">
+                                                <span>Type</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                    {{ir.RepairTypeID == 70 ? 'Mechanical' : ir.RepairTypeID == 71 ?
+                                                    'Electrical' : ir.RepairTypeID == 72 ? 'Spare Parts' :
+                                                    ir.RepairTypeID == 73 ? 'Others' : ir.RepairTypeID == 102 ? 'Body
+                                                    Repair' : ''}}
+                                                    <small>
+                                                        {{ir.JobTaskTypeID == 51? 'Internal' : 'External'}}</small>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 px-0 pb-3" *ngIf="_sharedService.logged_user_role_id != 8">
+                                            <div class="primary-font ml-3 smaller-font">
+                                                <span>Labor</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="part-detail-box my-0 primary-dark-font" title=""
+                                                    *ngIf="ir.EditLabor == false || ir.EditLabor == undefined">
+                                                    <span
+                                                        *ngIf="ir.NetAmount != undefined; else elseHyphen">{{ir.NetAmount
+                                                        | number : '1.2-2'}}
+                                                        JOD</span>
+                                                </p>
+                                                <ng-container *ngIf="ir.EditLabor == true">
+                                                    <div class="floating-label form-group col mb-0 px-0 page-animation mt-2"
+                                                        *ngIf="_sharedService.logged_user_role_id != 8 && ir.repairType == 2">
+                                                        <input type="text" value="" placeholder=" "
+                                                            (change)="ir.IsModified = true"
+                                                            class="floating-input form-control input-border-color"
+                                                            name="LaborPrice" [(ngModel)]="ir.LaborPrice"
+                                                            #LaborPrice="ngModel" maxlength="5"
+                                                            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                                                        <div class="input-group-append price-perpend">JOD</div>
+                                                        <span class="highlight"></span>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 px-0 pb-3" *ngIf="_sharedService.logged_user_role_id != 8">
+                                            <div class="primary-font ml-3 smaller-font">
+                                                <span>Time</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="part-detail-box my-0 primary-dark-font" title=""
+                                                    *ngIf="ir.EditTime == false || ir.EditTime == undefined">
+                                                    <span
+                                                        *ngIf="ir.LaborTime != undefined; else elseHyphen">{{ir.LaborTime
+                                                        | hourToMin}}
+                                                    </span>
+                                                </p>
+                                                <ng-container *ngIf="ir.EditTime == true">
+                                                    <div
+                                                        class="floating-label form-group col time-div floating-input form-control input-border-color mb-0 page-animation mt-2">
+                                                        <div class="input-group-append Country-code-prepend">
+                                                            <div class="custom custom-append">Time</div>
+                                                        </div>
+                                                        <div class="time">
+                                                            <input id="time" class="time-input ml-1" type="number"
+                                                                name="hour" min="0" max="99" placeholder="00"
+                                                                [(ngModel)]="ir.Hours">
+                                                            <span class="align-self-center">:</span>
+                                                            <input id="time2" class="time-input" type="number"
+                                                                name="mins" min="0" max="59" placeholder="00"
+                                                                [(ngModel)]="ir.Minutes">
+                                                        </div>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 px-0 pb-1">
+                                            <div class="primary-font ml-3 smaller-font">
+                                                <span>Description</span>
+                                            </div>
+                                            <div class="ml-3">
+                                                <p class="part-detail-box my-0 primary-dark-font" title="">
+                                                    <span
+                                                        *ngIf="ir.TaskDescription != undefined; else elseHyphen">{{ir.TaskDescription}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mx-0">
+                                    <table class="table mx-3 text-left primary-dark-font page-animation">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Part</th>
+                                                <th scope="col">Note</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="primary-font">
+                                            <!-- id 49 for External Task task0 -->
+                                            <tr
+                                                *ngFor="let jp of _sharedService.jobObj.JobParts | filter : ir.JobTaskID : 'JobTaskID' ;let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{jp.PartNameEnglish}}</td>
+                                                <td> <span appElseHyphen [elseHyphen]="jp.Notes"> </span></td>
+                                                <td>{{jp.Quantity}} <small
+                                                        *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                                                </td>
+                                                <td><span appElseHyphen [elseHyphen]="jp.JobPartStatusName"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody
+                                            *ngIf="_sharedService.jobObj.JobParts == undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : ir.JobTaskID : 'JobTaskID').length == 0)">
+                                            <tr scope="row">
+                                                <td colspan="12" class="text-center">No part added!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row text-center mx-0">
+                                <div class="card p-3"
+                                    *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks != undefined && _sharedService.jobObj.JobTasks.length==0)">
+                                    No repair added!
+                                </div>
+                            </div>
+                            <div class="card p-3 mb-0 text-center" *ngIf="(_sharedService.jobObj.JobTasks).length == 0">
+                                No Repair Added
+                            </div>
+                            <div class="card p-3 mb-0 text-center"
+                                *ngIf="(_sharedService.jobObj.JobTasks | filter : undefined : 'JobConcernID').length == 0">
+                                No Repair Added
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- <div class="card col-12 d-flex bb-2">
+                        <div class="row w-100">
+                            <div class="col-11 align-self-center pl-5">
+                                <b>Other Parts</b>
+                            </div>
+                            <div class="col-1 text-right">
+                                <a class="collapse-tabset btn p-0 collapseButton-color" data-toggle="collapse"
+                                    href="#otherParts" role="button" (click)="collapseOtherParts($event)"
+                                    aria-expanded="false" aria-controls="jc.JobCardID">
+                                    <i class="fas fa-chevron-down p-2" id="chevronOtherPart"></i>
+                                </a>
+
+                            </div>
+                        </div>
+
+                        <div class="collapse bt-1" id="otherParts">
+                            <div class="row card mx-0 my-2"
+                                *ngFor="let ir of _sharedService.jobObj.JobParts | filter : undefined : 'JobConcernID' ;let i=index">
+
+                                <div class="row mx-0">
+                                    <table class="table mx-3 text-left primary-dark-font page-animation">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Part</th>
+                                                <th scope="col">Note</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Status</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="primary-font">
+                                            <tr
+                                                *ngFor="let jp of _sharedService.jobObj.JobParts | filter : undefined : 'JobTaskID' ;let i=index">
+                                                <td>{{i+1}}</td>
+                                                <td>{{jp.PartNameEnglish}}</td>
+                                                <td> <span appElseHyphen [elseHyphen]="jp.Notes"> </span></td>
+                                                <td>{{jp.Quantity}} <small
+                                                        *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                                                </td>
+                                                <td><span appElseHyphen [elseHyphen]="jp.JobPartStatusName"></span>
+                                                </td>
+
+                                            </tr>
+                                            <tr
+                                                *ngIf="_sharedService.jobObj.JobParts == undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : undefined : 'JobTaskID').length == 0)">
+                                                <td scope="row" colspan="12" class="text-center">
+                                                    No part added!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody
+                                            *ngIf="_sharedService.jobObj.JobParts == undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : ir.JobTaskID : 'JobTaskID').length == 0)">
+                                            <tr scope="row">
+                                                <td colspan="12" class="text-center">No part added!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                            <div class="card p-3 mb-0 text-center" *ngIf="(_sharedService.jobObj.JobParts).length == 0">
+                                No Repair Added
+                            </div>
+                            <div class="card p-3 mb-0 text-center"
+                                *ngIf="(_sharedService.jobObj.JobParts | filter : undefined : 'JobConcernID').length == 0">
+                                No Parts Added
+                            </div>
+                        </div>
+                    </div> -->
+                </ng-template>
+
+            </ngb-tab>
+
+        </ngb-tabset>
+
+
+    </div>
+</div>
+
+<!-- view Note -->
+<ng-template #notePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Note</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p class="primary-dark-font">{{checklist.Note}}</p>
+
+    </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+    <span class="px-3">-</span>
+</ng-template>
+<ng-template #jobProcessUpdate let-c="close" let-d="dismiss">
+    <!-- <audio id="alertAudioSup" class="d-none" controls autoplay loop>
+      <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/ogg">
+      <source src="../assets/audio/zapsplat_household_alarm_clock_beeps_002_37448.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio> -->
+    <div class="adOptionModel" id="adOptionModel" role="document">
+      <div class="modal-header process-alert">
+        <h5 class="modal-title text-center"></h5>
+        <button type="button" class="close" (click)="closeProcessModal()" title="Cancel">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body  px-0 py-0">
+        <div class="fluid-container modal_container ">
+          <div class="row mx-0 justify-content-center bottom_margins pb-3">
+            <div class="col-12 text-center mt-3 font-18">
+                Are you sure you want to update JobProcess?
+            </div>
+            <div class="col-6 text-center mt-3">
+             <button class="a-button btn btn-secondary btn-round btn-simple px-3 py-2"  (click)="closeProcessModal()" title="Cancel">Cancel</button>
+            </div>
+            <div class="col-6 text-center mt-3">
+                <button class="a-button btn btn-primary btn-round btn-simple px-3 py-2" (click)="updateJobProcess()">Update</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </ng-template>

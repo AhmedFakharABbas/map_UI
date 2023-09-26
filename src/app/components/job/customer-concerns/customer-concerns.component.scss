@@ -1,0 +1,205 @@
+@media only screen and (max-width: 760px) and (min-width: 767px),
+    only screen and (max-device-width: 1024px) and (min-device-width: 768px) and (min-width: 767px),
+    tbody,
+    th,
+    td,
+    tr {
+    /* display: block; */
+}
+
+@import "variables";
+
+.approve-toggle {
+    border: 1px solid $primary-font;
+    border-radius: 25px;
+}
+
+///toggle-button
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+.toggle-switch label {
+    cursor: pointer;
+}
+.toggle-switch label .toggle-track-active {
+    display: block;
+    height: 15px;
+    width: 30px;
+    background: $hover-color;
+    border-radius: 20px;
+    position: relative;
+}
+.toggle-switch label .toggle-track-inActive {
+    display: block;
+    height: 15px;
+    width: 30px;
+    background: $primary-font;
+    border-radius: 20px;
+    position: relative;
+}
+
+.toggle-switch .toggle-track-2:before {
+    content: "";
+    display: inline-block;
+    height: 11px;
+    width: 11px;
+    background: white;
+    border-radius: 20px;
+    position: absolute;
+    top: 2px;
+    right: 16px;
+    transition: right 0.2s ease-in;
+}
+
+.toggle-switch .toggle-track-1:before {
+    content: "";
+    display: inline-block;
+    height: 11px;
+    width: 11px;
+    background: white;
+    border-radius: 20px;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    transition: right 0.2s ease-in;
+}
+
+.isCollapsed {
+    display: none !important;
+}
+
+.toggle-off.sidebar-wrapper {
+    width: 73px !important;
+}
+.status-bg {
+    background: $secondary-color;
+    border-radius: 50px;
+    width: 100px;
+}
+
+.form-check .form-check-sign::before,
+.form-check .form-check-sign::after {
+    transform: scale(0.7);
+}
+
+.sub-heading-btn:focus {
+    background: $secondary-color;
+}
+.sub-heading-btn {
+    height: 36px;
+    padding: 5px 15px !important;
+    margin: -33px 20px auto auto !important;
+}
+.error-block-text-area {
+    position: absolute;
+    top: 11px;
+    right: 5px;
+    margin-right: 20px;
+    left: auto;
+}
+
+.concern-tabset {
+    overflow-x: scroll;
+}
+
+.sup {
+    padding: 8px 4px;
+    height: 13px;
+    margin-left: 3px;
+}
+
+.white-space {
+    white-space: nowrap;
+}
+.ts::after {
+    top: -15px;
+}
+
+// dorp down
+.ng-select.custom-append {
+    border-radius: 0px 8px 8px 0 !important;
+    border-left: 0px;
+    background: $primary-font;
+}
+.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+    color: white !important;
+}
+.ng-select.custom-append .ng-value-label {
+    color: white !important;
+}
+
+.error-block-unit {
+    position: absolute;
+    z-index: 3;
+    top: 7px;
+    right: 113px;
+    height: 0;
+    pointer-events: none;
+    text-align: right;
+    margin-right: 20px !important;
+}
+
+
+.time-div{ 
+    display: inline-flex; 
+    color: $primary-font;
+  }
+  
+  .time-input{
+    border: none;
+    color: $primary-font;
+    text-align: center;
+    width: 60px;
+  }
+  
+  .time-input:focus{
+    outline: none;
+  }
+  .time{
+    position: absolute;
+    right: 29px;
+    top: 10px;
+  }
+
+.Country-code-prepend {
+    top: -1px !important;
+    left: -1px !important;
+}
+  
+.ng-select.custom-append {
+    border-radius: 0px 8px 8px 0 !important;
+    border-left: 0px;
+    background: $primary-font;
+}
+
+  .ng-select-opened .ng-arrow-wrapper .ng-arrow {
+    color: white !important;
+  }
+  .ng-select.custom-append .ng-value-label{
+    color: white !important;
+  }
+  .floating-input1,
+.floating-select {
+  font-size: 0.8571em;
+  padding: 0px 0px; 
+  width: 100%;
+  border-radius: 8px;
+  height: 40px;
+  background-color: transparent;
+  background: #ffffff;
+  background-color: transparent;
+  //border was overwriting default input field border
+  border: 0.1rem solid $primary-font;
+  background: $white-color;
+}
+    /* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

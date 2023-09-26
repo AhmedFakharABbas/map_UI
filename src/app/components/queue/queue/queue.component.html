@@ -1,0 +1,970 @@
+<div class="row w-100 mx-0 py-4">
+  <hr class="w-100" />
+  <h4 class="sub-heading">Create Queue</h4>
+</div>
+
+<div *ngIf="takeApproval != false">
+  <app-queue-preview></app-queue-preview>
+</div>
+
+<div class="col-12" *ngIf="takeApproval != true">
+  <!-- (ngSubmit)="appoinementForm.valid ? (appointmentID == undefined || appointmentID == 0) ? saveAppointment() : updateAppointment() : '' " -->
+  <form
+    #appoinementForm="ngForm"
+    *ngIf="
+      _sharedService.logged_user_role_id == 6 ||
+      _sharedService.logged_user_role_id == 1 ||
+      _sharedService.logged_user_role_id == 2 ||
+      _sharedService.logged_user_role_id == 3
+    "
+  >
+    <div class="card">
+      <ngb-tabset
+        class="sub-tabset big-font"
+        #tabset="ngbTabset"
+        (tabChange)="beforeChange($event); markerBinding()"
+      >
+        <ngb-tab title="Plate #" id="1">
+          <ng-template ngbTabContent>
+            <div class="row pt-3">
+              <!-- fuel tank reading  -->
+              <div class="col-12">
+                <div class="row mx-0 py-3 px-lg-3">
+                  <div class="col-4 px-md-0">
+                    <div class="col-12">
+                      <label class="primary-font">Plate Number</label>
+                    </div>
+                    <div class="floating-label form-group col-lg-12 col-sm-12">
+                      <input
+                        type="text"
+                        placeholder=" "
+                        class="floating-input form-control"
+                        name="plateNumber"
+                        [disabled]="_sharedService.appointmentData != undefined"
+                        [(ngModel)]="
+                          saveAppointmentData.AppointmentObj.PlateNumber
+                        "
+                        #plateNumber="ngModel"
+                        minlength="1"
+                        maxlength="20"
+                        required
+                      />
+                      <span class="highlight"></span>
+                      <label class="input-label">Plate #</label>
+                      <div class="error-block text-danger">
+                        <small
+                          *ngIf="
+                            (appoinementForm.submitted ||
+                              plateNumber.touched) &&
+                            plateNumber.errors?.required
+                          "
+                          >*Required</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="col-4 px-md-0"
+                    *ngIf="_sharedService.logged_user_role_id == 3"
+                  >
+                    <div class="col-12">
+                      <label class="primary-font">Appointment Date</label>
+                    </div>
+                    <div class="floating-label form-group col-lg-12 col-sm-12">
+                      <input
+                        type="datetime-local"
+                        placeholder=" "
+                        [disabled]="_sharedService.appointmentData != undefined"
+                        class="floating-input form-control"
+                        name="appointmentDateTime"
+                        [(ngModel)]="
+                          saveAppointmentData.AppointmentObj.AppointmentDateTime
+                        "
+                        #appointmentDateTime="ngModel"
+                        required
+                      />
+                      <span class="highlight"></span>
+                      <label class="input-label">Time</label>
+                      <div class="error-block text-danger">
+                        <small
+                          *ngIf="
+                            (appoinementForm.submitted ||
+                              appointmentDateTime.touched) &&
+                            appointmentDateTime.errors?.required
+                          "
+                          >*Required</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col-4 px-md-0"
+                    *ngIf="_sharedService.logged_user_role_id == 3"
+                  >
+                    <div class="col-12">
+                      <label class="primary-font">Customer Mobile</label>
+                    </div>
+                    <div class="floating-label form-group col-lg-12 col-sm-12">
+                      <input
+                        type="text"
+                        placeholder=" "
+                        class="floating-input form-control"
+                        name="customerMobile"
+                        [disabled]="_sharedService.appointmentData != undefined"
+                        [(ngModel)]="
+                          saveAppointmentData.AppointmentObj.CustomerMobile
+                        "
+                        #customerMobile="ngModel"
+                        minlength="1"
+                        maxlength="12"
+                        onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+                        required
+                      />
+                      <span class="highlight"></span>
+                      <label class="input-label">Mobile</label>
+                      <div class="error-block text-danger">
+                        <small
+                          *ngIf="
+                            (appoinementForm.submitted ||
+                              customerMobile.touched) &&
+                            customerMobile.errors?.required
+                          "
+                          >*Required</small
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab title="Vehicle Data" id="2">
+          <ng-template ngbTabContent>
+            <div class="col-12">
+              <div class="row mt-4 px-md-0">
+                <!-- fuel and mileage  -->
+                <div class="col-8 px-md-0">
+                  <div class="col-12">
+                    <label class="primary-font">Fuel Tank Reading</label>
+                  </div>
+                  <div class="col-12 px-md-0">
+                    <div class="row mx-0">
+                      <div
+                        class="
+                          floating-label
+                          text-center
+                          form-group
+                          col-12
+                          d-flex
+                        "
+                      >
+                        <div
+                          class="col form-check form-check-radio px-2"
+                          *ngFor="
+                            let type of _sharedService._commonMeta.objectTypes
+                              | filter: 'FuelTankReading':'ObjectNameEnglish'
+                          "
+                        >
+                          <label class="form-check-label">
+                            <input
+                              class="form-check-input"
+                              type="radio"
+                              name="fuelTankReading"
+                              id="{{ type.TypeNameEnglish }}"
+                              (change)="
+                                saveAppointmentData.AppointmentObj.FuelTankReading =
+                                  type.TypeNameEnglish;
+                                saveAppointmentData.AppointmentObj.IsModified = true;
+                                shouldUpdate = true
+                              "
+                              [checked]="
+                                saveAppointmentData.AppointmentObj
+                                  .FuelTankReading == type.TypeNameEnglish
+                              "
+                            />
+                            <span
+                              class="form-check-sign primary-font"
+                              [ngClass]="
+                                saveAppointmentData.AppointmentObj
+                                  .PriorityTypeID == type.ObjectTypeID
+                                  ? 'active-text'
+                                  : ''
+                              "
+                              >{{ type.TypeNameEnglish }}%
+                            </span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- mileage  -->
+                <div class="col-4 px-md-0">
+                  <div class="col-6">
+                    <label class="primary-font">Mileage</label>
+                  </div>
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-10 col-sm-8
+                      input-group
+                      ml-lg-3
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control custom-input"
+                      name="engine_capacity"
+                      [(ngModel)]="saveAppointmentData.AppointmentObj.Mileage"
+                      #mileage="ngModel"
+                      maxlength="10"
+                      (change)="shouldUpdate = true"
+                      onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <!-- <label class="input-label">Mileage</label> -->
+                    <div class="input-group-append right-dropdown">
+                      <ng-select
+                        [searchable]="false"
+                        [clearable]="false"
+                        class="
+                          custom custom-append custom-dropdown
+                          unit-dropdown
+                          side-dropdown
+                          rightDropdown-color
+                        "
+                        id="applications"
+                        name="engnine_capacity_unit"
+                        [(ngModel)]="
+                          saveAppointmentData.AppointmentObj.MileageUnit
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.objectTypes
+                              | filter: 'MileageUnit':'ObjectNameEnglish'
+                          "
+                          [value]="item.ObjectTypeID"
+                          >{{ item.TypeNameEnglish }}
+                        </ng-option>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="col-6"
+                  *ngIf="_sharedService.logged_user_role_id == 3"
+                >
+                  <div
+                    class="floating-label form-group col-lg-10 col-md-12 pb-0"
+                  >
+                    <textarea
+                      type="text"
+                      value=""
+                      placeholder=" "
+                      class="floating-input form-control input-border-color"
+                      name="Note"
+                      [(ngModel)]="saveAppointmentData.AppointmentObj.Note"
+                      value=""
+                      rows="2"
+                      maxlength="256"
+                    >
+                    </textarea>
+                    <span class="highlight"></span>
+                    <label class="input-label">Note</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row pb-4">
+                <div class="col-3 text-center">
+                  <div class="col-12 px-sm-0">
+                    <label class="primary-font tab-font">Mileage</label>
+                  </div>
+                  <img
+                    class="fuel-tank-image"
+                    (click)="
+                    saveAppointmentData.AppointmentObj.MileageImageURL
+                    ?   open(
+                      imagePreview,
+                      'Mileage',
+                      saveAppointmentData.AppointmentObj.MileageImageURL
+                    )
+                    : ''
+
+                    
+                    "
+                    [src]="
+                      saveAppointmentData.AppointmentObj.MileageImageURL
+                        ? _sharedService.baseUrl +
+                          saveAppointmentData.AppointmentObj.MileageImageURL
+                        : _sharedService.default_img
+                    "
+                  />
+
+                  <input
+                    id="fileInput1"
+                    type="file"
+                    class="d-none"
+                    accept="image/x-png,image/gif,image/jpeg"
+                    (change)="onSelectFile($event, 'MileageImageURL')"
+                  />
+                  <label for="fileInput1">
+                    <i
+                      class="fas fa-2x fa-camera upload-btn"
+                      aria-hidden="true"
+                      title="upload"
+                    ></i>
+                  </label>
+                </div>
+
+                <div class="col-3 text-center">
+                  <div class="col-12 px-sm-0">
+                    <label class="primary-font tab-font">Front Photo</label>
+                  </div>
+                  <img
+                    class="fuel-tank-image"
+                    (click)="
+                    saveAppointmentData.AppointmentObj.VehicleFront
+                        ? open(
+                          imagePreview,
+                          'Vehicle Front',
+                          saveAppointmentData.AppointmentObj.VehicleFront
+                        )
+                        : ''"
+                    [src]="
+                      saveAppointmentData.AppointmentObj.VehicleFront
+                        ? _sharedService.baseUrl +
+                          saveAppointmentData.AppointmentObj.VehicleFront
+                        : _sharedService.default_img
+                    "
+                  />
+
+                  <input
+                    id="fileInput2"
+                    type="file"
+                    class="d-none"
+                    accept="image/x-png,image/gif,image/jpeg"
+                    (change)="onSelectFile($event, 'VehicleFront')"
+                  />
+                  <label for="fileInput2">
+                    <i
+                      class="fas fa-2x fa-camera upload-btn"
+                      aria-hidden="true"
+                      title="upload"
+                    ></i>
+                  </label>
+                </div>
+
+                <div class="col-3 text-center">
+                  <div class="col-12 px-sm-0">
+                    <label class="primary-font tab-font"
+                      >License ID Front</label
+                    >
+                  </div>
+                  <img
+                    class="fuel-tank-image"
+                    (click)="
+                    saveAppointmentData.AppointmentObj.LicensePlateFront? open(imagePreview,'License Plate Front',saveAppointmentData.AppointmentObj.LicensePlateFront
+                    ):''"
+                    [src]="
+                      saveAppointmentData.AppointmentObj.LicensePlateFront
+                        ? _sharedService.baseUrl +
+                          saveAppointmentData.AppointmentObj.LicensePlateFront
+                        : _sharedService.default_img
+                    "
+                  />
+
+                  <input
+                    id="fileInput3"
+                    type="file"
+                    class="d-none"
+                    accept="image/x-png,image/gif,image/jpeg"
+                    (change)="onSelectFile($event, 'LicensePlateFront')"
+                  />
+                  <label for="fileInput3">
+                    <i
+                      class="fas fa-2x fa-camera upload-btn"
+                      aria-hidden="true"
+                      title="upload"
+                    ></i>
+                  </label>
+                </div>
+
+                <div class="col-3 text-center">
+                  <div class="col-12 px-sm-0">
+                    <label class="primary-font tab-font">License ID Back</label>
+                  </div>
+                  <img
+                    class="fuel-tank-image"
+                    (click)="
+                    saveAppointmentData.AppointmentObj.LicensePlateBack
+                    ? open(
+                      imagePreview,
+                      'License Plate Back',
+                      saveAppointmentData.AppointmentObj.LicensePlateBack
+                    )
+                    :''"
+                    [src]="
+                      saveAppointmentData.AppointmentObj.LicensePlateBack
+                        ? _sharedService.baseUrl +
+                          saveAppointmentData.AppointmentObj.LicensePlateBack
+                        : _sharedService.default_img
+                    "
+                  />
+
+                  <input
+                    id="fileInput4"
+                    type="file"
+                    class="d-none"
+                    accept="image/x-png,image/gif,image/jpeg"
+                    (change)="onSelectFile($event, 'LicensePlateBack')"
+                  />
+                  <label for="fileInput4">
+                    <i
+                      class="fas fa-2x fa-camera upload-btn"
+                      aria-hidden="true"
+                      title="upload"
+                    ></i>
+                  </label>
+                </div>
+              </div>
+
+              <!-- gallery  -->
+              <div class="row w-100 mx-0 mt-4">
+                <hr class="w-100" />
+                <h5 class="sub-heading primary-font">Gallery</h5>
+              </div>
+
+              <div class="row m-3">
+                <div class="col-lg-2 col-sm-4 row mx-0 justify-content-center">
+                  <input
+                    accept="image/gif,image/jpeg,image/*,image/png"
+                    multiple
+                    type="file"
+                    class="file-choose"
+                    id="files"
+                    (change)="galleryUpload($event); shouldUpdate = true"
+                  />
+                  <label
+                    for="files"
+                    class="my-2 align-self-center"
+                    (click)="onClickUpload()"
+                  >
+                    <img
+                      class="upload-image plus-image"
+                      [src]="_sharedService.plus_image"
+                    />
+                  </label>
+                </div>
+                <div
+                  class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0"
+                  *ngFor="
+                    let image of saveAppointmentData.Gallery
+                      | filter: 147:'GalleryTypeID';
+                    let idx = index
+                  "
+                >
+                  <img
+                    [src]="
+                      image
+                        ? _sharedService.baseUrl + image.ImageURL
+                        : _sharedService.plus_image
+                    "
+                    (click)="
+                      open(imagePreview, 'Gallery', image.ImageURL);
+                      shouldUpdate = true
+                    "
+                    class="gallery-img"
+                  />
+                  <span class="del"
+                    ><i
+                      class="img-del"
+                      (click)="openRemoveImage(deleteImage, image)"
+                      >x</i
+                    ></span
+                  >
+                </div>
+              </div>
+
+              <!-- damages  -->
+              <div class="row w-100 mx-0">
+                <hr class="w-100" />
+                <h5 class="sub-heading primary-font">Damages test</h5>
+              </div>
+              <!-- select body type -->
+              <!-- 
+
+                
+                      (click)="ShowMoreBodyType = false"
+                       (click)="
+                              createVehicle.vehicleObj.VehicleTypeID = item.ObjectTypeID
+                            "
+                             (click)="ShowMoreBodyType = true"
+                             
+                            createVehicle.vehicleObj.VehicleTypeID ==
+                            item.ObjectTypeID
+
+               -->
+
+              <div class="col-11 card mt-2">
+                <div class="col-10 ml-4">
+                  <h5 class="mb-2 mt-2">Vehicle Type</h5>
+                </div>
+
+                <ul role="tablist" class="nav nav-pills pl-4 ml-4">
+                  <li class="nav-item pointer mx-2 d-flex" name="vehicle_type">
+                    <ng-container
+                      *ngFor="
+                        let item of _sharedService._commonMeta.objectTypes
+                          | filter: 'Body':'ObjectNameEnglish'
+                      "
+                    >
+                      <div class="text-center mx-3" *ngIf="true">
+                        <a
+                          class="role-selector mr-0"
+                          [class.checked]="
+                            saveAppointmentData.AppointmentObj.VehicleTypeID ==
+                            item.ObjectTypeID
+                          "
+                          id="{{ item.TypeNameEnglish }}1"
+                          name="vehicle_type"
+                        >
+                          <i
+                            class="px-3 ts {{ item.Icon }}"
+                            title="{{ item.TypeNameEnglish }}"
+                            (click)="
+                              saveAppointmentData.AppointmentObj.VehicleTypeID =
+                                item.ObjectTypeID;
+                              onClickVehicleIcon()
+                            "
+                          ></i
+                        ></a>
+                        <label
+                          for=""
+                          class="role-name smaller-font"
+                          [class.icon-checked]="
+                            saveAppointmentData.AppointmentObj.VehicleTypeID ==
+                            item.ObjectTypeID
+                          "
+                          >{{ item.TypeNameEnglish }}</label
+                        >
+                      </div>
+                    </ng-container>
+                  </li>
+                  <!-- <div
+                    class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-1 padding_0"
+                  >
+                    <button
+                      *ngIf="
+                        ShowMoreBodyType == false &&
+                        generalVehicle.GeneralVehicles != undefined &&
+                        generalVehicle.GeneralVehicles.length > 0
+                      "
+                      title="Show More"
+                      class="btn btn-primary btn-round btn-simple"
+                      type="button"
+                      style="border-radius: 7px"
+                    >
+                      Show More
+                    </button>
+                    <button
+                      *ngIf="ShowMoreBodyType == true"
+                      title="Show Less"
+                      class="btn btn-primary btn-round btn-simple"
+                      type="button"
+                      style="border-radius: 7px"
+                    >
+                      Show Less
+                    </button>
+                  </div> -->
+                </ul>
+              </div>
+              <!-- select body type -->
+
+              <div class="row justify-content-center page-animation mt-5">
+                <img-map
+                  #imgMap
+                  style="width: 50%"
+                  [src]="
+                    saveAppointmentData.AppointmentObj.VehicleTypeID !=
+                    undefined
+                      ? saveAppointmentData.AppointmentObj.VehicleTypeID == 16
+                        ? hatchback
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 17
+                        ? SUV
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 18
+                        ? pickup
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 19
+                        ? coupe
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 20
+                        ? twoDoorPickup
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 21
+                        ? bus
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 22
+                        ? convertible
+                        : saveAppointmentData.AppointmentObj.VehicleTypeID == 23
+                        ? smallVehicle
+                        :  sedan : sedan
+                        
+                        "
+                  [markerRadius]="_sharedService.marker_radius"
+                  [markers]="markers"
+                  (mark)="onMark($event)"
+                >
+                </img-map>
+              </div>
+              <div class="col-sm-12">
+                <h3 class="primary-font mb-0">Markers</h3>
+                <div class="row text-center pl-2">
+                  <ng-container
+                    *ngFor="let marker of markers; let i = index"
+                    style="margin-bottom: 3px"
+                  >
+                    <div class="row">
+                      <div class="col">
+                        <button
+                          class="btn btn-danger px-2 py-1"
+                          (click)="removeMarker(i, marker)"
+                        >
+                          <small>
+                            <i class="fa fa-trash" style="font-size: 14px"></i>
+                          </small>
+                        </button>
+                        <br />
+                        <span
+                          style="cursor: pointer; font-size: 12px"
+                          [ngClass]="{
+                            'text-primary': imgMap.markerActive === i
+                          }"
+                          (click)="selectMarker(i)"
+                        >
+                          {{ i + 1 }}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <!-- initial Checklist -->
+
+        <ngb-tab title="Initial Checklist" id="3">
+          <ng-template ngbTabContent>
+            <div class="pb-3">
+              <div class="form-check mt-3">
+                <label class="form-check-label bold-font need-maintainance">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="markAllCb"
+                    id="selectAll"
+                    (change)="markAll = 1; markAllIC($event)"
+                    [checked]="markAll == 1"
+                  />
+                  <span class="form-check-sign pl-md-2"></span>
+                  Mark All
+                </label>
+              </div>
+              <div
+                class="row pt-2 mx-3 checklist-highlight"
+                *ngFor="
+                  let ic of saveAppointmentData.JobCardCheckList
+                    | filter: 45:'CheckListTypeID'
+                "
+              >
+                <div class="form-check col-lg-7 col-sm-12 page-animation">
+                  <label class="d-flex form-check-label pb-md-2">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="{{ ic.EnglishName }}"
+                      value=""
+                      name="{{ ic.EnglishName }}"
+                      [checked]="ic.IsChecked == true"
+                      (change)="querMarkClick($event, ic)"
+                    />
+                    <!-- (click)="
+                    onClickCheckBox()
+                      " -->
+                    <span class="form-check-sign primary-font pl-md-2">{{
+                      ic.EnglishName
+                    }}</span>
+                  </label>
+                </div>
+
+                <div
+                  class="
+                    floating-label
+                    form-group
+                    col-lg-4 col-sm-12
+                    input-slide
+                    mb-0
+                    pb-0
+                  "
+                  *ngIf="ic.IsChecked == true"
+                >
+                  <input
+                    type="text"
+                    value=""
+                    placeholder=" "
+                    class="
+                      floating-input
+                      form-control
+                      primary-font
+                      input-border-color
+                    "
+                    name="{{ ic.EnglishName }}"
+                    [(ngModel)]="ic.Note"
+                    (change)="ic.IsModified = true"
+                    maxlength="400"
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Note</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="row mx-0 justify-content-center">
+                            <div class="col-10">
+                                <textarea class="form-control my-3 px-2 input-border-color primary-font" name="comments"
+                                    rows="3" cols="80" placeholder="Write general notes here..."
+                                    (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                                    [(ngModel)]="_sharedService.jobObj.JCBasicInfo.InspectionComments">
+                            </textarea>
+                            </div>
+                        </div> -->
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+
+      <div class="row mx-0 my-l-3 mb-md-5">
+        <div class="col-6 justify-content-start mb-md-3">
+          <div class="row mx-0">
+            <button
+              class="btn btn-primary btn-round btn-simple ml-5 px-4"
+              *ngIf="tabID != 1"
+              (click)="changeTab(false)"
+            >
+              <i class="fas fa-arrow-left mr-3"></i> Previous - السابق
+            </button>
+          </div>
+        </div>
+
+        <div class="col-6 text-right mb-md-3">
+          <!-- <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn bg-white px-4"
+                        *ngIf="tabID == 4 && _sharedService.jobObj.JCBasicInfo.VIStatusID != 17"
+                        (click)="checkVehicleImages() == true ? _sharedService.jobObj.JCBasicInfo.Mileage == undefined ? openMileageVerificationModal(mileageVerificationModal) : takeApproval = true : '' ">
+                        Preview - معاينة
+                    </button> -->
+          <ng-container *ngIf="tabID != 3">
+            <button
+              class="btn btn-primary btn-round btn-simple mr-5 px-4"
+              (click)="changeTab(true)"
+            >
+              Next - التالي
+              <i class="fas fa-arrow-right ml-3"></i>
+            </button>
+          </ng-container>
+          <ng-container *ngIf="tabID == 3">
+            <!-- <button class="btn btn-primary btn-round btn-simple mr-5 px-4" type="button" (click)=" changeTab(true);">
+                            Submit
+                            <i class="fas fa-arrow-right ml-3"></i>
+                        </button> -->
+            <button
+              type="submit"
+              class="
+                btn btn-primary btn-simple btn-round
+                mark-complete-btn
+                bg-white
+                px-4
+              "
+              (click)="changeTab(true)"
+            >
+              Preview - معاينة
+            </button>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- <button class="btn btn-primary btn-round complete-btn">Complete</button> -->
+    </div>
+  </form>
+</div>
+
+<!-- preview image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ modalHeader }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="img-fluid"
+      [src]="
+        imageURL
+          ? _sharedService.baseUrl + imageURL
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>
+
+<ng-template
+  #deleteImage
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <h5>Are you sure you want to delete this {{ content }}?</h5>
+  </div>
+  <div class="modal-footer">
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="(c)"
+      >
+        No
+      </button>
+    </div>
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="onRemoveImage()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #selectCustomerList let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Please Select Customer</h5>
+      <button
+        type="button"
+        class="close"
+        (click)="closeCustomerListModel()"
+        title="Cancel"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <table class="table mx-3 text-left primary-font page-animation">
+              <thead>
+                <tr>
+                  <!-- <th scope="col"></th> -->
+                  <th scope="col">Plate Number</th>
+                  <th scope="col">Customer Name</th>
+                  <th scope="col">VIN</th>
+                  <th scope="col">Car Name</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let v of saveAppointmentData.Vehicles; let i = index"
+                >
+                  <td
+                    class="pointer"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.PlateNumber }}
+                  </td>
+                  <td
+                    class="pointer"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.CustomerFullName }}
+                  </td>
+                  <td
+                    class="pointer"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.VIN }}
+                  </td>
+                  <td
+                    class="pointer"
+                    (click)="selectVehicleCustomer(v.CustomerID, v.VehicleID)"
+                  >
+                    {{ v.EnglishMakeName }} {{ v.EnglishModelName }}
+                  </td>
+                  <!-- <td>
+                                        <button (click)="selectVehicleCustomer(0, v.VehicleID)"
+                                            class="a-button btn btn-primary btn-round btn-simple col-6">
+                                            Transfer Owner</button>
+                                    </td> -->
+                </tr>
+              </tbody>
+            </table>
+            <!-- <div class="col-12 float-left text-center">
+                            <button (click)="closeSelectCustomersModal();"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">
+                                Create New Customer</button>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #confirmSave
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <h3>Prompt</h3>
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <h5>Do you want to save Data?</h5>
+  </div>
+  <div class="modal-footer">
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="(c); closeConfirmSaveModel()"
+      >
+        Ignore
+      </button>
+    </div>
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="updateAppointment(); closeConfirmSaveModel()"
+      >
+        Save & Exit
+      </button>
+    </div>
+  </div>
+</ng-template>

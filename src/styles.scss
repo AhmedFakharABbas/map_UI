@@ -1,0 +1,2712 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$now-ui-kit-angular-primary: mat-palette($mat-indigo);
+$now-ui-kit-angular-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$now-ui-kit-angular-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$now-ui-kit-angular-theme: mat-light-theme(
+  $now-ui-kit-angular-primary,
+  $now-ui-kit-angular-accent,
+  $now-ui-kit-angular-warn
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($now-ui-kit-angular-theme);
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$now-ui-kit-angular-primary: mat-palette($mat-indigo);
+$now-ui-kit-angular-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$now-ui-kit-angular-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$now-ui-kit-angular-theme: mat-light-theme(
+  $now-ui-kit-angular-primary,
+  $now-ui-kit-angular-accent,
+  $now-ui-kit-angular-warn
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($now-ui-kit-angular-theme);
+
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/scss/bootstrap.scss";
+@import "variables";
+
+a {
+  text-decoration: none !important;
+  -webkit-appearance: none !important;
+}
+
+//nav-pills-checked
+.checked {
+  background: $hover-color !important;
+  color: #fff !important;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid $hover-color !important;
+}
+
+.breadcrumb {
+  display: -webkit-box;
+  display: flex;
+  flex-wrap: wrap;
+
+  padding: 0.75rem 4rem;
+  list-style: none;
+  background-color: white;
+  border-radius: 0.25rem;
+  box-shadow: 0px -4px 4px 6px #00000022;
+  margin-bottom: 0;
+}
+
+.page-wrapper.toggled .breadcrumb {
+  padding: 0.75rem 2rem;
+}
+
+.toggled .sidebar-mini-button {
+  display: none;
+}
+
+.sidebar-mini-button {
+  position: absolute;
+  top: 60px;
+  z-index: 10;
+  display: block;
+}
+
+.fas {
+  cursor: pointer;
+}
+
+.pr-15 {
+  padding-right: 15px;
+}
+
+.pr-30 {
+  padding-right: 30px;
+}
+
+.px-20 {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.px-30 {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+.pl-15 {
+  padding-left: 15px;
+}
+.pl_20 {
+  padding-left: 20px;
+}
+.pl-30 {
+  padding-left: 30px;
+}
+
+.imr-1 {
+  margin-right: 4px;
+}
+
+.model-text-msg {
+  padding-left: 7px;
+}
+
+.iml-1 {
+  margin-left: 4px;
+}
+
+.single-vendor-picture img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #f7f5ec;
+}
+
+.border-right {
+  border-right: 1px sold grey;
+}
+
+.circle-picture img {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  box-shadow: 2px 1px 9px 5px #d3cdcd9e;
+}
+
+.employe-circle-picture img {
+  width: 30px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #f7f5ec;
+}
+
+.b-0 {
+  border: 0px !important;
+}
+
+.bb-0 {
+  border-bottom: 0px !important;
+}
+
+.bt-0 {
+  border-top: 0px !important;
+}
+.bt-1 {
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.bb-1 {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.br-1 {
+  border-right: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.bl-1 {
+  border-left: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.b-radius {
+  border-radius: 6px;
+}
+
+// list card design
+
+.complete {
+  background: $success-navbar !important;
+  color: white;
+}
+
+.inprogress {
+  background: $warning-navbar !important;
+  color: white;
+}
+
+.cancelled {
+  background: $danger-navbar !important;
+  color: white;
+}
+
+.complete1 {
+  background: white !important;
+  color: $success-navbar;
+}
+
+.inprogress1 {
+  background: white !important;
+  color: $warning-navbar;
+}
+
+.cancelled1 {
+  background: white !important;
+  color: $danger-navbar;
+}
+
+.info-heading {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.info-text {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Open Sans", sans-serif;
+}
+
+// style for search pages
+
+.card-body-padding {
+  // min-height : 110px !important;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+//overlapping line and heading
+.sub-heading {
+  margin-top: -1.59em;
+  margin-left: 5%;
+  background-color: #f2f2fa;
+  z-index: 1;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  color: $primary-color;
+  // padding: 0px 12px 0px 12px;
+  margin-bottom: 1em;
+  color: $primary-color;
+  font-weight: 500;
+}
+.sub-heading-right {
+  z-index: 1;
+  position: absolute;
+  right: 19px;
+}
+.bottom-button {
+  justify-content: end !important;
+}
+
+.sub-heading-btn {
+  height: 26px;
+  padding: 5px 15px !important;
+  margin: -30px 8px auto auto !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: $secondary-color;
+  overflow-x: hidden;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.ts-l {
+  margin-right: 6px;
+}
+
+.ts-r {
+  margin-left: 6px;
+}
+
+.ts {
+  display: inline-flex;
+}
+
+.ts::after {
+  fill: $hover-color;
+  // content         : "     ";
+  // white-space     : pre;
+  content: " ";
+  width: 20px;
+  height: 20px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.png::after {
+  fill: $hover-color;
+  content: " ";
+  width: 40px;
+  height: 40px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.smaller.ts::after {
+  width: 16px;
+  height: 16px;
+}
+
+.extra-small.ts::after {
+  width: 14px;
+  height: 14px;
+}
+
+.large.ts::after {
+  width: 30px;
+  height: 30px;
+}
+.ts.inspection::after {
+  background-image: url("./assets/icons/inspection.svg");
+  transform: scale(1) translate(-7px, 16px);
+}
+.ts.crown::after {
+  background-image: url("./assets/icons/crown.svg");
+  transform: scale(1.8) translate(-5px, 5px);
+}
+.crown:hover {
+  filter: invert(79%) sepia(47%) saturate(6118%) hue-rotate(328deg)
+    brightness(100%) contrast(101%);
+}
+
+.ts.contract_bw::after {
+  background-image: url("./assets/icons/contract b&w.svg");
+  transform: scale(0.9) translate(0px, 2px);
+}
+.contract_bw:hover {
+  filter: invert(79%) sepia(47%) saturate(6118%) hue-rotate(328deg)
+    brightness(100%) contrast(101%);
+}
+
+.ts.contract_360::after {
+  background-image: url("./assets/icons/contract-11.png");
+  transform: scale(3.4) translate(0px, -1px);
+}
+.ts.eco::after {
+  background-image: url("./assets/icons/group-23@3x.png");
+  transform: scale(3.4) translate(1px, 15px);
+}
+.ts.pro::after {
+  background-image: url("./assets/icons/group-22@3x.png");
+  transform: scale(3.4) translate(1px, 15px);
+}
+.contract_360:hover {
+  // filter: invert(79%) sepia(47%) saturate(6118%) hue-rotate(328deg) brightness(100%) contrast(101%);
+}
+
+.ts.contract::after {
+  background-image: url("./assets/icons/contract.svg");
+  transform: scale(1.8) translate(6px, 2px);
+}
+
+.ts.user::after {
+  background-image: url("./assets/icons/user-1.png");
+}
+
+.ts.settings::after {
+  background-image: url("./assets/icons/settings-1.png");
+}
+
+.ts.car-inspection::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/initial-inspection.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.car-inspection::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/ii-orange.svg");
+}
+
+.ts.part-price::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/parts-pricing.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.part-price::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/pp-orange.svg");
+}
+
+.ts.invoice::after {
+  background-image: url("./assets/icons/generate-invoice.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.invoice::after {
+  background-image: url("./assets/icons/gi-orange.svg");
+}
+
+.ts.approval::after {
+  background-image: url("./assets/icons/pending-approval.svg");
+}
+
+.ts.part-delivery::after {
+  background-image: url("./assets/icons/parts-delivery.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.part-delivery::after {
+  background-image: url("./assets/icons/ii-orange.svg");
+}
+
+.ts.in-progress::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/work-in-progress.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.in-progress::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/wip-orange.svg");
+}
+
+.ts.quality-assurance::after {
+  background-image: url("./assets/icons/quality-assurance.svg");
+}
+.jl-main-tabset
+  input:checked
+  + .radio-tabset
+  .temp
+  .ts.quality-assurance::after {
+  background-image: url("./assets/icons/quality-assurance-orange.svg");
+}
+
+.ts.closed::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/closed.svg");
+}
+.jl-main-tabset input:checked + .radio-tabset .temp .ts.closed::after {
+  transform: translateY(3px);
+  background-image: url("./assets/icons/cls-orange.svg");
+}
+
+.ts.admin::after {
+  background-image: url($admin-svg);
+}
+
+.checked .ts.admin::after {
+  background-image: url($admin-hover-svg);
+}
+
+.ts.advisor::after {
+  left: -5px;
+  position: relative;
+  background-image: url($advisor-svg);
+}
+
+.checked .ts.advisor::after {
+  background-image: url($advisor-hover-svg);
+}
+
+.ts.supervisor::after {
+  left: -5px;
+  position: relative;
+  background-image: url($admin-svg);
+}
+.checked .ts.supervisor::after {
+  background-image: url($admin-hover-svg);
+}
+
+.ts.foreman::after {
+  left: -5px;
+  position: relative;
+  background-image: url($foreman-svg);
+}
+
+.checked .ts.foreman::after {
+  background-image: url($foreman-hover-svg);
+}
+
+.ts.technician::after {
+  left: -2px;
+  position: relative;
+  background-image: url($technician-svg);
+}
+
+.checked .ts.technician::after {
+  background-image: url($technician-hover-svg);
+}
+
+.ts.cashier::after {
+  left: -4px;
+  position: relative;
+  background-image: url($cashier-svg);
+}
+
+.checked .ts.cashier::after {
+  background-image: url($cashier-hover-svg);
+}
+
+.ts.qa::after {
+  left: -4px;
+  position: relative;
+  background-image: url($qa-svg);
+}
+
+.checked .ts.qa::after {
+  background-image: url($qa-hover-svg);
+}
+
+.ts.valet::after {
+  left: -5px;
+  position: relative;
+  background-image: url($teamLead-svg);
+}
+
+.checked .ts.valet::after {
+  background-image: url($teamLead-hover-svg);
+}
+
+.ts.parts-manager::after {
+  left: -5px;
+  position: relative;
+  background-image: url($partsManager-svg);
+}
+
+.checked .ts.parts-manager::after {
+  background-image: url($partsManager-hover-svg);
+}
+
+////vehicle types
+.ts.suv::after {
+  transform: scale(3) !important;
+  background-image: url(./assets/icons/suv.png);
+}
+.ts.suv:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/suv-hover.png);
+}
+.checked .ts.suv::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/suv-active.png);
+}
+
+.ts.two-door-small-vehicle::after {
+  transform: scale(2.2) !important;
+  background-image: url(./assets/icons/small-car.png);
+}
+.ts.two-door-small-vehicle:hover::after {
+  transform: scale(2.5) !important;
+  background-image: url(./assets/icons/small-car-hover.png);
+}
+.checked .ts.two-door-small-vehicle::after {
+  transform: scale(2.8) !important;
+  background-image: url(./assets/icons/small-car-active.png);
+}
+
+.ts.sedan::after {
+  transform: scale(3) !important;
+  background-image: url(./assets/icons/sedan.png);
+}
+.ts.sedan:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/sedan-hover.png);
+}
+
+.checked .ts.sedan::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/sedan-active.png);
+}
+
+.ts.pick-up::after {
+  transform: scale(3.5) !important;
+  background-image: url(./assets/icons/pick-up.png);
+}
+.ts.pick-up:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/pick-up-hover.png);
+}
+
+.checked .ts.pick-up::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/pick-up-active.png);
+}
+
+.ts.coupe::after {
+  transform: scale(3.5) !important;
+  background-image: url(./assets/icons/coupe.png);
+}
+.ts.coupe:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/coupe-hover.png);
+}
+
+.checked .ts.coupe::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/coupe-active.png);
+}
+
+.ts.convertible::after {
+  transform: scale(3) !important;
+  background-image: url(./assets/icons/Convertible.png);
+}
+.ts.convertible:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/Convertible-hover.png);
+}
+
+.checked .ts.convertible::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/Convertible-active.png);
+}
+
+.ts.large-bus::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/bus.png);
+}
+.ts.large-bus:hover::after {
+  transform: scale(2.2) !important;
+  background-image: url(./assets/icons/bus-hover.png);
+}
+.checked .ts.large-bus::after {
+  transform: scale(2.5) !important;
+  background-image: url(./assets/icons/bus-active.png);
+}
+.ts.hatchback::after {
+  transform: scale(3) !important;
+  background-image: url(./assets/icons/hatchback-inactive.png);
+}
+.ts.hatchback:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/hatchback-hover.png);
+}
+.checked .ts.hatchback::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/hatchback-active.png);
+}
+
+.ts.two-door-pickup::after {
+  transform: scale(3.5) !important;
+  background-image: url(./assets/icons/2-Door-Pickup.png);
+}
+.ts.two-door-pickup:hover::after {
+  transform: scale(4) !important;
+  background-image: url(./assets/icons/2-Door-Pickup-hover.png);
+}
+.checked .ts.two-door-pickup::after {
+  transform: scale(4.5) !important;
+  background-image: url(./assets/icons/2-Door-Pickup-active.png);
+}
+
+///vehicle types end
+
+//checklist
+.ts.icon1::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon1.svg);
+}
+.ts.icon2::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon2.svg);
+}
+.ts.icon3::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon3.svg);
+}
+.ts.icon4::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon4.svg);
+}
+.ts.icon5::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon5.svg);
+}
+.ts.icon6::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon6.svg);
+}
+.ts.icon7::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon7.svg);
+}
+.ts.icon8::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon8.svg);
+}
+.ts.icon9::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon9.svg);
+}
+.ts.icon10::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon10.svg);
+}
+.ts.icon11::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon11.svg);
+}
+.ts.icon12::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon12.svg);
+}
+
+.ts.icon13::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon13.svg);
+}
+.ts.icon14::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon14.svg);
+}
+.ts.icon15::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon15.svg);
+}
+.ts.icon16::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon16.svg);
+}
+.ts.icon17::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon17.svg);
+}
+.ts.icon18::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon18.svg);
+}
+.ts.icon19::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon19.svg);
+}
+.ts.icon20::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon20.svg);
+}
+.ts.icon21::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon21.svg);
+}
+.ts.icon22::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon22.svg);
+}
+
+.ts.icon13-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon13-good.svg);
+}
+.ts.icon14-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon14-good.svg);
+}
+.ts.icon15-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon15-good.svg);
+}
+.ts.icon16-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon16-good.svg);
+}
+.ts.icon17-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon17-good.svg);
+}
+.ts.icon18-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon18-good.svg);
+}
+.ts.icon19-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon19-good.svg);
+}
+.ts.icon20-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon20-good.svg);
+}
+.ts.icon21-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon21-good.svg);
+}
+.ts.icon22-good::after {
+  transform: scale(2) !important;
+  background-image: url(./assets/icons/icon22-good.svg);
+}
+.toggle-on {
+  background: url(./assets/icons/toggle-on.svg) no-repeat;
+}
+
+.toggle-off {
+  background: url(./assets/icons/toggle-off.svg) no-repeat;
+}
+
+.service-center {
+  display: initial;
+  background: url(./assets/icons/service-center-inactive.svg) no-repeat;
+}
+
+.service-center:hover {
+  display: initial;
+  background: url(./assets/icons/service-center-active.svg) no-repeat;
+}
+
+.mechanical {
+  display: initial;
+  background: url(./assets/icons/mechanical-inactive.svg) no-repeat;
+}
+
+.mechanical:hover {
+  display: initial;
+  background: url(./assets/icons/mechanical-orange.svg) no-repeat;
+}
+
+input:checked + .radio-tabset .mechanical {
+  display: initial;
+  background: url(./assets/icons/mechanical-orange.svg) no-repeat;
+}
+
+.electrical {
+  display: initial;
+  background: url(./assets/icons/electrical-inactive.svg) no-repeat;
+}
+
+.electrical:hover {
+  display: initial;
+  background: url(./assets/icons/electrical-active.svg) no-repeat;
+}
+input:checked + .radio-tabset .electrical {
+  display: initial;
+  background: url(./assets/icons/electrical-active.svg) no-repeat;
+}
+
+.spare-parts {
+  display: initial;
+  background: url(./assets/icons/spare-parts-inactive.svg) no-repeat;
+}
+.spare-parts:hover {
+  display: initial;
+  background: url(./assets/icons/spare-parts-orange.svg) no-repeat;
+}
+input:checked + .radio-tabset .spare-parts {
+  display: initial;
+  background: url(./assets/icons/spare-parts-orange.svg) no-repeat;
+}
+
+.others {
+  display: initial;
+  background: url(./assets/icons/other-inactive.svg) no-repeat;
+}
+
+.others:hover {
+  display: initial;
+  background: url(./assets/icons/other-active.svg) no-repeat;
+}
+input:checked + .radio-tabset .others {
+  display: initial;
+  background: url(./assets/icons/other-active.svg) no-repeat;
+}
+
+.body-repair {
+  display: initial;
+  color: $primary-font;
+  background: url(./assets/icons/body-repair.svg) no-repeat;
+}
+
+.body-repair:hover {
+  display: initial;
+  background: url(./assets/icons/body-repair-active.svg) no-repeat;
+}
+input:checked + .radio-tabset .body-repair {
+  display: initial;
+  background: url(./assets/icons/body-repair-active.svg) no-repeat;
+}
+
+li.active .service-center {
+  display: initial;
+  background: url(./assets/icons/service-center-active.svg) no-repeat !important;
+}
+
+.staff {
+  display: initial;
+  background: url(./assets/icons/staff-inactive.svg) no-repeat;
+}
+
+.staff:hover {
+  display: initial;
+  background: url(./assets/icons/staff-active.svg) no-repeat;
+}
+
+li.active .staff {
+  display: initial;
+  background: url(./assets/icons/staff-active.svg) no-repeat !important;
+}
+
+.workshop {
+  display: initial;
+  background: url(./assets/icons/workshhop-inactive.svg) no-repeat;
+}
+
+.workshop:hover {
+  display: initial;
+  background: url(./assets/icons/workshop-active.svg) no-repeat;
+}
+
+li.active .workshop {
+  display: initial;
+  background: url(./assets/icons/workshop-active.svg) no-repeat !important;
+}
+
+.part-shop {
+  display: initial;
+  background: url(./assets/icons/partsshop-inactive.svg) no-repeat;
+}
+
+.part-shop:hover {
+  display: initial;
+  background: url(./assets/icons/partsshop-active.svg) no-repeat;
+}
+
+li.active .part-shop {
+  display: initial;
+  background: url(./assets/icons/partsshop-active.svg) no-repeat !important;
+}
+
+.globe {
+  display: initial !important;
+  background: url(./assets/icons/globe-americas-solid.svg) no-repeat !important;
+}
+
+// .globe:hover {
+//   display: initial;
+//   background: url(./assets/icons/globe-active.svg) no-repeat;
+// }
+
+.zip-code {
+  display: initial !important;
+  background: url(./assets/icons/zip.svg) no-repeat;
+}
+
+// .zip-code:hover {
+//   display: initial;
+//   background: url(./assets/icons/zip-active.svg) no-repeat !important;
+// }
+
+.wallet-solid {
+  display: initial !important;
+  background: url(./assets/icons/wallet-solid.svg) no-repeat;
+}
+
+// .wallet-solid:hover {
+//   display: initial ;
+//   background: url(./assets/icons/wallet-active.svg) no-repeat !important;
+// }
+
+.check-mark {
+  display: inline-block;
+  background: url(./assets/icons/check.svg) no-repeat;
+}
+
+.compare-part {
+  display: inline-block;
+  background: url(./assets/icons/compare-parts.svg) no-repeat;
+}
+
+.compare-part-hover {
+  display: inline-block;
+  background: url(./assets/icons/compare-parts-orange.svg) no-repeat;
+}
+
+.create-part {
+  display: inline-block;
+  background: url(./assets/icons/create-part.svg) no-repeat;
+}
+
+.create-part-hover {
+  display: inline-block;
+  background: url(./assets/icons/create-part-orange.svg) no-repeat;
+}
+
+.create-vendor {
+  display: inline-block;
+  background: url(./assets/icons/create-vendor.svg) no-repeat;
+}
+
+.create-vendor-hover {
+  display: inline-block;
+  background: url(./assets/icons/create-vendor-orange.svg) no-repeat;
+}
+
+.view-all-part {
+  display: inline-block;
+  background: url(./assets/icons/view-all-parts.svg) no-repeat;
+}
+
+.view-all-part-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-parts-orange.svg) no-repeat;
+}
+
+.view-vendor {
+  display: inline-block;
+  background: url(./assets/icons/view-all-vendor.svg) no-repeat;
+}
+
+.view-vendor-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-vendor-orange.svg) no-repeat;
+}
+
+.create-employee {
+  display: inline-block;
+  background: url(./assets/icons/create-employee.svg) no-repeat;
+}
+
+.create-employee-hover {
+  display: inline-block;
+  background: url(./assets/icons/create-employee-orange.svg) no-repeat;
+}
+
+.view-employee {
+  display: inline-block;
+  background: url(./assets/icons/view-all-employee.svg) no-repeat;
+}
+
+.view-employee-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-employee-orange.svg) no-repeat;
+}
+
+.add-customer {
+  display: inline-block;
+  background: url(./assets/icons/add-customer.svg) no-repeat;
+}
+
+.add-customer-hover {
+  display: inline-block;
+  background: url(./assets/icons/add-customer-orange.svg) no-repeat;
+}
+
+.add-vehicle {
+  display: inline-block;
+  background: url(./assets/icons/add-vehicle.svg) no-repeat;
+}
+
+.add-vehicle-white {
+  display: inline-block;
+  background: url(./assets/icons/add-vehicle-white.svg) no-repeat;
+}
+
+.add-vehicle-hover {
+  display: inline-block;
+  background: url(./assets/icons/add-vehicle-orange.svg) no-repeat;
+}
+
+.create-job {
+  display: inline-block;
+  background: url(./assets/icons/create-job.svg) no-repeat;
+}
+
+.create-job-hover {
+  display: inline-block;
+  background: url(./assets/icons/create-job-orange.svg) no-repeat;
+}
+
+.invoice-list {
+  display: inline-block;
+  background: url(./assets/icons/invoice-list.svg) no-repeat;
+}
+
+.invoice-list-hover {
+  display: inline-block;
+  background: url(./assets/icons/invoice-list-orange.svg) no-repeat;
+}
+
+.view-customers {
+  display: inline-block;
+  background: url(./assets/icons/view-all-customer.svg) no-repeat;
+}
+
+.view-customers-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-customer-orange.svg) no-repeat;
+}
+
+.view-jobs {
+  display: inline-block;
+  background: url(./assets/icons/view-all-job.svg) no-repeat;
+}
+
+.view-jobs-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-job-orange.svg) no-repeat;
+}
+
+.view-vehicles {
+  display: inline-block;
+  background: url(./assets/icons/view-all-vehicle.svg) no-repeat;
+}
+
+.view-vehicles-hover {
+  display: inline-block;
+  background: url(./assets/icons/view-all-vehicle-orange.svg) no-repeat;
+}
+
+.signature {
+  display: inline-block;
+  background: url(./assets/icons/file-signature-solid.png) no-repeat;
+}
+
+.inspections {
+  display: block;
+  background: url(./assets/icons/inspections.svg) no-repeat;
+}
+
+.working-hours {
+  display: block;
+  background: url(./assets/icons/working-hours.svg) no-repeat;
+}
+
+.earnings {
+  display: block;
+  background: url(./assets/icons/earnings.svg) no-repeat;
+}
+
+.foreman-icon {
+  display: inline-block;
+  background: url(./assets/icons/foreman-icon.svg) no-repeat;
+}
+.foreman-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/foreman-icon-hover.svg) no-repeat;
+}
+
+.supervisor-icon {
+  display: inline-block;
+  background: url(./assets/icons/supervisor-icon.svg) no-repeat;
+}
+.supervisor-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/supervisor-icon-orange.svg) no-repeat;
+}
+
+.review-icon {
+  display: inline-block;
+  transform: translateY(7px) scale(1.4);
+  background: url(./assets/icons/review.svg) no-repeat;
+}
+.review-icon:hover {
+  display: inline-block;
+  transform: translateY(7px) scale(1.4);
+  background: url(./assets/icons/review-hover.svg) no-repeat;
+}
+
+.staff-review {
+  display: inline-block;
+  transform: scale(1.2) translateY(5px);
+  // filter: invert(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1.2);
+  background: url(./assets/icons/review-staff.svg) no-repeat;
+}
+.staff-review:hover {
+  display: inline-block;
+  transform: scale(1.2) translateY(5px);
+  // filter: invert(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1.2);
+  background: url(./assets/icons/staff-active.svg) no-repeat;
+}
+
+.plate-number-icon {
+  display: inline-block;
+  transform: translateY(5px);
+  background: url(./assets/icons/number-plate.svg) no-repeat;
+}
+.plate-number-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/number-plate-orange.svg) no-repeat;
+}
+
+.vin-icon {
+  display: inline-block;
+  background: url(./assets/icons/VIN.svg) no-repeat;
+}
+.vin-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/VIN-orange.svg) no-repeat;
+}
+
+.e-capacity-icon {
+  display: inline-block;
+  background: url(./assets/icons/engine-capacity.svg) no-repeat;
+}
+.e-capacity-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/engine-capacity-orange.svg) no-repeat;
+}
+
+.e-type-icon {
+  display: inline-block;
+  background: url(./assets/icons/engine-type.svg) no-repeat;
+}
+.e-type-icon:hover {
+  display: inline-block;
+  background: url(./assets/icons/engine-type-orange.svg) no-repeat;
+}
+
+.primary-font-svg {
+  fill: $primary-font !important;
+}
+
+//card-height
+.card-height {
+  height: 105px;
+}
+
+//card-scroll
+.card-scroll {
+  overflow-y: scroll;
+}
+
+//list of cards
+.card-list-image {
+  height: 56px;
+  width: 56px;
+  border-radius: 2rem;
+}
+
+.list-alignment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+//flex display on show more button
+.display-flex-items.collapse.show {
+  display: flex !important;
+}
+
+//region tabset
+
+.tabset-head .nav-tabs > .nav-item > .nav-link {
+  padding: 10px 5px;
+}
+
+.tabset-head .nav-tabs > .nav-item > .nav-link.active {
+  border: 2px solid $primary-color;
+  color: $primary-color;
+  border-radius: 20px 20px 0 0 !important;
+  font-weight: bold;
+  border-bottom: 0;
+  box-shadow: 2px 0px 2px 1px #00000033;
+}
+
+.tabset-head {
+  margin-bottom: 20px !important;
+  width: 100%;
+}
+
+.tabset-head > .nav-tabs {
+  padding: 0;
+  border-bottom: 2px solid $primary-color;
+  margin-bottom: 20px !important;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  box-shadow: 0 0 8px 2px #00000033;
+}
+
+//customer profile tabset
+.sub-tabset.tabset-border .nav-tabs > .nav-item > .nav-link.active {
+  background: $white-color !important;
+  border-bottom: 4px solid $hover-color !important;
+  color: $hover-color !important;
+}
+
+//joblist tabset
+.jl-tabset .nav-tabs {
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  background: white;
+  // justify-content: space-evenly !important;
+  border-bottom: 1px solid $primary-font;
+  // border-bottom: 1px solid $primary-color;
+}
+.jl-tabset > .nav-tabs > .nav-item > .nav-link {
+  font-size: 14px;
+  padding: 5px 50px !important;
+  font-weight: 500;
+  color: $primary-font !important;
+}
+
+.jl-tabset > .nav-tabs > .nav-item > .nav-link.active {
+  background: $white-color !important;
+  color: $hover-color !important;
+  padding: 6px 20px !important;
+  border-bottom: 5px solid $hover-color !important;
+}
+
+.jl-tabset > .nav-tabs > .nav-item > .nav-link.active {
+  font-size: 14px !important;
+}
+
+.sub-tabset .nav-tabs {
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  background: white;
+  border-bottom: 1px solid lightgray;
+}
+
+.inspectionResult-tab.sub-tabset .nav-tabs {
+  border-bottom: 0px !important;
+}
+
+.sub-tabset > .nav-tabs > .nav-item > .nav-link {
+  font-size: 16px !important;
+  font-weight: 700;
+  padding: 11px 23px;
+}
+
+.nav-item > .nav-link {
+  color: $primary-font !important;
+  margin-right: 0px;
+}
+.nav-tabs > .nav-item > .nav-link {
+  line-height: 0.8 !important;
+}
+
+.nav-tabs > .nav-item > .nav-link.active {
+  font-size: 16px !important;
+  font-weight: 700;
+  background: white;
+  color: $hover-color !important;
+  border-radius: 0px !important;
+  border-bottom: 4px solid coral !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+  // padding: 12px 20px 12px 20px;
+  padding: 11px 10px 11px 8px;
+  // old design
+  // font-size: 14px;
+  // color: $primary-color;
+  // border: 1px solid $primary-color;
+  // font-weight: normal;
+  // border-bottom: 1px solid white !important;
+  // padding: 4px 11px;
+  // border-radius: 20px 20px 0 0 !important;
+}
+
+//region tabset ended
+
+.radio-btn {
+  display: none;
+}
+
+// jl radio tabset
+.jl-main-tabset input:checked + .radio-tabset {
+  background: #f2f2fa;
+  color: $hover-color !important;
+}
+
+.sup {
+  background: $primary-font;
+  color: $white-color;
+  padding: 1px 4px;
+  border-radius: 5px;
+}
+
+input:checked + .radio-tabset .sup {
+  background: $hover-color;
+  color: $white-color;
+}
+
+.radio-tabset {
+  margin-bottom: 0px;
+  font-weight: 700;
+  color: $dark-font !important;
+  padding: 15px 25px 15px 22px;
+  cursor: pointer;
+}
+
+input:checked + .radio-tabset {
+  font-size: 14px;
+  font-weight: 700;
+  background: $secondary-color;
+  color: $hover-color !important;
+  border-bottom: 3px solid $hover-color !important;
+  // border-top: 2px solid white;
+  padding: 12px 20px 15px 24px;
+  cursor: pointer;
+}
+
+// input:checked + .concern-radio-tabset{
+// font-size: 14px;
+// font-weight: 700;
+// /* background: #ff7949; */
+// color: #ff7949 !important;
+// border: none !important;
+// padding: 7px 20px;
+// // border-radius: 5px;
+// border-bottom: 2px solid $hover-color!important;
+// }
+.radio-btn .radio-tabset {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 50px 0px;
+}
+
+.radio-bg {
+  background: $white-color;
+  // border-radius: 5px;
+  border-radius: 8px;
+}
+
+.radio-tabset:hover {
+  background: $secondary-color;
+  color: $dark-font !important;
+
+  .sup {
+    color: $secondary-color;
+    background: $dark-font;
+  }
+}
+
+// .radio-bg .radio-tabset:first-child{
+//   border-bottom-left-radius: 5px;
+//   border-top-left-radius: 5px;
+// }
+
+// .radio-bg .radio-tabset:nth-last-child(1){
+//   border-top-right-radius: 5px;
+//   border-bottom-right-radius: 5px;
+// }
+
+.big-font .nav-tabs > .nav-item > .nav-link.active,
+.big-font > .nav-tabs > .nav-item > .nav-link {
+  font-size: 12px;
+}
+
+//checkbox
+.form-check .custom-checkbox::before {
+  width: 14px !important;
+  height: 14px !important;
+  top: 6px !important;
+  border: 1px solid #bbb5b5 !important;
+}
+
+.form-check .custom-checkbox::after {
+  font-size: 8px !important;
+  width: 13px !important;
+  color: #191818 !important;
+  top: 0px !important;
+}
+
+//textarea
+textarea::placeholder {
+  color: #3c3b3b !important;
+}
+
+//radio buttons{
+.form-check-radio .form-check-sign::before,
+.form-check-radio .form-check-sign::after {
+  border: 1px solid #928f8f !important;
+}
+
+.form-check-radio .form-check-sign::before,
+.form-check-radio .form-check-sign::after {
+  top: 0px !important;
+}
+
+.form-check-radio
+  input[type="radio"]:checked
+  + .form-check-sign::after
+  .active-text {
+  color: $hover-color !important;
+}
+
+.form-check-radio input[type="radio"]:checked + .form-check-sign::after {
+  top: 8px !important;
+  color: $hover-color !important;
+}
+
+//accordian
+.accordian-container {
+  padding: 6px 20px;
+}
+
+.accordion > .card {
+  margin-top: 16px;
+  border-radius: 1em;
+  overflow: hidden;
+  box-shadow: 0px 0px 3px #00000033;
+}
+
+.accordion > .card .card-header {
+  border: none;
+  margin-bottom: -1px;
+  background-color: rgba(218, 218, 218, 0.07) !important;
+}
+
+.accordian-padding {
+  padding: 1rem;
+}
+
+.heading-accordion-padding:hover {
+  box-shadow: 0px 2px 4px 0px #cecccc;
+}
+
+.arrow:hover::after {
+  color: $primary-color;
+  font-size: 16px;
+}
+
+//ng-slider
+.ng5-slider .ng5-slider-pointer {
+  width: 22px !important;
+  height: 22px !important;
+  top: -9px !important;
+  background-color: $primary-color !important;
+}
+
+.ng5-slider .ng5-slider-pointer:after {
+  width: 7px !important;
+  height: 7px !important;
+  top: 8px !important;
+  left: 8px !important;
+}
+
+.ng5-slider .ng5-slider-selection {
+  background: #fdd0c1 !important;
+}
+
+.ng5-slider .ng5-slider-pointer.ng5-slider-active:after {
+  background-color: #fdd0c1 !important;
+}
+
+.ng5-slider .ng5-slider-bubble {
+  color: $primary-color !important;
+  font-size: $small-font !important;
+}
+
+//breadcrumb
+.breadcrumb {
+  margin-bottom: 16px;
+}
+
+@mixin fas {
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  font-weight: 900;
+  cursor: pointer;
+  font-family: "Font Awesome 5 Free", sans-serif;
+}
+
+@mixin accordian-arrow {
+  position: absolute;
+  top: 11px;
+  right: 19px;
+}
+
+.arrow[aria-expanded="false"]::after {
+  @include fas();
+  @include accordian-arrow();
+  content: "\f105";
+}
+
+.arrow[aria-expanded="true"]::after {
+  @include fas();
+  content: "\f107";
+  @include accordian-arrow();
+}
+
+// .collapsing{
+//   transition: 10s linear ;
+// }
+
+.overflow-visible {
+  overflow: visible !important;
+}
+
+.fas:hover,
+.far:hover,
+.fab:hover,
+.fa:hover {
+  color: $hover-color !important;
+  transform: scale(1.5);
+  transition: 0.1s ease;
+  cursor: pointer;
+}
+.hover-none:hover {
+  color: white !important;
+  transform: scale(1.5);
+  transition: 0.1s ease;
+  cursor: pointer;
+}
+.fas:focus,
+.far:focus,
+.fab:focus,
+.fa:focus {
+  outline: none;
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link:focus {
+  border: none;
+}
+
+//search filter
+.sorting-select-height {
+  padding: 6px 18px 7px 18px !important;
+  height: 31px !important;
+}
+
+//table border top
+th {
+  border-top: 0 !important;
+}
+
+//bold-font
+.bold-font {
+  font-weight: bold;
+}
+.light-bold {
+  font-weight: 500 !important;
+}
+
+.font-weight-normal {
+  font-weight: $font-weight-normal;
+}
+
+.font-500 {
+  font-weight: 500;
+}
+//small-font
+.small-font {
+  font-size: $small-font;
+}
+
+//smaller font
+.smaller-font {
+  font-size: $smaller-font;
+}
+
+.font-9 {
+  font-size: 9px;
+}
+
+.font-13 {
+  font-size: 13px;
+}
+
+.font-14 {
+  font-size: 14px;
+}
+.font-16 {
+  font-size: 16px;
+}
+
+.font-18 {
+  font-size: 18px;
+}
+
+.font-22 {
+  font-size: 22px;
+}
+
+// big font
+
+.big-font {
+  font-size: 16px;
+}
+.y-axis-3 {
+  transform: translateY(-3px);
+}
+.gray-font {
+  color: gray;
+}
+//graphs
+.legend-a {
+  display: inline-block;
+  background: red;
+  width: 25px;
+  margin: 3px;
+  height: 10px;
+}
+
+.legend-b {
+  display: inline-block;
+  background: orange;
+  width: 25px;
+  margin: 3px;
+  height: 10px;
+}
+
+.legend-c {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.7);
+  width: 25px;
+  margin: 3px;
+  height: 10px;
+}
+
+.legend-d {
+  display: inline-block;
+  background: rgba(0, 0, 255, 0.7);
+  width: 25px;
+  margin: 3px;
+  height: 10px;
+}
+
+.rad-info-box {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  border-radius: 20px;
+}
+
+.rad-info-box .heading {
+  font-size: 1.2em;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.rad-info-box .value,
+.rad-info-box .heading {
+  display: block;
+  position: relative;
+  color: #515d6e;
+  text-align: right;
+  z-index: 10;
+}
+
+.rad-info-box i {
+  font-size: 4.4em;
+}
+
+.fa-chart-bar {
+  color: $warning-color;
+}
+
+.left-nav-bar {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+//model position
+// .modal.show .modal-dialog {
+//   transform: translate(0, 20%);
+// }
+
+.modalTop.modal.show .modal-dialog {
+  transform: translate(0, 0%) !important;
+}
+
+//model close button position
+.modal-content .modal-header button {
+  top: 13px !important;
+  font-size: 33px !important;
+}
+
+.modal-content .modal-header {
+  border-bottom: none;
+  padding-left: 20px !important;
+  padding-right: 0px !important;
+}
+
+//model border radius
+.modal-content {
+  border-radius: 10px !important;
+}
+
+.btn > .fas:hover {
+  color: white;
+}
+
+.btn > .btn-plus:hover {
+  color: white;
+  font-size: inherit;
+  position: absolute;
+  left: 25px;
+  top: -10px;
+}
+
+// .i-select {
+//   -webkit-appearance: none;
+//   height            : 30px !important;
+//   width             : 30px !important;
+//   min-width         : 30px !important;
+//   padding           : 12px !important;
+// }
+// .i-select::-ms-expand {
+//   display: none;
+// }
+
+// .i-label {
+//   position      : absolute;
+//   margin        : 0 !important;
+//   padding       : 0 !important;
+//   top           : 50% !important;
+//   left          : 50% !important;
+//   transform     : translate(-50%, -50%) !important;
+//   pointer-events: none;
+// }
+
+.i-floating-label {
+  position: relative;
+  margin-bottom: 0 !important;
+  margin: auto;
+  padding: 0;
+  top: 50%;
+  transform: translate(0px, -50%);
+  // left      : 2%;
+}
+
+//dropdown-appended
+.custom-dropdown .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  padding: 0 6px !important;
+}
+
+.custom-dropdown .ng-select-container .ng-value-container .ng-value {
+  margin-right: 2px;
+  margin-top: 1px !important;
+}
+
+.custom-dropdown .ng-dropdown-panel {
+  width: 125% !important;
+  left: -22% !important;
+}
+
+.unit-dropdown .ng-dropdown-panel {
+  min-width: 40.646px;
+}
+
+.unit-dropdown .ng-dropdown-panel .ng-option-label {
+  padding-left: 7px;
+}
+
+// .right-dropdown {
+//   border-radius: 0px 20px 20px 0px;
+//   background-color: #e6dcd7;
+// }
+
+//login page fields
+.login-input-field {
+  background: rgba(255, 255, 255, 0.58) !important;
+  height: 42px !important;
+}
+
+//upload image
+.upload-image {
+  height: 100px !important;
+  width: 100px;
+  border-radius: 50%;
+  // margin-left: 125px;
+}
+
+.fuel-tank-image {
+  height: 100px !important;
+  width: 100px;
+}
+
+#fileInput {
+  display: none;
+}
+
+.hoverable {
+  position: relative;
+  // display: block;
+  cursor: pointer;
+  // width: 100%;
+}
+
+.hoverable .hover-text {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.hoverable .background {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  z-index: 1;
+  // border-radius: 50%;
+}
+
+.hoverable:hover .hover-text {
+  display: block;
+}
+
+.hoverable:hover .background {
+  display: block;
+}
+
+//for loader
+.centerspinner {
+  position: fixed;
+  z-index: 999999;
+  height: 35%;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.spiner {
+  z-index: 9999;
+}
+
+.loaderbguntouch {
+  content: "";
+  z-index: -1;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #6a6ab7;
+  opacity: 0.3;
+}
+
+.alert-danger {
+  border-radius: 16px !important;
+  text-align: center;
+}
+
+.ellipsis-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roles-select {
+  padding: 18px;
+  width: 100%;
+}
+
+.img-del {
+  top: 0%;
+  right: 40px;
+  padding: 0px 8px 1px 6px;
+  // transform: translate(0, -50%);
+  position: absolute;
+  color: white;
+  background: orangered;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+//accept job task buttons
+.proposal-btns {
+  height: 30px;
+  max-width: 30px !important;
+  padding: 4px 18px 2px 9px !important;
+}
+
+.no-record-error {
+  color: #575b63;
+  font-size: 14px;
+  text-align: center;
+}
+
+//toogler complete inprogress
+
+.tgl {
+  display: none;
+
+  // add default box-sizing for this scope
+  &,
+  &:after,
+  &:before,
+  & *,
+  & *:after,
+  & *:before,
+  & + .tgl-btn {
+    box-sizing: border-box;
+
+    &::selection {
+      background: none;
+    }
+  }
+
+  + .tgl-btn {
+    outline: 0;
+    display: block;
+    width: 6em;
+    height: 2em;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+
+    &:after,
+    &:before {
+      position: relative;
+      display: block;
+      content: "";
+      width: 50%;
+      height: 100%;
+    }
+
+    &:after {
+      left: 0;
+    }
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:checked + .tgl-btn:after {
+    left: 50%;
+  }
+}
+
+.tgl-flip + .tgl-btn {
+  padding: 2px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  font-family: sans-serif;
+  -webkit-perspective: 100px;
+  perspective: 100px;
+}
+
+.tgl-flip + .tgl-btn:after,
+.tgl-flip + .tgl-btn:before {
+  display: inline-block;
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  width: 145%;
+  text-align: center;
+  position: absolute;
+  line-height: 2em;
+  font-weight: bold;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: -45%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 4px;
+}
+
+.tgl-flip + .tgl-btn:after {
+  content: attr(data-tg-on);
+  // background: #02c66f;
+  -webkit-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+.tgl-flip + .tgl-btn:hover:before {
+  background: $hover-color;
+  color: $white-color;
+}
+.tgl-flip + .tgl-btn:before {
+  color: $hover-color;
+  background: $white-color;
+  border: 1px solid $hover-color;
+  content: attr(data-tg-off);
+  border-radius: 25px;
+}
+
+.tgl-flip + .tgl-btn:active:before {
+  -webkit-transform: rotateY(-20deg);
+  transform: rotateY(-20deg);
+}
+
+.tgl-flip:checked + .tgl-btn:before {
+  -webkit-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.tgl-flip:checked + .tgl-btn:after {
+  -webkit-transform: rotateY(0);
+  transform: rotateY(0);
+  left: -45%;
+  border-radius: 25px;
+  background: white;
+  color: #7fc6a6;
+  border: 1px solid #7fc6a6;
+}
+
+.tgl-flip:checked + .tgl-btn:active:after {
+  -webkit-transform: rotateY(20deg);
+  transform: rotateY(20deg);
+}
+
+body.signature-modal {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+.plate-img {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.footer-buttons {
+  justify-content: space-around;
+}
+
+.btn-round {
+  border-radius: 8px !important;
+}
+
+.upl-btn {
+  width: 130px;
+}
+
+.dlt-btn {
+  width: 130px;
+}
+
+.btn-primary.btn-simple:hover {
+  background-color: $hover-color !important;
+  color: $white-color !important;
+  border-color: $hover-color;
+  box-shadow: none;
+}
+
+.list-color {
+  color: $primary-color;
+}
+
+.hover-color {
+  color: $hover-color !important;
+}
+
+.light-primary-font {
+  color: $input-field-color !important;
+}
+
+.white-font {
+  color: $white-color;
+}
+
+.primary-font {
+  color: $primary-font;
+}
+
+.primary-dark-font {
+  color: $primary-dark-font;
+}
+
+.light-font {
+  color: $input-field-color;
+}
+
+.primary-color {
+  color: $primary-color !important;
+}
+
+.dark-font {
+  color: $dark-font;
+}
+
+.secondary-color {
+  color: $secondary-color;
+}
+
+.eclipse {
+  display: inline-block;
+  width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-list {
+  height: 100% !important;
+  border-radius: 10px !important;
+}
+
+.actions {
+  cursor: pointer;
+}
+
+// queries for card view responsiveness
+@media only screen and (min-width: 1248px) and (max-width: 1400px) {
+  .card-responsive {
+    min-width: 40% !important;
+    margin-left: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1210px) {
+  .card-responsive {
+    min-width: 44% !important;
+    margin-left: 30px;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 787px) {
+  .card-responsive {
+    min-width: 70% !important;
+    margin-left: 50px;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 576px) and (max-width: 618px) {
+  .card-responsive {
+    min-width: 80% !important;
+    margin-bottom: 20px;
+    margin-left: 50px;
+  }
+}
+
+// query region end
+
+// card margin-bottom
+.mb-card {
+  margin-bottom: 20px;
+}
+
+//sticky side baR and filters
+.sticky-top {
+  z-index: auto !important;
+  top: 50px;
+}
+
+// page slide animation
+.page-animation {
+  animation: slideIn ease 1s;
+  animation-iteration-count: 1;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.drop-down-animation {
+  animation: topSlideIn ease 1s;
+  animation-iteration-count: 1;
+}
+
+@keyframes topSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.card-sub-heading {
+  margin-top: -1.59em;
+  margin-left: 5%;
+  background-color: #fff;
+  z-index: 1;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  // color: #4948AB;
+  margin-bottom: 1em;
+  color: $primary-color;
+  font-weight: 500;
+}
+
+.plate-number {
+  border-radius: 5px;
+  background-color: gray;
+  color: white !important;
+  font-weight: 600;
+  font-size: 14px;
+  width: fit-content !important;
+}
+
+.card-header {
+  padding: $card-spacer-y $card-spacer-x;
+  margin-bottom: 0; // Removes the default margin-bottom of <hN>
+  color: $card-cap-color;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: $card-border-width solid $card-border-color;
+
+  &:first-child {
+    @include border-radius(
+      $card-inner-border-radius $card-inner-border-radius 0 0
+    );
+  }
+
+  + .list-group {
+    .list-group-item:first-child {
+      border-top: 0;
+    }
+  }
+}
+
+.part-card-header {
+  padding: $card-spacer-y $card-spacer-x;
+  margin-bottom: 0; // Removes the default margin-bottom of <hN>
+  color: $card-cap-color;
+  background-color: #6d6c68;
+  border-bottom: $card-border-width solid $card-border-color;
+
+  &:first-child {
+    @include border-radius(
+      $card-inner-border-radius $card-inner-border-radius 0 0
+    );
+  }
+
+  + .list-group {
+    .list-group-item:first-child {
+      border-top: 0;
+    }
+  }
+}
+
+.custom-font {
+  font-size: 22px !important;
+  font-weight: 600;
+  color: $dark-font;
+}
+
+.bg-white {
+  background: white;
+}
+
+.sticky-bottom {
+  position: sticky !important;
+  bottom: 14px;
+  width: 100% !important;
+  z-index: 9;
+  margin: 0px 0px 70px 0px !important;
+}
+.card-margin {
+  margin-top: 50px;
+}
+.bg-silver {
+  background: silver;
+}
+.net-amount-style {
+  background: silver;
+  color: white;
+  line-height: 3;
+  transform: translateY(5px);
+}
+.btn-plus {
+  left: 23px;
+  position: absolute;
+  top: -13px;
+  font-size: large;
+}
+
+.circle-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50% !important;
+}
+
+.circle-btn .btn-plus {
+  padding-top: 2px;
+}
+
+.btn-simple.sub-heading-btn {
+  background: $secondary-color;
+  padding: 3px 20px !important;
+}
+
+//text-area placeholder
+textarea::-webkit-input-placeholder {
+  color: $primary-font !important;
+  font-size: 14px !important;
+  padding-left: 10px !important;
+}
+
+.check_status {
+  position: absolute;
+  top: 18%;
+  right: 8%;
+}
+
+.check-mark-filled {
+  display: inline-block;
+  background: url(./assets/icons/check_filled.svg) no-repeat;
+  transform: scale(0.8);
+}
+
+//pagination arrows
+.pagination .page-item.disabled > .page-link {
+  transform: scale(1.5);
+}
+
+.pagination-primary {
+  background: white;
+  border-radius: 8px;
+  padding: 3px 3px;
+}
+
+.ng-select.ng-select-disabled
+  .ng-select-container
+  .ng-value-container
+  .ng-placeholder {
+  background: lightgray !important;
+}
+
+// carasoul in results
+.carousel.results .carousel-inner {
+  box-shadow: none !important;
+}
+
+.carousel.vehicle-image .carousel-inner {
+  box-shadow: none !important;
+  border-radius: 7px;
+}
+
+//results tabset sup
+.nav-tabs .nav-item .nav-link.active .sup1 {
+  border: 1px solid $hover-color;
+  color: $hover-color;
+  padding: 0px 2px;
+  border-radius: 5px;
+  background: $white-color;
+}
+
+//assign task job detail select
+.ng-select.assign-dropdown {
+  margin-top: 0px !important;
+}
+.ng-select.assign-dropdown .ng-value {
+  font-size: 14px !important;
+}
+
+.ng-select-disabled {
+  background: lightgray !important;
+}
+
+//job list progress bar
+.progress {
+  background-color: #ff79494d !important;
+}
+
+.progress .progress-bar {
+  background-color: $hover-color !important;
+}
+.active-text {
+  color: $hover-color !important;
+}
+
+.form-check-line.form-check .form-check-label {
+  line-height: 20px !important;
+}
+.capital {
+  text-transform: capitalize;
+}
+
+.modalWidth {
+  width: 80% !important;
+}
+
+.seasonalCL > ul.nav.nav-tabs {
+  margin-bottom: 15px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.not-allowed {
+  cursor: not-allowed !important;
+}
+
+//add new item to array dropdown
+.ng-dropdown-panel.add-new-item
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-marked
+  span {
+  font-size: 16px;
+  color: green;
+}
+.ng-dropdown-panel.add-new-item
+  .ng-dropdown-panel-items
+  .ng-option.ng-option-marked
+  span
+  .ng-tag-label {
+  font-size: 12px;
+  color: $primary-font;
+}
+
+.label_cb {
+  position: relative;
+  cursor: pointer;
+  color: #3c3d41;
+}
+input[type="radio"] + .label-text:before {
+  content: "\f111";
+  font-family: "Font Awesome 5 Free", "Almarai", sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  width: 1em;
+  font-size: 18px;
+  color: #3c3c3c;
+  display: inline-block;
+  margin-right: 6px;
+  font-weight: 100;
+  position: relative;
+  top: 1px;
+}
+.not-implimented input[type="radio"]:checked + .label-text:before {
+  content: "\f192";
+  color: black;
+  animation: effect 250ms ease-in;
+}
+.good input[type="radio"]:checked + .label-text:before {
+  content: "\f192";
+  color: green;
+  animation: effect 250ms ease-in;
+}
+.need-maintainance input[type="radio"]:checked + .label-text:before {
+  content: "\f192";
+  color: red;
+  animation: effect 250ms ease-in;
+}
+
+.modal-lg,
+.modal-xl {
+  max-width: 1000px !important;
+}
+.primary-color {
+  color: #ff7949 !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  left: 200px;
+  height: 10px;
+  background: lightgray;
+}
+
+::-webkit-scrollbar-track {
+  // -webkit-box-shadow: inset 0 0 6px #3c3c3c;
+  border-radius: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background: #ff7949;
+}
+.font-18 {
+  font-size: 18px;
+}
+.cursor {
+  cursor: pointer;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+nav.scrollmenu {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+nav.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+
+  text-decoration: none;
+}
+@media screen and(max-width:1050px) {
+  .sticky-bottom {
+    margin: 0px 0px 70px 0px !important;
+  }
+  .jl-main-tabset input:checked {
+    background: #f2f2fa !important;
+  }
+  input:checked + .radio-tabset {
+    border-top: none;
+  }
+  ::-webkit-scrollbar {
+    width: 2px;
+    left: 200px;
+    height: 2px;
+    background: lightgray;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #ff7949;
+  }
+  .sub-tabset ul {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: auto;
+    align-items: center;
+    overflow-y: hidden;
+  }
+
+  .sub-tabset.tabset-border .nav-tabs > .nav-item > .nav-link.active {
+    font-size: 14px !important;
+  }
+  .sub-tabset > .nav-tabs > .nav-item > .nav-link {
+    font-size: 14px !important;
+  }
+  .badge {
+    line-height: 6px !important;
+  }
+  .purchaseOrderTable {
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  .ng-select.ng-select-single .ng-select-container .ng-arrow-wrapper {
+    left: 12px;
+  }
+}
+.ngx-pagination .current {
+  padding: 0.1875rem 0.625rem;
+  background: #ff7949 !important;
+  color: #fefefe;
+  cursor: default;
+  border-radius: 7px;
+}
+.selected-tab{
+  border-bottom: 4px solid $hover-color;
+}
+.bg-green {
+  background: #ffffff !important;
+  color :  black;
+}
+
+.ngx-pagination a:hover, .ngx-pagination button:hover {
+  background: transparent !important;
+}
+
+:focus-visible {
+  outline: none !important;
+  background: transparent;
+}
+:focus {
+  outline: none !important;
+  background: transparent;
+}

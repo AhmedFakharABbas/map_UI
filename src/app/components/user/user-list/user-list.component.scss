@@ -1,0 +1,166 @@
+@import "variables";
+
+.badge.active {
+  color: white;
+  background: $hover-color;
+  cursor: pointer;
+}
+
+.badge.inActive {
+  color: $hover-color;
+  background: white;
+  cursor: pointer;
+}
+
+.badge {
+  cursor: pointer;
+}
+
+.a-button {
+  width: 150px;
+}
+
+.role-badge {
+  color: $primary-color;
+  font-size: 8px;
+  background: white;
+  padding: 1px 2px;
+}
+
+.role-badge:hover {
+  color: white;
+  font-size: 8px;
+  background: $primary-color;
+}
+
+.tabset-border {
+  border-top: 2px solid $primary-color;
+}
+
+.status-pill {
+  position: absolute;
+  justify-content: flex-end !important;
+  margin-left: inherit;
+  margin-top: 20px;
+}
+
+.wallet-solid {
+  font-size: 12px;
+}
+//multiple Roles as View More
+.part-label-expanded {
+  line-height: 14px;
+  transform: scale(0.8);
+  display: inline-block;
+  background: $primary-color;
+  border-radius: 10px;
+  margin: 2px;
+  border: 2px solid $primary-color;
+}
+
+.part-label-expanded:first {
+  margin-left: -2px;
+}
+
+.part-label-expanded .part-label-text {
+  font-weight: 700;
+  margin: 0 4px 4px 0;
+  color: white;
+}
+//Roles region ended
+//hover effect to change the text "Active <=> InActive"
+.active-label:after {
+  content: "Active";
+}
+
+.active-label:hover:after {
+  content: "InActive";
+}
+
+.inactive-label:after {
+  content: "InActive";
+}
+
+.inactive-label:hover:after {
+  content: "Active";
+}
+// region ended
+
+.zip-code .globe {
+  font: 13px;
+}
+
+///toggle-button
+.toggle-switch input[type="checkbox"] {
+  display: none;
+}
+.toggle-switch label {
+  cursor: pointer;
+}
+.toggle-switch label .toggle-track-active {
+  display: block;
+  height: 15px;
+  width: 30px;
+  background: $hover-color;
+  border-radius: 20px;
+  position: relative;
+}
+.toggle-switch label .toggle-track-inActive {
+  display: block;
+  height: 15px;
+  width: 30px;
+  background: $primary-font;
+  border-radius: 20px;
+  position: relative;
+}
+
+.toggle-switch .toggle-track-2:before {
+  content: "";
+  display: inline-block;
+  height: 9px;
+  width: 9px;
+  background: white;
+  border-radius: 20px;
+  position: absolute;
+  top: 3px;
+  right: 17px;
+  transition: right 0.2s ease-in;
+}
+
+.toggle-switch .toggle-track-1:before {
+  content: "";
+  display: inline-block;
+  height: 9px;
+  width: 9px;
+  background: white;
+  border-radius: 20px;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  transition: right 0.2s ease-in;
+  box-shadow: -1px 1px 6px 1px #807f7fc4;
+}
+
+.isCollapsed {
+  display: none !important;
+}
+
+.toggle-off.sidebar-wrapper {
+  width: 73px !important;
+}
+.status-bg {
+  background: $secondary-color;
+  border-radius: 50px;
+  width: 100px;
+}
+
+.form-check .form-check-sign::before,
+.form-check .form-check-sign::after {
+  border-radius: 20px;
+  transform: scale(0.7);
+  content: '' !important;
+}
+ 
+// .toggle-switch .toggle-track:before
+
+// .toggle-switch input[type="checkbox"]:checked + label .toggle-track[_ngcontent-agr-c7]:before

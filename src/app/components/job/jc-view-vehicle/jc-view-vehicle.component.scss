@@ -1,0 +1,25 @@
+.color-box {
+  width: 30px;
+  height: 30px;
+  margin-right: 9px;
+  margin-left: 9px;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+.gallery-img {
+  max-width: 250px;
+  height: 170px;
+  // border-radius: 50%;
+  // position: absolute;
+  width: 250px;
+}
+@media screen and(max-width:1050px) {
+  .gallery-img {
+    max-width: 162px;
+    height: 112px;
+  }
+  .btn-round.btn-simple {
+    padding: 3px 10px;
+  }
+}

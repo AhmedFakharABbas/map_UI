@@ -1,0 +1,207 @@
+<div class="row w-100 mx-0 page-animation">
+    <hr class="w-100">
+    <h5 class="sub-heading primary-font">Parts</h5>
+    <button type="button" class="btn btn-primary btn-round sub-heading-btn" (click)="open(addPart)"><i
+            class="fas fa-plus" title="Add Part & Price"></i></button>
+</div>
+
+<div class="row card">
+    <table class="table text-left primary-font page-animation">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Customer Concern</th>
+                <th scope="col">Task</th>
+                <th scope="col">Part</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Discount</th>
+                <th scope="col"
+                    *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 6 ">
+                    Status
+                </th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let jp of _sharedService.jobObj.JobParts;let i=index">
+                <td>{{i+1}}</td>
+                <td>{{jp.ConcernDescription}}</td>
+                <td>{{jp.TaskDescription}}</td>
+                <td><span
+                        *ngIf="(_sharedService.AutomotiveParts | filter: jp.AutomotivePartID : 'AutomotivePartID' ).length > 0">{{(_sharedService.AutomotiveParts | filter: jp.AutomotivePartID : 'AutomotivePartID')[0].PartNameEnglish}}</span>
+                </td>
+                <td>{{jp.Quantity}}</td>
+                <td>{{jp.SellingPrice | number : '1.2-2'}}</td>
+                <td>{{jp.DiscountAmount}}</td>
+                <td *ngIf="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 6)  ">
+                    <div class="floating-label form-group">
+                        <ng-select placeholder="Status" class="custom" name="part{{i+1}}" id="applications"
+                            appendTo="body" (change)="jp.IsModified = true" [(ngModel)]="jp.JobPartStatusID">
+                            <ng-option
+                                *ngFor="let item of _sharedService._commonMeta.ObjectStatus | filter: 'PartDelivery': 'ObjectNameEnglish'"
+                                [value]="item.ObjectStatusID">{{item.StatusNameEnglish}}
+                            </ng-option>
+                        </ng-select>
+                    </div>
+                </td>
+                <td><i class="far fa-edit mr-2" title="Edit" (click)="openEdit(addPart,jp)"></i>
+                    <i class="far fa-trash-alt" title="Delete" (click)="openDelete(warningDelete,jp)"></i>
+                </td>
+            </tr>
+
+        </tbody>
+        <tbody
+            *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && _sharedService.jobObj.JobParts.length==0)">
+            <tr scope="row">
+                <td colspan="12" class="text-center">No part found!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<ng-template #warningDelete let-c="close('Close click')" let-d="dismiss('Cross click')">
+    <div class="modal-header">
+
+        <button type="button" class="close" (click)="d" title="Cancel">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <h5>Are you sure you want to delete this Part?</h5>
+    </div>
+    <div class="modal-footer">
+        <div class="col-6 text-center m-0">
+            <button type="button" class="a-button btn btn-primary btn-round btn-simple" (click)="c">Never mind</button>
+        </div>
+        <div class="col-6 text-center m-0">
+            <button type="button" class="a-button btn btn-primary btn-round btn-simple" (click)="delete()">Yes</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addPart let-d="dismiss('Cross click')">
+    <div class="modal-header primary-font">
+        <!-- <h5 class="modal-title">Part & Price</h5> -->
+        <button type="button" class="close" (click)="d" title="Cancel">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row w-100 mt-1">
+            <hr class="w-100">
+            <h4 class="modal-title card-sub-heading">Part & Price</h4>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form #partsFormData="ngForm"
+            (ngSubmit)="partsFormData.valid ? ( part.JobPartID == undefined ? submitPart() : editPart()) : '' ">
+            <div class="row">
+                <div class="floating-label form-group col-lg-6 col-sm-12">
+                    <ng-select class="custom input-border-color " id="applications" name="partConcern"
+                        placeholder="Customer Concern" [(ngModel)]="part.JobConcernID" #partConcern="ngModel">
+                        <ng-option *ngFor="let jc of _sharedService.jobObj.JobConcerns" [value]="jc.JobConcernID">
+                            <span *ngIf="jc.ConcernDescription != undefined">{{jc.ConcernDescription}}</span>
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div class="floating-label form-group col-lg-6 col-sm-12">
+                    <ng-select class="custom input-border-color" id="applications" name="task" placeholder="Task"
+                        [(ngModel)]="part.JobTaskID">
+                        <ng-option *ngFor="let jt of _sharedService.jobObj.JobTasks" [value]="jt.JobTaskID">
+                            <span *ngIf="jt.TaskDescription != undefined">{{jt.TaskDescription}}</span>
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="floating-label form-group col-lg-6 col-sm-12">
+                    <ng-select class="custom input-border-color" id="applications" name="mainCategory"
+                        placeholder="Main Category" [(ngModel)]="part.MainCategoryID" (change)="resetFieldsMain()"
+                        (clear)="resetFieldsMain()" >
+                        <ng-option *ngFor="let mc of _sharedService._commonMeta.MainCategory"
+                            [value]="mc.MainCategoryID" >
+                            <span *ngIf="mc.MainCategoryNameEng != undefined">{{mc.MainCategoryNameEng}}</span>
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div class="floating-label form-group col-6">
+                    <ng-select class="custom input-border-color" id="applications" name="subCategory"
+                        placeholder="Sub Category" [(ngModel)]="part.SubCategoryID" (clear)="resetFieldsSub()" (change)="resetFieldsSub()">
+                        <ng-option
+                            *ngFor="let item of _sharedService._commonMeta.SubCategory | filter: part.MainCategoryID : 'MainCategoryID'"
+                            [value]="item.SubCategoryID">{{item.SubCategoryNameEng}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div class="floating-label form-group col-6">
+                    <ng-select class="custom input-border-color" id="applications" name="subSubCategory"
+                        placeholder="Sub Sub-Category" [(ngModel)]="part.SubSubCategoryID">
+                        <ng-option
+                            *ngFor="let item of _sharedService._commonMeta.SubSubCategory | filter: part.SubCategoryID : 'SubCategoryID'"
+                            [value]="item.SubSubCategoryID">{{item.SubSubCategoryNameEng}}
+                        </ng-option>
+                    </ng-select>
+                </div>
+                <div class="floating-label form-group col-6">
+                    <ng-select class="custom input-border-color" id="applications" name="part_name" placeholder="Part"
+                        [(ngModel)]="part.AutomotivePartID" (change)="getPartPrice(); resetFieldsPart()" (clear)="part.SellingPrice = ''"  #partID="ngModel" required>
+                        <ng-option
+                            *ngFor="let ap of _sharedService.AutomotiveParts | filter: part.MainCategoryID : 'MainCategoryID' | filter: part.SubCategoryID : 'SubCategoryID' | duplicateDropdown : _sharedService.jobObj.JobParts : 'AutomotivePartID' : part.AutomotivePartID"
+                            [value]="ap.AutomotivePartID">
+                            <span *ngIf="ap.AutomotivePartID != undefined">{{ap.PartNameEnglish}}</span>
+                        </ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                        <small *ngIf="(partsFormData.submitted || partID.touched) && partID.errors?.required"
+                            class="mr-2">*Required</small>
+                    </div>
+                </div>
+                <div class="floating-label form-group col-6">
+                    <ng-select class="custom input-border-color" id="applications" name="vendor" placeholder="Vendor"
+                        [(ngModel)]="part.VendorID" (change)="getVendorPartPrice()" #vendorID="ngModel">
+                        <ng-option
+                            *ngFor="let vp of _sharedService._basicInfoMeta.VendorPartPrice | filter: part.AutomotivePartID : 'AutomotivePartID'"
+                            [value]="vp.VendorID">
+                            <span *ngIf="vp.AutomotivePartID != undefined">{{vp.VendorName}}</span>
+                        </ng-option>
+                    </ng-select>
+                </div>
+
+                <div class="floating-label form-group col-6">
+                    <input type="text" value="" placeholder=" " class="floating-input form-control input-border-color"
+                        name="discount" [(ngModel)]="part.DiscountAmount" maxlength="5"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 47 && event.charCode <= 57" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Discount</label>
+
+                </div>
+                <div class="floating-label form-group col-lg-6 col-sm-12">
+                    <input type="text" value="" placeholder=" " class="floating-input form-control input-border-color"
+                        name="Quantity" [(ngModel)]="part.Quantity" #quantity="ngModel" maxlength="5" required
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 47 && event.charCode <= 57" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Quantity</label>
+                    <div class="error-block text-danger">
+                        <small *ngIf="(partsFormData.submitted || quantity.touched) && quantity.errors?.required"
+                            class="mr-2">*Required</small>
+                    </div>
+                </div>
+                <div class="floating-label form-group col-lg-6 col-sm-12">
+                    <input type="number" value="" placeholder=" " class="floating-input form-control input-border-color"
+                        name="price" [(ngModel)]="part.SellingPrice"
+                        [disabled]="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 6)? false : true"
+                        value="">
+                    <span class="highlight"></span>
+                    <label class="input-label">Price</label>
+                </div>
+                <textarea class="form-control input-border-color mx-3 mb-3 px-2" name="name" rows="4" cols="80"
+                    placeholder="Enter notes here..." [(ngModel)]="part.Notes"></textarea>
+                <div class="col-12 text-right">
+                    <button type="submit" class="btn btn-primary btn-round btn-simple m-0"
+                        *ngIf="part.JobPartID == undefined">Create</button>
+                    <button type="submit" class="btn btn-primary btn-round btn-simple m-0"
+                        *ngIf="part.JobPartID != undefined">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

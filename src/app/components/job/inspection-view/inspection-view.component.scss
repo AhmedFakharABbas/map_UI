@@ -1,0 +1,28 @@
+@import "variables";
+.fuel-tank-image {
+    height: 198px !important;
+    width: 275px;
+}
+.detail-font {
+    font-size: 16px;
+    font-weight: 600;
+    color: $primary-dark-font;
+}
+.gallery-img {
+    height: 115px;
+    border-radius: 5px;
+    width: 96%;
+}
+
+.upload-image {
+    height: 80px !important;
+    width: 100px !important;
+}
+
+.file-choose {
+    visibility: hidden;
+    display: none;
+}
+.img-fluid {
+    height: 300px !important;
+}

@@ -1,0 +1,73 @@
+@import "variables";
+.priority-high {
+  background-color: #ff3333;
+  text-decoration: none;
+  padding: 4px 4px;
+  position: relative;
+  border-radius: 50%;
+  left: -7px;
+  float: left;
+  bottom: -6px;
+}
+
+.priority-med {
+  background-color: #ffcc33;
+  text-decoration: none;
+  padding: 4px 4px;
+  position: relative;
+  border-radius: 50%;
+  left: -7px;
+  float: left;
+  bottom: -6px;
+}
+
+.inv-footer {
+  background: $primary-color;
+  color: white;
+}
+
+.part-selection {
+  background: $secondary-color;
+  margin-left: 92% !important;
+  margin-right: 30% !important;
+}
+
+.color-box {
+  width: 30px;
+  height: 30px;
+  margin-right: 9px;
+  margin-left: 9px;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+.gallery-img {
+  height: 188px;
+  width: 91%;
+  border-radius: 6px;
+}
+
+.invoice-footer {
+  background: $input-field-color;
+}
+
+.contracted {
+  // position: sticky;
+  // left: 400px;
+  color: #019201;
+  border: 1px solid;
+  border-radius: 10px;
+  // top: -8px;
+}
+.contract-icon {
+  width: 15px !important;
+  height: 15px !important;
+}
+.customerSignature {
+  color: #ff3333 !important;
+}
+@media screen and(max-width:1050px) {
+  .custom-font {
+    font-size: 1.6vw !important;
+  }
+}

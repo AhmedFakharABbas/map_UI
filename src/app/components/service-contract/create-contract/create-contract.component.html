@@ -1,0 +1,186 @@
+<div class="row justify-content-center">
+    <div class="col-11" id="append">
+        <div class="row page-animation">
+            <!-- ( vehicleObj.VehicleID == undefined ? onSaveVehicle() : onUpdateVehicle()) -->
+            <form
+                (ngSubmit)="contractForm.valid ?( serviceContract.ServiceContractID > 0 ? updateServiceContract() : saveServiceContract() ) : ''"
+                #contractForm="ngForm" class="col-lg-12 col-md-12 col-sm-12 mt-3">
+                <div class="col-12 card">
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-11">
+                            <h4 class="font-weight-bold mb-4">Create Contract</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="offset-1 col-5 pl-0">
+                            <div class="floating-label form-group col-lg-12 col-sm-12">
+                                <ng-select class="custom" [(ngModel)]="serviceContract.ServiceContractID"
+                                    #contract="ngModel" placeholder="Select Contract" name="pkg"
+                                    [addTag]="addServiceContractRef" required>
+                                    <ng-option *ngFor="let item of _sharedService._commonMeta.ServiceContracts"
+                                        [value]="item.ServiceContractID">
+                                        {{item.ContractName}}</ng-option>
+                                </ng-select>
+                                <div class="error-block-ng-select text-danger">
+                                    <small
+                                        *ngIf="(contractForm.submitted || contract.touched) && contract.errors?.required"
+                                        class="mr-2">*Required</small>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-5">
+                            <div class="floating-label form-group col-lg-12 col-sm-12">
+                                <ng-select class="custom" [(ngModel)]="contractPlan.ContractPlanID" #plan="ngModel"
+                                    id="contractPlan" placeholder="Select Plan" name="contractPlan2"
+                                    [addTag]="addContractPlanRef" required>
+                                    <ng-option *ngFor="let item of _sharedService._commonMeta.ContractPlans"
+                                        [value]="item.ContractPlanID">
+                                        {{item.PlanName}}</ng-option>
+                                </ng-select>
+                                <div class="error-block-ng-select text-danger">
+                                    <small *ngIf="(contractForm.submitted || plan.touched) && plan.errors?.required"
+                                        class="mr-2">*Required</small>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
+                        <div class="col-5">
+                            <div class="row px-3 py-4">
+                                <label for="" class="font-weight-bold">Choose Cylinder Type</label>
+                            </div>
+                            <div class="row">
+                                <div class="floating-label form-group col-lg-12 col-sm-12">
+                                    <ng-select class="custom" appendTo="#append" id="applications"
+                                        [(ngModel)]="planPrices.CylinderTypeID" #cylinder="ngModel"
+                                        placeholder="Select Cylinder Type" name="pkg" required>
+                                        <ng-option
+                                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'CylinderCount' : 'ObjectNameEnglish'"
+                                            [value]="item.TypeNameEnglish">
+                                            {{item.TypeNameEnglish}}</ng-option>
+                                    </ng-select>
+                                    <div class="error-block-ng-select text-danger">
+                                        <small
+                                            *ngIf="(contractForm.submitted || cylinder.touched) && cylinder.errors?.required"
+                                            class="mr-2">*Required</small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-5 pl-4">
+                            <div class="row px-3 py-4">
+                                <label for="" class="font-weight-bold">Enter the Prices</label>
+                            </div>
+                            <div class="row">
+                                <div class="floating-label form-group col-lg-4 col-sm-6">
+                                    <input type="text" placeholder="American" class="floating-input form-control"
+                                        name="American" minlength="1" maxlength="4"
+                                        [(ngModel)]="planPrices.AmericanPrice" #american="ngModel"
+                                        onkeypress='return ((event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32) || (event.charCode >= 48 && event.charCode <= 57))'
+                                        required />
+                                    <span class="highlight"></span>
+                                    <div class="error-block text-danger">
+                                        <small class="text-danger ml-3"
+                                            *ngIf="(contractForm.submitted || american.touched) && american.errors?.required">*Required</small>
+                                    </div>
+                                </div>
+
+                                <div class="floating-label form-group col-lg-4 col-sm-6">
+                                    <input type="text" placeholder="European" class="floating-input form-control"
+                                        [(ngModel)]="planPrices.EuropeanPrice" #european="ngModel" name="European"
+                                        minlength="1" maxlength="4"
+                                        onkeypress='return ((event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32) || (event.charCode >= 48 && event.charCode <= 57))'
+                                        required />
+                                    <span class="highlight"></span>
+                                    <div class="error-block text-danger">
+                                        <small class="text-danger ml-3"
+                                            *ngIf="(contractForm.submitted || european.touched) &&european.errors?.required">*Required</small>
+                                    </div>
+                                </div>
+
+                                <div class="floating-label form-group col-lg-4 col-sm-6">
+                                    <input type="text" placeholder="Asian" class="floating-input form-control"
+                                        [(ngModel)]="planPrices.AsianPrice" #asian="ngModel" name="Asian" minlength="1"
+                                        maxlength="4"
+                                        onkeypress='return ((event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32) || (event.charCode >= 48 && event.charCode <= 57))'
+                                        required />
+                                    <span class="highlight"></span>
+                                    <div class="error-block text-danger">
+                                        <small class="text-danger ml-3"
+                                            *ngIf="(contractForm.submitted || asian.touched) && asian.errors?.required">*Required</small>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-11 text-right px-3">
+                        <button type="submit" class="btn btn-primary btn-round btn-simple">Add More</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row px-3 justify-content-center">
+    <div class="col-11 card">
+        <table class="table mt-3 page-animation">
+            <thead>
+                <tr>
+                    <th scope="col" class="font-weight-bold">#</th>
+                    <th scope="col" class="font-weight-bold">Cylinder Type</th>
+                    <th scope="col" class="font-weight-bold">American Region Price</th>
+                    <th scope="col" class="font-weight-bold">European Region Price</th>
+                    <th scope="col" class="font-weight-bold">Asian Region Price</th>
+                </tr>
+            </thead>
+            <tbody
+                *ngIf="_sharedService.contractObj.PlanPrices != undefined && _sharedService.contractObj.PlanPrices.length > 0">
+                <tr scope="row" *ngFor="let item of _sharedService.contractObj.PlanPrices; let i = index">
+                    <td>{{i+1}}</td>
+                    <td><i class=""></i> {{item.CylinderTypeID}}
+                    </td>
+                    <td>
+                        {{item.AmericanPrice}}
+                    </td>
+                    <td>
+                        {{item.EuropeanPrice}}
+                    </td>
+                    <td>
+                        {{item.AsianPrice}}
+                    </td>
+                </tr>
+            </tbody>
+            <tbody
+                *ngIf="_sharedService.contractObj.PlanPrices == undefined || _sharedService.contractObj.PlanPrices.length == 0">
+                <tr scope="row">
+                    <td colspan="12" class="text-center">No Data found!</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-11 text-right px-3">
+        <button  [routerLink]="['/','auth','login' ]" type="submit" class="btn btn-primary btn-round btn-simple">Continue to Services</button>
+    </div>
+</div>

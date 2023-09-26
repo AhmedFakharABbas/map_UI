@@ -1,0 +1,77 @@
+@import "variables";
+.priority-high {
+    background-color: #ff3333;
+    text-decoration: none;
+    padding: 4px 4px;
+    position: relative;
+    border-radius: 50%;
+    left: -7px;
+    float: left;
+    bottom: -6px;
+}
+
+.priority-med {
+    background-color: #ffcc33;
+    text-decoration: none;
+    padding: 4px 4px;
+    position: relative;
+    border-radius: 50%;
+    left: -7px;
+    float: left;
+    bottom: -6px;
+}
+
+.inv-footer {
+    background: $primary-color;
+    color: white;
+}
+
+.part-selection {
+    background: $secondary-color; 
+}
+
+.invoice-footer {
+    background: $input-field-color;
+}
+
+.part-selection {
+    background: $secondary-color;
+}
+
+.con-count {
+    background: $hover-color;
+    color: $white-color;
+    padding: 5px 11px;
+}
+
+.tbl-header {
+    background: $primary-color;
+    color: $white-color;
+}
+
+thead tr:first-child th:first-child {
+    border-radius: 0.4em 0 0 0.4em;
+}
+/* the last 'th' within the first 'tr' of the 'thead': */
+thead tr:first-child th:last-child {
+    border-radius: 0 0.4em 0.4em 0;
+}
+/* the first 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 0.6em;
+}
+/* the last 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:last-child {
+    border-radius: 0 0 0.6em 0;
+}
+.hoverBackground {
+    color: $hover-color;
+    border: 1px solid $hover-color !important;
+    border-radius: 1px;
+    background: white;
+}
+
+.status-border{
+    border-right: 1px solid coral !important;
+}
+

@@ -1,0 +1,389 @@
+<div class="row justify-content-center align-items-center page-animation" id="scrollable">
+
+    <div class="col-lg-11 col-12 mt-3">
+
+        <div class="row justify-content-center">
+            <div class="row w-100">
+                <hr class="w-100">
+                <h4 class="sub-heading">Vehicle List</h4>
+            </div>
+
+            <div class="row col-12 ">
+
+                <div class="col-md-3 col-sm-5 p-2">
+                    <div class="sticky-top pt-3">
+                        <div class="row w-100 mx-0">
+                            <hr class="w-100">
+                            <h4 class="sub-heading mb-2">Filters</h4>
+                        </div>
+
+                        <div id="accordion_plate" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#plate">
+                                    <a class="card-title">
+                                        <span class="filter_title">Plate Number</span>
+                                    </a>
+                                </div>
+                                <div id="plate" class="panel card-body collapse p-0 small-font"
+                                    data-parent="#accordion_plate">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb d-flex">
+                                            <input type="text" class="mr-1 form-control" placeholder="Plate Number"
+                                                name="plate" [(ngModel)]="filter.PlateNumber" #PlateNumber="ngModel"
+                                                (keyup.enter)="filter.PlateNumber!= undefined && filter.PlateNumber != '' ? getAllVehicles() : ''" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accordion_make" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#make">
+                                    <a class="card-title">
+                                        <span class="filter_title">Make</span>
+                                    </a>
+                                </div>
+                                <div id="make" class="panel card-body collapse p-0 small-font"
+                                    data-parent="#accordion_make">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb">
+                                            <ng-select class="custom search-dropdown" id="applications"
+                                                placeholder="Make" name="Make" appendTo="#scrollable"
+                                                resolution="duplicate" [(ngModel)]="filter.MakeID" #MakeName="ngModel"
+                                                (change)="filter.MakeID!= undefined ? getAllVehicles() : '' ; filter.ModelID = null "
+                                                (clear)="getAllVehicles() ; filter.ModelID = null ">
+                                                <ng-option *ngFor="let item of _sharedService._commonMeta.Makes"
+                                                    [value]="item.MakeID">{{item.EnglishMakeName}}
+                                                </ng-option>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accordion_model" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#model">
+                                    <a class="card-title">
+                                        <span class="filter_title">Model</span>
+                                    </a>
+                                </div>
+                                <div id="model" class="panel card-body collapse p-0 small-font"
+                                    data-parent="#accordion_model">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb">
+                                            <ng-select class="custom search-dropdown" id="applications"
+                                                placeholder="Model" name="Model" appendTo="#scrollable"
+                                                [(ngModel)]="filter.ModelID" #ModelName="ngModel"
+                                                [disabled]="filter.MakeID == undefined"
+                                                (change)="filter.ModelID != undefined ? getAllVehicles() : ''"
+                                                (clear)="getAllVehicles()">
+                                                <ng-option
+                                                    *ngFor="let item of _sharedService._commonMeta.Models | filter: filter.MakeID : 'MakeID'"
+                                                    [value]="item.ModelID">{{item.EnglishModelName}}
+                                                </ng-option>
+                                            </ng-select>
+                                            <!-- [disabled]="filter.MakeID == undefined" -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accordion_year" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#year">
+                                    <a class="card-title">
+                                        <span class="filter_title">Year</span>
+                                    </a>
+                                </div>
+                                <div id="year" class="panel card-body collapse p-0" data-parent="#accordion_year">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb">
+                                            <ng5-slider [(value)]="yearValue" [(highValue)]="yearHighValue"
+                                                (click)="sliderChange = true" [options]="yearRange">
+                                            </ng5-slider>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accordion_vin" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#vin">
+                                    <a class="card-title">
+                                        <span class="filter_title">VIN</span>
+                                    </a>
+                                </div>
+                                <div id="vin" class="panel card-body collapse p-0 small-font"
+                                    data-parent="#accordion_vin">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb d-flex">
+                                            <input type="text" class="mr-1 form-control" value="" placeholder="VIN"
+                                                name="VIN" [(ngModel)]="filter.VIN" #VIN="ngModel"
+                                                (keyup.enter)="filter.VIN!= undefined && filter.VIN != '' ? getAllVehicles() : ''" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="accordion_customer" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#customer">
+                                    <a class="card-title">
+                                        <span class="filter_title">Customer</span>
+                                    </a>
+                                </div>
+                                <div id="customer" class="panel card-body collapse p-0 small-font"
+                                    data-parent="#accordion_customer">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb d-flex">
+                                            <input type="text" class="mr-1 form-control" placeholder="Customer"
+                                                name="CustomerName" [(ngModel)]="filter.CustomerName"
+                                                #CustomerName="ngModel"
+                                                (keyup.enter)="filter.CustomerName!= undefined && filter.CustomerName != '' ? getAllVehicles() : ''" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row w-100 m-0">
+                            <hr class="w-100">
+                            <button type="button" class="btn btn-primary btn-round sub-heading-btn btn-simple transparrent-background"
+                                (click)="clearFilters()" title="Clear">Clear</button>
+                            <button type="button" class="btn btn-primary btn-round sub-heading-btn btn-simple transparrent-background"
+                                (click)="getAllVehicles()" title="Apply">Apply</button>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-12">
+                    <div class="row justify-content-center mt-4"
+                        *ngIf="vehicleArray == undefined || ( vehicleArray!= undefined && vehicleArray.length == 0)">
+                        <div class="col-lg-12 no-record-error">No record found!</div>
+                    </div>
+
+                    <ng-container *ngIf="vehicleArray != undefined && vehicleArray.length > 0">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6 mb-card card-responsive"
+                                *ngFor="let arr of vehicleArray">
+                                <div class="card inner-card-shadow card-list">
+                                    <div class="list-card-header">
+                                        <div class="text-center mt-3">
+                                            <div title="Plate Number">
+                                                <h5 class="">
+                                                    <span class="plate-number px-2 py-1">{{arr.PlateNumber}}</span>
+                                                </h5>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <div title="Manufacturer">
+                                                <h5 class="mt-4">
+                                                    <!-- <i class="ts smaller ts-l user primary-font"></i> -->
+                                                    <span class="list-color">{{arr.EnglishMakeName}}
+                                                        {{arr.EnglishModelName}}</span> </h5>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="text-center">
+                                            <div>
+                                                <i class="fas fa-eye primary-font px-2" title="View"
+                                                    [routerLink]="['/','vehicle','view']"
+                                                    [queryParams]="{ VehicleID: arr.VehicleID}"></i>
+                                                <i class="fas fa-edit primary-font px-2" title="Edit"
+                                                    [routerLink]="['/','vehicle','create-vehicle']"
+                                                    [queryParams]="{VehicleID: arr.VehicleID}"></i>
+                                                <i class="fas fa-trash-alt primary-font px-2" title="Delete"
+                                                    (click)="deleteModal(warningDelete, arr.VehicleID)"></i>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="card-body card-body-padding small-font">
+                                        <div>
+
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="bold-font primary-font ">VIN</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.VIN != undefined && arr.VIN != ''; else elseHyphen "
+                                                        title="{{arr.VIN}}">{{arr.VIN}}</span>
+                                                </div>
+                                                <!-- <i class="col-2 mt-1 fas fa-mobile-alt primary-font"></i> -->
+                                            </div>
+
+                                            <!-- <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right"
+                                                    title="Internal Vehicle No">
+                                                    <span class="bold-font primary-font">IVN</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0 "
+                                                        *ngIf="arr.InternalVehicleNo != undefined && arr.InternalVehicleNo != ''; else elseHyphen "
+                                                        title="">{{arr.InternalVehicleNo}}</span>
+                                                </div>
+                                            </div> -->
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="bold-font primary-font">Make</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0" title="">{{arr.EnglishMakeName}}</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right ">
+                                                    <span class="bold-font primary-font">Model</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0" title="">{{arr.EnglishModelName}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="bold-font primary-font">Color</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.Color != undefined && arr.Color != ''; else elseHyphen "
+                                                        title="">{{arr.Color}}</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right pl-0">
+                                                    <span class="bold-font primary-font">Production Year</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0" title="">{{arr.ProductionYear}}</span>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="row justify-content-center mb-lg-3 mb-5" *ngIf="vehicleArray != undefined && totalVehicle > 10">
+            <ngb-pagination 
+            [(page)]="cPage" 
+            [maxSize]="5" 
+            [rotate]="true"
+            [ellipses]="false"
+            [boundaryLinks]="true" 
+            [pageSize]="_sharedService.pageSize" 
+            [collectionSize]="totalVehicle"
+            (pageChange)="getAllVehicles(filter.PageNumber = $event)"
+            aria-label="Service Center Pagination"
+             class="pagination-primary mb-md-4">
+            </ngb-pagination>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+    <div class="adOptionModel" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h5 class="modal-title text-center">Delete Vehicle</h5>
+            <button type="button" class="close" (click)="closeModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="fluid-container modal_container ">
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12 mt-4 ">
+                        <h5 class="text-center col-12 heading-20 bold text-primary-0 m-b-10">
+                            Are you sure you want to delete this vehicle?
+                        </h5>
+                        <div class="col-6 float-left text-left ">
+                            <button (click)="closeModal()" class="a-button btn btn-primary btn-round col-6"> No</button>
+                        </div>
+                        <div class="col-6 float-left text-right">
+                            <button (click)="deleteVehicle(vehicleID)"
+                                class="a-button btn btn-primary btn-round col-6">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<!--  
+<ng-template #makeModal let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Select Make</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+   
+    <div class="modal-body"> 
+        <div class="row pb-4"> 
+            <div class="col-3 form-check mt-0" *ngFor="let item of _sharedService._commonMeta.Makes">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" [(ngModel)]="item.MakeID">
+                    {{item.EnglishMakeName}}
+                    <span class="form-check-sign custom-checkbox"></span>
+                </label>
+            </div> 
+        </div> 
+    </div>
+</ng-template>
+ 
+<ng-template #Model let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Select Model</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+   
+    <div class="modal-body"> 
+        <div class="row pb-4">  
+            <div class="col-3 form-check m-0">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" checked>
+                    Honda
+                    <span class="form-check-sign custom-checkbox"></span>
+                </label>
+            </div> 
+        </div>
+    
+    </div>
+</ng-template> -->
+<ng-template #elseHyphen>
+    <span class="px-2">-</span>
+</ng-template>

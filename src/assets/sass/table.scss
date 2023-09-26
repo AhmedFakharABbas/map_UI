@@ -1,0 +1,64 @@
+td {
+  vertical-align: middle !important;
+}
+// .d-flex{
+//   display: flex !important;
+// }
+
+@media screen and (max-width: 992px) {
+  .m-b-8-resp {
+    margin-bottom: 16px;
+  }
+}
+
+@media only screen and (min-width: 767px) {
+  .table td,
+  .table th {
+    padding: 12px 8px 12px 9px !important;
+  }
+
+  @media only screen and (max-width: 760px),
+    (min-device-width: 768px) and (max-device-width: 1024px) {
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      // display: block;
+    }
+    thead tr {
+      // position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    tr {
+      margin: 0 0 1rem 0;
+    }
+
+    tr:nth-child(odd) {
+      // background: $primary-color;
+      // color: $white-color;
+    }
+
+    td {
+      border: none;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      padding-left: 50%;
+      // text-align: center;
+      vertical-align: middle;
+    }
+
+    td:before {
+      position: absolute;
+      top: 0;
+      left: 6px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      padding: 0.75rem;
+    }
+  }
+}

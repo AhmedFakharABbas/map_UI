@@ -1,0 +1,602 @@
+<ng-container
+    *ngIf="_sharedService.jobObj.JCBasicInfo.StatusID == 25 && (_sharedService.logged_user_role_id != 1 && _sharedService.logged_user_role_id != 2)">
+    <app-customer-concerns-view></app-customer-concerns-view>
+</ng-container>
+
+<ng-container
+    *ngIf="_sharedService.jobObj.JCBasicInfo.StatusID != 25 || _sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2">
+    <div class="row w-100 mx-0">
+        <hr class="w-100">
+        <h5 class="sub-heading primary-font">Customer Concerns</h5>
+        <button type="button" class="btn btn-primary btn-round sub-heading-btn btn-simple"
+            *ngIf="_sharedService.logged_user_role_id != 4 && _sharedService.logged_user_role_id != 9 && (_sharedService.jobObj.JobConcerns != undefined && _sharedService.jobObj.JobConcerns?.length > 0)"
+            (click)="open(addConcern); editMode = false;">
+            <i class="fas fa-plus" title="Add Customer Concern"></i> Add customer concern</button>
+    </div>
+    <div class="row card mx-0">
+
+        <div class="d-flex concern-tabset border-bottom radio-bg mb-4 px-3 pb-1">
+            <span
+                *ngFor="let is of _sharedService._commonMeta.objectTypes | filter : 'JobConcern' : 'ObjectNameEnglish'">
+                <a class=" ">
+                    <input class="radio-btn" type="radio" (click)="tabID = is.ObjectTypeID;" id="{{is.TypeNameEnglish}}"
+                        name="invoiceStatus" [checked]="is.ObjectTypeID === tabID" (change)="radioTab = true" value="0">
+                    <label for="{{is.TypeNameEnglish}}" class="radio-tabset d-flex"><i class="ts {{is.Icon}}"></i>
+                        &nbsp; <span class="white-space"> {{is.TypeNameEnglish}} </span>
+                        <sup *ngIf="is.ObjectTypeID != 69 && (_sharedService.jobObj.JobConcerns | filter: is.ObjectTypeID : 'ConcernTypeID').length>0"
+                            class="sup font-9">
+                            {{(_sharedService.jobObj.JobConcerns | filter: is.ObjectTypeID :
+                            'ConcernTypeID').length}}</sup>
+                        <sup *ngIf="is.ObjectTypeID == 69 && (_sharedService.jobObj.JobConcerns?.length >0)"
+                            class="sup font-9">{{_sharedService.jobObj.JobConcerns?.length}}</sup>
+                        <!-- <sup
+                class="sup">{{(customerConcerns | filter : is.ObjectTypeID : 'ConcernTypeID').length}}</sup> -->
+                    </label>
+                </a>
+            </span>
+        </div>
+
+        <table class="table text-left primary-font page-animation">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Concerns</th>
+                    <th scope="col" *ngIf="tabID == 72 || tabID == 69">Part/Task</th>
+                    <th scope="col">Note</th>
+                    <th scope="col">Status</th>
+                    <th scope="col"><span
+                            *ngIf="_sharedService.logged_user_role_id != 4 && _sharedService.logged_user_role_id != 9">Action</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr scope="row"
+                    *ngFor="let item of _sharedService.jobObj.JobConcerns | filter: tabID == 69? '' : tabID : 'ConcernTypeID'; let i = index">
+                    <td>{{i+1}}</td>
+                    <td><i class="fas ts {{item.Icon}} mr-2 pl-2 border-right"></i> {{item.ConcernDescription =='' ||
+                        item.ConcernDescription == undefined ? item.ConcernTypeName : item.ConcernDescription}}</td>
+                    <!-- <td *ngIf="tabID == 72 || tabID == 69">
+                        <ng-container
+                            *ngIf="(_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length > 0">
+                            {{ (_sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                            'JobConcernID')[0].PartNameEnglish }}
+                            <span
+                                *ngIf="(_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length == 0">N/A</span>
+                        </ng-container>
+
+                        <ng-container
+                            *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length > 0">
+                            {{ (_sharedService.jobObj.JobTasks | filter : item.JobConcernID :
+                            'JobConcernID')[0].LaborDescriptionEng}}
+                            <span
+                                *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length == 0">N/A</span>
+                        </ng-container>
+
+                    </td> -->
+
+                    <td *ngIf="tabID == 72 || tabID == 69">
+                        <!-- <div *ngIf="isValid;else other_content">
+                            content here ...
+                        </div>
+                        
+                        <ng-template #other_content>other content here...</ng-template> -->
+                        <ng-container
+                            *ngIf="_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length > 0;">
+                            {{ (_sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                            'JobConcernID')[0].PartNameArabic }}
+
+                        </ng-container>
+                        <ng-container
+                            *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length > 0">
+                            <span
+                                *ngIf="(_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length == 0">
+                                {{(_sharedService.jobObj.JobTasks | filter : item.JobConcernID :
+                                'JobConcernID')[0].LaborDescriptionEng}}
+                            </span>
+                        </ng-container>
+                        <span
+                            *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length == 0
+                             && (_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length == 0">N/A</span>
+
+                    </td>
+
+                    <!-- <td *ngIf="tabID == 72 || tabID == 69">
+                        {{(_sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                        'JobConcernID')[0]?.PartNameEnglish}}
+                    </td> -->
+                    <td *ngIf="_sharedService.logged_user_role_id != 9"><span appElseHyphen
+                            [elseHyphen]="item.Note">{{item.Note}}</span></td>
+
+                    <td *ngIf="_sharedService.logged_user_role_id == 9">
+                        <div class="col-12">
+                            <div class="row primary-font">
+                                <div class="col-10">
+                                    <span class="part-detail-box my-0 primary-dark-font" title=""
+                                        *ngIf="item.Note != undefined && item.EditNote != true">
+                                        {{item.Note}}
+                                    </span>
+                                    <div class="d-flex floating-label form-group mb-0 px-0 page-animation pb-0"
+                                        *ngIf="_sharedService.logged_user_role_id == 9 && item.EditNote == true">
+                                        <input type="text" value="" placeholder=" " (change)="item.IsModified = true"
+                                            class="floating-input form-control input-border-color" name="note"
+                                            [(ngModel)]="item.Note" #note="ngModel" />
+                                        <i class="fas fa-check mx-2 align-self-center" (click)="item.EditNote = false;"
+                                            *ngIf="item.EditNote == true"></i>
+                                    </div>
+                                    <i class="fas fa-edit pointer" (click)="item.EditNote = true"
+                                        *ngIf="item.EditNote != true"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td>{{item.IsApproved == true? 'Approved' : 'Waiting Inspection'}}</td>
+                    <td><span
+                            *ngIf="_sharedService.logged_user_role_id != 4 && _sharedService.logged_user_role_id != 9">
+                            <i class="far fa-edit mr-2" title="Edit" (click)="openEditConcern(addConcern,item)"></i>
+                            <i class="far fa-trash-alt" title="Delete"
+                                (click)="openDeleteConcern(warningDelete,item)"></i>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tbody
+                *ngIf="_sharedService.jobObj.JobConcerns?.length == 0 || _sharedService.jobObj.JobConcerns == undefined || (_sharedService.jobObj.JobConcerns != undefined && _sharedService.jobObj.JobConcerns?.length==0) || (tabID != 69 && (_sharedService.jobObj.JobConcerns | filter: tabID : 'ConcernTypeID').length == 0)">
+                <tr scope="row">
+                    <td colspan="12" class="text-center">
+                        <button type="button" class="btn btn-primary btn-round btn-simple my-0"
+                            (click)="open(addConcern); editMode = false;">Add Concern</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+<!-- <div class="row w-100 footer">
+    <div class="col-4">
+        <button type="button" [routerLink]="['../basic-info']"
+            class="btn btn-primary btn-round btn-simple">Previous</button>
+    </div>
+    <div class="col-4 text-center">
+        <button type="submit" class="btn btn-primary btn-round" (click)="onsaveCustomerData()">Submit</button>
+    </div>
+    <div class="col-4 text-right pr-0">
+        <button type="button" [routerLink]="['../inspection']"
+            class="btn btn-primary btn-round btn-simple">Next</button>
+    </div>
+</div> -->
+
+
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+    <div class="adOptionModel" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h5 class="modal-title text-center">Delete Concern</h5>
+            <button type="button" class="close" (click)="closeDeleteModal()" title="Cancel">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="fluid-container modal_container ">
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12 mt-4 ">
+                        <h5 class="text-center col-12 heading-20 bold text-primary-0 m-b-10">
+                            Are you sure you want to delete this Concern?
+                        </h5>
+                        <div class="col-6 float-left text-left ">
+                            <button (click)="closeDeleteModal()"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">
+                                No</button>
+                        </div>
+                        <div class="col-6 float-left text-right">
+                            <button (click)="delete()"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #addConcern let-c="close('Close click')" let-d="dismiss('Cross click')">
+    <div class="modal-header pb-0">
+        <button type="button" class="close" (click)="closeModal()" title="Cancel">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="row w-100 mt-1">
+            <hr class="w-100">
+            <h4 class="modal-title card-sub-heading mb-0">Customer Concern</h4>
+        </div>
+    </div>
+    <div class="modal-body">
+        <form #customerConcernForm="ngForm" name="customerConcernForm"
+            (ngSubmit)="customerConcernForm.valid ? ( customerConcern.JobConcernID == undefined ? onAddConcern() : editConcern() ) : '' ">
+            <div class="row">
+                <div class="col-5"
+                    *ngIf="((_sharedService.logged_user_role_id == 9 && customerConcern.JobConcernID != undefined) || _sharedService.logged_user_role_id != 9) && _sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                    <div class="row">
+                        <ng-container
+                            *ngFor="let cc of _sharedService._commonMeta.objectTypes | filter : 'JobConcern' : 'ObjectNameEnglish'">
+                            <div class="form-check form-check-radio" *ngIf="cc.ObjectTypeID != 69">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="concern"
+                                        id="{{cc.TypeNameEnglish}}"
+                                        [checked]="customerConcern.ConcernTypeID == cc.ObjectTypeID"
+                                        (change)="customerConcern.ConcernTypeID = cc.ObjectTypeID; customerConcern.Icon = cc.Icon">
+                                    <span class="form-check-sign dark-font"
+                                        [ngClass]="customerConcern.ConcernTypeID == cc.ObjectTypeID ? 'active-text' : ''">{{cc.TypeNameEnglish}}</span>
+                                </label>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="col-5 row" *ngIf="_sharedService.jobObj.JCBasicInfo.ServiceTypeID === 140">
+                    <ng-container *ngFor="let p of _sharedService.AutomotiveParts">
+                        <div class="form-check form-check-radio col-">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="qs_part" id="{{p.ItemCode}}"
+                                    [checked]="partName == p.PartNameArabic" (change)="partName = p.PartNameArabic">
+                                <span class="form-check-sign dark-font"
+                                    [ngClass]="partName == p.PartNameArabic ? 'active-text' : ''">{{p.PartNameArabic}}</span>
+                            </label>
+                        </div>
+                    </ng-container>
+                </div>
+
+                <div class="col-7 pl-0 mt-2 "
+                    *ngIf="(_sharedService.logged_user_role_id == 9 && customerConcern.JobConcernID != undefined) || _sharedService.logged_user_role_id != 9">
+                    <div *ngIf="customerConcern.ConcernTypeID == 72">
+                      
+                      
+                        <!-- <div class="floating-label form-group col-12 mb-0"
+                            *ngIf="_sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                            <ng-select class="custom input-border-color" id="part_name" name="part_name" [addTag]="true"
+                                #partID="ngModel" required [(ngModel)]="partName"
+                                [items]="_sharedService.partsListBuffer" [virtualScroll]="true" [loading]="loading"
+                                bindLabel="PartNameArabic" bindValue="PartNameArabic" placeholder="Part" appendTo="body"
+                                (scroll)="onScroll($event)" (scrollToEnd)="onScrollToEnd()">
+                                <ng-template ng-header-tmp>
+                                    <small class="form-text text-muted">Loaded
+                                        {{_sharedService.partsListBuffer.length}}
+                                        of
+                                        {{_sharedService.partsList.length}}</small>
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-index="index">
+                                    {{item.PartNameArabic}}
+                                </ng-template>
+                            </ng-select>
+                            <div class="error-block-text-area text-danger">
+                                <small *ngIf="(customerConcernForm.submitted || part.touched) && part.errors?.required"
+                                    class="mr-4">*Required</small>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="floating-label form-group col-lg-6 col-md-12 pb-0" *ngIf="_sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                            <input 
+                                type="text" 
+                                id="autoCompleteInput" 
+                                list="autoCompleteInputList"
+                                id="autoCompleteInput"
+                                class="floating-input input-border-color form-control custom-input"
+                                (keypress)="partSearch()" 
+                                [(ngModel)]="partName" 
+                                name="partName" 
+                                aria-label="Part"
+                                #partID="ngModel" 
+                                placeholder="Write part name">
+                            <datalist id="autoCompleteInputList"
+                                *ngIf="suggestedParts!=undefined && suggestedParts.length>0">
+                                <option *ngFor="let p of suggestedParts" [value]="p.ItemNameArabic">
+                                </option>
+                                <option *ngIf="partName != undefined" [value]="partName">
+                                </option>
+                            </datalist>
+
+                            <div class="error-block-ng-select-add text-danger">
+                                <small *ngIf="(customerConcernForm.submitted || partID.touched) && partID.errors?.required"
+                                    class="mr-2">*Required</small>
+                            </div>
+                        </div> -->
+
+
+                        <div class="floating-label form-group col-12 input-group mb-0 b-1">
+                            <ng-select
+                              class="floating-input1 form-control input-border-color custom-input"
+                              [items]="suggestedParts"
+                              id="applications"
+                              (keypress)="onClickCustomerDropdown()"
+                              bindValue="ItemNameArabic"
+                              bindLabel="ItemNameArabic"
+                              [hideSelected]="true"
+                              [trackByFn]="trackByFn"
+                              [closeOnSelect]="true"
+                              [loading]="loading"
+                              typeToSearchText="Please enter 2 or more characters"
+                              [typeahead]="itemCodeInput"
+                              placeholder="Part"
+                              name="part"
+                              [(ngModel)]="partName"
+                              
+                              #partID="ngModel"
+                              required
+                            >
+
+                            </ng-select>
+
+                          </div>
+
+                        <!-- <div class="floating-label form-group col-12 mb-0">
+                            <input type="text" placeholder=" " class="floating-input form-control" name="partQuantity"
+                                [(ngModel)]="partQuantity" maxlength="4" minlength="1" #Quantity="ngModel" required
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                            <span class="highlight"></span>
+                            <label class="input-label">Quantity</label>
+                            <div class="error-block text-danger">
+                                <small *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small>
+                                <small *ngIf="Quantity.value == 0">*Invalid Input</small>
+                            </div> 
+                        </div> -->
+
+                        <div class="floating-label form-group col-12 input-group mb-0 b-1">
+                            <input type="text" placeholder=" "
+                                class="floating-input form-control input-border-color custom-input" name="partQuantity"
+                                [(ngModel)]="partQuantity" maxlength="4" minlength="1" #Quantity="ngModel" required
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                            <span class="highlight"></span>
+                            <label class="input-label">Quantity  </label>
+                            <div class="error-block-unit text-danger">
+                                <small
+                                    *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small>
+                                <small *ngIf="Quantity.value == 0">*Invalid Input</small>
+                            </div>
+                            <div class="input-group-append right-dropdown">
+                                <ng-select [searchable]="false" [clearable]="false" [(ngModel)]="partUnit"
+                                    class="input-border-color custom custom-append custom-dropdown unit-dropdown side-dropdown"
+                                    id="applications" name="quantity_unit">
+                                    <ng-option
+                                        *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'PartUnit' : 'ObjectNameEnglish'"
+                                        [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                </ng-select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- task data input for inspection type -->
+                    <div *ngIf="customerConcern.ConcernTypeID == 139">
+                        <div class="floating-label form-group col-12 mb-0">
+                            <ng-select class="custom input-border-color" name="tasks" placeholder="Service"
+                                [(ngModel)]="laborDescription" #laborTaskID="ngModel" required>
+                                <ng-option disabled [value]="0">Service</ng-option>
+                                <ng-option
+                                    *ngFor="let lt of _sharedService.jobObj.LaborTasks | filter : 136 : 'ServiceTypeID' | duplicateDropdown : _sharedService.jobObj.JobTasks : 'LaborDescriptionEng' : laborDescription "
+                                    [value]="lt.LaborDescriptionEng">
+                                    <span>{{lt.LaborDescriptionEng}}</span>
+                                </ng-option>
+                            </ng-select>
+                            <div class="error-block-text-area text-danger">
+                                <small
+                                    *ngIf="(customerConcernForm.submitted || laborTaskID.touched) && laborTaskID.errors?.required"
+                                    class="mr-4">*Required</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12" *ngIf="_sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                        <textarea class="form-control mb-3 px-2 input-border-color primary-font" name="name" rows="2"
+                            cols="80" placeholder="You can write customer concern here..."
+                            [(ngModel)]="customerConcern.ConcernDescription" #ConcernDescription="ngModel"
+                            [required]="customerConcern.ConcernTypeID != 72 && customerConcern.ConcernTypeID != 139">
+                        </textarea>
+                        <div class="error-block-text-area text-danger">
+                            <small
+                                *ngIf="(customerConcernForm.submitted || ConcernDescription.touched) && ConcernDescription.errors?.required"
+                                class="mr-2">*Required</small>
+                        </div>
+                    </div>
+
+                    <div class="form-check col-12 mb-3"
+                        *ngIf="customerConcern.ConcernTypeID == 72 && _sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                        <label class="d-flex form-check-label">
+                            <input type="checkbox" class="form-check-input" name="part{{part.JobPartID}}"
+                                id="part{{part.JobPartID}}" value=""
+                                (change)="part.IsModified = true; part.AddPartTask = !part.AddPartTask"
+                                [checked]="part.AddPartTask == true"
+                                [disabled]="(_sharedService.jobObj.JobTasks | filter : part.JobTaskID : 'JobTaskID').length > 0">
+                            <span class="form-check-sign primary-font">Is this part without labor charge?</span>
+                        </label>
+                    </div>
+
+                    <ng-container
+                        *ngIf="customerConcern.ConcernTypeID == 72 && customerConcern.IsApproved == true && _sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                        <div class="floating-label form-group col-12">
+                            <ng-select class="custom input-border-color" placeholder="Brand" name="manufacturer"
+                                id="{{JobPartID}}" [(ngModel)]="partBrandName" #brand="ngModel" required>
+                                <ng-option disabled>Brand</ng-option>
+                                <ng-option *ngFor="let pb of _sharedService.jobObj.PartBrands" [value]="pb.BrandName">
+                                    {{pb.BrandName}}
+                                </ng-option>
+                            </ng-select>
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="(customerConcernForm.submitted || brand.touched) && brand.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+                        <div class="floating-label form-group col-12">
+                            <input type="number" value="" maxlength="3" placeholder=" "
+                                class="floating-input form-control input-border-color" name="pertPrice"
+                                (paste)="onAmountEnter($event)"
+                                (keypress)="onAmountEnter($event)"
+                                [(ngModel)]="partPrice" />
+                            <span class="highlight"></span>
+                            <label class="input-label">Price </label>
+                        </div>
+
+                    </ng-container>
+
+
+                    <!-- <div *ngIf="part.AddPartTask == true && customerConcern.ConcernTypeID == 72 && _sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140"
+                        class="col-12 floating-label form-group col-sm-11 time-div floating-input form-control input-border-color mx-3">
+                        <div class="input-group-append Country-code-prepend">
+                            <div class="custom custom-append">Time</div>
+                        </div>
+                        <div class="time">
+                            <input id="time" class="time-input ml-1" type="number" name="hour" min="0" max="99"
+                                placeholder="00" [(ngModel)]="task.Hours">
+                            <span class="align-self-center">:</span>
+                            <input id="time2" class="time-input" type="number" name="mins" min="0" max="59"
+                                placeholder="00" [(ngModel)]="task.Minutes">
+                        </div>
+                    </div> -->
+                    <div class="floating-label form-group col-12"
+                        *ngIf="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 9 )&& _sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                        <input type="text" value="" placeholder=" "
+                            class="floating-input form-control input-border-color" name="Note"
+                            [(ngModel)]="customerConcern.Note" />
+                        <span class="highlight"></span>
+                        <label class="input-label">Note</label>
+                    </div>
+                </div>
+
+                <div class="col-12 d-flex justify-content-between primary-font"
+                    *ngIf="(_sharedService.logged_user_role_id == 9 && customerConcern.JobConcernID != undefined) || _sharedService.logged_user_role_id != 9">
+                    <!-- approved? -->
+                    <div class="col-4 align-self-center">
+                        <div class="row approve-toggle py-1 ml-0"
+                            *ngIf="_sharedService.jobObj.JCBasicInfo.ServiceTypeID != 140">
+                            <span class="col-6 dark-font">Approved?</span>
+                            <div class="row status-bg ml-1 pl-2">
+                                <div class="toggle-switch" id="change-status">
+                                    <input type="checkbox"
+                                        (change)="customerConcern.IsApproved = !customerConcern.IsApproved"
+                                        id="status{{customerConcern.JobConcernID}}"
+                                        name="status{{customerConcern.JobConcernID}}"
+                                        [checked]="customerConcern.IsApproved == true">
+                                    <label for="status{{customerConcern.JobConcernID}}" class="mb-0">
+                                        <span class="mt-1 toggle-track"
+                                            [ngClass]="customerConcern.IsApproved == true ? 'toggle-track-active toggle-track-1' : 'toggle-track-inActive toggle-track-2'"></span>
+                                    </label>
+                                </div>
+                                <div class="pl-3">
+                                    <span>
+                                        <ng-container *ngIf="customerConcern.IsApproved == true"><span
+                                                class="smaller-font hover-color">Yes</span>
+                                        </ng-container>
+                                        <ng-container *ngIf="customerConcern.IsApproved == false"><span
+                                                class="smaller-font">No</span>
+                                        </ng-container>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-3 text-right h-80 pr-0">
+                        <button type="submit" class="btn btn-primary btn-round btn-simple"
+                            [disabled]="customerConcern.ConcernTypeID == 72 && partQuantity == 0"
+                            *ngIf="customerConcern.JobConcernID == undefined">
+                            Save & Add
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-round btn-simple m-0"
+                            [disabled]="customerConcern.ConcernTypeID == 72 && partQuantity == 0"
+                            *ngIf="customerConcern.JobConcernID != undefined">Save & Add</button>
+                    </div>
+                </div>
+
+
+                <table class="table mt-3 primary-font page-animation">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Concerns</th>
+                            <th scope="col">Part/Task</th>
+                            <th scope="col" *ngIf="tabID == 72 || tabID == 69">Quantity</th>
+                            <th scope="col">Status </th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr scope="row"
+                            *ngFor="let item of _sharedService.jobObj.JobConcerns | filter: customerConcern.ConcernTypeID : 'ConcernTypeID'; let is of _sharedService._commonMeta.objectTypes | filter : 'JobConcern' : 'ObjectNameEnglish'; let i = index">
+                            <td>{{i+1}}</td>
+                            <td><i class="fas ts {{is.Icon}} mr-2 pl-2 border-right"></i>{{item.ConcernDescription ==
+                                undefined || item.ConcernDescription =='' ? item.ConcernTypeName :
+                                item.ConcernDescription}}
+                            </td>
+                            <td>
+                                <!-- <div *ngIf="isValid;else other_content">
+                                    content here ...
+                                </div>
+                                
+                                <ng-template #other_content>other content here...</ng-template> -->
+                                <ng-container
+                                    *ngIf="_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length > 0;">
+                                    {{ (_sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                                    'JobConcernID')[0].PartNameArabic }}
+
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length > 0">
+                                    <span
+                                        *ngIf="(_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length == 0">
+                                        {{(_sharedService.jobObj.JobTasks | filter : item.JobConcernID :
+                                        'JobConcernID')[0].LaborDescriptionEng}}
+                                    </span>
+                                </ng-container>
+                                <span
+                                    *ngIf="(_sharedService.jobObj.JobTasks | filter : item.JobConcernID : 'JobConcernID').length == 0
+                                     && (_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID').length == 0">N/A</span>
+
+                            </td>
+                            <!-- <td>{{partQuantity}}</td> -->
+                            <!-- -->
+                            <td>
+                           <span *ngIf="( _sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                           'JobConcernID').length > 0 &&(tabID == 72 || tabID == 69 ) ;else other_content
+                          ">
+                          {{ (_sharedService.jobObj.JobParts | filter : item.JobConcernID :
+                            'JobConcernID')[0].Quantity }}</span>
+                          <ng-template #other_content>-</ng-template>
+                         
+                               
+                               
+                            </td>
+                            <td>
+                              
+                                <i class="fas fa-check" *ngIf="item.IsApproved == true"></i>
+                                <i class="fas fa-hourglass-start" *ngIf="item.IsApproved != true"></i>
+                            </td>
+                            <td>
+                                <i class="far fa-edit mr-2" title="Edit" (click)="openEdit(item)"></i>
+                                <i class="far fa-trash-alt" title="Delete"
+                                    (click)="openDeleteConcern(warningDelete,item)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody
+                        *ngIf="_sharedService.jobObj.JobConcerns== undefined || (_sharedService.jobObj.JobConcerns != undefined && _sharedService.jobObj.JobConcerns?.length==0)">
+                        <tr scope="row">
+                            <td colspan="12" class="text-center">No concern found!</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary btn-round btn-simple m-0" (click)="closeModal()">Close</button>
+
+                    <!-- <button type="button" class="btn btn-primary btn-round btn-simple m-0" (click)="onCreateConcern()"
+                        *ngIf="_sharedService.jobObj.JobConcerns.JobConcernID == undefined && editMode == false && _sharedService.jobObj.JobConcerns.length > 0">Create</button>
+                    <button type="submit" class="btn btn-primary btn-round btn-simple m-0"
+                        (click)="editConcern(); editMode = false"
+                        *ngIf="customerConcern.JobConcernID != undefined">Update</button> -->
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>

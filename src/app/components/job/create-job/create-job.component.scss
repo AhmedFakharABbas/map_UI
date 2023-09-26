@@ -1,0 +1,137 @@
+@import "variables";
+
+.nav-item {
+  position: relative;
+  height: 83px;
+}
+
+.nav-item > .nav-link {
+  transition: all ease-in-out 0.5s;
+}
+
+.nav-item .active {
+  background-color: $hover-color;
+  color: $white-color;
+  border-radius: 8px;
+  margin: 5px 5px;
+  height: 80px;
+  transition: all ease-in-out 0.5s;
+}
+
+// .nav-item>#info-tab.active {
+//   transform: translate(0px, 0px);
+// }
+
+// .nav-item>#concerns-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item>#inspection-tab.active {
+//   transform: translate(0px, 8px);
+// }
+
+// .nav-item>#tasks-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item>#parts-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item>#qa-tab.active {
+//   transform: translate(0px, 8px);
+// }
+
+.nav-item .active i {
+  color: $white-color !important;
+}
+
+.nav-item .active .nav-text {
+  color: $hover-color !important;
+}
+
+.nav-link {
+  padding: 0.2rem 0px !important;
+}
+
+.active > i:hover {
+  color: $white-color !important;
+}
+
+a {
+  color: #808080;
+}
+
+.left-nav-bar ul li:active {
+  border-right: none;
+}
+
+.nav-bg {
+  background: #ced4dfad;
+  border-radius: 8px;
+  height: fit-content;
+  max-width: 50px;
+}
+
+.arrow-btn {
+  padding: 8px 11px;
+}
+
+.nav-text {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: -70px;
+}
+
+ul {
+  scroll-behavior: smooth;
+}
+//less effect of hove
+.icon-hover:hover {
+  transform: scale(1.2) !important;
+}
+
+.color-box {
+  width: 30px;
+  height: 30px;
+  margin-right: 9px;
+  margin-left: 9px;
+  margin-top: 4px;
+  border-radius: 4px;
+}
+
+.gallery-img {
+  height: 188px;
+  width: 91%;
+  border-radius: 6px;
+}
+
+.ty {
+  transform: translateY(-27px);
+}
+.keywarning {
+  color: #ff7949;
+  margin-bottom: 0;
+}
+.fas:hover {
+  color: #ffffff !important;
+  transform: none !important;
+}
+@media screen and (max-width: 991px) {
+  .nav-bg {
+    max-width: 100%;
+    flex-direction: row !important;
+  }
+  .nav-text {
+    position: absolute;
+    top: unset !important;
+    transform: translate(-50%, 0) !important;
+    left: 50%;
+    bottom: 0px;
+    width: 100%;
+  }
+  .nav-item .active .nav-text {
+    color: white !important;
+  }
+}

@@ -1,0 +1,1149 @@
+<!-- <div class="row justify-content-end mx-0" *ngIf="_sharedService.jobObj.JCBasicInfo.JobCardID != undefined">
+    <input class="tgl tgl-flip" id="complete-visual-inspection" type="checkbox" value=""
+        *ngIf="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 6)  "
+        name="ViStatus" [checked]="_sharedService.jobObj.JCBasicInfo.VIStatusID == 17"
+        (click)="_sharedService.jobObj.JCBasicInfo.VIStatusID = 17; completeJobProcess(_sharedService.jobObj.JCBasicInfo.VIStatusID )" />
+    <label class="tgl-btn" data-tg-off="Mark complete" data-tg-on="Completed!" for="complete-visual-inspection"></label>
+</div> -->
+
+<!-- (  _sharedService.jobObj.JCBasicInfo.CreatedBy == undefined || _sharedService.jobObj.JCBasicInfo.CreatedBy != _sharedService.logged_user_id && _sharedService.jobObj.JCBasicInfo.IsMileageVerified == true) ? takeApproval = true : openMileageVerificationModal(mileageVerificationModal) -->
+<!-- <div class="col-12 text-right">
+    <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn py-1 bg-white"
+        *ngIf="takeApproval == false && _sharedService.jobObj.JCBasicInfo.VIStatusID != 17"
+        (click)="_sharedService.jobObj.JCBasicInfo.Mileage == undefined ? openMileageVerificationModal(mileageVerificationModal) : takeApproval = true">
+        Approval
+    </button>
+    <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn py-1 bg-white"
+        *ngIf="takeApproval == true && _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL == undefined"
+        (click)="takeApproval = false">
+        Edit Mode
+    </button>
+
+    <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn py-1 bg-white"
+        *ngIf="_sharedService.jobObj.JCBasicInfo.InspectionSignatureURL != undefined && takeApproval == true && (_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || (_sharedService.jobObj.JCBasicInfo.VIStatusID == 16 && _sharedService.logged_user_role_id == 6))"
+        (click)=" completeJobProcess()">
+        Mark Complete
+    </button>
+
+    <button class="btn btn-success btn-simple btn-round mark-complete-btn py-1 bg-white"
+        *ngIf="_sharedService.jobObj.JCBasicInfo.VIStatusID == 17 && (_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 6)">
+        Completed
+    </button>
+</div> -->
+
+<div
+  *ngIf="
+    ((_sharedService.jobObj.JCBasicInfo.VIStatusID == 17 ||
+      _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL != undefined) &&
+      _sharedService.logged_user_role_id != 1 &&
+      _sharedService.logged_user_role_id != 2) ||
+    takeApproval != false
+  "
+>
+  <app-inspection-view></app-inspection-view>
+</div>
+
+<form
+  #inspectionForm="ngForm"
+  *ngIf="
+    (_sharedService.jobObj.JCBasicInfo.InspectionSignatureURL == undefined ||
+      _sharedService.logged_user_role_id == 1 ||
+      _sharedService.logged_user_role_id == 2) &&
+    takeApproval != true
+  "
+>
+  <div class="card">
+    <ngb-tabset
+      class="sub-tabset big-font"
+      #tabset="ngbTabset"
+      (tabChange)="markerBinding(); beforeChange($event)"
+    >
+      <!-- initial Checklist -->
+      <ngb-tab title="Initial Checklist" id="1">
+        <ng-template ngbTabContent>
+          <div class="pb-3">
+            <div class="form-check mt-3">
+              <label class="form-check-label bold-font need-maintainance">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="markAllCb"
+                  id="good"
+                  (change)="markAll = !markAll; markAllIC()"
+                  [checked]="markAll == true"
+                />
+                <span class="form-check-sign"></span>
+                Mark All</label
+              >
+            </div>
+            <div
+              class="row pt-2 mx-3 checklist-highlight"
+              *ngFor="
+                let ic of _sharedService.jobObj.JobCardCheckList
+                  | filter: 45:'CheckListTypeID'
+              "
+            >
+              <div class="form-check col-lg-7 col-sm-12 page-animation">
+                <label class="d-flex form-check-label">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    id="{{ ic.EnglishName }}"
+                    value=""
+                    name="{{ ic.EnglishName }}"
+                    (change)="
+                      ic.IsModified = true;
+                      ic.IsChecked = !ic.IsChecked;
+                      shouldUpdate = true;
+                      updateMArkAllCheckbox()
+                    "
+                    [checked]="ic.IsChecked == true"
+                  />
+                  <span class="form-check-sign primary-font">{{
+                    ic.EnglishName
+                  }}</span>
+                </label>
+              </div>
+
+              <div
+                class="
+                  floating-label
+                  form-group
+                  col-lg-4 col-sm-12
+                  input-slide
+                  mb-0
+                  pb-0
+                "
+                *ngIf="ic.IsChecked == true"
+              >
+                <input
+                  type="text"
+                  value=""
+                  placeholder=" "
+                  class="
+                    floating-input
+                    form-control
+                    primary-font
+                    input-border-color
+                  "
+                  name="{{ ic.EnglishName }}"
+                  [(ngModel)]="ic.Note"
+                  (change)="ic.IsModified = true"
+                />
+                <span class="highlight"></span>
+                <label class="input-label">Note</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0 justify-content-center">
+            <div class="col-10">
+              <textarea
+                class="form-control my-3 px-2 input-border-color primary-font"
+                name="comments"
+                rows="3"
+                cols="80"
+                placeholder="Write general notes here..."
+                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+                [(ngModel)]="
+                  _sharedService.jobObj.JCBasicInfo.InspectionComments
+                "
+              >
+              </textarea>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Damages" id="2" *ngIf="markers != undefined">
+        <ng-template ngbTabContent>
+          <div class="row justify-content-center page-animation mt-5">
+            <img-map
+              #imgMap
+              style="width: 50%"
+              [src]="
+                _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 15
+                  ? sedan
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 16
+                  ? hatchback
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 17
+                  ? SUV
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 18
+                  ? pickup
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 19
+                  ? coupe
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 20
+                  ? twoDoorPickup
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 21
+                  ? bus
+                  : _sharedService.jobObj.jcVehicleObj.VehicleTypeID == 22
+                  ? convertible
+                  : smallVehicle
+              "
+              [markerRadius]="_sharedService.marker_radius"
+              [markers]="markers"
+              (mark)="onMark($event)"
+            >
+            </img-map>
+          </div>
+          <div class="col-sm-12">
+            <h3 class="primary-font mb-0">Markers</h3>
+            <div class="row text-center pl-2">
+              <ng-container
+                *ngFor="let marker of markers; let i = index"
+                style="margin-bottom: 3px"
+              >
+                <div class="row">
+                  <div class="col">
+                    <button
+                      class="btn px-2 py-1"
+                      (click)="removeMarker(i, marker)"
+                    >
+                      <small>
+                        <i
+                          class="fa fa-trash"
+                          style="font-size: 14px; color: red"
+                        ></i>
+                      </small>
+                    </button>
+                    <br />
+                    <span
+                      style="cursor: pointer; font-size: 12px"
+                      [ngClass]="{ 'text-primary': imgMap.markerActive === i }"
+                      (click)="selectMarker(i)"
+                    >
+                      {{ i + 1 }}
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Fuel & Mileage" id="3">
+        <ng-template ngbTabContent>
+          <div class="row pt-3">
+            <!-- fuel tank reading  -->
+            <div class="col-12">
+              <div class="row mx-0">
+                <div class="col-12">
+                  <label class="primary-font">Fuel Tank Reading</label>
+                </div>
+                <div class="col-6">
+                  <div class="row mx-0">
+                    <div
+                      class="
+                        floating-label
+                        text-center
+                        form-group
+                        col-12
+                        d-flex
+                      "
+                    >
+                      <div
+                        class="col form-check form-check-radio px-2"
+                        *ngFor="
+                          let type of _sharedService._commonMeta.objectTypes
+                            | filter: 'FuelTankReading':'ObjectNameEnglish'
+                        "
+                      >
+                        <label class="form-check-label">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="fuelTankReading"
+                            id="{{ type.TypeNameEnglish }}"
+                            (change)="
+                              _sharedService.jobObj.JCBasicInfo.FuelTankReading =
+                                type.TypeNameEnglish;
+                              _sharedService.jobObj.JCBasicInfo.IsModified = true
+                            "
+                            [checked]="
+                              _sharedService.jobObj.JCBasicInfo
+                                .FuelTankReading == type.TypeNameEnglish
+                            "
+                          />
+                          <span
+                            class="form-check-sign primary-font"
+                            [ngClass]="
+                              _sharedService.jobObj.JCBasicInfo
+                                .PriorityTypeID == type.ObjectTypeID
+                                ? 'active-text'
+                                : ''
+                            "
+                            >{{ type.TypeNameEnglish }}%
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 mb-3">
+                  <label class="primary-font">Mileage</label>
+                </div>
+                <div
+                  class="
+                    floating-label
+                    form-group
+                    col-lg-6 col-sm-6
+                    input-group
+                    ml-3
+                  "
+                >
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control custom-input"
+                    name="engine_capacity"
+                    [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Mileage"
+                    #mileage="ngModel"
+                    maxlength="10"
+                    onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+                    required
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Mileage</label>
+                  <div class="input-group-append right-dropdown">
+                    <ng-select
+                      [searchable]="false"
+                      [clearable]="false"
+                      class="
+                        custom custom-append custom-dropdown
+                        unit-dropdown
+                        side-dropdown
+                        rightDropdown-color
+                      "
+                      id="applications"
+                      name="engnine_capacity_unit"
+                      [(ngModel)]="
+                        _sharedService.jobObj.JCBasicInfo.MileageUnit
+                      "
+                    >
+                      <ng-option
+                        *ngFor="
+                          let item of _sharedService._commonMeta.objectTypes
+                            | filter: 'MileageUnit':'ObjectNameEnglish'
+                        "
+                        [value]="item.ObjectTypeID"
+                        >{{ item.TypeNameEnglish }}</ng-option
+                      >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- <input type="text" value="" placeholder=" "
+                                    class="floating-input form-control input-border-color"
+                                    (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true; shouldUpdate = true;"
+                                    name="fuelReader" [(ngModel)]="_sharedService.jobObj.JCBasicInfo.FuelTankReading"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                    maxlength="6" />
+                                <span class="highlight"></span>
+                                <label class="input-label">Fuel Tank Reading</label> -->
+              </div>
+              <div class="col-12 text-center">
+                <img
+                  class="fuel-tank-image"
+                  (click)=" _sharedService.jobObj.JCBasicInfo.MileageImageURL? previewImage( imagePreview,'Mileage Image URL', _sharedService.jobObj.JCBasicInfo.MileageImageURL)
+                  : ''
+
+
+                    
+                  "
+                  [src]="
+                    _sharedService.jobObj.JCBasicInfo.MileageImageURL
+                      ? _sharedService.baseUrl +
+                        _sharedService.jobObj.JCBasicInfo.MileageImageURL
+                      : _sharedService.default_img
+                  "
+                />
+
+                <input
+                  id="fileInput"
+                  type="file"
+                  accept="image/x-png,image/gif,image/jpeg"
+                  (change)="onSelectFile($event)"
+                />
+                <label for="fileInput">
+                  <i
+                    class="fas fa-2x fa-camera upload-btn"
+                    aria-hidden="true"
+                    title="upload"
+                  ></i>
+                </label>
+
+                <!-- <button class="btn btn-primary btn-round btn-simple"
+                                    *ngIf="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL"
+                                    >Preview</button>
+                                <button class="btn btn-primary btn-round btn-simple"
+                                    *ngIf="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL"
+                                    (click)="deleteFuelTankImage()">delete</button> -->
+              </div>
+            </div>
+            <!-- mileage  -->
+            <!-- <div class="col-6">
+                            <div class="floating-label form-group col-lg-6 col-sm-6 input-group  ml-3">
+                                <input type="text" placeholder=" " class="floating-input form-control custom-input"
+                                    name="engine_capacity" [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Mileage"
+                                    #mileage="ngModel" maxlength="10"
+                                    onkeypress='return (event.charCode >= 48 && event.charCode <= 57)' required />
+                                <span class="highlight"></span>
+                                <label class="input-label">Mileage</label>
+                                <div class="input-group-append right-dropdown">
+                                    <ng-select [searchable]="false" [clearable]="false"
+                                        class="custom custom-append custom-dropdown unit-dropdown side-dropdown rightDropdown-color"
+                                        id="applications" name="engnine_capacity_unit"
+                                        [(ngModel)]="_sharedService.jobObj.JCBasicInfo.MileageUnit">
+                                        <ng-option
+                                            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'MileageUnit' : 'ObjectNameEnglish'"
+                                            [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                    </ng-select>
+    
+                                </div>
+                            </div>
+
+                            <div class="col-12 text-center">
+
+                                <img class="fuel-tank-image" (click)="open(imagePreview)"
+                                    [src]="_sharedService.jobObj.JCBasicInfo.MileageImageURL != undefined ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.MileageImageURL :  _sharedService.default_img">
+                                <input id="mileageImage" class="d-none" type='file'
+                                    accept="image/x-png,image/gif,image/jpeg" (change)="uploadImage($event, 1)">
+                                <label for="mileageImage">
+                                    <i class="fas fa-2x fa-camera upload-btn" aria-hidden="true" title="upload"></i>
+                                </label>
+
+                              
+                            </div>
+                        </div> -->
+          </div>
+
+          <!-- <div class="row pt-3">
+                        <div class="floating-label text-center form-group col-lg-4 col-sm-6 ml-3">
+                            <input type="text" value="" placeholder=" "
+                                class="floating-input form-control input-border-color"
+                                (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true; shouldUpdate = true;"
+                                name="fuelReader" [(ngModel)]="_sharedService.jobObj.JCBasicInfo.FuelTankReading"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                maxlength="6" />
+                            <span class="highlight"></span>
+                            <label class="input-label">Fuel Tank Reading</label>
+                        </div>
+                    </div> -->
+          <!-- 
+                    <div class="row justify-content-center pb-5">
+                        <div class="col-4 text-center">
+                            <img class="fuel-tank-image" (click)="open(imagePreview)"
+                                [src]="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL ? _sharedService.baseUrl + _sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL :  _sharedService.default_img">
+
+
+                            <input id="fileInput" type='file' accept="image/x-png,image/gif,image/jpeg"
+                                (change)="onSelectFile($event)">
+                            <label for="fileInput">
+                                <i class="fas fa-2x fa-camera upload-btn" aria-hidden="true" title="upload"></i>
+                            </label>
+                            ----------------
+                            <button class="btn btn-primary btn-round btn-simple"
+                                *ngIf="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL"
+                                >Preview</button>
+                            <button class="btn btn-primary btn-round btn-simple"
+                                *ngIf="_sharedService.jobObj.JCBasicInfo.FuelTankMeterImageURL"
+                                (click)="deleteFuelTankImage()">delete</button>
+                        </div>
+                    </div> -->
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Gallery" id="4">
+        <ng-template ngbTabContent>
+          <div class="row mx-0 my-3">
+            <!-- <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Front" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 107, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="files">
+                                    Front
+                                </div>
+                            </label>
+                        </div> -->
+
+            <div class="col-3 text-center mb-3">
+              <div class="col-12 px-sm-0">
+                <label class="primary-font">Vehicle Front</label>
+              </div>
+
+              <img
+                class="fuel-tank-image"
+                (click)="
+                  previewImage(imagePreview, 'Vehicle Front', 'VehicleFront')
+                "
+                [src]="
+                  _sharedService.jobObj.JCBasicInfo.VehicleFront != undefined
+                    ? _sharedService.baseUrl +
+                      _sharedService.jobObj.JCBasicInfo.VehicleFront
+                    : _sharedService.default_img
+                "
+              />
+              <!-- [src]="(_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 107 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image" -->
+              <input
+                id="fileInput4"
+                type="file"
+                class="d-none"
+                accept="image/x-png,image/gif,image/jpeg"
+                (change)="
+                  uploadVehicleImage(
+                    $event,
+                    107,
+                    _sharedService.jobObj.JCBasicInfo.JobCardID
+                  );
+                  shouldUpdate = true
+                "
+              />
+              <label for="fileInput4">
+                <i
+                  class="fas fa-2x fa-camera upload-btn"
+                  aria-hidden="true"
+                  title="upload"
+                ></i>
+              </label>
+            </div>
+
+            <!-- <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 109 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="RightSide" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 109, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="RightSide">
+                                    Right Side
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 108 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Rear" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 108, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="files">
+                                    Rear
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 110 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="LeftSide" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 110, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="LeftSide">
+                                    Left Side
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 111 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Inside" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 111, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Inside">
+                                    Inside
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 112 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Roof" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 112, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Roof">
+                                    Roof
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 113 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Dashboard" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 113, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Dashboard">
+                                    Dashboard
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 114 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Rim1" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 114, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Rim1">
+                                    Rim 1
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 115 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Rim2" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 115, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Rim2">
+                                    Rim 2
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 116 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Rim3" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 116, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Rim3">
+                                    Rim 3
+                                </div>
+                            </label>
+                        </div>
+                        <div class=" form-group col-2 text-center">
+                            <label>
+                                <img class="upload-image"
+                                    [src]="(_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0] ?  _sharedService.baseUrl + (_sharedService.jobObj.Gallery | filter : 117 : 'GalleryTypeID')[0].ImageURL : _sharedService.plus_image">
+                                <input type='file' class="file-choose" id="Rim4" accept="image/jpeg,image/png"
+                                    (change)="uploadVehicleImage($event, 117, _sharedService.jobObj.JCBasicInfo.JobCardID); shouldUpdate = true;">
+                                <div class="hover-text" for="Rim4">
+                                    Rim 4
+                                </div>
+                            </label>
+                        </div> -->
+          </div>
+          <div class="row w-100 mx-0">
+            <hr class="w-100" />
+            <h5 class="sub-heading primary-font">Gallery</h5>
+          </div>
+          <div class="row m-3">
+            <div class="col-lg-2 col-sm-4 row mx-0 justify-content-center">
+              <input
+                accept="image/gif,image/jpeg,image/*,image/png"
+                multiple
+                type="file"
+                class="file-choose"
+                id="files"
+                (change)="onSelectFile($event); galleryUpload($event)"
+              />
+              <label
+                for="files"
+                class="my-2 align-self-center"
+                *ngIf="ImgCounter < 8"
+              >
+                <img
+                  class="upload-image Plus-image"
+                  [src]="_sharedService.plus_image"
+                />
+              </label>
+            </div>
+            <div
+              class="col-lg-2 col-sm-4 text-center px-0 my-3 mx-0"
+              *ngFor="
+                let image of _sharedService.jobObj.Gallery
+                  | filter: 48:'GalleryTypeID';
+                let idx = index
+              "
+            >
+              <img
+                [src]="
+                  image
+                    ? _sharedService.baseUrl + image.ImageURL
+                    : _sharedService.plus_image
+                "
+                (click)=" galleryPreviewModal(galleryPreview, image);
+                  shouldUpdate = true
+                "
+                class="gallery-img"
+              />
+              <span class="del"
+                ><i
+                  class="img-del"
+                  (click)="openRemoveImage(deleteImage, image)"
+                  >x</i
+                ></span
+              >
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+    <div class="row mx-0 my-3">
+      <div class="col-6 justify-content-start">
+        <div class="row mx-0">
+          <button
+            class="btn btn-primary btn-round btn-simple ml-5 px-4"
+            *ngIf="tabID != 1"
+            (click)="changeTab(false)"
+          >
+            <i class="fas fa-arrow-left mr-3"></i> Previous - السابق
+          </button>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="row mx-0 flex-end">
+          <button
+            type="submit"
+            class="
+              btn btn-primary btn-simple btn-round
+              mark-complete-btn
+              bg-white
+              px-4
+            "
+            *ngIf="
+              tabID == 4 && _sharedService.jobObj.JCBasicInfo.VIStatusID != 17
+            "
+            (click)="
+              _sharedService.jobObj.JCBasicInfo.Mileage == undefined
+                ? openMileageVerificationModal(mileageVerificationModal)
+                : (takeApproval = true);
+              updateVisualInspection()
+            "
+          >
+            Preview - معاينة
+          </button>
+          <ng-container *ngIf="tabID != 4">
+            <button
+              class="btn btn-primary btn-round btn-simple mr-5 px-4"
+              (click)="changeTab(true)"
+            >
+              Next - التالي
+              <i class="fas fa-arrow-right ml-3"></i>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- <button class="btn btn-primary btn-round complete-btn">Complete</button> -->
+  </div>
+</form>
+
+<div class="row mx-0 p-3 card mb-md-5" *ngIf="takeApproval == true">
+  <div class="d-flex justify-content-between">
+    <button
+      *ngIf="
+        _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL == undefined
+      "
+      class="
+        btn btn-primary btn-simple btn-round
+        mark-complete-btn
+        bg-white
+        px-4
+      "
+      (click)="takeApproval = false; tabID = 1"
+    >
+      previous
+    </button>
+    <button
+      type="submit"
+      class="
+        btn btn-primary btn-simple btn-round
+        mark-complete-btn
+        py-1
+        bg-white
+        px-5
+        py-3
+      "
+      *ngIf="
+        _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL == undefined
+      "
+      (click)="openModel(ESignatureModel)"
+    >
+      Customer Signatures
+      <i class="fas fa-pencil-alt ml-3"></i>
+    </button>
+    <!-- <label class="formGroupExampleInput mr-3 mb-0">Customer Signatures</label> -->
+
+    <img
+      style="width: 200px"
+      *ngIf="
+        _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL != undefined
+      "
+      src="{{ _sharedService.baseUrl }}{{
+        _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL
+      }}"
+    />
+    <!-- <i class="fas fa-pencil-alt" title="Signatures" (click)="openModel(ESignatureModel)"></i> -->
+
+    <button
+      type="submit"
+      class="
+        btn btn-primary btn-simple btn-round
+        mark-complete-btn
+        py-1
+        bg-white
+        px-5
+        py-3
+      "
+      *ngIf="
+        _sharedService.jobObj.JCBasicInfo.InspectionSignatureURL != undefined &&
+        _sharedService.jobObj.JCBasicInfo.VIStatusID != 17
+      "
+      (click)="openProcessConfirmationModel(completeProcess)"
+    >
+      Complete Process
+    </button>
+  </div>
+</div>
+
+<!-- preview image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ modalHeader }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="img-fluid"
+      [src]="
+        _sharedService.jobObj.JCBasicInfo.VehicleFront
+          ? _sharedService.baseUrl +
+            _sharedService.jobObj.JCBasicInfo.VehicleFront
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>
+
+<!-- Gallery view image modal -->
+<ng-template #galleryPreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">Gallery Image</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class=""
+      [src]="
+        currentImg != undefined
+          ? _sharedService.baseUrl + currentImg
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>
+
+<ng-template
+  #deleteImage
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <button type="button" class="close" (click)="(d)" title="Cancel">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <h5>Are you sure you want to delete this {{ content }}?</h5>
+  </div>
+  <div class="modal-footer">
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="(c)"
+      >
+        No
+      </button>
+    </div>
+    <div class="col-6 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple"
+        (click)="onRemoveImage()"
+      >
+        Yes
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Signature modal -->
+<ng-template #ESignatureModel let-c="close" let-d="dismiss">
+  <!--Modal Header -->
+  <div class="setScreen">
+    <div class="modal-header">
+      <h4 class="modal-title mt-0">E-Signature</h4>
+      <button
+        type="button"
+        class="close"
+        aria-label="Close"
+        (click)="d('Cross click'); closeSignatureModal()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!--Modal Body -->
+    <div class="modal-body">
+      <div class="row justify-content-center" style="margin-top: 0px">
+        <!--E-Signature Content -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <canvas id="sig-canvas" style="width: 100%; height: 200px">
+                Please use the latest chrome browser version.
+              </canvas>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <input hidden id="sig-dataUrl" class="form-control" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--Modal Footer -->
+    <div class="modal-footer modal-end-footer">
+      <button
+        type="button"
+        class="btn btn-danger btn-round"
+        (click)="c('Close click'); closeSignatureModal()"
+      >
+        Close
+      </button>
+
+      <button type="button" class="btn btn-clear btn-round" id="sig-clearBtn">
+        Clear
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-success btn-round"
+        id="sig-submitBtn"
+        (click)="onSubmitSignature()"
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</ng-template>
+<!-- <div class="row">
+    <label class="col-4" *ngFor="let img of FuelTankImagedata"> 
+        <img class="upload-image" [src]="url ? url : 'http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg'">
+        <img src={{url}}> 
+        <button class="btn btn-primary btn-round btn-simple" *ngIf="url"
+            (click)="open(imagePreview)">Preview</button>
+        <button class="btn btn-primary btn-round btn-simple" *ngIf="url" (click)="delete()">delete</button> 
+    </label> 
+</div> -->
+
+<!-- mileage verification model -->
+<!-- <ng-template #mileageVerificationModal let-c="close" let-d="dismiss">
+    <div class="adOptionModel" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h5 class="modal-title text-center">Verify Mileage</h5>
+            <button type="button" class="close" (click)="closeModal()" title="Cancel">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="fluid-container modal_container ">
+
+
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12">
+                        <div class="floating-label form-group col-lg-12 col-sm-6 input-group">
+                            <input type="text" placeholder=" " class="floating-input form-control custom-input"
+                                name="engine_capacity" [(ngModel)]="mileage" maxlength="10"
+                                onkeypress='return (event.charCode >= 48 && event.charCode <= 57)' />
+                            <span class="highlight"></span>
+                            <label class="input-label">Mileage</label>
+                            <div class="input-group-append right-dropdown">
+                                <ng-select [searchable]="false" [clearable]="false"
+                                    class="custom custom-append custom-dropdown unit-dropdown side-dropdown rightDropdown-color"
+                                    id="applications" name="engnine_capacity_unit"
+                                    [(ngModel)]="mileageUnitID">
+                                    <ng-option
+                                        *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'MileageUnit' : 'ObjectNameEnglish'"
+                                        [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                                </ng-select>
+
+                            </div>
+                        </div>
+                        <div class=" col-6 float-left text-left ">
+                            <button (click)="closeMileageVerificationModal();"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">
+                                Cancel</button>
+                        </div>
+                        <div class="col-6 float-left text-right">
+                            <button (click)="verifyMileage();"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template> -->
+
+<!-- add mileage  -->
+<ng-template #mileageVerificationModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Add Mileage</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <div
+              class="floating-label form-group col-lg-12 col-sm-6 input-group"
+            >
+              <input
+                type="text"
+                placeholder=" "
+                class="floating-input form-control custom-input"
+                name="engine_capacity"
+                [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Mileage"
+                #mileage="ngModel"
+                maxlength="10"
+                onkeypress="return (event.charCode >= 48 && event.charCode <= 57)"
+                required
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Mileage</label>
+              <div class="input-group-append right-dropdown">
+                <ng-select
+                  [searchable]="false"
+                  [clearable]="false"
+                  class="
+                    custom custom-append custom-dropdown
+                    unit-dropdown
+                    side-dropdown
+                    rightDropdown-color
+                  "
+                  id="applications"
+                  name="engnine_capacity_unit"
+                  [(ngModel)]="_sharedService.jobObj.JCBasicInfo.MileageUnit"
+                >
+                  <ng-option
+                    *ngFor="
+                      let item of _sharedService._commonMeta.objectTypes
+                        | filter: 'MileageUnit':'ObjectNameEnglish'
+                    "
+                    [value]="item.ObjectTypeID"
+                    >{{ item.TypeNameEnglish }}</ng-option
+                  >
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="form-group col-12 text-center">
+              <label>
+                <img
+                  class="upload-image hoverable"
+                  [src]="
+                    _sharedService.jobObj.JCBasicInfo.MileageImageURL !=
+                    undefined
+                      ? _sharedService.baseUrl +
+                        _sharedService.jobObj.JCBasicInfo.MileageImageURL
+                      : _sharedService.plus_image
+                  "
+                />
+                <input
+                  type="file"
+                  class="file-choose"
+                  id="mileageImage"
+                  accept="image/jpeg,image/png"
+                  (change)="uploadImage($event, 1)"
+                />
+                <div class="hover-text" for="files">Mileage Image</div>
+              </label>
+            </div>
+
+            <div class="error-block text-danger">
+              <small *ngIf="mileage.touched && mileage.errors?.required"
+                >*Required</small
+              >
+              <!-- <small *ngIf="mileage.errors?.minlength">Required</small> -->
+            </div>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeMileageVerificationModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Cancel
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                [disabled]="
+                  _sharedService.jobObj.JCBasicInfo.MileageImageURL == undefined
+                "
+                [ngClass]="
+                  _sharedService.jobObj.JCBasicInfo.MileageImageURL == undefined
+                    ? 'not-allowed'
+                    : ''
+                "
+                (click)="
+                  _sharedService.jobObj.JCBasicInfo.IsModified = true;
+                  closeMileageVerificationModal();
+                  takeApproval = true
+                "
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
+  #completeProcess
+  let-c="close('Close click')"
+  let-d="dismiss('Cross click')"
+>
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      (click)="closeProcessConfirmationModel()"
+      title="Cancel"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <h5>Are you sure to submit the visual inspection?</h5>
+  </div>
+  <div class="modal-footer">
+    <!-- <div class="col-6 text-center m-0">
+            <button type="button" class="a-button btn btn-primary btn-round btn-simple" (click)="c">No</button>
+        </div> -->
+    <div class="col-12 text-center m-0">
+      <button
+        type="button"
+        class="a-button btn btn-primary btn-round btn-simple px-5 py-3"
+        (click)="completeJobProcess(); closeProcessConfirmationModel()"
+      >
+        Confirm
+      </button>
+    </div>
+  </div>
+</ng-template>

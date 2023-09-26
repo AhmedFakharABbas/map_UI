@@ -1,0 +1,22 @@
+@import "variables";
+
+.heading-color {
+    background-color: $primary-color !important;
+}
+
+.bg-hover {
+    background: $hover-color;
+}
+
+a.active-none:active {
+    background: none !important;
+    box-shadow: none !important;
+}
+a.active-none {
+    background: none !important;
+    box-shadow: none !important;
+}
+
+tr.border-none:focus {
+    border: none;
+}

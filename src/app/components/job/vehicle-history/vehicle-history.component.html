@@ -1,0 +1,136 @@
+<div class="row justify-content-center mx-0">
+
+ 
+    <div class="card col-12"
+        *ngFor="let ir of _sharedService.jobObj.HistoryTasks | filter: 51 : 'JobTaskTypeID';let i=index"
+        [ngClass]="ir.PriorityTypeID == 83 ? 'priMedium' : 'priHigh'">
+
+        <div class="row py-3">
+            <div class="col-3 text-center align-self-center">
+                <ngb-carousel class="results"
+                    *ngIf="_sharedService.jobObj.HistoryGallery != undefined && _sharedService.jobObj.HistoryGallery.length > 0">
+                    
+                    <ng-template ngbSlide
+                        *ngFor="let image of _sharedService.jobObj.HistoryGallery | filter : ir.JobTaskID : 'ObjectID'; let idx = index">
+                        <div class="picsum-img-wrapper">
+                            <div *ngIf="image.IsVideo == false">
+                                <img [src]="image ? _sharedService.baseUrl + image.ImageURL : _sharedService.default_img"
+                                    class="result-img my-3">
+                            </div>
+                            <div *ngIf="image.IsVideo == true">
+                                <video class="video" controls multiple [src]="_sharedService.baseUrl + image.ImageURL">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+                <div
+                    *ngIf="_sharedService.jobObj.HistoryGallery == undefined || (_sharedService.jobObj.HistoryGallery | filter : ir.JobTaskID : 'ObjectID').length == 0">
+                    <img [src]="_sharedService.default_img" alt="Results Images" class="result-img my-3">
+                </div>
+            </div>
+            <div class="col-9 row"> 
+                <div class="col-4 px-0 pb-3">
+                    <div class="primary-font ml-3 smaller-font">
+                        <span>Task</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="part-detail-box custom-font my-0" title="">
+                            <span
+                                *ngIf="ir.LaborDescriptionEng != '' && ir.LaborDescriptionEng != undefined; else elseHyphen">{{ir.LaborDescriptionEng}}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div  class="col-4 px-0 pb-3">
+                    <div class="primary-font ml-3 smaller-font">
+                        <span>Type</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="part-detail-box my-0 custom-font" title="">
+                            {{ir.RepairTypeID == 70 ? 'Mechanical' : ir.RepairTypeID == 71 ? 'Electrical' : ir.RepairTypeID == 72 ? 'Spare Parts' : ir.RepairTypeID == 73 ? 'Others' : ir.RepairTypeID == 102 ? 'Body Repair' : ''}}
+                            <small> {{ir.JobTaskTypeID == 51? 'Internal' : 'External'}}</small></p>
+                    </div>
+                </div>
+
+                <div class="col-4 px-0 pb-3">
+                    <div class="primary-font ml-3 smaller-font">
+                        <span>Completion Date</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="part-detail-box custom-font my-0" title="">
+                            <span
+                                *ngIf="ir.EndDateTime != undefined; else elseHyphen">{{ir.EndDateTime | date}}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 px-0 pb-3">
+                    <div class="primary-font ml-3 smaller-font">
+                        <span>Concern</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="part-detail-box custom-font my-0" title="">
+                            <span
+                                *ngIf="ir.ConcernDescription != undefined; else elseHyphen">{{ir.ConcernDescription}}</span>
+                        </p>
+                    </div>
+                </div>
+
+
+
+                <div class="col-8 px-0 pb-3">
+                    <div class="primary-font ml-3 smaller-font">
+                        <span>Description</span>
+                    </div>
+                    <div class="ml-3">
+                        <p class="part-detail-box custom-font my-0" title="">
+                            <span *ngIf="ir.TaskDescription != undefined; else elseHyphen">{{ir.TaskDescription}}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- <div class="col-12 text-right">
+                    <button type="button" class="btn btn-primary btn-simple col-3"
+                        *ngIf="ir.TaskStatusID != 17 && ir.StartDateTime != undefined" (click)="isCompleted(ir)">Mark
+                        Complete</button>
+                    <button type="button" class="btn btn-primary btn-simple col-2"
+                        *ngIf="ir.TaskStatusID == 16 && ir.StartDateTime == undefined"
+                        (click)="startTask(ir)">Start</button>
+                    <button type="button" class="btn btn-success btn-simple col-3"
+                        *ngIf="ir.TaskStatusID == 17">Completed</button>
+                </div> -->
+            </div>
+
+        </div>
+        <div class="row card mx-0">
+            <table class="table primary-font">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Part</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                </thead>
+
+                <tbody
+                    *ngIf="_sharedService.jobObj.HistoryParts == undefined || (_sharedService.jobObj.HistoryParts != undefined &&
+                    (_sharedService.jobObj.HistoryParts | filter : JobCardID : 'JobCardID' | filter : ir.JobTaskID : 'JobTaskID').length == 0)">
+                    <tr scope="row">
+                        <td colspan="12" class="text-center">No Part Added!</td>
+                    </tr>
+                </tbody>
+                <tbody id="tbl">
+                    <tr
+                        *ngFor="let jp of _sharedService.jobObj.HistoryParts | filter : JobCardID : 'JobCardID' | filter : ir.JobTaskID : 'JobTaskID'; let idx = index">
+                        <td>{{idx + 1}}</td>
+                        <td>{{jp.PartNameEnglish}}</td>
+                        <td>{{jp.Quantity}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

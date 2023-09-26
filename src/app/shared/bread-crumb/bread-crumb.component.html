@@ -1,0 +1,202 @@
+<nav aria-label="breadcrumb">
+  <!-- class="breadcrumb" -->
+  <ol class="px-0">
+    <div class="navbarAlign px-lg-2 px-md-0 px-sm-0">
+      <li class="align-self-center activaeLabel">
+        <span *ngFor="let breadcrumb of breadcrumbs">
+          <a
+            class="text-nowrap"
+            [routerLink]="[breadcrumb.url, breadcrumb.params]"
+            routerLinkActive="active"
+          >
+            {{ breadcrumb.label }}
+          </a>
+        </span>
+      </li>
+      <li class="d-flex">
+        <div class="align-self-center br-1 d-flex headerNavbar">
+          <a
+            [ngClass]="{
+              ActiveItem:
+                router.url == '/job/list' ||
+                router.url == '/invoice/list' ||
+                router.url == '/job/job-list',
+              navBarItem:
+                router.url != '/job/list' &&
+                router.url != '/invoice/list' &&
+                router.url != '/job/job-list'
+            }"
+            class="mx-lg-3 mx-md-1 mx-3"
+            (click)="filter.pageNumber = 1"
+            [routerLink]="
+              _sharedService.logged_user_role_id == 1 ||
+              _sharedService.logged_user_role_id == 2 ||
+              _sharedService.logged_user_role_id == 3 ||
+              _sharedService.logged_user_role_id == 4
+                ? ['/', 'job', 'list']
+                : _sharedService.logged_user_role_id == 10
+                ? ['/', 'invoice', 'list']
+                : ['/', 'job', 'job-list']
+            "
+            ><i class="fas fa-tachometer-alt"></i> Dashboard</a
+          >
+          <a
+            *ngIf="
+              _sharedService.logged_user_role_id == 1 ||
+              _sharedService.logged_user_role_id == 2 ||
+              _sharedService.logged_user_role_id == 3
+            "
+            [ngClass]="{
+              ActiveItem: router.url == '/part/compare-parts',
+              navBarItem: router.url != '/part/compare-parts'
+            }"
+            class="mx-lg-3 mx-md-1 mx-3"
+            [routerLink]="['/', 'part', 'compare-parts']"
+            (click)="_sharedService.appointmentData = undefined"
+            ><i class="fas fa-search"></i>Search Parts</a
+          >
+          <a
+            *ngIf="
+              _sharedService.logged_user_role_id == 1 ||
+              _sharedService.logged_user_role_id == 2 ||
+              _sharedService.logged_user_role_id == 3
+            "
+            [ngClass]="{
+              ActiveItem: router.url == '/create-job/basic-info',
+              navBarItem: router.url != '/create-job/basic-info'
+            }"
+            class="mx-lg-3 mx-md-1 mx-3"
+            [routerLink]="['/', 'create-job', 'basic-info']"
+            (click)="_sharedService.appointmentData = undefined"
+            >+Create Job</a
+          >
+          <a
+            *ngIf="
+              _sharedService.logged_user_role_id == 6 ||
+              _sharedService.logged_user_role_id == 3
+            "
+            [ngClass]="{
+              ActiveItem: router.url == '/queue/create-queue',
+              navBarItem: router.url != '/queue/create-queue'
+            }"
+            class="mx-lg-3 mx-md-1 mx-3"
+            [routerLink]="['/', 'queue', 'create-queue']"
+            (click)="
+              clearQueueFields();
+              _sharedService.appointmentData = undefined;
+              _sharedService.queueInspectionApproval = false
+            "
+            >+Appointment</a
+          >
+        </div>
+        <div>
+          <div
+            class="notification-icon right hoverable navBarItem mx-2"
+            id="toggleNotifications"
+            data-toggle="collapse"
+            aria-expanded="false"
+            href="#notificationView"
+            aria-controls="notificationView"
+            *ngIf="_sharedService._commonMeta.Notification != undefined"
+          >
+            <div (click)="getAllNotifications()">
+              <i class="material-icons dp48">notifications</i>
+            </div>
+            <span class="num-count">{{
+              _sharedService._commonMeta.Notification.UnReadNotifications
+            }}</span>
+          </div>
+        </div>
+        <div class="align-self-center d-flex ml-md-2 mr-md-1 mx-lg-3">
+          <img [src]="_sharedService.avatar" alt="" />
+          <ng-select
+            class="custom disable-clear-all role-dropdown"
+            id="applications"
+            name="role"
+            *ngIf="
+              _sharedService.user.Roles != undefined &&
+              _sharedService.user.Roles.length > 1
+            "
+            placeholder=""
+            [(ngModel)]="_sharedService.logged_user_role"
+          >
+            <ng-option
+              *ngFor="let item of _sharedService.user.Roles"
+              [value]="item.RoleName"
+            >
+              <span>{{ item.RoleName }}</span>
+            </ng-option>
+          </ng-select>
+        </div>
+        <div
+          class="small-font primary-font align-self-center mr-md-2"
+          *ngIf="_sharedService.user.Roles.length == 1"
+        >
+          <span>{{ _sharedService.user.Roles[0].RoleName }}</span>
+        </div>
+      </li>
+    </div>
+  </ol>
+</nav>
+
+<div
+  class="row collapse drop-down-animation mx-0 notification-container"
+  id="notificationView"
+>
+  <div class="col-12 px-0">
+    <div class="col-12">
+      <div class="row">
+        <div
+          class="col-6 pl-4 align-self-center font-14 hoverable"
+          title="View All Notifications"
+        >
+          <span
+            class="outlineNone"
+            [routerLink]="['/', 'notification', 'list']"
+          >
+            <!--  -->
+            Notifications
+          </span>
+          <!-- <h3 class="mb-0">Notifications</h3> -->
+        </div>
+
+        <!-- <i *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 4 || _sharedService.logged_user_role_id == 5 || (_sharedService.user?.Roles | editAcceptedJob : _sharedService.logged_user_id : _sharedService.jobObj.JobProcess : jc.JobCardID)"
+          class="px-2 fas fa-eye pointer" title="View" [routerLink]="['/','job','detail']"
+          [queryParams]="{JobCardID : jc.JobCardID}"></i> -->
+
+        <div class="col-6 outlineNone">
+          <h3
+            class="mb-0 text-right outlineNone hoverable"
+            [routerLink]="['/', 'notification', 'list']"
+          >
+            View All
+          </h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 scrollable">
+      <div
+        class="row px-0"
+        *ngFor="
+          let n of _sharedService._commonMeta.Notifications;
+          let idx = index
+        "
+      >
+        <div class="col-12 notification new px-3 py-3 mb-1">
+          <label class="">{{ n.TextData }}.</label>
+
+          <div class="row mx-0">
+            <i class="fas fa-clock primary-font fw-500"></i>
+            <span class="primary-dark-font font-9 ml-4">{{
+              n.CreatedOn | date: "medium"
+            }}</span>
+          </div>
+          <!-- <input class="checkbox" type="checkbox" id="size_1" value="small" checked />
+          <label class="notification new px-3 py-3" for="size_1"><em>1</em> new <a href="">guest account(s)</a> have
+            been
+            created.<i class="material-icons dp48 right">clear</i></label> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

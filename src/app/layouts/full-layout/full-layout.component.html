@@ -1,0 +1,763 @@
+<div class="page-wrapper chiller-theme toggled" id="page-wrapper">
+  <!-- <a (click)="showSidebar()" id="show-sidebar " class="btn btn-sm btn-dark sidebar-mini-button">
+    <i class="fas fa-bars"></i>
+  </a> -->
+
+  <!-- *ngIf="_sharedService.user != undefined && _sharedService.user?.Roles != undefined" -->
+  <nav id="sidebar" class="sidebar-wrapper">
+    <div class="sidebar-content">
+      <div class="sidebar-brand justify-content-end">
+        <div class="toggle-switch" id="close-side">
+          <input
+            type="checkbox"
+            (click)="onToggle()"
+            id="chkTest"
+            name="chkTest"
+          />
+          <label for="chkTest">
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+      <div
+        class="sidebar-brand justify-content-center"
+        [class.isCollapsed]="isCollapsed == true"
+      >
+        <img
+          class="logo-img hoverable"
+          [routerLink]="
+            _sharedService.logged_user_role_id == 1 ||
+            _sharedService.logged_user_role_id == 2 ||
+            _sharedService.logged_user_role_id == 3 ||
+            _sharedService.logged_user_role_id == 4
+              ? ['/', 'job', 'list']
+              : _sharedService.logged_user_role_id == 10
+              ? ['/', 'invoice', 'list']
+              : ['/', 'job', 'job-list']
+          "
+          src="../../../assets/img/logo.png"
+          alt="E-Workshop"
+        />
+      </div>
+
+      <div
+        class="row justify-content-center w-100 ml-0"
+        *ngIf="
+          this._sharedService.logged_user_role_id == 1 && isCollapsed != true
+        "
+      >
+        <div class="col-11 sidebar-menu">
+          <ng-select
+            class="workshop-dropdown"
+            placeholder="workshop"
+            name="workshop"
+            (change)="onChangeWorkshop()"
+            [(ngModel)]="_sharedService.currentWorkshopName"
+            [clearable]="false"
+            [hideSelected]="true"
+          >
+            <ng-option
+              *ngFor="let workshop of _sharedService._commonMeta.Workshops"
+              [value]="workshop.EnglishName"
+            >
+              {{ workshop.EnglishName }}</ng-option
+            >
+          </ng-select>
+        </div>
+      </div>
+
+      <div class="sidebar-menu">
+        <ul *ngFor="let item of modules">
+          <li
+            class="header-menu"
+            *ngIf="
+              (_sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 6 ||
+                _sharedService.logged_user_role_id == 7 ||
+                _sharedService.logged_user_role_id == 8) &&
+              isCollapsed == false
+            "
+          >
+            <span>{{ item.generalName }} </span>
+          </li>
+          <li class="sidebar-dropdown pointer">
+            <a class="dropdown-header" (click)="collapse($event)">
+              <i class="ts service-center" title="Service Center"></i>
+              <span [class.isCollapsed]="isCollapsed == true"
+                >{{ item.generalMenu[0].serviceCenterName }}
+              </span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'admin', 'dashboard']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i class="fas fa-chart-line" title="Dashboard"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].dashboard
+                    }}</span></a
+                  >
+                </li>
+                <li *ngIf="_sharedService.logged_user_role_id == 1">
+                  <a
+                    [routerLink]="[
+                      '/',
+                      'service-center',
+                      'create-service-center'
+                    ]"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i class="fas fa-plus" title="Create Service Center"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].createNew
+                    }}</span></a
+                  >
+                </li>
+                <li *ngIf="_sharedService.logged_user_role_id == 1">
+                  <a
+                    [routerLink]="['/', 'service-center', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="fas fa-list-ul"
+                      title="View All Service Centers"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].viewAll
+                    }}</span></a
+                  >
+                </li>
+                <li *ngIf="_sharedService.logged_user_role_id == 2">
+                  <a
+                    [routerLink]="['/', 'service-center', 'view']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                    [queryParams]="{
+                      WorkshopID: _sharedService.currentWorkshopID
+                    }"
+                  >
+                    <i class="far fa-eye mr-2" title="Service Center"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].viewServiceCenter
+                    }}</span>
+                  </a>
+                </li>
+                <li *ngIf="_sharedService.logged_user_role_id == 2">
+                  <a
+                    [routerLink]="['/', 'service-center', 'manage-hours']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                    [queryParams]="{
+                      WorkshopID: _sharedService.currentWorkshopID
+                    }"
+                  >
+                    <i class="fas fa-hourglass-half" title="Manage Hours"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0]
+                        .manageWorkingHours
+                    }}</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3 ||
+                    _sharedService.logged_user_role_id == 4 ||
+                    _sharedService.logged_user_role_id == 5 ||
+                    _sharedService.logged_user_role_id == 6 ||
+                    _sharedService.logged_user_role_id == 7 ||
+                    _sharedService.logged_user_role_id == 8 ||
+                    _sharedService.logged_user_role_id == 9 ||
+                    _sharedService.logged_user_role_id == 10
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'service-center', 'view-working-hours']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                    [queryParams]="{
+                      WorkshopID: _sharedService.currentWorkshopID
+                    }"
+                  >
+                    <i class="fas fa-hourglass-half" title="Working Hours"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].viewWorkingHours
+                    }}</span>
+                  </a>
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'service-center', 'view-settings']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                    [queryParams]="{
+                      WorkshopID: _sharedService.currentWorkshopID
+                    }"
+                  >
+                    <i class="fas fa-cogs" title="Settings"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].serviceCenterMenu[0].settings
+                    }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <!-- <li class="sidebar-dropdown" *ngIf="(_sharedService.user?.Roles | filter : 7 : 'RoleID').length > 0">
+            <a (click)="collapse($event)">
+              <i class="fa fa-tachometer-alt"></i>
+              {{item.generalMenu[0].serviceCenterName}}
+            </a>
+            <div class="sidebar-submenu" *ngIf="(_sharedService.user?.Roles | filter : 2 : 'RoleID').length > 0">
+              <ul>
+              
+
+              </ul>
+            </div>
+          </li> -->
+
+          <li
+            class="sidebar-dropdown pointer"
+            *ngIf="
+              _sharedService.logged_user_role_id == 1 ||
+              _sharedService.logged_user_role_id == 2
+            "
+          >
+            <a class="dropdown-header" (click)="collapse($event)">
+              <i class="ts staff"></i>
+              <span [class.isCollapsed]="isCollapsed == true">{{
+                item.generalMenu[0].staffName
+              }}</span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li>
+                  <a
+                    [routerLink]="['/', 'user', 'create-user']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts create-employee-hover hover-svg"
+                      title="Create Employee"
+                    ></i>
+                    <i
+                      class="ts create-employee normal-svg"
+                      title="Create Employee"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].staffMenu[0].createUser
+                    }}</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    [routerLink]="['/', 'user', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-employee-hover hover-svg"
+                      title="View All Employees"
+                    ></i>
+                    <i
+                      class="ts view-employee normal-svg"
+                      title="View All Employees"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.generalMenu[0].staffMenu[0].viewALlEmployees
+                    }}</span>
+                  </a>
+                </li>
+                <!-- <li>
+                  <a [routerLink]="['/','labour-pricing']">
+                    Add Labour Pricing
+                  </a>
+                </li> -->
+              </ul>
+            </div>
+          </li>
+
+          <li
+            class="header-menu"
+            *ngIf="
+              (_sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3) &&
+              isCollapsed == false
+            "
+          >
+            <span>{{ item.businessName }}</span>
+          </li>
+          <li class="sidebar-dropdown pointer">
+            <a class="dropdown-header" (click)="collapse($event)">
+              <i class="ts workshop"></i>
+              <span [class.isCollapsed]="isCollapsed == true">{{
+                item.businessMenu[0].workshopName
+              }}</span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'customer', 'create-customer']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts add-customer-hover hover-svg"
+                      title="Create Customer"
+                    ></i>
+                    <i
+                      class="ts add-customer normal-svg"
+                      title="Create Customer"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].addCustomer
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'customer', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-customers-hover hover-svg"
+                      title="View All Customer"
+                    ></i>
+                    <i
+                      class="ts view-customers normal-svg"
+                      title="View All Customer"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].viewAllCustomers
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'vehicle', 'create-vehicle']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts add-vehicle-hover hover-svg"
+                      title="Add Vehicle"
+                    ></i>
+                    <i
+                      class="ts add-vehicle normal-svg"
+                      title="Add Vehicle"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].addvehicle
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'vehicle', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-vehicles-hover hover-svg"
+                      title="View All Vehicle"
+                    ></i>
+                    <i
+                      class="ts view-vehicles normal-svg"
+                      title="View All Vehicle"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].viewAllvehicle
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'pricing', 'task-pricing']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts create-job-hover hover-svg"
+                      title="Labor Pricing"
+                    ></i>
+                    <i
+                      class="ts create-job normal-svg"
+                      title="Labor Pricing"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].laborPricing
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'create-job', 'basic-info']"
+                    [routerLinkActive]="['hover-color']"
+                    [queryParams]="{ jobCardID: 0 }"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts create-job-hover hover-svg"
+                      title="Create Job"
+                    ></i>
+                    <i class="ts create-job normal-svg" title="Create Job"></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].createJob
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3 ||
+                    _sharedService.logged_user_role_id == 4
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'job', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-jobs-hover hover-svg"
+                      title="View All Jobs"
+                    ></i>
+                    <i
+                      class="ts view-jobs normal-svg"
+                      title="View All Jobs"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].viewAllJobs
+                    }}</span></a
+                  >
+                </li>
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 8 ||
+                    _sharedService.logged_user_role_id == 5 ||
+                    _sharedService.logged_user_role_id == 6 ||
+                    _sharedService.logged_user_role_id == 7 ||
+                    _sharedService.logged_user_role_id == 9
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'job', 'job-list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-jobs-hover hover-svg"
+                      title="View All Jobs"
+                    ></i>
+                    <i
+                      class="ts view-jobs normal-svg"
+                      title="View All Jobs"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].techJobList
+                    }}</span></a
+                  >
+                </li>
+                <!-- <li
+                  *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3">
+                  <a [routerLink]="['/','service-contract','create-contract']" [routerLinkActive]="['hover-color']"
+                    class="parent-chiller">
+                    <i class="ts create-job-hover hover-svg" title="Create Contract"></i>
+                    <i class="ts create-job normal-svg" title="Create Contract"></i>
+                    <span
+                      [class.isCollapsed]="isCollapsed==true">{{item.businessMenu[0].workshopMenu[0].createContract}}</span></a>
+                </li> -->
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3 ||
+                    _sharedService.logged_user_role_id == 10
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'job', 'history']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-jobs-hover hover-svg"
+                      title="Job Card History"
+                    ></i>
+                    <i
+                      class="ts view-jobs normal-svg"
+                      title="Job Card History"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].jobHistory
+                    }}</span></a
+                  >
+                </li>
+                <!-- <li
+                  *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2  || _sharedService.logged_user_role_id == 1|| _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 4">
+                  <a [routerLink]="['/','assign-job']">Assign Job</a>
+                </li> -->
+                <!-- <li *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 8">
+                  <a
+                    [routerLink]="['/','invoice','generate-invoice']">{{item.businessMenu[0].workshopMenu[0].generateInvoice}}</a>
+                </li> -->
+                <li
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3 ||
+                    _sharedService.logged_user_role_id == 10
+                  "
+                >
+                  <a
+                    [routerLink]="['/', 'invoice', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts invoice-list-hover hover-svg"
+                      title="Invoice List"
+                    ></i>
+                    <i
+                      class="ts invoice-list normal-svg"
+                      title="Invoice List"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].workshopMenu[0].invoiceList
+                    }}</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li
+            class="sidebar-dropdown pointer"
+            *ngIf="
+              _sharedService.logged_user_role_id == 1 ||
+              _sharedService.logged_user_role_id == 2 ||
+              _sharedService.logged_user_role_id == 7 ||
+              _sharedService.logged_user_role_id == 3
+            "
+          >
+            <a class="dropdown-header" (click)="collapse($event)">
+              <i class="ts part-shop"></i>
+              <span [class.isCollapsed]="isCollapsed == true">{{
+                item.businessMenu[0].partShopName
+              }}</span>
+            </a>
+            <div class="sidebar-submenu">
+              <ul>
+                <li>
+                  <a
+                    [routerLink]="['/', 'vendor', 'create-vendor']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts create-vendor-hover hover-svg"
+                      title="Create Vendor"
+                    ></i>
+                    <i
+                      class="ts create-vendor normal-svg"
+                      title="Create Vendor"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].createVendor
+                    }}</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    [routerLink]="['/', 'vendor', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-vendor-hover hover-svg"
+                      title="View All Vendor"
+                    ></i>
+                    <i
+                      class="ts view-vendor normal-svg"
+                      title="View All Vendor"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].viewAllVendor
+                    }}</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    [routerLink]="['/', 'part', 'create-part']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts create-part-hover hover-svg"
+                      title="Create Part"
+                    ></i>
+                    <i
+                      class="ts create-part normal-svg"
+                      title="Create Part"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].createPart
+                    }}</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    [routerLink]="['/', 'part', 'list']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts view-all-part-hover hover-svg"
+                      title="View All Parts"
+                    ></i>
+                    <i
+                      class="ts view-all-part normal-svg"
+                      title="View All Parts"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].viewAllPart
+                    }}</span></a
+                  >
+                </li>
+                <!-- <li>
+                  <a [routerLink]="['/','part','search-parts']">{{item.businessMenu[0].partShopMenu[0].searchParts}}</a>
+                </li> -->
+                <li>
+                  <a
+                    [routerLink]="['/', 'part', 'compare-parts']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts compare-part-hover hover-svg"
+                      title="Compare Parts"
+                    ></i>
+                    <i
+                      class="ts compare-part normal-svg"
+                      title="Compare Parts"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].compareParts
+                    }}</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    [routerLink]="['/', 'part', 'purchase-orders']"
+                    [routerLinkActive]="['hover-color']"
+                    class="parent-chiller"
+                  >
+                    <i
+                      class="ts compare-part-hover hover-svg"
+                      title="Purchase Orders"
+                    ></i>
+                    <i
+                      class="ts compare-part normal-svg"
+                      title="Compare Parts"
+                    ></i>
+                    <span [class.isCollapsed]="isCollapsed == true">{{
+                      item.businessMenu[0].partShopMenu[0].purchaseOrders
+                    }}</span></a
+                  >
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <a class="userNameoverflow" title="{{ _sharedService.user?.UserName }}">
+        <i class="fa fa-user ts-l text-white"></i>
+        <span class="username" [class.isCollapsed]="isCollapsed == true">{{
+          _sharedService.user?.UserName
+        }}</span>
+      </a>
+      <!-- <a>
+        <i class="fa fa-envelope"></i>
+        <span class="badge badge-pill badge-success notification">7</span>
+      </a>
+      <a>
+        <i class="fa fa-cog"></i>
+        <span class="badge-sonar"></span>
+      </a> -->
+      <a (click)="onLogout()">
+        <i class="fa fa-power-off"></i>
+      </a>
+    </div>
+  </nav>
+
+  <main class="page-content" id="page-content" (click)="closeSidebar()">
+    <div class="container-fluid">
+      <div class="d-flex flex-column h-100 w-100 m-0">
+        <app-bread-crumb class="col- p-0"></app-bread-crumb>
+        <div class="col p-0">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

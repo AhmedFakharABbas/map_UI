@@ -1,0 +1,72 @@
+// User Profile style
+@import "variables";
+
+.our-team {
+  height: 100%;
+}
+
+.team-main {
+  flex-grow: 1;
+}
+
+.picture {
+  left     : 50% !important;
+  transform: translate(-50%, 0%) !important;
+}
+
+.sub-tabset .nav-tabs {
+  padding-bottom: 0px !important;
+  margin-bottom : 10px !important;
+}
+
+.rad-info-box i {
+  font-size: 2.4em;
+}
+
+.badge {
+  color: #f56c3f;
+  font-size: 10px;
+  background: white;
+}
+
+.badge:hover {
+  color       : white;
+  font-size: 10px;
+  background  : #f56c3f;
+}
+.toggle-button-active {
+  color: $hover-color;
+  text-decoration: underline;
+}
+
+
+
+//job card 
+
+@import "variables";
+.card-number {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px 4px;
+    background: coral;
+    color: white;
+    border-bottom-right-radius: 35% 100%;
+    border-top-right-radius: 0% 100%; 
+}
+.collapse-tabset {
+    position: absolute;
+    margin-top: -4px;
+    left: 50%;
+    transform: translate(-50% , 0);
+    background-color: $white-color;
+}
+ 
+.active-process {
+  height: 220px;
+  overflow-y: scroll;
+}
+
+.btm-border{
+  border-bottom: 5px solid $primary-color;
+}

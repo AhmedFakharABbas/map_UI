@@ -1,0 +1,274 @@
+@import "variables";
+
+.error-block-radio {
+  position: relative;
+  z-index: 3;
+  top: 0px;
+  height: 0;
+  pointer-events: none;
+  text-align: right;
+  /* margin-right: 20px !important;*/
+}
+
+.priHigh {
+  border-left: 22px solid #ff3333;
+}
+.priMedium {
+  border-left: 22px solid #ffcc33;
+}
+
+.more.fas:hover {
+  color: white !important;
+}
+.sub-heading-btn:focus {
+  background: $secondary-color;
+}
+
+.input-slide {
+  animation: InputSlide ease 0.5s;
+  animation-iteration-count: 1;
+}
+
+@keyframes InputSlide {
+  0% {
+    opacity: 1;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.gallery-img {
+  height: 115px;
+  width: 96%;
+}
+
+.video-del {
+  top: 0%;
+  right: 11px;
+  padding: 0px 8px 1px 6px;
+  position: absolute;
+  color: white;
+  background: orangered;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.plus-image {
+  max-width: 100px;
+  width: 190px;
+  height: 100px !important;
+  // border-radius: 0% !important;
+}
+
+.file-choose {
+  visibility: hidden;
+  display: none;
+}
+
+.video {
+  max-width: 100%;
+  height: 115px;
+}
+
+.video-input {
+  width: 100%;
+  height: 186px;
+}
+
+.uploader {
+  border: 1px dashed $primary-font;
+  //width: 135px;
+  height: 115px;
+  border-radius: 10px;
+}
+
+.nav-tabs > .nav-item > .nav-link.active {
+  font-size: 16px !important;
+  font-weight: 700;
+  background: #ffffff;
+  color: $hover-color !important;
+  border-radius: 0px !important;
+  border-bottom: 4px solid $hover-color !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.custom-font {
+  font-size: 16px !important;
+}
+
+.img-del {
+  right: 21px;
+}
+
+.result-img {
+  width: 200px;
+  height: 115px;
+}
+
+.sup1 {
+  border: 1px solid $primary-font;
+  border-radius: 5px;
+  padding: 0px 2px;
+}
+
+.time-div {
+  display: inline-flex;
+  color: $primary-font;
+}
+
+.time-input {
+  border: none;
+  color: $primary-font;
+  text-align: center;
+  width: 60px;
+}
+
+.time-input:focus {
+  outline: none;
+}
+.time {
+  position: absolute;
+  right: 29px;
+  top: 10px;
+}
+
+.btn-success {
+  color: #7fc6a6 !important;
+  border-color: #7fc6a6 !important;
+}
+
+//ng-select
+.ng-select.custom-append {
+  border-radius: 0px 8px 8px 0 !important;
+  border-left: 0px;
+  background: $primary-font;
+}
+.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+  color: white !important;
+}
+.ng-select.custom-append .ng-value-label {
+  color: white !important;
+}
+
+.error-block-unit {
+  position: absolute;
+  z-index: 3;
+  top: 7px;
+  right: 113px;
+  height: 0;
+  pointer-events: none;
+  text-align: right;
+  margin-right: 20px !important;
+}
+
+//ribbon
+.ribbon_3 {
+  position: absolute;
+  left: 15px;
+  top: 0px;
+  z-index: 1;
+  overflow: hidden;
+  width: 100px;
+  height: 100px;
+  text-align: left;
+  transform: rotate(-90deg);
+}
+
+.ribbon_3 span {
+  font-size: 10px;
+  font-weight: 400;
+  color: #fff;
+  background: #ff7949;
+  text-align: center;
+  line-height: 25px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(40deg);
+  width: 190px;
+  display: block;
+  //box-shadow: 0px 4px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 16px;
+  left: -30px;
+}
+
+.Country-code-prepend {
+  top: -1px !important;
+  left: -1px !important;
+}
+
+.button-position {
+  position: absolute;
+  top: -3px;
+  right: 18px;
+  z-index: 1;
+}
+
+.text-position {
+  position: absolute;
+  top: 5px;
+  z-index: 1;
+  /* right: 62px; */
+  left: 30px;
+  background: white;
+  color: $hover-color;
+}
+
+.collapseButton-color {
+  color: $hover-color;
+  background: transparent;
+  border: 1px solid $hover-color;
+}
+
+.collapseButton-color .fas:hover {
+  color: white !important;
+  background: $hover-color;
+}
+
+.fa-chevron-down:hover,
+.fa-chevron-up:hover {
+  transform: scale(1) !important;
+}
+
+.tickGreen {
+  color: green;
+}
+.greenBorder {
+  border: 1px solid green !important;
+}
+
+.fas:hover {
+  color: green;
+}
+
+.rotate180 {
+  transform: rotate(180deg);
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.mw-94{
+  max-width: 94%;
+}
+.button-active {
+  background: $hover-color  !important;
+  color:white  !important;  
+}
+
+.btn-round-service.btn-simple-service {
+  padding: 5px 14px;
+  color: #ff7949;
+  border-color: #ff7949;
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+
+

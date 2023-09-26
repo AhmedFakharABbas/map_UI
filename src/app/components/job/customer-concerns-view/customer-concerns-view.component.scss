@@ -1,0 +1,14 @@
+.concern-tabset {
+    overflow-x: scroll;
+}
+.white-space {
+    white-space: nowrap;
+}
+.sup {
+    padding: 8px 4px;
+    height: 13px;
+    margin-left: 3px;
+}
+.ts::after {
+    top: -15px;
+}

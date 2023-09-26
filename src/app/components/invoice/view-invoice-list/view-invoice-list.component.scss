@@ -1,0 +1,29 @@
+@import "variables";
+.tabset-border {
+    border-top: 2px solid $primary-color;
+}
+.plate-number {
+    width: 25px;
+}
+
+.colored-header {
+    background: $card-header-color;
+    // color: #fff;
+    font-weight: 600;
+}
+
+.card-body-padding{
+    padding-bottom: 25px;
+    padding-top: 25px;
+}
+.vertical-line{
+    border: 0.5px solid #dce3de;
+    height: 50px;
+}
+
+.invoice-list-card-header{
+    padding: 12px !important;
+    background: #ffe6e6;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 0;
+  }

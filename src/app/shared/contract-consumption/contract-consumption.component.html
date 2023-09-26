@@ -1,0 +1,136 @@
+<!-- <ng-template #contractDetails let-c="close" let-d="dismiss"> -->
+    <div class="adOptionModel contract-modal" id="adOptionModel" role="document">
+        <div class="modal-header">
+            <h2 class="modal-title text-center col-12 hover-color">
+                {{_sharedService.jobObj.jcVehicleObj != undefined ? _sharedService.jobObj.jcVehicleObj.ContractFullName
+                : ''}}
+            </h2>
+            <button type="button" class="close" (click)="closeContract()" title="Cancel">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="fluid-container modal_container ">
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12">
+                        <div
+                            *ngFor="let ob of _sharedService._commonMeta.objectTypes | filter : 'ServiceCategory' : 'ObjectNameEnglish'; let i=index">
+                            <div class="card px-2 py-2 text-center text-white heading-color">
+                                <label for="">{{ob.TypeNameEnglish}} </label>
+                            </div>
+                            <table class="table text-left primary-font page-animation">
+                                <thead class="col-12">
+                                    <tr class="row">
+                                        <th scope="col" class="col-1">#</th>
+                                        <th scope="col" class="col-4">Name</th>
+                                        <th scope="col" class="col-3">Allowed Units</th>
+                                        <th scope="col" class="col-3">Total Used</th>
+                                        <th scope="col" class="col-1"></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody *ngIf="getVehicleContractObj.PlanFeatures != undefined">
+                                    <tr class="row"
+                                        *ngFor="let pl of getVehicleContractObj.PlanFeatures | filter : vehicleID : 'VehicleID' | filter : ob.ObjectTypeID : 'CategoryID'; let i=index">
+                                        <td class="col-1">{{i+1}}</td>
+                                        <td class="col-4">{{pl.PartNameEnglish != undefined ? pl.PartNameEnglish :
+                                            pl.LaborDescriptionEng != undefined ? pl.LaborDescriptionEng :
+                                            pl.FeatureNameEng }}
+                                        </td>
+                                        <td class="col-3">{{pl.NumberOfUnits != undefined ? pl.NumberOfUnits + ' (Qty)'
+                                            : pl.Discount != undefined ? pl.Discount + ' %' : pl.IsInclude == true ?
+                                            '&#10003;' : pl.AssistTypeName}}</td>
+                                        <td class="col-2">{{pl.NumberOfUnits != undefined ? pl.TotalUsage + ' (Qty)' :
+                                            pl.Discount != undefined ? ' - ' : pl.IsInclude == true ? ' - ' : ' - '}}
+                                        </td>
+                                        <td class="col-2 text-center">
+                                            <!-- {{(getVehicleContractObj.ContractTasksDetail | filter : 118 : 'LaborTaskID').CreatedOn}} -->
+                                            <!-- {{getVehicleContractObj.ContractTasksDetail | json}} -->
+                                            <!-- <i class="fas fa-info-circle" 
+                                            title="CreatedOn"></i> -->
+                                            <a *ngIf="pl.AutomotivePartID != undefined ? (getVehicleContractObj.ContractPartsDetail | filter : pl.AutomotivePartID : 'AutomotivePartID').length > 0 
+                                                : (getVehicleContractObj.ContractTasksDetail | filter : pl.LaborTaskID : 'LaborTaskID').length > 0"
+                                                class="collapse-tabset btn p-0 collapseButton-color my-0 active-none"
+                                                data-toggle="collapse" href="#consumptionDetails{{pl.PlanFeatureID}}"
+                                                role="button" aria-expanded="false" aria-controls="pl.PlanFeatureID"
+                                                title="View Details">
+                                                <i class="fas fa-eye font-14 hover-color" id=""></i>
+                                            </a>
+                                        </td>
+                                        <div class="collapse mx-3 row w-100"
+                                            id="consumptionDetails{{pl.PlanFeatureID}}">
+                                            <div class="card" *ngIf="pl.AutomotivePartID != undefined">
+                                                <table class="table text-left primary-font page-animation">
+                                                    <thead class="col-12">
+                                                        <tr class="row mx-0">
+                                                            <th scope="col" class="col-5">Job #</th>
+                                                            <th scope="col" class="col-5">Date</th>
+                                                            <th scope="col" class="col-2"></th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody *ngIf="pl.AutomotivePartID != undefined">
+                                                        <tr class="row mx-0 border-none"
+                                                            *ngFor="let part of getVehicleContractObj.ContractPartsDetail | filter : pl.AutomotivePartID : 'AutomotivePartID'; let i=index">
+                                                            <td class="col-5">{{part.JobCardNumber}}</td>
+                                                            <td class="col-5">{{part.CreatedOn | date}}</td>
+
+                                                            <td class="col-2">
+                                                                <i class="fas fa-eye font-14 hover-color"
+                                                                    title="View Card"
+                                                                    (click)="openNewTab(part.JobCardID)">
+                                                                </i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                            <div class="card"
+                                                *ngIf="pl.AutomotivePartID == undefined && pl.LaborTaskID != undefined">
+                                                <table class="table text-left primary-font page-animation">
+                                                    <thead class="col-12">
+                                                        <tr class="row mx-0">
+                                                            <th scope="col" class="col-5">Job #</th>
+                                                            <th scope="col" class="col-5">Date</th>
+                                                            <th scope="col" class="col-2"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <!-- [routerLink]="['/','update-job',task.JobCardID,'basic-info']" -->
+                                                    <tbody
+                                                        *ngIf="pl.AutomotivePartID == undefined && pl.LaborTaskID != undefined">
+                                                        <tr class="row mx-0 border-none"
+                                                            *ngFor="let task of getVehicleContractObj.ContractTasksDetail | filter : pl.LaborTaskID : 'LaborTaskID'; let i=index">
+                                                            <td class="col-5">{{task.JobCardNumber}}</td>
+                                                            <td class="col-5">{{task.CreatedOn | date}}</td>
+                                                            <td class="col-2">
+                                                                <i class="fas fa-eye font-14 hover-color"
+                                                                    title="View Card"
+                                                                    (click)="openNewTab(task.JobCardID)">
+                                                                </i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-12 float-left text-center">
+                            <button (click)="closeContract()"
+                                class="a-button btn btn-primary btn-round btn-simple col-6">
+                                OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- </ng-template> -->

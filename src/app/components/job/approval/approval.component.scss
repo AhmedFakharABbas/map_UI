@@ -1,0 +1,218 @@
+@import "variables";
+.btn-danger:hover {
+    background-color: #ff5555;
+    color: white;
+    border-color: #ff5555;
+    box-shadow: none;
+}
+
+.discount-field {
+    transform: scale(0.9);
+    width: 82px;
+}
+.ttl-discount-field{
+    transform: scale(1, 0.9);
+}
+.tableHeader {
+    background:$white-color!important;
+    color: $primary-color!important ;
+}
+
+.form-check .form-check-sign::before,
+.form-check .form-check-sign::after {
+    transform: scale(0.8);
+}
+
+.inv-footer{
+    background: $primary-color;
+}
+.timeIcon{
+    color: #000000!important;
+    
+
+}
+.timeIcon:hover{
+    color: #ff7949 !important;
+}
+.con-count{
+    background: $hover-color;
+    color: $white-color;
+    padding: 5px 11px;
+}
+
+.tbl-header{
+    background: $primary-color;
+    color: $white-color;
+}
+
+thead tr:first-child th:first-child {
+    border-radius: 0.4em 0 0 0.4em;
+  }
+  /* the last 'th' within the first 'tr' of the 'thead': */
+  thead tr:first-child th:last-child {
+    border-radius: 0 0.4em 0.4em 0;
+  }
+  /* the first 'td' within the last 'tr' of the 'tbody': */
+  tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 0.6em;
+  }
+  /* the last 'td' within the last 'tr' of the 'tbody': */
+  tbody tr:last-child td:last-child {
+    border-radius: 0 0 0.6em 0;
+  }
+
+  .priority-high{
+    background-color: #ff3333; 
+    text-decoration: none;
+    padding: 4px 4px;
+    position: relative;
+    border-radius: 50%;
+    left: -7px;
+    float: left;
+    bottom: -6px;
+}
+.radio-check{
+    display: grid;
+}
+.priority-med{
+    background-color: #ffcc33; 
+    text-decoration: none;
+    padding: 4px 4px;
+    position: relative;
+    border-radius: 50%;
+    left: -7px;
+    float: left;
+    bottom: -6px;
+}
+
+.part-selection{
+    background: #E9EDFF              ; 
+}
+.selected-row{
+    background: #E9EDFF   ;
+    border-top: 1px solid #dadee7; 
+}
+
+.hoverBackground {
+    color: $primary-color;
+    border-bottom: 1px solid #dadee7 !important;
+    border-radius: 1px;
+    background: white;
+}
+
+.status-border{
+    border-right: 1px solid coral !important;
+}
+
+.contracted{
+    // position: sticky;
+    // left: 400px;
+    color: #019201;
+    border: 1px solid;
+    border-radius: 10px;
+    // top: -8px;
+  
+}
+.contract-icon{
+    width: 15px !important;
+    height: 15px !important;
+}
+.approve-work{
+    background-color: #E0E5FF  
+    // background-color: green;
+    // color: white;
+}
+.approve-part{
+    color:black;
+    font-weight: bold;
+    // border-color: green;
+    // color: green;
+    // font-weight: bold;
+    // color: #FF7949;
+    
+}
+.available-part{
+   
+}
+.number{
+    border-right: 1px solid hsl(222, 21%, 88%);
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+}
+.repair-part{
+    background: #E9EDFF   ;
+    border-bottom: 1px solid #dadee7; 
+}
+
+.label {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    padding-left: 1px;
+    line-height: 26px;
+    margin-bottom: 0;
+    transition: color 0.3s linear;
+}
+
+
+
+.collapsed.fa-caret-up::before{
+    content: "\f0d7" !important;
+    color: black !important;
+}
+
+.caret-down.collapsed .label .icon .icon-up.fa-caret-up::before {
+    content: "\f0d7" !important;
+    color: black !important;
+}
+.alternativePart{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+.form-check-label .part-label .collapsed.fa-caret-up::before{
+    content: "\f0d7" !important;
+    color: black !important;
+}
+
+
+.form-check .form-check-sign::before, .form-check .form-check-sign::after {
+    content: " ";
+    display: inline-block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    cursor: pointer;
+    border-radius: 3px;
+    top: 0;
+    background-color: #ffffff;
+    border: 1px solid #031A69;
+    transition: opacity 0.3s linear;
+}
+.form-check input[type="checkbox"]:checked + .form-check-sign::after {
+    opacity: 1;
+    background-color: #031A69;
+    color: #fff;
+}
+.form-check .form-check-sign::after {
+    font-family: 'Nucleo Outline';
+    content: "\ea22";
+    top: 0px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0;
+    color: #ff7949;
+    border: 0;
+    background-color: inherit;
+}
+.form-check-radio .form-check-sign::before{
+    
+    top: 0px !important;
+   
+  
+  }
+  .itemCode{
+    padding-left: 9% !important;
+}
+  
+  

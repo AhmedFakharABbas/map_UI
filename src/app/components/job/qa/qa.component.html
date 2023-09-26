@@ -1,0 +1,1453 @@
+<!-- <div class="row w-100 mx-0">
+    <hr class="w-100">
+    <h5 class="sub-heading">Quality Assurance Checklist</h5>
+  <button class="btn btn-primary btn-round complete-btn">Complete</button>
+
+</div> -->
+<!-- <form #qaInspection="ngForm">
+
+<div class="row" *ngIf="_sharedService.jobObj.JobCardCheckList != undefined"> 
+    <div class="form-check col-12" *ngFor="let qa of _sharedService.jobObj.JobCardCheckList | filter: 47 : 'CheckListTypeID'">
+        <label class="d-flex form-check-label">
+            <input class="form-check-input" id="{{qa.EnglishName}}" type="checkbox" value="" name="{{qa.EnglishName}}" (change)="qa.IsModified = true"
+            [(ngModel)]="qa.IsChecked" #{{qa.EnglishName}} ngModel>
+            <span class="form-check-sign">{{qa.EnglishName}}</span>
+        </label>
+    </div>
+</div>
+ 
+</form> -->
+<div class="row w-100 mx-0">
+  <!-- <div class="col-12 text-right">
+        <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn  py-1 bg-white"
+            *ngIf="_sharedService.jobObj.JobTasks.length > 0 && ( _sharedService.jobObj.JobTasks |filter : true : 'IsInclude' | filter : false : 'QAVerify').length == 0 && _sharedService.jobObj.JCBasicInfo.QAStatusID == 16"
+            (click)="_sharedService.jobObj.JCBasicInfo.QAStatusID = 17; completeJobProcess(_sharedService.jobObj.JCBasicInfo.QAStatusID)">
+            Mark Complete
+        </button>
+
+        <button class="btn btn-success btn-simple btn-round mark-complete-btn  py-1 bg-white"
+            *ngIf="_sharedService.jobObj.JCBasicInfo.QAStatusID == 17">
+            Completed
+        </button>
+    </div> -->
+
+  <hr class="w-100" />
+  <h5 class="sub-heading primary-font">Quality Assurance</h5>
+  <!-- <div class="row justify-content-end sub-heading-btn" *ngIf="_sharedService.jobObj.JobTasks.length > 0 && ( _sharedService.jobObj.JobTasks | filter : false : 'QAVerify').length == 0">
+        <input class="tgl tgl-flip" id="qa" type="checkbox" value=""
+            *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 9 "
+            name="QaStatusID" [checked]="_sharedService.jobObj.JCBasicInfo.QAStatusID == 17"
+            [disabled]="_sharedService.jobObj.JCBasicInfo.QAStatusID == 17"
+            (click)="_sharedService.jobObj.JCBasicInfo.QAStatusID = 17; completeJobProcess(_sharedService.jobObj.JCBasicInfo.QAStatusID)" />
+        <label class="tgl-btn" data-tg-off="Mark complete" data-tg-on="Completed!" for="qa"></label>
+    </div> -->
+</div>
+<ng-container
+  *ngIf="
+    _sharedService.jobObj.JCBasicInfo.QAStatusID == 17 &&
+    _sharedService.logged_user_role_id != 1 &&
+      _sharedService.logged_user_role_id != 2
+  "
+>
+  <app-qa-view></app-qa-view>
+</ng-container>
+<ng-container
+  *ngIf="
+    _sharedService.jobObj.JCBasicInfo.QAStatusID != 17 ||
+    _sharedService.logged_user_role_id == 1 ||
+    _sharedService.logged_user_role_id == 2
+  "
+>
+  <form #qaInspection="ngForm">
+    <ngb-tabset
+      class="sub-tabset big-font"
+      #tabset="ngbTabset"
+      (tabChange)="preventChange($event)"
+    >
+      <!-- initial Checklist -->
+      <ngb-tab title="QA Checklist" id="1">
+        <ng-template ngbTabContent>
+          <div
+            class="row primary-font page-animation card pb-3 mx-0"
+            *ngIf="_sharedService.jobObj.JobCardCheckList != undefined"
+          >
+            <div
+              class="form-check col-12"
+              *ngFor="
+                let qa of _sharedService.jobObj.JobCardCheckList
+                  | filter: 47:'CheckListTypeID'
+              "
+            >
+              <label class="d-flex form-check-label">
+                <input
+                  class="form-check-input"
+                  id="{{ qa.EnglishName }}"
+                  type="checkbox"
+                  value=""
+                  name="{{ qa.EnglishName }}"
+                  (change)="qa.IsModified = true; shouldUpdate = true"
+                  [(ngModel)]="qa.IsChecked"
+                  #{{qa.EnglishName}}
+                  ngModel
+                />
+                <span class="form-check-sign">{{ qa.EnglishName }}</span>
+              </label>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab title="Tasks" id="2">
+        <ng-template ngbTabContent>
+          <!-- *ngIf="_sharedService.jobObj.JobTasks != undefined" -->
+          <!-- <div class="row justify-content-center mt-4 mb-4"
+                            *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks!= undefined && _sharedService.jobObj.JobTasks.length==0)">
+                            <span class="primary-font">No task found!</span>
+                        </div> -->
+          <!-- {{ _sharedService.jobObj.JobConcerns | json }} -->
+
+          <ng-container
+          >
+            <div
+              class="card col-12 d-flex bb-2 mt-2"
+              *ngIf="
+                _sharedService.jobObj != undefined &&
+                _sharedService.jobObj.JobTasks != undefined &&
+                (
+                  _sharedService.jobObj.JobTasks
+                  | partfilter: undefined:'JobConcernID'
+                  | filter: true:'IsInclude'
+                ).length > 0
+              "
+            >
+              <div class="row w-100">
+                <div class="col-11 align-self-center pl-5">
+                  <!-- {{i+1}}- &nbsp; -->
+                  <b> Others</b>
+                </div>
+                <div class="col-1 text-right">
+                  <a
+                    class="collapse-tabset btn p-0 collapseButton-color"
+                    data-toggle="collapse"
+                    href="#concernOther"
+                    role="button"
+                    (click)="collapseConcern($event, undefined)"
+                    aria-expanded="false"
+                    aria-controls="jc.JobCardID"
+                  >
+                    <i
+                      class="fas fa-chevron-down p-2"
+                      id="Other"
+                    ></i>
+                  </a>
+                </div>
+              </div>
+
+              <div class="collapse bt-1" id="concernOther">
+                <div
+                  class="row card mx-0 my-2"
+                  *ngFor="
+                    let ir of _sharedService.jobObj.JobTasks
+                      | partfilter: undefined:'JobConcernID'
+                      | filter: true:'IsInclude';
+                    let i = index
+                  "
+                >
+                  <div class="row">
+                    <div class="col-3 text-center align-self-center">
+                      <ngb-carousel
+                        class="results"
+                        *ngIf="
+                          _sharedService.jobObj.Gallery != undefined &&
+                          _sharedService.jobObj.Gallery.length > 0
+                        "
+                      >
+                        <ng-template
+                          ngbSlide
+                          *ngFor="
+                            let image of _sharedService.jobObj.Gallery
+                              | filter: ir.JobTaskID:'ObjectID'
+                              | filter: 50:'GalleryTypeID';
+                            let idx = index
+                          "
+                        >
+                          <div class="picsum-img-wrapper">
+                            <div *ngIf="image.IsVideo == false">
+                              <img
+                                [src]="
+                                  image
+                                    ? _sharedService.baseUrl + image.ImageURL
+                                    : _sharedService.default_img
+                                "
+                                class="result-img"
+                              />
+                            </div>
+                            <div *ngIf="image.IsVideo == true">
+                              <video
+                                class="video"
+                                controls
+                                multiple
+                                [src]="_sharedService.baseUrl + image.ImageURL"
+                              >
+                                Your browser does not support the video tag.
+                              </video>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </ngb-carousel>
+                      <div
+                        *ngIf="
+                          _sharedService.jobObj.Gallery == undefined ||
+                          (
+                            _sharedService.jobObj.Gallery
+                            | filter: ir.JobTaskID:'ObjectID'
+                            | filter: 50:'GalleryTypeID'
+                          ).length == 0
+                        "
+                      >
+                        <img
+                          [src]="_sharedService.default_img"
+                          alt="Results Images"
+                          class="result-img"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-9 row">
+                      <div class="col-6 px-0 pb-3">
+                        <div class="primary-font ml-3 smaller-font">
+                          <span>Service</span>
+                        </div>
+                        <div class="ml-3">
+                          <p
+                            class="part-detail-box my-0 primary-dark-font"
+                            title=""
+                          >
+                            <span
+                              *ngIf="
+                                ir.LaborDescriptionEng != '' &&
+                                  ir.LaborDescriptionEng != undefined;
+                                else elseHyphen
+                              "
+                              >{{ ir.LaborDescriptionEng }}</span
+                            >
+                          </p>
+                        </div>
+                      </div>
+
+                      <div class="col-6 px-0 pb-3">
+                        <div class="primary-font ml-3 smaller-font">
+                          <span>Type</span>
+                        </div>
+                        <div class="ml-3">
+                          <p
+                            class="part-detail-box my-0 primary-dark-font"
+                            title=""
+                          >
+                            {{
+                              ir.RepairTypeID == 70
+                                ? "Mechanical"
+                                : ir.RepairTypeID == 71
+                                ? "Electrical"
+                                : ir.RepairTypeID == 72
+                                ? "Spare Parts"
+                                : ir.RepairTypeID == 73
+                                ? "Others"
+                                : ir.RepairTypeID == 102
+                                ? "Body Repair"
+                                : ""
+                            }}
+                            <small>
+                              {{
+                                ir.JobTaskTypeID == 51 ? "Internal" : "External"
+                              }}</small
+                            >
+                          </p>
+                        </div>
+                      </div>
+
+                      <!-- <div class="col-6 px-0 pb-1">
+                                                <div class="primary-font ml-3 smaller-font">
+                                                    <span>Concern</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box my-0 primary-font" title="">
+                                                        <span
+                                                            *ngIf="ir.ConcernDescription != undefined; else elseHyphen">{{ir.ConcernDescription}}</span>
+                                                    </p>
+                                                </div>
+                                                </div> -->
+
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col-6 px-0 pb-1">
+                            <div class="primary-font ml-3 smaller-font">
+                              <span>Description</span>
+                            </div>
+                            <div class="ml-3">
+                              <p
+                                class="part-detail-box my-0 primary-dark-font"
+                                title=""
+                              >
+                                <span
+                                  appElseHyphen
+                                  [elseHyphen]="ir.TaskDescription"
+                                ></span>
+                                <!-- <span
+                                                                        *ngIf="ir.TaskDescription != undefined; else elseHyphen">{{ir.TaskDescription}}</span> -->
+                              </p>
+                            </div>
+                          </div>
+
+                          <div
+                            class="col-6 px-0 pb-1"
+                            *ngIf="
+                              ir.ServiceTypeID == 136 &&
+                              (ir.LaborTaskID == 130 || ir.LaborTaskID == 131)
+                            "
+                          >
+                            <div class="primary-font ml-3 smaller-font">
+                              <span>Inspection</span>
+                            </div>
+                            <div class="ml-3">
+                              <i
+                                class="fas fa-eye"
+                                (click)="
+                                  LaborTaskID = ir.LaborTaskID;
+                                  openTaskCheckListModal(taskCheckList)
+                                "
+                              ></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 
+                                            <div class="col-6">
+                                                <div class="floating-label form-group mt-3 mb-0">
+                                                    <input type="text" placeholder=" "
+                                                        class="floating-input form-control" name="Comments{{i}}"
+                                                        [(ngModel)]="ir.QAComments" (change)="ir.IsModified = true" />
+                                                    <span class="highlight"> </span>
+                                                    <label class="input-label">Comments</label>
+                                                </div>
+                                            </div> -->
+
+                      <div class="col-6">
+                        <div class="primary-font smaller-font">
+                          <span
+                            >QA Comments
+                            <i
+                              class="fas fa-edit pointer ml-2"
+                              (click)="ir.EditLabor = true"
+                              *ngIf="
+                                ir.QAComments == undefined ||
+                                ir.EditLabor == undefined
+                              "
+                            ></i>
+                            <i
+                              class="fas fa-check ml-2"
+                              (click)="ir.EditLabor = false"
+                              *ngIf="ir.EditLabor == true"
+                            ></i>
+                          </span>
+                        </div>
+                        <div class="">
+                          <p
+                            class="part-detail-box my-0 primary-dark-font"
+                            title=""
+                            *ngIf="
+                              ir.EditLabor == false || ir.EditLabor == undefined
+                            "
+                          >
+                            <span
+                              *ngIf="
+                                ir.QAComments != undefined;
+                                else elseHyphen
+                              "
+                              >{{ ir.QAComments }}
+                            </span>
+                          </p>
+                          <ng-container *ngIf="ir.EditLabor == true">
+                            <div
+                              class="
+                                floating-label
+                                form-group
+                                col
+                                mb-0
+                                px-0
+                                page-animation
+                                mt-2
+                              "
+                            >
+                              <input
+                                type="text"
+                                value=""
+                                placeholder=" "
+                                (change)="
+                                  ir.IsModified = true; shouldUpdate = true
+                                "
+                                class="
+                                  floating-input
+                                  form-control
+                                  input-border-color
+                                "
+                                name="QAComments"
+                                [(ngModel)]="ir.QAComments"
+                              />
+                              <span class="highlight"></span>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+
+                      <div class="col-6 align-self-center">
+                        <ng-container *ngIf="ir.QAVerify == false">
+                          <div
+                            class="text-center align-self-center"
+                            *ngIf="ir.TaskStatusID == 17"
+                          >
+                            <button
+                              type="button"
+                              title="Accept"
+                              class="btn btn-accept btn-round smaller-font"
+                              (click)="ir.QAVerify = true; taskVerification(ir)"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              type="button"
+                              title="Reject"
+                              class="btn btn-reject btn-round smaller-font"
+                              (click)="
+                                ir.QAVerify = false;
+                                ir.TaskStatusID = 16;
+                                taskVerification(ir)
+                              "
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        </ng-container>
+                        <div
+                          *ngIf="ir.TaskStatusID != 17"
+                          class="
+                            primary-dark-font
+                            align-self-center
+                            text-center
+                          "
+                        >
+                          <span>Task Not Completed!</span>
+                        </div>
+                        <div
+                          *ngIf="ir.QAVerify == true"
+                          class="
+                            primary-dark-font
+                            align-self-center
+                            text-center
+                            bold-font
+                          "
+                        >
+                          <span class="success-font">Verified!</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mx-0 bb-1">
+                    <table
+                      class="
+                        table
+                        mx-3
+                        text-left
+                        primary-dark-font
+                        page-animation
+                      "
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Part</th>
+                          <!-- <th scope="col">Customer Concern</th> -->
+                          <!-- <th scope="col">Repair</th> -->
+                          <th scope="col">Note</th>
+                          <th scope="col">Quantity</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody class="primary-font">
+                        <tr
+                          *ngFor="
+                            let jp of _sharedService.jobObj.JobParts
+                              | filter: ir.JobTaskID:'JobTaskID'
+                              | filter: true:'IsInclude';
+                            let i = index
+                          "
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ jp.PartNameEnglish }}</td>
+                          <!-- <td>{{jp.ConcernDescription}}</td> -->
+                          <!-- <td><i class="fas fa-clipboard"
+                                                                                *ngIf="(_sharedService.jobObj.JobTasks | filter : jp.JobTaskID : 'JobTaskID').length > 0"
+                                                                                (click)="openTaskModal(taskModel, jp.JobTaskID)"></i>
+                                                                            <span
+                                                                                *ngIf="(_sharedService.jobObj.JobTasks | filter : jp.JobTaskID : 'JobTaskID').length == 0">N/A</span>
+                                                                        </td> -->
+                          <td>
+                            <span appElseHyphen [elseHyphen]="jp.Notes"> </span>
+                          </td>
+                          <td>
+                            {{ jp.Quantity }}
+                            <small *ngIf="jp.UnitTypeName != undefined"
+                              >({{ jp.UnitTypeName }})</small
+                            >
+                          </td>
+                          <td>
+                            <span
+                              appElseHyphen
+                              [elseHyphen]="jp.JobPartStatusName"
+                            ></span>
+                          </td>
+                          <!-- <td *ngIf="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 6)  ">
+                                                        <div class="floating-label form-group">
+                                                            <ng-select placeholder="Status" class="custom" name="part{{i+1}}" id="applications"
+                                                                appendTo="body" (change)="jp.IsModified = true" [(ngModel)]="jp.JobPartStatusID">
+                                                                <ng-option
+                                                                    *ngFor="let item of _sharedService._commonMeta.ObjectStatus | filter: 'JobPartDelivery': 'ObjectNameEnglish'"
+                                                                    [value]="item.ObjectStatusID">{{item.StatusNameEnglish}}
+                                                                </ng-option>
+                                                            </ng-select>
+                                                        </div>
+                                                    </td> -->
+                        </tr>
+                      </tbody>
+                      <tbody
+                        *ngIf="
+                          _sharedService.jobObj.JobParts == undefined ||
+                          (_sharedService.jobObj.JobParts != undefined &&
+                            (
+                              _sharedService.jobObj.JobParts
+                              | filter: ir.JobTaskID:'JobTaskID'
+                            ).length == 0)
+                        "
+                      >
+                        <tr scope="row">
+                          <td colspan="12" class="text-center primary-font">
+                            No part added!
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="row text-center mx-0">
+                  <div
+                    class="card p-3"
+                    *ngIf="
+                      _sharedService.jobObj.JobTasks == undefined ||
+                      (_sharedService.jobObj.JobTasks != undefined &&
+                        _sharedService.jobObj.JobTasks.length == 0)
+                    "
+                  >
+                    No repair added!
+                  </div>
+                </div>
+                <div
+                  class="card p-3 mb-0 text-center"
+                  *ngIf="
+                    (
+                      _sharedService.jobObj.JobTasks
+                      | filter: undefined:'JobConcernID'
+                    ).length == 0
+                  "
+                >
+                  No Repair Added
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+
+          <ng-container
+          *ngFor="let con of _sharedService.jobObj.JobConcerns; let i = index"
+        >
+          <div
+            class="card col-12 d-flex bb-2 mt-2"
+            *ngIf="
+              _sharedService.jobObj != undefined &&
+              _sharedService.jobObj.JobTasks != undefined &&
+              (
+                _sharedService.jobObj.JobTasks
+                | filter: con.JobConcernID:'JobConcernID'
+                | filter: true:'IsInclude'
+              ).length > 0
+            "
+          >
+            <div class="row w-100">
+              <div class="col-11 align-self-center pl-5">
+                <!-- {{i+1}}- &nbsp; -->
+                <b> {{ con.ConcernDescription }}</b>
+              </div>
+              <div class="col-1 text-right">
+                <a
+                  class="collapse-tabset btn p-0 collapseButton-color"
+                  data-toggle="collapse"
+                  href="#concern{{ con.JobConcernID }}"
+                  role="button"
+                  (click)="collapseConcern($event, con.JobConcernID)"
+                  aria-expanded="false"
+                  aria-controls="jc.JobCardID"
+                >
+                  <i
+                    class="fas fa-chevron-down p-2"
+                    id="{{ con.JobConcernID }}"
+                  ></i>
+                </a>
+              </div>
+            </div>
+
+            <div class="collapse bt-1" id="concern{{ con.JobConcernID }}">
+              <div
+                class="row card mx-0 my-2"
+                *ngFor="
+                  let ir of _sharedService.jobObj.JobTasks
+                    | filter: con.JobConcernID:'JobConcernID'
+                    | filter: true:'IsInclude';
+                  let i = index
+                "
+              >
+                <div class="row">
+                  <div class="col-3 text-center align-self-center">
+                    <ngb-carousel
+                      class="results"
+                      *ngIf="
+                        _sharedService.jobObj.Gallery != undefined &&
+                        _sharedService.jobObj.Gallery.length > 0
+                      "
+                    >
+                      <ng-template
+                        ngbSlide
+                        *ngFor="
+                          let image of _sharedService.jobObj.Gallery
+                            | filter: ir.JobTaskID:'ObjectID'
+                            | filter: 50:'GalleryTypeID';
+                          let idx = index
+                        "
+                      >
+                        <div class="picsum-img-wrapper">
+                          <div *ngIf="image.IsVideo == false">
+                            <img
+                              [src]="
+                                image
+                                  ? _sharedService.baseUrl + image.ImageURL
+                                  : _sharedService.default_img
+                              "
+                              class="result-img"
+                            />
+                          </div>
+                          <div *ngIf="image.IsVideo == true">
+                            <video
+                              class="video"
+                              controls
+                              multiple
+                              [src]="_sharedService.baseUrl + image.ImageURL"
+                            >
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </ngb-carousel>
+                    <div
+                      *ngIf="
+                        _sharedService.jobObj.Gallery == undefined ||
+                        (
+                          _sharedService.jobObj.Gallery
+                          | filter: ir.JobTaskID:'ObjectID'
+                          | filter: 50:'GalleryTypeID'
+                        ).length == 0
+                      "
+                    >
+                      <img
+                        [src]="_sharedService.default_img"
+                        alt="Results Images"
+                        class="result-img"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-9 row">
+                    <div class="col-6 px-0 pb-3">
+                      <div class="primary-font ml-3 smaller-font">
+                        <span>Service</span>
+                      </div>
+                      <div class="ml-3">
+                        <p
+                          class="part-detail-box my-0 primary-dark-font"
+                          title=""
+                        >
+                          <span
+                            *ngIf="
+                              ir.LaborDescriptionEng != '' &&
+                                ir.LaborDescriptionEng != undefined;
+                              else elseHyphen
+                            "
+                            >{{ ir.LaborDescriptionEng }}</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="col-6 px-0 pb-3">
+                      <div class="primary-font ml-3 smaller-font">
+                        <span>Type</span>
+                      </div>
+                      <div class="ml-3">
+                        <p
+                          class="part-detail-box my-0 primary-dark-font"
+                          title=""
+                        >
+                          {{
+                            ir.RepairTypeID == 70
+                              ? "Mechanical"
+                              : ir.RepairTypeID == 71
+                              ? "Electrical"
+                              : ir.RepairTypeID == 72
+                              ? "Spare Parts"
+                              : ir.RepairTypeID == 73
+                              ? "Others"
+                              : ir.RepairTypeID == 102
+                              ? "Body Repair"
+                              : ""
+                          }}
+                          <small>
+                            {{
+                              ir.JobTaskTypeID == 51 ? "Internal" : "External"
+                            }}</small
+                          >
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- <div class="col-6 px-0 pb-1">
+                                              <div class="primary-font ml-3 smaller-font">
+                                                  <span>Concern</span>
+                                              </div>
+                                              <div class="ml-3">
+                                                  <p class="part-detail-box my-0 primary-font" title="">
+                                                      <span
+                                                          *ngIf="ir.ConcernDescription != undefined; else elseHyphen">{{ir.ConcernDescription}}</span>
+                                                  </p>
+                                              </div>
+                                              </div> -->
+
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-6 px-0 pb-1">
+                          <div class="primary-font ml-3 smaller-font">
+                            <span>Description</span>
+                          </div>
+                          <div class="ml-3">
+                            <p
+                              class="part-detail-box my-0 primary-dark-font"
+                              title=""
+                            >
+                              <span
+                                appElseHyphen
+                                [elseHyphen]="ir.TaskDescription"
+                              ></span>
+                              <!-- <span
+                                                                      *ngIf="ir.TaskDescription != undefined; else elseHyphen">{{ir.TaskDescription}}</span> -->
+                            </p>
+                          </div>
+                        </div>
+
+                        <div
+                          class="col-6 px-0 pb-1"
+                          *ngIf="
+                            ir.ServiceTypeID == 136 &&
+                            (ir.LaborTaskID == 130 || ir.LaborTaskID == 131)
+                          "
+                        >
+                          <div class="primary-font ml-3 smaller-font">
+                            <span>Inspection</span>
+                          </div>
+                          <div class="ml-3">
+                            <i
+                              class="fas fa-eye"
+                              (click)="
+                                LaborTaskID = ir.LaborTaskID;
+                                openTaskCheckListModal(taskCheckList)
+                              "
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 
+                                          <div class="col-6">
+                                              <div class="floating-label form-group mt-3 mb-0">
+                                                  <input type="text" placeholder=" "
+                                                      class="floating-input form-control" name="Comments{{i}}"
+                                                      [(ngModel)]="ir.QAComments" (change)="ir.IsModified = true" />
+                                                  <span class="highlight"> </span>
+                                                  <label class="input-label">Comments</label>
+                                              </div>
+                                          </div> -->
+
+                    <div class="col-6">
+                      <div class="primary-font smaller-font">
+                        <span
+                          >QA Comments
+                          <i
+                            class="fas fa-edit pointer ml-2"
+                            (click)="ir.EditLabor = true"
+                            *ngIf="
+                              ir.QAComments == undefined ||
+                              ir.EditLabor == undefined
+                            "
+                          ></i>
+                          <i
+                            class="fas fa-check ml-2"
+                            (click)="ir.EditLabor = false"
+                            *ngIf="ir.EditLabor == true"
+                          ></i>
+                        </span>
+                      </div>
+                      <div class="">
+                        <p
+                          class="part-detail-box my-0 primary-dark-font"
+                          title=""
+                          *ngIf="
+                            ir.EditLabor == false || ir.EditLabor == undefined
+                          "
+                        >
+                          <span
+                            *ngIf="
+                              ir.QAComments != undefined;
+                              else elseHyphen
+                            "
+                            >{{ ir.QAComments }}
+                          </span>
+                        </p>
+                        <ng-container *ngIf="ir.EditLabor == true">
+                          <div
+                            class="
+                              floating-label
+                              form-group
+                              col
+                              mb-0
+                              px-0
+                              page-animation
+                              mt-2
+                            "
+                          >
+                            <input
+                              type="text"
+                              value=""
+                              placeholder=" "
+                              (change)="
+                                ir.IsModified = true; shouldUpdate = true
+                              "
+                              class="
+                                floating-input
+                                form-control
+                                input-border-color
+                              "
+                              name="QAComments"
+                              [(ngModel)]="ir.QAComments"
+                            />
+                            <span class="highlight"></span>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+
+                    <div class="col-6 align-self-center">
+                      <ng-container *ngIf="ir.QAVerify == false">
+                        <div
+                          class="text-center align-self-center"
+                          *ngIf="ir.TaskStatusID == 17"
+                        >
+                          <button
+                            type="button"
+                            title="Accept"
+                            class="btn btn-accept btn-round smaller-font"
+                            (click)="ir.QAVerify = true; taskVerification(ir)"
+                          >
+                            Approve
+                          </button>
+                          <button
+                            type="button"
+                            title="Reject"
+                            class="btn btn-reject btn-round smaller-font"
+                            (click)="
+                              ir.QAVerify = false;
+                              ir.TaskStatusID = 16;
+                              taskVerification(ir)
+                            "
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      </ng-container>
+                      <div
+                        *ngIf="ir.TaskStatusID != 17"
+                        class="
+                          primary-dark-font
+                          align-self-center
+                          text-center
+                        "
+                      >
+                        <span>Task Not Completed!</span>
+                      </div>
+                      <div
+                        *ngIf="ir.QAVerify == true"
+                        class="
+                          primary-dark-font
+                          align-self-center
+                          text-center
+                          bold-font
+                        "
+                      >
+                        <span class="success-font">Verified!</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mx-0 bb-1">
+                  <table
+                    class="
+                      table
+                      mx-3
+                      text-left
+                      primary-dark-font
+                      page-animation
+                    "
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Part</th>
+                        <!-- <th scope="col">Customer Concern</th> -->
+                        <!-- <th scope="col">Repair</th> -->
+                        <th scope="col">Note</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody class="primary-font">
+                      <tr
+                        *ngFor="
+                          let jp of _sharedService.jobObj.JobParts
+                            | filter: ir.JobTaskID:'JobTaskID'
+                            | filter: true:'IsInclude';
+                          let i = index
+                        "
+                      >
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ jp.PartNameEnglish }}</td>
+                        <!-- <td>{{jp.ConcernDescription}}</td> -->
+                        <!-- <td><i class="fas fa-clipboard"
+                                                                              *ngIf="(_sharedService.jobObj.JobTasks | filter : jp.JobTaskID : 'JobTaskID').length > 0"
+                                                                              (click)="openTaskModal(taskModel, jp.JobTaskID)"></i>
+                                                                          <span
+                                                                              *ngIf="(_sharedService.jobObj.JobTasks | filter : jp.JobTaskID : 'JobTaskID').length == 0">N/A</span>
+                                                                      </td> -->
+                        <td>
+                          <span appElseHyphen [elseHyphen]="jp.Notes"> </span>
+                        </td>
+                        <td>
+                          {{ jp.Quantity }}
+                          <small *ngIf="jp.UnitTypeName != undefined"
+                            >({{ jp.UnitTypeName }})</small
+                          >
+                        </td>
+                        <td>
+                          <span
+                            appElseHyphen
+                            [elseHyphen]="jp.JobPartStatusName"
+                          ></span>
+                        </td>
+                        <!-- <td *ngIf="(_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 6)  ">
+                                                      <div class="floating-label form-group">
+                                                          <ng-select placeholder="Status" class="custom" name="part{{i+1}}" id="applications"
+                                                              appendTo="body" (change)="jp.IsModified = true" [(ngModel)]="jp.JobPartStatusID">
+                                                              <ng-option
+                                                                  *ngFor="let item of _sharedService._commonMeta.ObjectStatus | filter: 'JobPartDelivery': 'ObjectNameEnglish'"
+                                                                  [value]="item.ObjectStatusID">{{item.StatusNameEnglish}}
+                                                              </ng-option>
+                                                          </ng-select>
+                                                      </div>
+                                                  </td> -->
+                      </tr>
+                    </tbody>
+                    <tbody
+                      *ngIf="
+                        _sharedService.jobObj.JobParts == undefined ||
+                        (_sharedService.jobObj.JobParts != undefined &&
+                          (
+                            _sharedService.jobObj.JobParts
+                            | filter: ir.JobTaskID:'JobTaskID'
+                          ).length == 0)
+                      "
+                    >
+                      <tr scope="row">
+                        <td colspan="12" class="text-center primary-font">
+                          No part added!
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="row text-center mx-0">
+                <div
+                  class="card p-3"
+                  *ngIf="
+                    _sharedService.jobObj.JobTasks == undefined ||
+                    (_sharedService.jobObj.JobTasks != undefined &&
+                      _sharedService.jobObj.JobTasks.length == 0)
+                  "
+                >
+                  No repair added!
+                </div>
+              </div>
+              <div
+                class="card p-3 mb-0 text-center"
+                *ngIf="
+                  (
+                    _sharedService.jobObj.JobTasks
+                    | filter: con.JobConcernID:'JobConcernID'
+                  ).length == 0
+                "
+              >
+                No Repair Added
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <!-- <div class="row card mx-0 pb-3" *ngFor="let con of _sharedService.jobObj.JobConcerns; let id=index">
+                        <div class="col-12 row p-3">
+                            <div class="col-10 d-flex">
+                                <div class="px-3 pt-3 text-center">
+                                    <span class="b-radius con-count big-font">{{id+1}}</span> <br>
+                                    <i class="fas fa-hourglass-half mt-3" *ngIf="con.IsApproved != true"></i>
+                                    <i class="fas fa-check-circle mt-3" *ngIf="con.IsApproved == true"></i>
+                                </div>
+                                <div class="mb-0 p-3 big-font primary-color">{{con.ConcernDescription}}</div>
+                            </div>
+                            <div class="col-2 p-3 bold-font text-center">
+                                <span class="hover-color">({{con.ConcernTypeName}})</span> <br>
+                                <span class="primary-color">{{con.TaskTime | hourToMin}}</span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <table class="table primary-dark-font page-animation table-borderless" id="table"
+                                data-toggle="table" data-height="460" data-custom-sort="customSort">
+                                <thead class="tbl-header">
+                                    <tr>
+                                        <th scope="col">Results</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col" class="pointer" (click)="IsSorted = !IsSorted; onSort()">
+                                            Priority <i class="fa fa-sort"></i></th>
+                                        <th>Comments</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        *ngFor="let jt of _sharedService.jobObj.JobTasks | filter : con.JobConcernID : 'JobConcernID'; let i=index">
+                                        <td>{{jt.LaborDescriptionEng}}</td>
+                                        <td>{{jt.RepairTypeID == 70 ? 'Mechanical' : jt.RepairTypeID == 71 ? 'Electrical' : jt.RepairTypeID == 73 ? 'Other' : 'Body Repair'}}
+                                            <small>({{jt.JobTaskTypeID == 51 ?'Internal' : 'External' }})</small>
+                                        </td>
+                                        <td>
+                                            <div [ngClass]="jt.PriorityTypeID == 83? 'priority-med' : 'priority-high'">
+                                                <span class="badge"></span></div>
+                                            {{jt.PriorityTypeID == 83 ?'Medium' : 'High' }}
+                                        </td>
+                                        <td>
+                                            <div class="floating-label form-group mt-3 mb-0">
+                                                <input type="text" placeholder=" " class="floating-input form-control"
+                                                    name="Comments{{idx}}" [(ngModel)]="jt.QAComments"
+                                                    (change)="jt.IsModified = true" />
+                                                <span class="highlight"> </span>
+                                                <label class="input-label">Comments</label>
+                                            </div> 
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="jt.QAVerify == false">
+                                                <div class="text-center mt-2 align-self-center"
+                                                    *ngIf="jt.TaskStatusID == 17">
+                                                    <button type="button" title="Accept"
+                                                        class="btn btn-accept btn-round smaller-font mx-1 my-2 px-2 py-1"
+                                                        (click)="jt.QAVerify = true; taskVerification(jt)">Approve</button>
+                                                    <button type="button" title="Reject"
+                                                        class="btn btn-reject btn-round smaller-font mx-1 my-2 px-2 py-1"
+                                                        (click)="jt.QAVerify = false; jt.TaskStatusID = 16; taskVerification(jt)">Reject</button>
+                                                </div>
+                                            </ng-container>
+                                            <div *ngIf="jt.TaskStatusID != 17"
+                                                class="primary-font align-self-center text-center">
+                                                <span>Task Not Completed!</span>
+                                            </div>
+                                            <div *ngIf="jt.QAVerify == true"
+                                                class="primary-font align-self-center text-center bold-font">
+                                                <span class="success-font">Verified!</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody
+                                    *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks != undefined && (_sharedService.jobObj.JobTasks | filter : con.JobConcernID : 'JobConcernID').length==0)">
+                                    <tr scope="row">
+                                        <td colspan="12" class="text-center">No task added!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="col-12">
+                            <hr>
+                        </div>
+
+                        <div class="col-12">
+                            <table class="table primary-dark-font page-animation">
+                                <thead class="tbl-header">
+                                    <tr>
+                                        <th scope="col">Part</th>
+                                        <th scope="col">Manufacturer</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container
+                                        *ngFor="let jp of _sharedService.jobObj.JobParts | filter : con.JobConcernID : 'JobConcernID' | filter : true : 'IsInclude'">
+                                        <tr >
+                                            <td>{{jp.PartNameEnglish}}</td>
+                                            <td>{{(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID')[0].BrandName}}
+                                                <small>({{(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID')[0].OrigionName}})</small>
+                                            </td>
+                                            <td>{{jp.Quantity}} <small
+                                                    *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                                            </td>
+                                            <td>{{(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID')[0].PartConditionID == 66? 'Used' : 'New'}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                                <tbody
+                                    *ngIf="_sharedService.jobObj.JobParts == undefined || (_sharedService.jobObj.JobParts | filter : con.JobConcernID : 'JobConcernID' | filter : true : 'IsInclude').length == 0">
+                                    <tr scope="row">
+                                        <td colspan="12" class="text-center">No part added!</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> -->
+
+          <!-- <div class="row page-animation mx-0"
+                        *ngFor="let qa of _sharedService.jobObj.JobTasks  | filter: true : 'IsInclude'; let idx = index">
+                        <div class="form-check col-4">
+                            <span class="pl-3 primary-font">{{qa.LaborDescriptionEng}}</span>
+                        </div>
+
+
+                    </div> -->
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+    <div class="card">
+      <div class="row mx-0">
+        <div class="col-6">
+          <button
+            class="btn btn-primary btn-round btn-simple ml-5 px-4"
+            *ngIf="tabID != 1"
+            (click)="changeTab(false)"
+          >
+            <i class="fas fa-arrow-left mr-3"></i> Previous - السابق
+          </button>
+        </div>
+
+        <div class="col-6">
+          <div class="row mx-0 justify-content-end">
+            <!-- <button type="submit"
+                            class="btn btn-primary btn-simple btn-round mark-complete-btn bg-white px-4 mr-5"
+                            *ngIf="tabID == 2" (click)="changeTab(true, true)">
+                            Update & exit - التحديث والخروج
+                        </button> -->
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-simple btn-round ml-5 px-4"
+              *ngIf="
+                _sharedService.jobObj.JobTasks.length > 0 &&
+                (
+                  _sharedService.jobObj.JobTasks
+                  | filter: true:'IsInclude'
+                  | filter: false:'QAVerify'
+                ).length == 0 &&
+                _sharedService.jobObj.JCBasicInfo.QAStatusID == 16 &&
+                tabID == 2
+              "
+              (click)="
+                _sharedService.jobObj.JCBasicInfo.QAStatusID = 17;
+                completeJobProcess(_sharedService.jobObj.JCBasicInfo.QAStatusID)
+              "
+            >
+              Mark Complete
+            </button>
+
+            <button
+              class="
+                btn btn-success btn-simple btn-round
+                mark-complete-btn
+                py-1
+                bg-white
+              "
+              *ngIf="_sharedService.jobObj.JCBasicInfo.QAStatusID == 17"
+            >
+              Completed
+            </button>
+
+            <ng-container *ngIf="tabID != 2">
+              <button
+                class="btn btn-primary btn-round btn-simple mr-5 px-4"
+                (click)="changeTab(true)"
+              >
+                Next - التالي
+                <i class="fas fa-arrow-right ml-3"></i>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-container>
+
+<ng-template #taskCheckList let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header mt-2 pb-0">
+      <div class="col-12">
+        <h3 class="modal-title hover-color">
+          {{ LaborTaskID == 130 ? "Seasonal Check" : "80 Points Check" }}
+        </h3>
+      </div>
+      <button
+        type="button"
+        class="close"
+        (click)="closeTaskCheckListModal()"
+        title="Cancel"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0 px-0">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-2">
+            <div
+              class="row text-left pt-3 primary-font page-animation card mx-0"
+            >
+              <ng-container *ngIf="LaborTaskID == 131">
+                <ngb-tabset
+                  class="seasonalCL inspectionResult-tab sub-tabset w-100"
+                  (tabChange)="workTypeID = workTypeID == 71 ? 70 : 71"
+                >
+                  <ngb-tab class="px-2 mb-3">
+                    <ng-template ngbTabTitle>
+                      <div>
+                        <span class="tab-title">Mechanical </span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+
+                  <ngb-tab>
+                    <ng-template ngbTabTitle>
+                      <div>
+                        <span class="tab-title">Electrical</span>
+                      </div>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </ng-container>
+
+              <div class="col-12 d-flex px-0">
+                <div class="col-3"></div>
+
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-2 px-0 text-center">
+                      <p class="bold-font">Good</p>
+                    </div>
+                    <div class="col-3 px-0 text-center">
+                      <p class="bold-font">Need Maintenance</p>
+                    </div>
+                    <div class="col-6">
+                      <p class="bold-font">Not Available</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container
+                *ngFor="
+                  let ip of _sharedService.jobObj.JobCardCheckList
+                    | filter
+                      : (LaborTaskID == 131
+                          ? 134
+                          : LaborTaskID == 130
+                          ? 133
+                          : '')
+                      : 'CheckListTypeID'
+                    | filter
+                      : (LaborTaskID == 131 ? workTypeID : '')
+                      : 'WorkTypeID'
+                "
+              >
+                <div class="col-12 d-flex mb-3 px-0">
+                  <div class="row w-100 mx-0">
+                    <div class="col-3 text-right">
+                      <label
+                        class="form-check-label mt-3"
+                        [ngClass]="{
+                          green: ip.StatusID === 30,
+                          red: ip.StatusID === 31,
+                          gray: ip.StatusID === 32
+                        }"
+                      >
+                        {{ ip.EnglishName }}
+                      </label>
+                    </div>
+
+                    <!-- id 30 for good condition -->
+                    <div class="col-2 form-check mt-0 text-center">
+                      <label class="form-check-label good">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="{{ ip.EnglishName }}"
+                          id="{{ ip.EnglishName }}30"
+                          (change)="ip.IsModified = true; ip.StatusID = 30"
+                          [disabled]="
+                            _sharedService.logged_user_role_id != 1 &&
+                            _sharedService.logged_user_role_id != 2
+                          "
+                          [checked]="ip.StatusID === 30"
+                        />
+                        <span class="form-check-sign"></span>
+                      </label>
+                    </div>
+                    <!-- id 31 for need maintenance -->
+                    <div class="col-2 form-check mt-0 d-flex text-center">
+                      <div class="col-2">
+                        <label class="form-check-label need-maintainance">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="{{ ip.EnglishName }}"
+                            id="{{ ip.EnglishName }}31"
+                            (change)="ip.IsModified = true; ip.StatusID = 31"
+                            [disabled]="
+                              _sharedService.logged_user_role_id != 1 &&
+                              _sharedService.logged_user_role_id != 2
+                            "
+                            [checked]="ip.StatusID === 31"
+                          />
+                          <span class="form-check-sign"></span>
+                        </label>
+                      </div>
+                    </div>
+
+                    <!-- id 32 for not available -->
+                    <div class="col-5 form-check mt-0 d-flex text-center">
+                      <div class="col-2">
+                        <label class="form-check-label not-available">
+                          <input
+                            class="form-check-input"
+                            type="radio"
+                            name="{{ ip.EnglishName }}"
+                            id="{{ ip.EnglishName }}32"
+                            (change)="ip.IsModified = true; ip.StatusID = 32"
+                            [disabled]="
+                              _sharedService.logged_user_role_id != 1 &&
+                              _sharedService.logged_user_role_id != 2
+                            "
+                            [checked]="ip.StatusID === 32"
+                          />
+                          <span class="form-check-sign"></span>
+                        </label>
+                      </div>
+                      <div
+                        class="
+                          floating-label
+                          form-group
+                          col-10
+                          input-slide
+                          mb-0
+                          pb-0
+                          mt-1
+                        "
+                        *ngIf="ip.StatusID == 31"
+                      >
+                        <input
+                          type="text"
+                          value=""
+                          placeholder=" "
+                          class="
+                            floating-input
+                            form-control
+                            primary-font
+                            input-border-color
+                          "
+                          name="{{ ip.EnglishName }}31"
+                          [(ngModel)]="ip.Note"
+                          (change)="ip.IsModified = true"
+                        />
+                        <span class="highlight"></span>
+                        <label class="input-label">Note</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="col-12 float-left text-center">
+                <button
+                  (click)="
+                    _sharedService.logged_user_role_id == 9
+                      ? closeTaskCheckListModal()
+                      : updateCheckList()
+                  "
+                  class="a-button btn btn-primary btn-round btn-simple col-6"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

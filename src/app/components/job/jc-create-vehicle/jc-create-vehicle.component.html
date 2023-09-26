@@ -1,0 +1,910 @@
+<form
+  (ngSubmit)="
+    vehicleForm.valid
+      ? _sharedService.jobObj.jcVehicleObj.VehicleID == undefined
+        ? onSaveVehicle()
+        : onUpdateVehicle()
+      : ''
+  "
+  #vehicleForm="ngForm"
+  class="row"
+  *ngIf="_sharedService.jobObj.jcVehicleObj"
+>
+  <!-- Plate Type Radio Buttons -->
+  <!-- <div class="col-lg-4 col-sm-6 form-check form-check-radio floating-label mt-0">
+        <label class="col-12  ml-2 px-0  primary-font">Plate Type</label>
+        <label class="form-check-label mr-5 "
+            *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'Plate Type' : 'ObjectNameEnglish'">
+            <input class="form-check-input" type="radio" id="{{item.TypeNameEnglish}}1" name="plate_type"
+                [(ngModel)]="_sharedService.jobObj.jcVehicleObj.PlateTypeID" [value]="item.ObjectTypeID">
+            <span class="form-check-sign primary-font">{{item.TypeNameEnglish}}</span>
+        </label>
+    </div> -->
+
+  <!-- <div class="col-lg-4 col-sm-6">
+
+    </div>
+
+    <div class="row w-100 mx-0">
+        <hr class="w-100">
+        <h5 class="sub-heading primary-font">Production Information</h5>
+    </div> -->
+
+  <div
+    class="floating-label form-group col-sm-6 align-self-center"
+    [ngClass]="
+      this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'
+    "
+  >
+    <ng-select
+      class="custom"
+      id="make"
+      placeholder="Make"
+      name="make"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.MakeID"
+      #make="ngModel"
+      (change)="mapRegion(_sharedService.jobObj.jcVehicleObj.MakeID);
+    changeMake()
+      "
+      [clearable]="false"
+      required
+    >
+      <ng-option
+        *ngFor="let item of _sharedService._commonMeta.Makes"
+        [value]="item.MakeID"
+      >
+        {{ item.EnglishMakeName }}</ng-option
+      >
+    </ng-select>
+    <i
+      class="fa fa-times remove-make"
+      (click)="onChangeMake()"
+      *ngIf="_sharedService.jobObj.jcVehicleObj.MakeID != undefined"
+    ></i>
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="(vehicleForm.submitted || make.touched) && make.errors?.required"
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-3 col-md-3 align-self-center"
+    *ngIf="this.groupnameCount > 0"
+  >
+    <ng-select
+      class="custom"
+      id="groupName"
+      placeholder="Group Name"
+      name="groupName"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.GroupName"
+      #groupName="ngModel"
+      (change)="
+        this.MinYear = null;
+        this.MaxYear = null;
+        _sharedService.jobObj.jcVehicleObj.ProductionYear = null
+      "
+    >
+      <ng-option
+        *ngFor="
+          let item of _sharedService._commonMeta.GroupName
+            | filter: _sharedService.jobObj.jcVehicleObj.MakeID:'MakeID'
+        "
+        [value]="item.GroupName"
+      >
+        {{ item.GroupName }}</ng-option
+      >
+    </ng-select>
+
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || groupName.touched) &&
+          groupName.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-sm-6 align-self-center"
+    [ngClass]="
+      this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'
+    "
+  >
+    <ng-select
+      class="custom"
+      id="model"
+      placeholder="Model"
+      name="model"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.ModelID"
+      #model="ngModel"
+      (change)="
+        getProductionYears();
+        changeModel();
+        _sharedService.jobObj.jcVehicleObj.ProductionYear = null
+      "
+      required
+    >
+      <ng-option
+        *ngFor="
+          let item of _sharedService._commonMeta.Models
+            | filter: _sharedService.jobObj.jcVehicleObj.MakeID:'MakeID'
+            | filter: _sharedService.jobObj.jcVehicleObj.GroupName:'GroupName'
+        "
+        [value]="item.ModelID"
+        >{{ item.EnglishModelName }}</ng-option
+      >
+    </ng-select>
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || model.touched) && model.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-sm-6 align-self-center"
+    [ngClass]="
+      this.groupnameCount > 0 ? 'col-lg-3 col-md-3' : 'col-lg-4 col-md-4'
+    "
+  >
+    <ng-select
+      class="custom"
+      id="year"
+      placeholder="Production Year"
+      name="model_version"
+      (change)="
+        _sharedService.jobObj.jcVehicleObj.EngineCapacity = null;
+        _sharedService.jobObj.jcVehicleObj.EngineCode = null
+      "
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.ProductionYear"
+      #productionYear="ngModel"
+      (change)="getSeries()"
+      required
+      [clearable]="false"
+    >
+      <ng-option
+        *ngFor="
+          let item of _sharedService._commonMeta.Years
+            | between: MinYear:MaxYear:'YearCode'
+        "
+        [value]="item.YearCode"
+      >
+        {{ item.YearCode }}</ng-option
+      >
+    </ng-select>
+    <i
+      class="fa fa-times remove-year"
+      (click)="onRemoveYear()"
+      *ngIf="_sharedService.jobObj.jcVehicleObj.ProductionYear != undefined"
+    ></i>
+    <!-- <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-1 padding_0">
+      <button title="add Model" class="btn btn-outline-secondary" (click)="onRemoveYear()" type="button">
+          <i class="fa fa-times"></i></button>
+    </div> -->
+
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || productionYear.touched) &&
+          productionYear.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div class="floating-label form-group col-lg-4 col-sm-6">
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="plate number"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.PlateNumber"
+      #plateNumber="ngModel"
+      (change)="_sharedService.jobObj.JCBasicInfo.IsModified = true"
+      onkeypress="return ((event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32) || (event.charCode >= 48 && event.charCode <= 57))"
+      maxlength="17"
+      required
+    />
+    <!-- (blur)="checkVehicle(_sharedService.jobObj.jcVehicleObj.PlateNumber, _sharedService.jobObj.jcVehicleObj.CustomerID, null)" -->
+    <span class="highlight"></span>
+    <label class="input-label">Plate Number</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || plateNumber.touched) &&
+          plateNumber.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <!-- <div class="floating-label form-group col-lg-4 col-sm-6 align-self-center">
+    <ng-select
+      class="custom"
+      id="variant"
+      placeholder="Variant"
+      name="model_version"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.ModelVersionID"
+    >
+      <ng-option
+        *ngFor="
+          let item of _sharedService._commonMeta.ModelVariant
+            | filter: _sharedService.jobObj.jcVehicleObj.ModelID:'ModelID'
+        "
+        [value]="item.ModelVariantID"
+      >
+        {{ item.ModelVariantName }}</ng-option
+      >
+    </ng-select>
+    <div class="error-block-ng-select text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || productionYear.touched) &&
+          productionYear.errors?.required
+        "
+      ></small>
+    </div>
+  </div> -->
+
+  <div class="floating-label form-group col-lg-4 col-sm-6">
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="vin"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.VIN"
+      #vin="ngModel"
+      minlength="17"
+      maxlength="20"
+      (paste)="onVINPaste($event)"
+     onkeypress="return ((event.keyCode == 45) || (event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122) || (event.charCode == 32) || (event.charCode >= 48 && event.charCode <= 57))"
+      required
+      (blur)="
+        checkVehicle(
+          null,
+          _sharedService.jobObj.jcVehicleObj.CustomerID,
+          _sharedService.jobObj.jcVehicleObj.VIN
+        )
+      "
+    />
+    <span class="highlight"></span>
+    <label class="input-label">VIN</label>
+    <div class="error-block text-danger">
+      <small
+        class="text-danger ml-3"
+        *ngIf="(vehicleForm.submitted || vin.touched) && vin.errors?.required"
+        >*Required</small
+      >
+      <small *ngIf="vin.errors?.minlength"
+        >*At-least 17 characters are allowed</small
+      >
+    </div>
+  </div>
+
+  <div class="col-lg-6 col-md-12">
+    <div class="row pb-3 px-3">
+      <label for="facelift">FaceLift</label>
+      <div
+        class="col-4 px-0 form-check form-check-radio mt-0"
+        *ngFor="
+          let type of _sharedService._commonMeta.objectTypes
+            | filter: 'FaceLift':'ObjectNameEnglish'
+        "
+      >
+        <label class="form-check-label mx-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="jcType"
+            id="{{ type.TypeNameEnglish }}"
+            [(ngModel)]="_sharedService.jobObj.jcVehicleObj.FaceLiftTypeID"
+            [value]="type.ObjectTypeID"
+            [disabled]="_sharedService.jobObj.JCBasicInfo.JobCardID > 0"
+            [checked]="
+              _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+              type.ObjectTypeID
+            "
+          />
+          <span
+            class="form-check-sign primary-font"
+            [ngClass]="
+              _sharedService.jobObj.JCBasicInfo.JobCardTypeID ==
+              type.ObjectTypeID
+                ? 'active-text'
+                : ''
+            "
+            >{{ type.TypeNameEnglish == "false" ? "No" : "Yes" }}</span
+          >
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row col-12 justify-content-center">
+    <div class="col-10 border-dotted mb-5">
+      <div class="row justify-content-center">
+        <div class="form-group col-lg-4 col-sm-6 mb-2 pb-0 mt-3">
+          <div class="our-team">
+            <!-- <label class="hoverable">
+                            <img class="upload-image"
+                                [src]="_sharedService.jobObj.jcVehicleObj.LicensePlateFront?  _sharedService.baseUrl + _sharedService.jobObj.jcVehicleObj.LicensePlateFront :_sharedService.default_img">
+                            <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                                (change)="uploadImage($event, 1)">
+
+                            <div class="hover-text" for="files">
+                                License ID front
+                            </div>
+                            <div class="background"></div>
+                        </label> -->
+
+            <div class="text-center mb-4 hoverable-img">
+              <img
+                class="fuel-tank-image"
+                (click)="
+                  previewImage(
+                    imagePreview,
+                    'License Plate Front',
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                  )
+                "
+                [src]="
+                  _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                    ? _sharedService.baseUrl +
+                      _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                    : _sharedService.default_img
+                "
+              />
+
+              <input
+                id="files"
+                type="file"
+                class="d-none"
+                accept="image/x-png,image/gif,image/jpeg"
+                (change)="uploadImage($event, 1)"
+              />
+              <div
+                (click)="
+                  previewImage(
+                    imagePreview,
+                    'License Plate Front',
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                  )
+                "
+                class="hover-img-text"
+                for="files"
+              >
+                License ID front
+              </div>
+              <div class="background"></div>
+              <label for="files">
+                <i
+                  class="fas fa-2x fa-camera upload-btn"
+                  aria-hidden="true"
+                  title="upload"
+                ></i>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-lg-4 col-sm-6 mb-2 pb-0 mt-3">
+          <div class="our-team">
+            <!-- <label class="hoverable">
+                            <img class="upload-image"
+                                [src]="_sharedService.jobObj.jcVehicleObj.LicensePlateBack?  _sharedService.baseUrl + _sharedService.jobObj.jcVehicleObj.LicensePlateBack :_sharedService.default_img">
+                            <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                                (change)="uploadImage($event, 2)">
+
+                            <div class="hover-text" for="files">
+                                License ID back
+                            </div>
+                            <div class="background"></div>
+                        </label> -->
+
+            <div class="text-center mb-4 hoverable-img">
+              <img
+                class="fuel-tank-image"
+                (click)="
+                  previewImage(
+                    imagePreview,
+                    'License Plate Back',
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                  )
+                "
+                [src]="
+                  _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                    ? _sharedService.baseUrl +
+                      _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                    : _sharedService.default_img
+                "
+              />
+
+              <input
+                id="files2"
+                type="file"
+                class="d-none"
+                accept="image/x-png,image/gif,image/jpeg"
+                (change)="uploadImage($event, 2)"
+              />
+              <div
+                (click)="
+                  previewImage(
+                    imagePreview,
+                    'License Plate Back',
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                  )
+                "
+                class="hover-img-text"
+                for="files2"
+              >
+                License ID back
+              </div>
+              <div class="background"></div>
+              <label for="files2">
+                <i
+                  class="fas fa-2x fa-camera upload-btn"
+                  aria-hidden="true"
+                  title="upload"
+                ></i>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class=" form-group col-lg-2 col-md-4 col-sm-6">
+        <div class="our-team">
+            <label class="hoverable">
+                <img class="upload-image"
+                    [src]="_sharedService.jobObj.jcVehicleObj.LicensePlateFront?  _sharedService.baseUrl + _sharedService.jobObj.jcVehicleObj.LicensePlateFront :_sharedService.default_img">
+                <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                    (change)="uploadImage($event, 1)">
+
+                <div class="hover-text" for="files">
+                    License ID front
+                </div>
+                <div class="background"></div>
+            </label>
+        </div>
+    </div>
+    <div class="form-group col-lg-2 col-md-4 col-sm-6">
+        <div class="our-team">
+            <label class="hoverable">
+                <img class="upload-image"
+                    [src]="_sharedService.jobObj.jcVehicleObj.LicensePlateBack?  _sharedService.baseUrl + _sharedService.jobObj.jcVehicleObj.LicensePlateBack :_sharedService.default_img">
+                <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                    (change)="uploadImage($event, 2)">
+
+                <div class="hover-text" for="files">
+                    License ID back
+                </div>
+                <div class="background"></div>
+            </label>
+        </div>
+    </div> -->
+
+  <!-- <div class="col-12 form-check form-check-radio floating-label mt-0">
+        <label class="mt-3 mb-0 primary-dark-font bold-font big-font">Vehicle Region</label>
+        <div class="row p-3">
+            <label class="form-check-label mr-3 primary-font"
+                *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'VehicleRegion' : 'ObjectNameEnglish'">
+                <input class="form-check-input" type="radio" id="{{item.TypeNameEnglish}}" name="region"
+                    [(ngModel)]="_sharedService.jobObj.jcVehicleObj.VehicleRegionID" [value]="item.ObjectTypeID">
+                <span class="form-check-sign mx-3"
+                    [ngClass]="_sharedService.jobObj.jcVehicleObj.VehicleRegionID == item.ObjectTypeID ? 'active-text' : ''">{{item.TypeNameEnglish}}</span>
+            </label>
+        </div>
+    </div> -->
+
+  <!-- color -->
+  <div class="col-12">
+    <div class="row p-3">
+      <label class="primary-dark-font bold-font mb-2 col-12"
+        ><span class="big-font">Color</span>
+        <ng-container
+          *ngIf="_sharedService.jobObj.jcVehicleObj.Color != undefined"
+        >
+          <span
+            class="selected-color ml-3"
+            [style.background]="
+              '#' + _sharedService.jobObj.jcVehicleObj.ColorCode
+            "
+          ></span>
+          <span class="primary-font ml-3 mr-7">{{
+            _sharedService.jobObj.jcVehicleObj.Color
+          }}</span>
+        </ng-container>
+      </label>
+
+      <div class="row w-100 mt-1 px-3 justify-content-center">
+        <div
+          *ngFor="let color of _sharedService.jobObj.Colors"
+          class=""
+          [ngClass]="
+            _sharedService.jobObj.jcVehicleObj.ColorID == color.ColorID
+              ? 'color-box2'
+              : ''
+          "
+        >
+          <div
+            class="color-box pointer mb-2"
+            title="{{ color.ColorName }}"
+            [ngClass]="color.ColorID == 2 ? 'white-border' : ''"
+            [style.background]="'#' + color.ColorCode"
+            (click)="
+              _sharedService.jobObj.jcVehicleObj.ColorID = color.ColorID;
+              _sharedService.jobObj.jcVehicleObj.Color = color.ColorName;
+              _sharedService.jobObj.jcVehicleObj.ColorCode = color.ColorCode
+            "
+          ></div>
+          <span
+            *ngIf="_sharedService.jobObj.jcVehicleObj.ColorID == color.ColorID"
+            class=""
+          >
+            <!-- <i class="far fa-check-circle ml-3 pl-1 hover-color icon-animation"></i> -->
+            <p class="smaller-font mb-0 text-center icon-animation">
+              {{ _sharedService.jobObj.jcVehicleObj.Color }}
+            </p>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- vehicle type  -->
+  <div class="col-12 mt-0">
+    <label class="mt-3 mb-0 primary-dark-font bold-font big-font">
+      Vehicle Type</label
+    >
+
+    <ul role="tablist" class="row justify-content-start nav nav-pills">
+      <li class="nav-item pointer mx-2 d-flex vehicleList" name="vehicle_type">
+      
+        <ng-container
+          *ngFor="
+            let item of _sharedService._commonMeta.objectTypes
+              | filter: 'Body':'ObjectNameEnglish'
+          "
+        > 
+          <div
+            class="text-center mx-3"
+            *ngIf="
+              ShowMoreBodyType == true ||
+              generalVehicle.GeneralVehicles == undefined ||
+              generalVehicle.GeneralVehicles.length == 0 ||
+              (
+                generalVehicle.GeneralVehicles
+                | filter: item.TypeNameEnglish:'BodyType'
+              ).length > 0 ||  _sharedService.jobObj.jcVehicleObj.VehicleTypeID ==
+              item.ObjectTypeID 
+            "
+          >
+            <a
+              class="role-selector mr-0"
+              [class.checked]="
+                _sharedService.jobObj.jcVehicleObj.VehicleTypeID ==
+                item.ObjectTypeID
+              "
+              id="{{ item.TypeNameEnglish }}1"
+              name="vehicle_type"
+            >
+              <i
+                class="px-3 ts {{ item.Icon }}"
+                title="{{ item.TypeNameEnglish }}"
+                (click)="
+                  _sharedService.jobObj.jcVehicleObj.VehicleTypeID =
+                    item.ObjectTypeID
+                "
+              ></i
+            ></a>
+            <label
+              for=""
+              class="role-name smaller-font"
+              [class.icon-checked]="
+                _sharedService.jobObj.jcVehicleObj.VehicleTypeID ==
+                item.ObjectTypeID
+              "
+              >{{ item.TypeNameEnglish }}</label
+            > 
+          </div>
+        </ng-container>
+      </li>
+      
+      <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 col-1 padding_0">
+        <button
+          *ngIf="
+            ShowMoreBodyType == false &&
+            generalVehicle.GeneralVehicles != undefined &&
+            generalVehicle.GeneralVehicles.length > 0 &&
+            generalVehicle.GeneralVehicles != null
+          "
+          title="Show More"
+          class="btn btn-primary btn-round btn-simple"
+          type="button"
+          (click)="ShowMoreBodyType = true"
+          style="border-radius: 7px"
+        >
+          Show More
+        </button>
+        <button
+          *ngIf="ShowMoreBodyType == true"
+          title="Show Less"
+          class="btn btn-primary btn-round btn-simple"
+          type="button"
+          (click)="ShowMoreBodyType = false"
+          style="border-radius: 7px"
+        >
+          Show Less
+        </button>
+      </div>
+    </ul>
+  </div>
+
+  <!-- engine type new design (Radio buttons) -->
+  <div class="col-12 form-check form-check-radio floating-label mt-0">
+    <label class="mt-3 mb-0 primary-dark-font bold-font big-font"
+      >Engine Type</label
+    >
+    <div class="row p-3">
+      <label
+        class="form-check-label mr-3 primary-font"
+        *ngFor="
+          let item of _sharedService._commonMeta.objectTypes
+            | filter: 'Engine':'ObjectNameEnglish'
+        "
+      >
+        <input
+          class="form-check-input"
+          type="radio"
+          id="{{ item.TypeNameEnglish }}1"
+          name="engine_type"
+          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineTypeID"
+          [value]="item.ObjectTypeID"
+        />
+        <span
+          class="form-check-sign mx-3"
+          [ngClass]="
+            _sharedService.jobObj.jcVehicleObj.EngineTypeID == item.ObjectTypeID
+              ? 'active-text'
+              : ''
+          "
+          >{{ item.TypeNameEnglish }}</span
+        >
+      </label>
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4 col-sm-6 pb-0"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <input
+      type="text"
+      placeholder=" "
+      class="floating-input form-control"
+      name="engine_number"
+      onkeypress="return ((event.charCode >= 65 && event.charCode <= 90) || (event.charCode >= 97 && event.charCode <= 122)|| (event.charCode >= 48 && event.charCode <= 57) || (event.charCode == 32) || (event.charCode == 45))"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineNumber"
+      #engineNumber="ngModel"
+      maxlength="17"
+      required
+    />
+    <span class="highlight"></span>
+    <label class="input-label">Engine Number</label>
+    <div class="error-block text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || engineNumber.touched) &&
+          engineNumber.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <div
+    class="floating-label form-group col-lg-4 col-sm-6 pb-0"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <input
+      list="Capacitys"
+      type="text"
+      step="1"
+      min="0"
+      id="engine_capacity"
+      placeholder=" "
+      class="floating-input"
+      name="engine_capacity"
+      (change)="selectCylinderType()"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCapacity"
+      #engineCap="ngModel"
+      ngModel
+      required
+      pattern="\d*"
+      maxlength="4"
+    />
+
+    <div class="input-group-append price-perpend">CC</div>
+    <datalist id="Capacitys">
+      <option
+        *ngFor="let item of generalVehicle.GeneralVehicles"
+        value="{{ item.EngineCapacity }}"
+      ></option>
+    </datalist>
+
+    <!-- <input list="Capacitys"  type="number" class="floating-input form-control" (change)="selectCylinderType()" [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCapacity"
+    step="1" placeholder=" " min="0" name="Capacity" id="Capacity" required ngModel #engineCap="ngModel">
+<label class="input-label">Engine Capacity *</label>
+<datalist id="Capacitys" *ngIf="generalVehicle">
+    <option value="{{item.EngineCapacity}}" *ngFor="let item of generalVehicle">
+  </datalist> -->
+
+    <span class="highlight"></span>
+    <label class="input-label">Engine Capacity</label>
+
+    <div class="error-block-append text-danger">
+      <small
+        *ngIf="
+          (vehicleForm.submitted || engineCap.touched) &&
+          engineCap.errors?.required
+        "
+        >*Required</small
+      >
+    </div>
+  </div>
+
+  <!-- ---Engine Code--- -->
+  <div
+    class="floating-label form-group col-lg-4 col-sm-6 pb-0"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <input
+      type="text"
+      list="enginecodes"
+      step="1"
+      min="0"
+      placeholder=" "
+      class="floating-input"
+      name="engine_code"
+      [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCode"
+      #engineCode="ngModel"
+      ngModel
+      maxlength="50"
+    />
+
+    <datalist id="enginecodes">
+      <option
+        *ngFor="let item of generalVehicle.GeneralVehicles"
+        [value]="item.EngineCode"
+      ></option>
+    </datalist>
+
+    <span class="highlight"></span>
+    <label class="input-label">Engine Code</label>
+  </div>
+  <!-- | pfilter
+        : _sharedService.jobObj.jcVehicleObj.EngineCapacity
+        : 'EngineCapacity'
+   -->
+
+  <!-- <span class="highlight"></span>
+  <label class="input-label">Engine Code</label> -->
+
+  <!-- <div class="error-block-ng-select text-danger">
+    <small
+      *ngIf="
+        (vehicleForm.submitted || engineCode.touched) &&
+        engineCode.errors?.required
+      "
+      >*Required</small
+    >
+  </div> -->
+
+  <!-- capapcity with unit input -->
+  <!-- <div class="floating-label form-group col-lg-4 col-sm-6 input-group pb-0"
+        *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29">
+        <input type="text" placeholder=" " class="floating-input form-control custom-input" name="engine_capacity"
+            [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCapacity" maxlength="4" #engineCap="ngModel"
+            onkeypress='return (event.charCode >= 48 && event.charCode <= 57)' required/>
+        <span class="highlight"></span>
+        <label class="input-label">Engine Capacity</label>
+        <div class="error-block text-danger">
+            <small
+                *ngIf="(vehicleForm.submitted || engineCap.touched) && engineCap.errors?.required">*Required</small>
+        </div> 
+        <div class="input-group-append right-dropdown">
+            <ng-select [searchable]="false" [clearable]="false"
+                class="custom custom-append custom-dropdown unit-dropdown side-dropdown" id="engineCapacity"
+                name="engnine_capacity_unit" [(ngModel)]="_sharedService.jobObj.jcVehicleObj.EngineCapacityUnitID">
+                <ng-option *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 32 : 'ObjectTypeID'"
+                    [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+            </ng-select> 
+        </div>
+    </div> -->
+
+  <div
+    class="col-12 form-check form-check-radio floating-label"
+    *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+  >
+    <label class="mt-3 mb-0 primary-dark-font bold-font big-font"
+      >Cylinder Type</label
+    >
+
+    <!-- {{(_sharedService._commonMeta.objectTypes | filter: 'CylinderCount':'ObjectNameEnglish') | json}} -->
+
+    <div class="row p-3">
+      <label
+        class="form-check-label mr-3 primary-font"
+        *ngFor="
+          let item of _sharedService._commonMeta.objectTypes
+            | filter: 'CylinderCount':'ObjectNameEnglish';
+          let i = index
+        "
+      >
+    
+        <input
+          class="form-check-input"
+          type="radio"
+          [checked]="item.IsSelected == true"
+          (click)="resetCylinderType(item.ObjectTypeID)"
+          id="{{ item.TypeNameEnglish }}"
+          name="cylinderType"
+          [(ngModel)]="_sharedService.jobObj.jcVehicleObj.CylinderTypeID"
+          [value]="item.ObjectTypeID"
+        />
+        <span
+          class="form-check-sign mx-3"
+          [ngClass]="item.ObjectTypeID == _sharedService.jobObj.jcVehicleObj.CylinderTypeID ? 'active-text' : ''"
+          >{{ item.TypeNameEnglish }}</span
+        >
+      </label>
+    </div>
+  </div>
+
+  <div class="col-12 text-right px-3">
+    <button
+      type="submit"
+      class="btn btn-primary btn-round btn-simple"
+      *ngIf="_sharedService.jobObj.jcVehicleObj.VehicleID == undefined"
+    >
+      Create
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary btn-round btn-simple"
+      *ngIf="_sharedService.jobObj.jcVehicleObj.VehicleID != undefined"
+    >
+      Update
+    </button>
+  </div>
+</form>
+
+<!-- preview image modal -->
+<ng-template #imagePreview let-d="dismiss('Cross click')">
+  <div class="modal-header">
+    <h5 class="modal-title text-center">{{ modalHeader }}</h5>
+    <button type="button" class="close" (click)="(d)">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <img
+      class="img-fluid"
+      [src]="
+        imageURL
+          ? _sharedService.baseUrl + imageURL
+          : _sharedService.default_img
+      "
+    />
+  </div>
+</ng-template>

@@ -1,0 +1,495 @@
+<div class="row justify-content-center align-self-center h-100 page-animation">
+  <div class="col-11 d-flex flex-column align-self-center card">
+    <form
+      (ngSubmit)="
+        employeeForm.valid
+          ? employeeObj.UserID == undefined
+            ? onSaveEmployee()
+            : onUpdateEmployee()
+          : ''
+      "
+      #employeeForm="ngForm"
+      *ngIf="employeeObj"
+      autocomplete="off"
+    >
+      <!-- <div class="row w-100 mt-3">
+                <hr class="w-100">
+                <h4 class="sub-heading">Create Employee</h4>
+            </div> -->
+      <div class="col-md-12 mb-4 text-center mt-5">
+        <div class="our-team">
+          <!-- <div class="picture"> -->
+          <!-- <img class=" " src="https://picsum.photos/900/900?random&t=${Math.random()}`"> -->
+          <label class="hoverable">
+            <img
+              class="upload-image"
+              [src]="
+                employeeObj.ImageURL
+                  ? _sharedService.baseUrl + employeeObj.ImageURL
+                  : default_img
+              "
+            />
+            <input
+              type="file"
+              class="file-choose"
+              id="files"
+              accept="image/jpeg,image/png"
+              (change)="uploadImage($event)"
+            />
+
+            <div class="hover-text" for="files">
+              Choose file
+              <!-- <h4 class="success-message" *ngIf="url"> Uploaded Successfully </h4> -->
+            </div>
+            <div class="background"></div>
+          </label>
+          <!-- </div> -->
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row justify-content-around">
+          <!-- First Name -->
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="first_name"
+              [(ngModel)]="employeeObj.FirstName"
+              #fName="ngModel"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">First Name</label>
+            <div class="error-block text-danger">
+              <small
+                *ngIf="
+                  (employeeForm.submitted || fName.touched) &&
+                  fName.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+          <!-- has-danger -->
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="last_name"
+              [(ngModel)]="employeeObj.LastName"
+              (keypress)="_sharedService.CheckInputCharacters($event)"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Last Name</label>
+          </div>
+
+          <div class="floating-label form-group col-lg-5 col-sm-6">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="email"
+              [(ngModel)]="employeeObj.Email"
+              #email="ngModel"
+              pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+              required
+              [disabled]="employeeObj.UserID != undefined"
+              autocomplete="new-password"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Email</label>
+            <div class="error-block text-danger">
+              <small
+                class="text-danger ml-3"
+                *ngIf="
+                  (employeeForm.submitted || email.touched) &&
+                  email.errors?.required
+                "
+                >*Required</small
+              >
+              <small class="text-danger ml-3" *ngIf="email.errors?.pattern"
+                >*Invalid Format</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 mb-3 floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Workshop"
+              name="workshop"
+              [disabled]="employeeObj.UserID != undefined"
+              [(ngModel)]="employeeObj.WorkshopID"
+              #workshop="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="let item of _sharedService._commonMeta.Workshops"
+                [value]="item.WorkshopID"
+              >
+                {{ item.EnglishName }}
+              </ng-option>
+              <!-- <ng-option [value]=2>Workshop 2</ng-option> -->
+            </ng-select>
+            <div class="error-block-ng-select text-danger">
+              <small
+                *ngIf="
+                  (employeeForm.submitted || workshop.touched) &&
+                  workshop.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Country"
+              name="country"
+              [(ngModel)]="employeeObj.CountryID"
+              #country="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="let item of _sharedService._commonMeta.Countries"
+                [value]="item.CountryID"
+              >
+                {{ item.CountryName }}
+              </ng-option>
+            </ng-select>
+            <div class="error-block-ng-select text-danger">
+              <small
+                *ngIf="
+                  (employeeForm.submitted || country.touched) &&
+                  country.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="City"
+              name="city"
+              [(ngModel)]="employeeObj.CityID"
+              #city="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="
+                  let item of _sharedService._commonMeta.Cities
+                    | filter: employeeObj.CountryID:'CountryID'
+                "
+                [value]="item.CityID"
+                >{{ item.CityName }}</ng-option
+              >
+            </ng-select>
+            <div class="error-block-ng-select text-danger">
+              <small
+                *ngIf="
+                  (employeeForm.submitted || city.touched) &&
+                  city.errors?.required
+                "
+                >*Required</small
+              >
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="salary"
+              [(ngModel)]="employeeObj.Salary"
+              maxlength="4"
+              #Salary="ngModel"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Salary</label>
+          </div>
+
+          <!-- <div class="col-sm-6 col-lg-5 floating-label form-group">
+                        <div class="input-group-append Country-code-prepend">
+                            <div class="custom custom-append"
+                                *ngFor="let code of _sharedService._commonMeta.Countries | filter: employeeObj.CountryID : 'CountryID'">
+                                {{code.CountryCode}}
+                            </div>
+                        </div>
+                        <input type="text" placeholder=" " class="floating-input form-control phone-number-prepend"
+                            name="contact_phone" [(ngModel)]="employeeObj.ContactPhone" maxlength="15"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                        <span class="highlight"></span>
+                        <label class="input-label text-prepend">Contact Phone</label>
+                    </div> -->
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <div class="input-group-append Country-code-prepend">
+              <div
+                class="custom custom-append"
+                *ngFor="
+                  let code of _sharedService._commonMeta.Countries
+                    | filter: employeeObj.CountryID:'CountryID'
+                "
+              >
+                {{ code.CountryCode }}
+              </div>
+            </div>
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control phone-number-prepend"
+              name="contact_phone"
+              [(ngModel)]="employeeObj.ContactMobile"
+              maxlength="15"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label text-prepend">Contact Mobile</label>
+          </div>
+
+          <!-- <div class="col-sm-6 col-lg-5 floating-label form-group">
+                        <input type="text" PhoneMask placeholder=" " class="floating-input form-control" name="contact_mobile"
+                            [(ngModel)]="employeeObj.ContactMobile" maxlength="15"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                        <span class="highlight"></span>
+                        <label class="input-label">Contact Mobile</label>
+                    </div> -->
+
+          <div class="col-sm-6 col-lg-5 floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="zipcode"
+              [(ngModel)]="employeeObj.Zipcode"
+              maxlength="5"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Zipcode</label>
+          </div>
+          <ng-container *ngIf="employeeObj.UserID == undefined">
+            <div class="col-sm-6 col-lg-5 floating-label form-group">
+              <input
+                type="password"
+                placeholder=" "
+                class="floating-input form-control"
+                name="password"
+                [(ngModel)]="employeeObj.Password"
+                #password="ngModel"
+                minlength="6"
+                required
+                [disabled]="employeeObj.UserID != undefined"
+                autocomplete="new-password"
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Password </label>
+              <div class="error-block text-danger">
+                <small
+                  *ngIf="
+                    (employeeForm.submitted || password.touched) &&
+                    password.errors?.required
+                  "
+                  >*Required</small
+                >
+                <small *ngIf="password.errors?.minlength"
+                  >*Atleast 6 characters are allowed</small
+                >
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-5 floating-label form-group">
+              <input
+                type="password"
+                placeholder=" "
+                class="floating-input form-control"
+                name="confirm_password"
+                [(ngModel)]="employeeObj.ConfirmPassword"
+                #confirmPassword="ngModel"
+                required
+                [disabled]="employeeObj.UserID != undefined"
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Confirm Password</label>
+              <div class="error-block text-danger">
+                <small
+                  *ngIf="
+                    confirmPassword.touched
+                      ? password.value != confirmPassword.value
+                      : ''
+                  "
+                  >Passwords not same</small
+                >
+                <small
+                  *ngIf="
+                    (employeeForm.submitted || confirmPassword.touched) &&
+                    confirmPassword.errors?.required
+                  "
+                >
+                  *Required</small
+                >
+              </div>
+            </div>
+            <!-- 
+                        <div class="col-sm-6 col-lg-5 ">
+
+                        </div> -->
+            <div class="col-sm-6 col-lg-5 floating-label form-group">
+              <input
+                type="text"
+                placeholder=" "
+                maxlength="300"
+                class="floating-input form-control"
+                name="address1"
+                [(ngModel)]="employeeObj.Address1"
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Address 1 </label>
+            </div>
+            <div class="col-sm-6 col-lg-5 floating-label form-group">
+              <input
+                type="text"
+                placeholder=" "
+                maxlength="300"
+                class="floating-input form-control"
+                name="address2"
+                [(ngModel)]="employeeObj.Address2"
+              />
+              <span class="highlight"></span>
+              <label class="input-label">Address 2 </label>
+            </div>
+          </ng-container>
+
+          <!-- <div class="col-sm-12 col-lg-11 floating-label form-group">
+                        <input type="text" placeholder=" " maxlength="300" class="floating-input form-control"
+                            name="address2" [(ngModel)]="employeeObj.Address2" />
+                        <span class="highlight"></span>
+                        <label class="input-label">Address 2</label>
+                    </div> -->
+        </div>
+
+        <ul
+          role="tablist"
+          class="nav nav-pills justify-content-between pl-4 pr-4"
+        >
+          <li class="nav-item pointer" *ngFor="let role of _meta.Roles">
+            <div class="text-center my-3 mx-2">
+              <a
+                class="nav-link role-selector"
+                (click)="role.IsChecked = role.IsChecked == 1 ? 0 : 1"
+                [class.checked]="role.IsChecked == 1"
+                [class.un-checked]="role.IsChecked == 0"
+                role="tab"
+                aria-expanded="false"
+                aria-disabled="false"
+                name="{{ role.RoleName }}"
+              >
+                <i
+                  class="ts {{ role.Icon }} large px-1"
+                  title="{{ role.RoleName }}"
+                ></i
+              ></a>
+              <label for="" class="role-name primary-font">{{
+                role.RoleName
+              }}</label>
+              <div class="error-block text-danger">
+                <small
+                  *ngIf="
+                    (employeeForm.submitted || role.touched) &&
+                    role.errors?.required
+                  "
+                  >*Required</small
+                >
+              </div>
+            </div>
+            <!-- <div class="error-block text-danger">
+                        <small *ngIf="employeeForm.submitted && role.Name.errors?.required">*Required</small>
+                    </div> -->
+          </li>
+        </ul>
+
+        <div
+          class="col-12"
+          *ngIf="
+            _meta.Roles != undefined &&
+            (_meta.Roles | filter: 8:'RoleID' | filter: 1:'IsChecked').length >
+              0
+          "
+        >
+          <div class="row w-100 mx-0">
+            <hr class="w-100" />
+            <h5 class="sub-heading primary-font">Technician Type</h5>
+          </div>
+
+          <div class="row text-center mb-3">
+            <div
+              class="col-3 px-0 form-check form-check-radio"
+              *ngFor="
+                let tech of _sharedService._commonMeta.objectTypes
+                  | filter: 'Technician':'ObjectNameEnglish'
+              "
+            >
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="tech-type"
+                  id="{{ tech.TypeNameEnglish }}"
+                  (click)="employeeObj.TechnicianTypeID = tech.ObjectTypeID"
+                  [checked]="employeeObj.TechnicianTypeID == tech.ObjectTypeID"
+                />
+                <span class="form-check-sign dark-font">{{
+                  tech.TypeNameEnglish
+                }}</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row col-12 justify-content-end pr-4">
+        <button
+          type="submit"
+          class="btn btn-primary btn-round btn-simple"
+          *ngIf="employeeObj.UserID == undefined"
+        >
+          Create
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary btn-round btn-simple"
+          *ngIf="employeeObj.UserID != undefined"
+        >
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- preview image modal -->
+<!-- <ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Employee Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid"
+            [src]="employeeObj.ImageURL ?  _sharedService.baseUrl + employeeObj.ImageURL :_sharedService.default_img">
+    </div>
+    <div class="row footer-buttons">
+        <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png" (change)="uploadImage($event)">
+        <label for="files" class="btn btn-primary btn-sm btn-round btn-simple upl-btn">Upload</label>
+        <button class="btn btn-primary btn-round btn-sm btn-simple dlt-btn" *ngIf="employeeObj.ImageURL"
+            (click)="delete()">Delete</button>
+    </div>
+</ng-template> -->

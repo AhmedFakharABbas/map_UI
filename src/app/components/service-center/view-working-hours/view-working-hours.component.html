@@ -1,0 +1,49 @@
+<div class="row justify-content-center align-items-center">
+    <div class="row w-100 mt-3">
+        <hr class="w-100">
+        <h4 class="sub-heading">Working Hours</h4>
+    </div>
+    <div class="col-lg-10 col-12 card outer-card-shadow mt-3 px-0">
+        <div class="row card-body  m-0">
+
+            <div class="row w-100 mx-0 dark-font">
+                <div class="offset-6 col-3 pl-4">
+                    <label class="bold-font">From</label>
+                </div>
+                <div class="col-3 pl-2">
+                    <label class="bold-font">To</label>
+                </div>
+
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-8 mb-3 mt-3 w-100 days-border"
+                    *ngFor="let obj of saveWorkingHours.WorkingHours; let i=index">
+                    <div class="row">
+                        <div class="col-3 align-self-center dark-font">
+                            <label class="form-check-label bold-font">
+                                {{obj.EnglishDayName}}
+                            </label>
+                        </div>
+                        <div class="mt-0 col-9 primary-font">
+                            <label class="d-flex form-check-label col-12">
+                                <div class="col-6 px-0 text-right" *ngIf="obj.StartTime != '' ">
+                                    {{obj.StartTime  | timeFormat}}
+                                </div>
+                                <div class="col-6 text-right" *ngIf="obj.StartTime == '' ">
+                                    <span class="ml-3">-</span>
+                                </div>
+                                <div class="col-6 px-1 text-right" *ngIf="obj.EndTime != '' ">
+                                    {{obj.EndTime  | timeFormat}}
+                                </div>
+                                <div class="col-6 text-right" *ngIf="obj.EndTime == '' ">
+                                    <span class="ml-3">-</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

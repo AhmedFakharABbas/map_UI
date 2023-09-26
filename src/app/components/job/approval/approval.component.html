@@ -1,0 +1,2696 @@
+<div
+  *ngIf="
+    _sharedService.jobObj.JCBasicInfo.ApprovalStatusID == 17 &&
+    _sharedService.logged_user_role_id != 1 &&
+    _sharedService.logged_user_role_id != 2
+  "
+>
+  <app-take-approval></app-take-approval>
+</div>
+<!-- {{_sharedService.jobObj.JCBasicInfo.ExternalTasksCost}} - {{_sharedService.jobObj.JCBasicInfo.InternalTasksCost}} -->
+<!-- <button type="button" id="setAlternatePart" class="d-none" (click)="setAlternate()"></button> -->
+
+<form
+  #approvalForm="ngForm"
+  *ngIf="
+    _sharedService.jobObj.JCBasicInfo.ApprovalStatusID != 17 ||
+    _sharedService.logged_user_role_id == 1 ||
+    _sharedService.logged_user_role_id == 2
+  "
+>
+  <div
+    class="row card mx-0"
+    *ngFor="let con of _sharedService.jobObj.JobConcerns; let id = index"
+  >
+ 
+    <div class="col-12 row p-3">
+      <div class="col-10 d-flex">
+        <div class="px-3 pt-3 text-center">
+          <span class="b-radius con-count big-font">{{ id + 1 }}</span> <br />
+          <!-- <i
+            class="fas fa-hourglass-half mt-3"
+            *ngIf="con.IsApproved != true"
+          ></i> -->
+          <i
+            class="fas fa-check-circle mt-3 timeIcon"
+            *ngIf="con.IsApproved == true"
+          ></i>
+        </div>
+        <div class="mb-0 p-3 big-font primary-color">
+          {{ con.ConcernDescription }}
+        </div>
+      </div>
+      <div class="col-2 py-3 px-0 bold-font text-center">
+        <span class="timeIcon "> <i
+          class="fas fa-hourglass-half mr-1 "
+          *ngIf="con.IsApproved != true"
+        ></i></span> 
+        <span class="primary-color">{{ con.TaskTime | hourToMin }} </span>
+      </div>
+    </div>
+    <!-- Parts table new -->
+
+    <div
+    class="col-12 px-0"
+    *ngIf="
+      _sharedService.jobObj.JobTasks != undefined &&
+      (
+        _sharedService.jobObj.JobTasks
+        | filter: true:'IsFree'
+        | filter: con.JobConcernID:'JobConcernID'
+      ).length > 0
+    "
+  >
+  <table
+  class="table primary-dark-font page-animation table-borderless mb-0 table-responsive "
+  id="table"
+  data-toggle="table"
+  data-height="460"
+  data-custom-sort="customSort"
+>
+  <thead class="tableHeader">
+    <tr class="hoverBackground">
+      <th width="1%"  scope="col"></th>
+      <th scope="col" class="text-nowrap">Part </th>
+      <th scope="col">Quantity</th>
+      <th scope="col" class="text-nowrap">Unit Price</th>
+      <th scope="col">Discount</th>
+      <th scope="col" class="text-nowrap">Net Amount</th>
+      <th scope="col">Labour</th>
+  <!-- <th scope="col" class="text-nowrap">Total Amount</th> -->
+      
+    </tr>
+  </thead>
+  <tbody>
+  
+    <ng-container
+      *ngFor="
+        let jt of _sharedService.jobObj.JobTasks
+          | filter: true:'IsFree'
+          | filter: con.JobConcernID:'JobConcernID';
+        let i = index
+      "
+    >
+      <ng-container
+        scope="row"
+        *ngFor="
+          let jp of _sharedService.jobObj.JobParts
+            | filter: jt.JobTaskID:'JobTaskID';
+          let parti = index
+        "
+      >
+
+        <tr [ngClass]="jp.isOpened == true ? 'approve-work' : ''">
+          <td class="number" width="1%" >{{ i + 1 }}</td>
+          <td class="text-nowrap">
+           <!--  <i class="fas fa-caret-left"></i> -->
+            <div class="pl-0 form-check mt-0 caret-down collapsed" data-toggle="collapse" [attr.data-target]="'#part'+id + i"  >
+              <!-- calcPartTotal($event.target.checked, jp); -->
+             <label class="d-flex label" (click)='clickonPart(jp)'>
+                
+                <p class="icon"><i class="fas fa-caret-up icon-up mr-3 primary-color "></i>{{ jp.PartNameEnglish}}</p>
+                <!-- <input
+                  class="form-check-input"
+                  id="part{{ jp.AutomotivePartID }}_{{ jt.JobTaskID }}"
+                  type="checkbox"
+                  name="part{{ jp.AutomotivePartID }}_{{ jt.JobTaskID }}"
+                  [checked]="jp.IsInclude == true"
+                  (change)="onSelectPart(jp)"
+                  [(ngModel)]="jp.IsInclude"
+                  #part{{jp.AutomotivePartID}}
+                  ngModel
+                />
+              
+               
+                <span class="form-check-sign">{{
+                  jp.PartNameEnglish
+                }}</span> -->
+                <ng-container
+                  *ngIf="
+                    jt.LaborTaskID != undefined &&
+                    _sharedService.jobObj.PlanFeatures != undefined &&
+                    (
+                      _sharedService.jobObj.PlanFeatures
+                      | filter: jp.AutomotivePartID:'AutomotivePartID'
+                    ).length > 0 &&
+                    _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 139
+                  "
+                >
+                  <i
+                    class="ts contract contract-icon"
+                    title="Contracted Part"
+                  ></i>
+                  <span class="ml-3 contracted px-2" title="">
+                    {{
+                      (_sharedService.jobObj.PlanFeatures
+                        | filter
+                          : jp.AutomotivePartID
+                          : "AutomotivePartID")[0].TotalUsage +
+                        "/" +
+                        (_sharedService.jobObj.PlanFeatures
+                          | filter
+                            : jp.AutomotivePartID
+                            : "AutomotivePartID")[0].NumberOfUnits
+                    }}
+                  </span>
+                </ng-container>
+              </label> 
+            </div>
+          </td>
+          <!-- <td><i *ngIf="jp.ConcernDescription != undefined" class="fas fa-file primary-dark-font"
+                                  (click)=viewConcern(concernPreview,jp)></i> <span
+                                  *ngIf="jp.ConcernDescription == undefined">N/A</span></td> -->
+          <td>
+            
+            {{ jp.Quantity }}
+            <small *ngIf="jp.UnitTypeName != undefined"
+              >({{ jp.UnitTypeName }})</small
+            >
+          </td>
+          <td>
+      
+            {{
+              jp.IsInclude == true
+                ? (jp.SellingPrice | number: "1.2-2")
+                : 0
+            }}
+            JD
+          </td>
+          <td>
+         
+            {{
+              jp.IsInclude == true
+                ? (jp.DiscountAmount | number: "1.2-2")
+                : 0
+            }}
+            JD
+          </td>
+          <td>
+            {{
+              jp.IsInclude == true ? (jp.NetAmount | number: "1.2-2") : 0
+            }}
+            JD
+          </td>
+          <td>
+            {{
+              jt.TotalAmount != undefined
+                ? jt.TotalAmount - jt.DiscountAmount > 0
+                  ? (jt.TotalAmount - jt.DiscountAmount | number: "1.2-2")
+                  : jt.TotalAmount
+                : jt.TotalAmount
+            }} 
+            JD
+          </td>
+          <!-- <td>
+            {{
+              jp.IsInclude == true
+                ? ((jt.TotalAmount )+ (jp.NetAmount *jp.Quantity )| number: "1.2-2")
+                : 0
+            }}
+            JD
+          </td> -->
+         
+        </tr>
+        
+        <tr  scope="row" [ngClass]="jp.isOpened == true ? 'selected-row' : ''" >
+          <td class="number"></td>
+         
+          <td   id="{{ 'part'+id + i }}" class="text-center  collapse multi-collapse alternativePart" colspan="11">
+            
+            <table
+          [ngClass]="jp.isOpened==true?' part-selection':''"
+              class="
+                table
+                text-left
+                primary-font
+                page-animation
+               
+                b-radius
+               
+              "
+              *ngIf="
+                (
+                  _sharedService.jobObj.JobPartAlternates
+                  | filter: jp.JobPartID:'JobPartID'
+                ).length > 0
+              "
+            >
+              <thead>
+                <tr class="primary-font">
+                  <th scope="col" class="itemCode text-nowrap">Item Code </th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Condition</th>
+                  <th scope="col">
+                    Price <span class="primary-font">(JD)</span>
+                  </th>
+                  <th scope="col">Discount</th>
+                  <th scope="col" class="text-nowrap">Net Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container
+                  *ngFor="
+                    let ap of _sharedService.jobObj.JobPartAlternates
+                      | filter: jp.JobPartID:'JobPartID';
+                    let i = index
+                  "
+                >
+                  <tr
+                    [ngClass]="
+                      ap.IsApproved == true
+                        ? 'approve-part'
+                        : ap.JobPartStatusID == 26
+                        ? 'available-part'
+                        : ''
+                    "
+                  >
+                    <td class="d-block text-nowrap" >
+                      <div class="form-check  form-check mt-0  radio-check
+                      ">
+                      <!-- calcPartTotal($event.target.checked, jp) -->
+                      <!-- working -->
+                      <!-- (change)="
+                            setAlternate(jp ap,);
+                            
+                          " -->
+                        <label class="form-check-label">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="alternatePart{{ ap.JobPartID }}"
+                            id="altPart{{ id + 1 }}{{ i }}{{
+                              ap.JobPartAlternateID
+                            }}"
+                            
+                          (click)="onSelectJobPartAlternate( jp ,ap)"
+                            [checked]="ap.IsApproved == true"
+                          />
+                          <!-- <span >
+                            {{ ap.ItemCode }}
+                          </span> -->
+                          <span class="form-check-sign dark-font"
+                          appElseHyphen
+                          [elseHyphen]="ap.ItemCode"
+                        >
+                        </span>
+                          <!-- (click)="jp.IsInclude = true; altPartPriceCalc(ap)" (change)="approvePart(ap); 
+                                                              jp.JobPartAlternateID = ap.JobPartAlternateID; ap.IsApproved = true; ap.IsModified = true" -->
+                        </label>
+                      </div>
+                    </td>
+                    <td class="text-nowrap">
+                      {{ ap.JobPartStatusName }}
+                    </td>
+                    <td>
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span>{{
+                          ap.PartConditionID == 66 ? "Used" : "New"
+                        }}</span>
+                      </p>
+                    </td>
+                    <td>
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="ap.SellingPrice"
+                        >
+                        </span
+                        >/{{ jp.UnitTypeName }}
+                      </p>
+                    </td>
+                    <td>
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span *ngIf="ap.DiscountPercentage > 0"
+                          >{{
+                            ap.DiscountPercentage | number: "1.2-2"
+                          }}%</span
+                        >
+                      </p>
+                    </td>
+                    <td>
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          >{{ ap.NetAmount | number: "1.2-2" }} JD</span
+                        >
+                      </p>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+
+            <table
+              class="
+                table
+                text-center
+                primary-font
+                page-animation
+                part-selection
+                b-radius
+              "
+              *ngIf="
+                (
+                  _sharedService.jobObj.JobPartAlternates
+                  | filter: jp.JobPartID:'JobPartID'
+                ).length == 0
+              "
+            >
+              <tbody>
+                <tr>
+                  <td>No Alternate added!</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+  <tbody
+    *ngIf="
+      _sharedService.jobObj.JobTasks == undefined ||
+      (_sharedService.jobObj.JobTasks != undefined &&
+        (
+          _sharedService.jobObj.JobTasks
+          | filter: con.JobConcernID:'JobConcernID'
+        ).length == 0)
+    "
+  >
+    <tr scope="row">
+      <td colspan="12" class="text-center">No task added!</td>
+    </tr>
+  </tbody>
+</table>
+    
+  </div>
+  
+     <div class="col-12 px-0">
+    <table
+      class="table primary-dark-font page-animation table-borderless mb-0 table-responsive"
+      id="table"
+      data-toggle="table"
+      data-height="460"
+      data-custom-sort="customSort"
+    >
+      <thead class="tableHeader">
+        <tr  class="hoverBackground">
+          <th width="1%"  scope="col"></th> 
+          <th scope="col">Results   </th>
+          <th scope="col">Type</th>
+          <th
+            scope="col"
+            class="pointer d-flex"
+            (click)="IsSorted = !IsSorted; onSort()"
+          >
+            Priority <i class="fa fa-sort pl-1 pt-1"></i>
+          </th>
+
+          <th scope="col">Discount</th>
+          <th scope="col">Labor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container
+          *ngFor="
+            let jt of _sharedService.jobObj.JobTasks
+              | filter: false:'IsFree'
+              | filter: con.JobConcernID:'JobConcernID';
+            let i = index
+          "
+        >
+          <tr [ngClass]="jt.isOpened == true ? 'approve-work' : ''">
+
+            <td class="number" width="1%">{{ i + 1 }}</td>
+            <td class="text-nowrap">
+           
+              <div class="pl-0 form-check d-flex">
+             
+                <i class="fas fa-caret-up mr-3 collapsed  primary-color"  data-toggle="collapse" [attr.data-target]="'#repair'+id + i" (click)='onClickJobTask(jt)'></i>
+                <label class="d-flex form-check-label ">
+                  
+                  <input
+                    class="form-check-input"
+                    id="{{ jt.LaborDescriptionEng }}{{ i }}"
+                    type="checkbox"
+                    value=""
+                    name="{{ jt.LaborDescriptionEng }}{{ i }}"
+                    [checked]="jt.IsInclude == true"
+                    (change)="onSelectTask(jt)"
+                    [(ngModel)]="jt.IsInclude"
+                  />
+                  <!-- (change)="calcTaskTotal($event.target.checked, jt)" -->
+                  <span class="form-check-sign">{{
+                    jt.LaborDescriptionEng
+                  }} </span>
+                  <ng-container
+                    *ngIf="
+                      jt.LaborTaskID != undefined &&
+                      _sharedService.jobObj.PlanFeatures != undefined &&
+                      (
+                        _sharedService.jobObj.PlanFeatures
+                        | filter: jt.LaborTaskID:'LaborTaskID'
+                      ).length > 0 &&
+                      _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 139
+                    "
+                  >
+                    <i
+                      class="ts contract contract-icon"
+                      title="Contracted Service"
+                    ></i>
+                    <span class="ml-3 contracted px-2" title="">
+                      {{
+                        (_sharedService.jobObj.PlanFeatures
+                          | filter: jt.LaborTaskID:"LaborTaskID")[0]
+                          .TotalUsage +
+                          "/" +
+                          (_sharedService.jobObj.PlanFeatures
+                            | filter: jt.LaborTaskID:"LaborTaskID")[0]
+                            .NumberOfUnits
+                      }}
+                    </span>
+                  </ng-container>
+                </label>
+             
+              </div>
+            </td>
+            <td class="text-nowrap">
+              {{ jt.JobTaskTypeID == 51 ? "Internal" : "External" }}
+              <small
+                >({{
+                  jt.RepairTypeID == 70
+                    ? "Mechanical"
+                    : jt.RepairTypeID == 71
+                    ? "Electrical"
+                    : jt.RepairTypeID == 73
+                    ? "Other"
+                    : "Body Repair"
+                }})</small
+              >
+            </td>
+            <td>
+              <div
+                [ngClass]="
+                  jt.PriorityTypeID == 83 ? 'priority-med' : 'priority-high'
+                "
+              >
+                <span class="badge"></span>
+              </div>
+              {{ jt.PriorityTypeID == 83 ? "Medium" : "High" }}
+            </td>
+            <td class="">
+              <span
+                appElseHyphen
+                [elseHyphen]="jt.DiscountAmount"
+                *ngIf="
+                  jt.EditDiscount == false || jt.EditDiscount == undefined
+                "
+              >
+              </span>
+              <i
+                class="fas fa-edit smaller-font ml-2 hover-color"
+                *ngIf="
+                  jt.EditDiscount == false || jt.EditDiscount == undefined
+                "
+                (click)="jt.EditDiscount = true"
+              ></i>
+              <div class="d-flex">
+                <div
+                  class="floating-label form-group mb-0 pb-0"
+                  *ngIf="jt.EditDiscount == true"
+                >
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control discount-field"
+                    name="discount{{ jt.JobTaskID }}"
+                    id="discount{{ jt.JobTaskID }}"
+                    (change)="(jt.DiscountAmount)"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 
+                                          && event.charCode != 47 && event.charCode <= 57"
+                    [(ngModel)]="jt.DiscountAmount"
+                    maxlength="6"
+                  />
+                  <span class="highlight"></span>
+                  <!-- <label class="input-label">Discount</label> -->
+                </div>
+                <i
+                  class="
+                    fas
+                    fa-check
+                    smaller-font
+                    ml-2
+                    hover-color
+                    align-self-center
+                  "
+                  *ngIf="jt.EditDiscount == true"
+                  (click)="jt.EditDiscount = false; CalculateCost()"
+                ></i>
+              </div>
+            </td>
+            <!-- <td> {{jt.TotalAmount != undefined? ((jt.TotalAmount - jt.DiscountAmount) > 0
+                              ?(jt.TotalAmount - jt.DiscountAmount | number : '1.2-2') : jt.TotalAmount ):
+                              jt.TotalAmount}}
+                              JD
+                          </td> -->
+            <td>
+              {{
+                jt.LaborCost != undefined
+                  ? (jt.LaborCost | number: "1.2-2")
+                  : 0
+              }}
+            </td>
+          </tr>
+          <tr [ngClass]="jt.isOpened == true ? 'selected-row' : ''"
+          id="{{ 'repair'+id + i }}"
+          class="collapse multi-collapse"
+            scope="row"
+            *ngIf="
+              _sharedService.jobObj.JobParts == undefined ||
+              (_sharedService.jobObj.JobParts != undefined &&
+                (
+                  _sharedService.jobObj.JobParts
+                  | filter: jt.JobTaskID:'JobTaskID'
+                ).length > 0)
+            "
+          >
+          <td class="number"></td>
+            <td class="" colspan="11">
+              <table class="table primary-dark-font page-animation mb-0">
+                <thead>
+                  <tr
+                  [ngClass]="jt.isOpened == true ? 'repair-part' : ''"
+                 >
+                    <th scope="col" class="text-nowrap">Part  </th>
+                    <th scope="col" class="text-nowrap">Quantity</th>
+                    <th scope="col" class="text-nowrap">Unit Price</th>
+                    <th scope="col" class="text-nowrap">Discount</th>
+                    <th scope="col" class="text-nowrap">Net Amount</th>
+                    <!-- <th scope="col">Status</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container
+                    *ngFor="
+                      let jp of _sharedService.jobObj.JobParts
+                        | filter: jt.JobTaskID:'JobTaskID';
+                      let i = index
+                    "
+                  >
+                    <tr
+                      [ngClass]="jt.isOpened == true ? 'selected-row' : ''"
+                    >
+                      <td class="text-nowrap">
+                        <div class="pl-0 form-check mt-0">
+                          <!-- (change)="setAlternate(jp); calcPartTotal($event.target.checked, jp); " -->
+                          <label class="d-flex form-check-label">
+                         
+                            <p class="part-label"> <i class="fas fa-caret-up mr-2 primary-color collapsed" data-toggle="collapse" [attr.data-target]="'#Taskpart' + i"></i>{{ jp.PartNameEnglish}}</p>
+                            <!-- <input
+                              class="form-check-input"
+                              [disabled]="jp.IsAvailable != true"
+                              id="part{{ jp.AutomotivePartID }}"
+                              type="checkbox"
+                              name="part{{ jp.AutomotivePartID }}_{{
+                                jt.JobTaskID
+                              }}"
+                              [checked]="jp.IsInclude == true"
+                              (change)="onSelectPart(jp)"
+                              [(ngModel)]="jp.IsInclude"
+                              #part{{jp.AutomotivePartID}}
+                              ngModel
+                            />
+                            
+                            <span class="form-check-sign">{{
+                              jp.PartNameEnglish
+                            }}</span> -->
+                            <ng-container
+                              *ngIf="
+                                jt.LaborTaskID != undefined &&
+                                _sharedService.jobObj.PlanFeatures !=
+                                  undefined &&
+                                (
+                                  _sharedService.jobObj.PlanFeatures
+                                  | filter
+                                    : jp.AutomotivePartID
+                                    : 'AutomotivePartID'
+                                ).length > 0 &&
+                                _sharedService.jobObj.JCBasicInfo
+                                  .ServiceTypeID == 139
+                              "
+                            >
+                              <i
+                                class="ts contract contract-icon"
+                                title="Contracted Part"
+                              ></i>
+                              <span class="ml-3 contracted px-2" title="">
+                                {{
+                                  (_sharedService.jobObj.PlanFeatures
+                                    | filter
+                                      : jp.AutomotivePartID
+                                      : "AutomotivePartID")[0].TotalUsage +
+                                    "/" +
+                                    (_sharedService.jobObj.PlanFeatures
+                                      | filter
+                                        : jp.AutomotivePartID
+                                        : "AutomotivePartID")[0].NumberOfUnits
+                                }}
+                              </span>
+                            </ng-container>
+                          </label>
+                        </div>
+                      </td>
+                      <!-- <td><i *ngIf="jp.ConcernDescription != undefined" class="fas fa-file primary-dark-font"
+                                                  (click)=viewConcern(concernPreview,jp)></i> <span
+                                                  *ngIf="jp.ConcernDescription == undefined">N/A</span></td> -->
+                      <td class="text-nowrap">
+                        {{ jp.Quantity }}
+                        <small *ngIf="jp.UnitTypeName != undefined"
+                          >({{ jp.UnitTypeName }})</small
+                        >
+                      </td>
+                      <td class="text-nowrap">
+                        {{
+                          jp.IsInclude == true
+                            ? (jp.SellingPrice | number: "1.2-2")
+                            : 0
+                        }}
+                        JD
+                      </td>
+                      <td class="text-nowrap">
+                        {{
+                          jp.IsInclude == true
+                            ? (jp.DiscountAmount | number: "1.2-2")
+                            : 0
+                        }}
+                        JD
+                      </td>
+                      <td class="text-nowrap">
+                        {{
+                          jp.IsInclude == true
+                            ? (jp.NetAmount | number: "1.2-2")
+                            : 0
+                        }}
+                        
+                        JD
+                      </td>
+                      <!-- <td>{{jp.ApprovalStatus}}</td> -->
+                      <!-- <td>{{jp.JobPartStatusName != undefined ? jp.JobPartStatusName :
+                                                  jp.IsInclude == true ? 'Approved' : 'Not Approved'}}
+                                              </td> -->
+                    </tr>
+
+                    <tr
+                    
+                    scope="row" id="{{ 'Taskpart' + i }}" class="text-center  collapse multi-collapse alternativePart">
+                      <td class="text-center" colspan="11">
+                        <table
+                          class="
+                            table
+                            text-left
+                            primary-font
+                            page-animation
+                           
+                            b-radius
+                          "
+                          *ngIf="
+                            (
+                              _sharedService.jobObj.JobPartAlternates
+                              | filter: jp.JobPartID:'JobPartID'
+                            ).length > 0
+                          "
+                        >
+                          <thead>
+                            <tr class="primary-font">
+                              <th scope="col" class="text-nowrap itemCode">Item Code </th>
+                              <th scope="col" class="text-nowrap">Status</th>
+                              <th scope="col" class="text-nowrap">Condition</th>
+                              <th scope="col" class="text-nowrap">
+                                Price <span class="primary-font">(JD)</span>
+                              </th>
+                              <th scope="col" class="text-nowrap">Discount</th>
+                              <th scope="col" class="text-nowrap">Net Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container
+                              *ngFor="
+                                let ap of _sharedService.jobObj
+                                  .JobPartAlternates
+                                  | filter: jp.JobPartID:'JobPartID';
+                                let i = index
+                              "
+                            >
+                              <tr
+                                [ngClass]="
+                                  ap.IsApproved == true
+                                    ? 'approve-part'
+                                    : ap.JobPartStatusID == 26
+                                    ? 'available-part'
+                                    : ''
+                                "
+                              >
+                                <td>
+                                  <div
+                                    class="form-check form-check mt-0 text-nowrap "
+                                  >
+                                    <label class="form-check-label">
+                                      <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        name="alternatePart{{ ap.JobPartID }}"
+                                        (click)="onSelectJobPartAlternate(jp ,ap)"
+                                        id="altPart{{ id + 1 }}{{ i }}{{
+                                          ap.JobPartAlternateID
+                                        }}"
+                                        [checked]="ap.IsApproved"
+                                      />
+                                      <!-- {{ ap.IsApproved }} -->
+                                      <span class="form-check-sign dark-font"
+                                        >
+                                        <span
+                                appElseHyphen
+                                [elseHyphen]="ap.ItemCode"
+                              ></span
+                              >
+                                        <!-- <small
+                                          >({{ ap.OrigionName }})</small
+                                        > -->
+                                      </span>
+                                      
+                                    </label>
+                                    <!-- (click)="jp.IsInclude = true; altPartPriceCalc(ap)" -->
+                                    <!-- (change)="approvePart(ap); jp.JobPartAlternateID = ap.JobPartAlternateID; ap.IsApproved = true; ap.IsModified = true" -->
+                                  </div>
+                                </td>
+                                <td>{{ ap.JobPartStatusName }}</td>
+                                <td class="text-nowrap">
+                                  <p
+                                    class="part-detail-box tbl-font my-0"
+                                    title=""
+                                  >
+                                    <span>{{
+                                      ap.PartConditionID == 66
+                                        ? "Used"
+                                        : "New"
+                                    }}</span>
+                                  </p>
+                                </td>
+                                <td class="text-nowrap">
+                                  <p
+                                    class="part-detail-box tbl-font my-0"
+                                    title=""
+                                  >
+                                    <span
+                                      appElseHyphen
+                                      [elseHyphen]="ap.SellingPrice"
+                                    ></span
+                                    >/{{ jp.UnitTypeName }}
+                                  </p>
+                                </td>
+                                <td class="text-nowrap">
+                                  <p
+                                    class="part-detail-box tbl-font my-0"
+                                    title=""
+                                  >
+                                    <span *ngIf="ap.DiscountPercentage > 0"
+                                      >{{
+                                        ap.DiscountPercentage
+                                          | number: "1.2-2"
+                                      }}%</span
+                                    >
+                                  </p>
+                                </td>
+                                <td class="text-nowrap">
+                                  <p
+                                    class="part-detail-box tbl-font my-0"
+                                    title=""
+                                  >
+                                    <span
+                                      >{{
+                                        ap.NetAmount | number: "1.2-2"
+                                      }}
+                                      JD</span
+                                    >
+                                  </p>
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+
+                        <table
+                          class="
+                            table
+                            text-center
+                            primary-font
+                            page-animation
+                            part-selection
+                            b-radius
+                          "
+                          *ngIf="
+                            (
+                              _sharedService.jobObj.JobPartAlternates
+                              | filter: jp.JobPartID:'JobPartID'
+                            ).length == 0 && jp.IsAvailable == true
+                          "
+                        >
+                          <tbody>
+                            <tr>
+                              <td>No Alternate added!</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <table
+                          class="
+                            table
+                            text-center
+                            primary-font
+                            page-animation
+                            part-selection
+                            b-radius
+                          "
+                          *ngIf="
+                            (
+                              _sharedService.jobObj.JobPartAlternates
+                              | filter: jp.JobPartID:'JobPartID'
+                            ).length == 0 && jp.IsAvailable == false
+                          "
+                        >
+                          <tbody>
+                            <tr>
+                              <td>Alternate part is not available!</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+                <!-- <tbody
+                                  *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : jt.JobTaskID : 'JobTaskID').length==0)">
+                                  <tr scope="row">
+                                      <td colspan="12" class="text-center">No part added!</td>
+                                  </tr>
+                              </tbody> -->
+              </table>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+      <tbody
+        *ngIf="
+          _sharedService.jobObj.JobTasks == undefined ||
+          (_sharedService.jobObj.JobTasks != undefined &&
+            (
+              _sharedService.jobObj.JobTasks
+              | filter: con.JobConcernID:'JobConcernID'
+            ).length == 0)
+        "
+      >
+        <tr scope="row">
+          <td colspan="12" class="text-center">No task added!</td>
+        </tr>
+      </tbody>
+    </table>
+     </div>
+    <!-- Parts table old -->
+   
+ 
+    <!-- Repairs table -->
+  
+  </div>
+
+  <!-- Other parts and services -->
+
+
+  <div *ngIf="(_sharedService.jobObj.JobTasks  | filter: true:'IsFree'
+  | partfilter: null:'JobConcernID').length >0" class="row card mx-0">
+    <div
+      class="row w-100 mx-0"
+      *ngIf="
+        _sharedService.jobObj.JobTasks == undefined ||
+        (_sharedService.jobObj.JobTasks != undefined &&
+          (_sharedService.jobObj.JobTasks | partfilter: null:'JobConcernID')
+            .length > 0)
+      "
+    >
+      <hr class="w-100" />
+      <h5 class="sub-heading primary-font">Other Services</h5>
+    </div>
+    <!-- Parts table 2 -->
+    <div class="col-12 px-0">
+      <table
+        class="table primary-dark-font page-animation table-borderless mb-0 table-responsive"
+        id="table"
+        data-toggle="table"
+        data-height="460"
+        data-custom-sort="customSort"
+      >
+        <thead class="tableHeader">
+          <tr class="hoverBackground">
+            <th width="1%"  scope="col"></th>
+            <th scope="col" class="text-nowrap">Part</th>
+            <th scope="col"  class="text-nowrap">Quantity</th>
+            <th scope="col"  class="text-nowrap">Unit Price</th>
+            <th scope="col"  class="text-nowrap">Discount</th>
+            <th scope="col"  class="text-nowrap">Net Amount</th>
+            <th scope="col"  class="text-nowrap">Labour</th>
+            <!-- <th scope="col" class="text-nowrap">Total Amount</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngFor="
+              let jt of _sharedService.jobObj.JobTasks
+                | filter: true:'IsFree'
+                | partfilter: null:'JobConcernID';
+              let i = index
+            "
+          >
+            <ng-container
+              scope="row"
+              *ngFor="
+                let jp of _sharedService.jobObj.JobParts
+                  | filter: jt.JobTaskID:'JobTaskID';
+                let parti = index
+              "
+            >
+              <tr [ngClass]="jp.isOpened == true ? 'approve-work' : ''">
+                <td class="number" width="1%" >{{ i + 1 }}</td>
+                <td  class="text-nowrap">
+                  <div class="pl-0 form-check mt-0 caret-down collapsed"  data-toggle="collapse" [attr.data-target]="'#OSpart'+id + i">
+                    <label class="d-flex label"  (click)='clickonPart(jp)'>
+                      <p class="icon"><i class="fas fa-caret-up icon-up mr-3 primary-color "></i>{{ jp.PartNameEnglish}}</p>
+                      <!-- <input
+                        class="form-check-input"
+                        id="part{{ jp.AutomotivePartID }}_{{ jt.JobTaskID }}"
+                        type="checkbox"
+                        name="part{{ jp.AutomotivePartID }}_{{ jt.JobTaskID }}"
+                        [checked]="jp.IsInclude == true"
+                        (change)="
+                          setAlternate(jp);
+                          calcPartTotal($event.target.checked, jp)
+                        "
+                        (click)="
+                          jp.IsInclude = !jp.IsInclude; jp.IsModified = true
+                        "
+                        [(ngModel)]="jp.IsInclude"
+                        #part{{jp.AutomotivePartID}}
+                        ngModel
+                      /> -->
+                      <!-- <span
+                      appElseHyphen
+                      [elseHyphen]="jp.PartNameEnglish"
+                    ></span> -->
+                    
+                      <ng-container
+                        *ngIf="
+                          jt.LaborTaskID != undefined &&
+                          _sharedService.jobObj.PlanFeatures != undefined &&
+                          (
+                            _sharedService.jobObj.PlanFeatures
+                            | filter: jp.AutomotivePartID:'AutomotivePartID'
+                          ).length > 0 &&
+                          _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 139
+                        "
+                      >
+                        <i
+                          class="ts contract contract-icon"
+                          title="Contracted Part"
+                        ></i>
+                        <span class="ml-3 contracted px-2" title="">
+                          {{
+                            (_sharedService.jobObj.PlanFeatures
+                              | filter
+                                : jp.AutomotivePartID
+                                : "AutomotivePartID")[0].TotalUsage +
+                              "/" +
+                              (_sharedService.jobObj.PlanFeatures
+                                | filter
+                                  : jp.AutomotivePartID
+                                  : "AutomotivePartID")[0].NumberOfUnits
+                          }}
+                        </span>
+                      </ng-container>
+                    </label>
+                  </div>
+                </td>
+                <!-- <td><i *ngIf="jp.ConcernDescription != undefined" class="fas fa-file primary-dark-font"
+                                        (click)=viewConcern(concernPreview,jp)></i> <span
+                                        *ngIf="jp.ConcernDescription == undefined">N/A</span></td> -->
+                <td>
+                  {{ jp.Quantity }}
+                  <small *ngIf="jp.UnitTypeName != undefined"
+                    >({{ jp.UnitTypeName }})</small
+                  >
+                </td>
+                <td>
+                  {{
+                    jp.IsInclude == true
+                      ? (jp.SellingPrice | number: "1.2-2")
+                      : 0
+                  }}
+                  JD
+                </td>
+                <td>
+                  {{
+                    jp.IsInclude == true
+                      ? (jp.DiscountAmount | number: "1.2-2")
+                      : 0
+                  }}
+                  JD
+                </td>
+                <td>
+                  {{
+                    jp.IsInclude == true ? (jp.NetAmount | number: "1.2-2") : 0
+                  }}
+                  JD
+                </td>
+                <!-- <td>{{jp.ApprovalStatus}}</td> -->
+                <!-- <td>{{jp.JobPartStatusName != undefined ? jp.JobPartStatusName :
+                                    jp.IsInclude == true ? 'Approved' : 'Not Approved'}}
+                                </td> -->
+
+                <td>
+                  {{
+                    jt.TotalAmount != undefined
+                      ? jt.TotalAmount - jt.DiscountAmount > 0
+                        ? (jt.TotalAmount - jt.DiscountAmount | number: "1.2-2")
+                        : jt.TotalAmount
+                      : jt.TotalAmount
+                  }}
+                  JD
+                </td>
+                <!-- <td>
+                  {{
+                    jp.IsInclude == true
+                      ? (jt.TotalAmount + jp.NetAmount | number: "1.2-2")
+                      : 0
+                  }}
+                  JD
+                </td> -->
+              </tr>
+
+              <tr scope="row" [ngClass]="jp.isOpened == true ? 'selected-row' : ''">
+                <td class="number"></td>
+         
+                <td id="{{ 'OSpart'+id + i }}" class="text-center collapse multi-collapse alternativePart" colspan="11">
+                  <table
+                  [ngClass]="jp.isOpened==true?' part-selection':''"
+                    class="
+                      table
+                      text-left
+                      primary-font
+                      page-animation
+                     
+                      b-radius
+                    "
+                    *ngIf="
+                      (
+                        _sharedService.jobObj.JobPartAlternates
+                        | filter: jp.JobPartID:'JobPartID'
+                      ).length > 0
+                    "
+                  >
+                    <thead>
+                      <tr class="primary-font">
+                        <th scope="col" class="itemCode text-nowrap">Item Code</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Condition</th>
+                        <th scope="col">
+                          Price <span class="primary-font">(JD)</span>
+                        </th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Net Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container
+                        *ngFor="
+                          let ap of _sharedService.jobObj.JobPartAlternates
+                            | filter: jp.JobPartID:'JobPartID';
+                          let i = index
+                        "
+                      >
+                        <tr
+                          [ngClass]="
+                            ap.IsApproved == true
+                              ? 'approve-part'
+                              : ap.JobPartStatusID == 26
+                              ? 'available-part'
+                              : ''
+                          "
+                        >
+                          <td>
+                      
+                            <div class="form-check form-check mt-0">
+                              <label class="form-check-label">
+                                <input
+                                  class="form-check-input"
+                                  type="checkbox"
+                                  name="alternatePart{{ ap.JobPartID }}"
+                                  id="altPart{{ id + 1 }}{{ i }}{{
+                                    ap.JobPartAlternateID
+                                  }}"
+                                  (click)="onSelectJobPartAlternate( jp ,ap)"
+                                  [checked]="ap.IsApproved == true"
+                                />
+                                <span class="form-check-sign dark-font">
+                                  {{ ap.ItemCode }}
+                                </span>
+                              </label>
+                            </div>
+                          </td>
+                          <td>
+                            {{ ap.JobPartStatusName }}
+                          </td>
+                          <td>
+                            <p class="part-detail-box tbl-font my-0" title="">
+                              <span>{{
+                                ap.PartConditionID == 66 ? "Used" : "New"
+                              }}</span>
+                            </p>
+                          </td>
+                          <td>
+                            <p class="part-detail-box tbl-font my-0" title="">
+                              <span
+                                appElseHyphen
+                                [elseHyphen]="ap.SellingPrice"
+                              ></span
+                              >/{{ jp.UnitTypeName }}
+                            </p>
+                          </td>
+                          <td>
+                            <p class="part-detail-box tbl-font my-0" title="">
+                              <span *ngIf="ap.DiscountPercentage > 0"
+                                >{{
+                                  ap.DiscountPercentage | number: "1.2-2"
+                                }}%</span
+                              >
+                            </p>
+                          </td>
+                          <td>
+                            <p class="part-detail-box tbl-font my-0" title="">
+                              <span
+                                >{{ ap.NetAmount | number: "1.2-2" }} JD</span
+                              >
+                            </p>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+
+                  <table
+                    class="
+                      table
+                      text-center
+                      primary-font
+                      page-animation
+                      part-selection
+                      b-radius
+                    "
+                    *ngIf="
+                      (
+                        _sharedService.jobObj.JobPartAlternates
+                        | filter: jp.JobPartID:'JobPartID'
+                      ).length == 0
+                    "
+                  >
+                    <tbody>
+                      <tr>
+                        <td>No Alternate added!</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+        <tbody
+          *ngIf="
+            _sharedService.jobObj.JobTasks == undefined ||
+            (_sharedService.jobObj.JobTasks != undefined &&
+              (_sharedService.jobObj.JobTasks | filter: null:'JobConcernID')
+                .length == 0)
+          "
+        >
+          <tr scope="row">
+            <td colspan="12" class="text-center">No task added!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    <!-- Repairs table 2 -->
+    <div *ngIf="(_sharedService.jobObj.JobTasks  | filter: false:'IsFree'
+    | partfilter: null:'JobConcernID').length >0" class="row card mx-0">
+      <div
+        class="row w-100 mx-0"
+        *ngIf="
+          _sharedService.jobObj.JobTasks == undefined ||
+          (_sharedService.jobObj.JobTasks != undefined &&
+            (_sharedService.jobObj.JobTasks | partfilter: null:'JobConcernID')
+              .length > 0)
+        "
+      >
+        <hr class="w-100" />
+        <h5 class="sub-heading primary-font">Other Services</h5>
+      </div>
+    <div class="col-12 px-0">
+      <table
+        class="table primary-dark-font page-animation table-borderless mb-0 table-responsive"
+        id="table"
+        data-toggle="table"
+        data-height="460"
+        data-custom-sort="customSort"
+      >
+        <thead class="tableHeader">
+          <tr class="hoverBackground">
+            <th width="1%"  scope="col"></th> 
+            <th scope="col">Results2</th>
+            <th scope="col">Type</th>
+            <th
+              scope="col"
+              class="pointer d-flex"
+              (click)="IsSorted = !IsSorted; onSort()"
+            >
+              Priority <i class="fa fa-sort pl-1 pt-1"></i>
+            </th>
+
+            <th scope="col">Discount</th>
+            <th scope="col">Labor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container
+            *ngFor="
+              let jt of _sharedService.jobObj.JobTasks
+                | filter: false:'IsFree'
+                | partfilter: null:'JobConcernID';
+              let i = index
+            "
+          >
+            <tr [ngClass]="jt.isOpened == true ? 'approve-work' : ''">
+              <td class="number" width="1%">{{ i + 1 }}</td>
+              <td class="text-nowrap">
+                <div class="pl-0 form-check d-flex">
+               
+                  <i class="fas fa-caret-up mr-3 collapsed  primary-color"  data-toggle="collapse" [attr.data-target]="'#orepair'+id + i" (click)='onClickJobTask(jt)'></i>
+                  <label class="d-flex form-check-label">
+                    
+                   
+                    <input
+                      class="form-check-input"
+                      id="{{ jt.LaborDescriptionEng }}{{ i }}"
+                      type="checkbox"
+                      value=""
+                      name="{{ jt.LaborDescriptionEng }}{{ i }}"
+                      [checked]="jt.IsInclude == true"
+                      (change)="onSelectTask(jt)"
+                      [(ngModel)]="jt.IsInclude"
+                    />
+                    
+                    <span class="form-check-sign">{{
+                      jt.LaborDescriptionEng
+                    }}</span>
+                    <ng-container
+                      *ngIf="
+                        jt.LaborTaskID != undefined &&
+                        _sharedService.jobObj.PlanFeatures != undefined &&
+                        (
+                          _sharedService.jobObj.PlanFeatures
+                          | filter: jt.LaborTaskID:'LaborTaskID'
+                        ).length > 0 &&
+                        _sharedService.jobObj.JCBasicInfo.ServiceTypeID == 139
+                      "
+                    >
+                      <i
+                        class="ts contract contract-icon"
+                        title="Contracted Service"
+                      ></i>
+                      <span class="ml-3 contracted px-2" title="">
+                        {{
+                          (_sharedService.jobObj.PlanFeatures
+                            | filter: jt.LaborTaskID:"LaborTaskID")[0]
+                            .TotalUsage +
+                            "/" +
+                            (_sharedService.jobObj.PlanFeatures
+                              | filter: jt.LaborTaskID:"LaborTaskID")[0]
+                              .NumberOfUnits
+                        }}
+                      </span>
+                    </ng-container>
+                  </label>
+                </div>
+              </td>
+              <td class="text-nowrap">
+                {{ jt.JobTaskTypeID == 51 ? "Internal" : "External" }}
+                <small
+                  >({{
+                    jt.RepairTypeID == 70
+                      ? "Mechanical"
+                      : jt.RepairTypeID == 71
+                      ? "Electrical"
+                      : jt.RepairTypeID == 73
+                      ? "Other"
+                      : "Body Repair"
+                  }})</small
+                >
+              </td>
+              <td>
+                <div
+                  [ngClass]="
+                    jt.PriorityTypeID == 83 ? 'priority-med' : 'priority-high'
+                  "
+                >
+                  <span class="badge"></span>
+                </div>
+                {{ jt.PriorityTypeID == 83 ? "Medium" : "High" }}
+              </td>
+              <td class="">
+                <span
+                  appElseHyphen
+                  [elseHyphen]="jt.DiscountAmount"
+                  *ngIf="
+                    jt.EditDiscount == false || jt.EditDiscount == undefined
+                  "
+                >
+                </span>
+                <i
+                  class="fas fa-edit smaller-font ml-2 hover-color"
+                  *ngIf="
+                    jt.EditDiscount == false || jt.EditDiscount == undefined
+                  "
+                  (click)="jt.EditDiscount = true"
+                ></i>
+                <div class="d-flex">
+                  <div
+                    class="floating-label form-group mb-0 pb-0"
+                    *ngIf="jt.EditDiscount == true"
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control discount-field"
+                      name="discount{{ jt.JobTaskID }}"
+                      id="discount{{ jt.JobTaskID }}"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="jt.DiscountAmount"
+                      maxlength="6"
+                    />
+                    <span class="highlight"></span>
+                    <!-- <label class="input-label">Discount</label> -->
+                  </div>
+                  <i
+                    class="
+                      fas
+                      fa-check
+                      smaller-font
+                      ml-2
+                      hover-color
+                      align-self-center
+                    "
+                    *ngIf="jt.EditDiscount == true"
+                    (click)="jt.EditDiscount = false"
+                  ></i>
+                </div>
+              </td>
+              <td>
+                <!-- {{
+                  jt.TotalAmount != undefined
+                    ? jt.TotalAmount - jt.DiscountAmount > 0
+                      ? (jt.TotalAmount - jt.DiscountAmount | number: "1.2-2")
+                      : jt.TotalAmount
+                    : jt.TotalAmount
+                }}
+                JD -->
+                {{
+                  jt.LaborCost != undefined
+                    ? (jt.LaborCost | number: "1.2-2")
+                    : 0
+                }}
+                <small *ngIf="jt.LaborTime != undefined && jt.LaborTime > 0.0"
+                  >({{ jt.LaborTime / 60 | number: "1.2-2" }} hrs)</small
+                >
+              </td>
+            </tr>
+            <tr
+            [ngClass]="jt.isOpened == true ? 'selected-row' : ''"
+            id="{{ 'orepair'+id + i }}"
+            class="collapse multi-collapse"
+              scope="row"
+              *ngIf="
+                _sharedService.jobObj.JobParts == undefined ||
+                (_sharedService.jobObj.JobParts != undefined &&
+                  (
+                    _sharedService.jobObj.JobParts
+                    | filter: jt.JobTaskID:'JobTaskID'
+                  ).length > 0)
+              "
+            >
+            <td class="number"></td>
+              <td class="" colspan="11">
+                <table class="table primary-dark-font page-animation mb-0">
+                  <thead>
+                    <tr  [ngClass]="jt.isOpened == true ? 'repair-part' : ''">
+                      <th scope="col">Part</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Unit Price</th>
+                      <th scope="col">Discount</th>
+                      <th scope="col">Net Amount</th>
+                      <!-- <th scope="col">Status</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container
+                      *ngFor="
+                        let jp of _sharedService.jobObj.JobParts
+                          | filter: jt.JobTaskID:'JobTaskID';
+                        let i = index
+                      "
+                    >
+                      <tr
+                        [ngClass]="jp.IsInclude == true ? 'approve-work' : ''"
+                      >
+                        <td class="text-nowrap">
+                          <div class="pl-0 form-check mt-0">
+                            <label class="d-flex form-check-label">
+                              <p class="part-label"> <i class="fas fa-caret-up mr-2 primary-color collapsed" data-toggle="collapse" [attr.data-target]="'#OTaskpart' + i"></i>{{ jp.PartNameEnglish}}</p>
+                              <!-- <input
+                                class="form-check-input"
+                                id="part{{ jp.AutomotivePartID }}"
+                                type="checkbox"
+                                name="part{{ jp.AutomotivePartID }}_{{
+                                  jt.JobTaskID
+                                }}"
+                                [checked]="jp.IsInclude == true"
+                                [(ngModel)]="jp.IsInclude"
+                                #part{{jp.AutomotivePartID}}
+                                ngModel
+                              /> -->
+                              <!-- <span class="form-check-sign">{{
+                                jp.PartNameEnglish
+                              }}</span> -->
+                              <!-- (change)="setAlternate(jp); calcPartTotal($event.target.checked, jp); "
+                                                            (click)="jp.IsInclude = !jp.IsInclude; jp.IsModified = true; " -->
+                              <ng-container
+                                *ngIf="
+                                  jt.LaborTaskID != undefined &&
+                                  _sharedService.jobObj.PlanFeatures !=
+                                    undefined &&
+                                  (
+                                    _sharedService.jobObj.PlanFeatures
+                                    | filter
+                                      : jp.AutomotivePartID
+                                      : 'AutomotivePartID'
+                                  ).length > 0 &&
+                                  _sharedService.jobObj.JCBasicInfo
+                                    .ServiceTypeID == 139
+                                "
+                              >
+                                <i
+                                  class="ts contract contract-icon"
+                                  title="Contracted Part"
+                                ></i>
+                                <span class="ml-3 contracted px-2" title="">
+                                  {{
+                                    (_sharedService.jobObj.PlanFeatures
+                                      | filter
+                                        : jp.AutomotivePartID
+                                        : "AutomotivePartID")[0].TotalUsage +
+                                      "/" +
+                                      (_sharedService.jobObj.PlanFeatures
+                                        | filter
+                                          : jp.AutomotivePartID
+                                          : "AutomotivePartID")[0].NumberOfUnits
+                                  }}
+                                </span>
+                              </ng-container>
+                            </label>
+                          </div>
+                        </td>
+                        <!-- <td><i *ngIf="jp.ConcernDescription != undefined" class="fas fa-file primary-dark-font"
+                                                    (click)=viewConcern(concernPreview,jp)></i> <span
+                                                    *ngIf="jp.ConcernDescription == undefined">N/A</span></td> -->
+                        <td>
+                          {{ jp.Quantity }}
+                          <small *ngIf="jp.UnitTypeName != undefined"
+                            >({{ jp.UnitTypeName }})</small
+                          >
+                        </td>
+                        <td>
+                          {{
+                            jp.IsInclude == true
+                              ? (jp.SellingPrice | number: "1.2-2")
+                              : 0
+                          }}
+                          JD
+                        </td>
+                        <td>
+                          {{
+                            jp.IsInclude == true
+                              ? (jp.DiscountAmount | number: "1.2-2")
+                              : 0
+                          }}
+                          JD
+                        </td>
+                        <td>
+                          {{
+                            jp.IsInclude == true
+                              ? (jp.NetAmount | number: "1.2-2")
+                              : 0
+                          }}
+                          JD
+                        </td>
+                        <!-- <td>{{ jp.NetAmount }}</td> -->
+                        <!-- <td>{{jp.ApprovalStatus}}</td> -->
+                        <!-- <td>{{jp.JobPartStatusName != undefined ? jp.JobPartStatusName :
+                                                    jp.IsInclude == true ? 'Approved' : 'Not Approved'}}
+                                                </td> -->
+                      </tr>
+
+                      <tr scope="row" id="{{ 'OTaskpart' + i }}" class="text-center  collapse multi-collapse alternativePart">
+                        <td class="text-center" colspan="11">
+                          <table
+                            class="
+                              table
+                              text-left
+                              primary-font
+                              page-animation
+                              part-selection
+                              b-radius
+                            "
+                            *ngIf="
+                              (
+                                _sharedService.jobObj.JobPartAlternates
+                                | filter: jp.JobPartID:'JobPartID'
+                              ).length > 0
+                            "
+                          >
+                            <thead>
+                              <tr class="primary-font">
+                                <th scope="col" class="itemCode">ItemCode </th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Condition</th>
+                                <th scope="col">
+                                  Price <span class="primary-font">(JD)</span>
+                                </th>
+                                <th scope="col">Discount</th>
+                                <th scope="col">Net Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <ng-container
+                                *ngFor="
+                                  let ap of _sharedService.jobObj
+                                    .JobPartAlternates
+                                    | filter: jp.JobPartID:'JobPartID';
+                                  let i = index
+                                "
+                              >
+                                <tr
+                                  [ngClass]="
+                                    ap.IsApproved == true
+                                      ? 'approve-part'
+                                      : ap.JobPartStatusID == 26
+                                      ? 'available-part'
+                                      : ''
+                                  "
+                                >
+                                  <td>
+                                    <div
+                                      class="form-check form-check mt-0"
+                                    >
+                                      <label class="form-check-label">
+                                        <input
+                                          class="form-check-input"
+                                          type="checkbox"
+                                          name="alternatePart{{ ap.JobPartID }}"
+                                          (click)="onSelectJobPartAlternate(jp ,ap)"
+                                          id="altPart{{ id + 1 }}{{ i }}{{
+                                            ap.JobPartAlternateID
+                                          }}"
+                                          [checked]="ap.IsApproved == true"
+                                        />
+                                        <!-- (click)="jp.IsInclude = true; altPartPriceCalc(ap)" -->
+                                        <!-- (change)="approvePart(ap); jp.JobPartAlternateID = ap.JobPartAlternateID; ap.IsApproved = true; ap.IsModified = true" -->
+                                        <span class="form-check-sign dark-font"
+                                          >{{ ap.ItemCode }}
+                                          <!-- <small
+                                            >({{ ap.OrigionName }})</small -->
+                                        </span>
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td>{{ ap.JobPartStatusName }}</td>
+                                  <td>
+                                    <p
+                                      class="part-detail-box tbl-font my-0"
+                                      title=""
+                                    >
+                                      <span>{{
+                                        ap.PartConditionID == 66
+                                          ? "Used"
+                                          : "New"
+                                      }}</span>
+                                    </p>
+                                  </td>
+                                  <td>
+                                    <p
+                                      class="part-detail-box tbl-font my-0"
+                                      title=""
+                                    >
+                                      <span
+                                        appElseHyphen
+                                        [elseHyphen]="ap.SellingPrice"
+                                      ></span
+                                      >/{{ jp.UnitTypeName }}
+                                    </p>
+                                  </td>
+                                  <td>
+                                    <p
+                                      class="part-detail-box tbl-font my-0"
+                                      title=""
+                                    >
+                                      <span *ngIf="ap.DiscountPercentage > 0"
+                                        >{{
+                                          ap.DiscountPercentage
+                                            | number: "1.2-2"
+                                        }}%</span
+                                      >
+                                    </p>
+                                  </td>
+                                  <td>
+                                    <p
+                                      class="part-detail-box tbl-font my-0"
+                                      title=""
+                                    >
+                                      <span
+                                        >{{
+                                          ap.NetAmount | number: "1.2-2"
+                                        }}
+                                        JD</span
+                                      >
+                                    </p>
+                                  </td>
+                                </tr>
+                              </ng-container>
+                            </tbody>
+                          </table>
+
+                          <table
+                            class="
+                              table
+                              text-center
+                              primary-font
+                              page-animation
+                              part-selection
+                              b-radius
+                            "
+                            *ngIf="
+                              (
+                                _sharedService.jobObj.JobPartAlternates
+                                | filter: jp.JobPartID:'JobPartID'
+                              ).length == 0
+                            "
+                          >
+                            <tbody>
+                              <tr>
+                                <td>No Alternate added!</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                  <!-- <tbody
+                                    *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : jt.JobTaskID : 'JobTaskID').length==0)">
+                                    <tr scope="row">
+                                        <td colspan="12" class="text-center">No part added!</td>
+                                    </tr>
+                                </tbody> -->
+                </table>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <tbody
+          *ngIf="
+            _sharedService.jobObj.JobTasks == undefined ||
+            (_sharedService.jobObj.JobTasks != undefined &&
+              (_sharedService.jobObj.JobTasks | filter: null:'JobConcernID')
+                .length == 0)
+          "
+        >
+          <tr scope="row">
+            <td colspan="12" class="text-center">No task added!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- <div class="row mx-0 pb-3">        
+        <div class="row w-100 mx-0"
+            *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks != undefined && (_sharedService.jobObj.JobTasks | filter : null : 'JobConcernID').length>0)">
+            <hr class="w-100">
+            <h5 class="sub-heading  primary-font">Other Services</h5>
+        </div>
+        <div class="col-12 card"
+            *ngIf="_sharedService.jobObj.JobTasks== undefined || (_sharedService.jobObj.JobTasks != undefined && (_sharedService.jobObj.JobTasks | filter : null : 'JobConcernID').length>0)">
+            <table class="table primary-dark-font page-animation table-borderless" id="table" data-toggle="table"
+                data-height="460" data-custom-sort="customSort">
+                <thead class="tbl-header">
+                    <tr>
+                        <th scope="col">Results</th>
+                        <th scope="col">Type</th>
+                        <th scope="col" class="pointer" (click)="IsSorted = !IsSorted; onSort()">Priority <i
+                                class="fa fa-sort"></i></th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Labor <small>(Exclusive of tax)</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container
+                        *ngFor="let jt of _sharedService.jobObj.JobTasks | filter : undefined : 'JobConcernID'; let i=index">
+                        <tr>
+                            <td>
+                                <div class="pl-0 form-check">
+                                    <label class="d-flex form-check-label">
+                                        <input class="form-check-input" id="{{jt.LaborDescriptionEng}}{{i}}"
+                                            type="checkbox" value="" name="{{jt.LaborDescriptionEng}}{{i}}"
+                                            [checked]="jt.IsInclude == true"
+                                            (change)="calcTaskTotal($event.target.checked, jt)"
+                                            [(ngModel)]="jt.IsInclude">
+                                        <span class="form-check-sign">{{jt.LaborDescriptionEng}}</span>
+                                        <ng-container
+                                            *ngIf="jt.LaborTaskID != undefined && _sharedService.jobObj.PlanFeatures != undefined && (_sharedService.jobObj.PlanFeatures | filter : jt.LaborTaskID : 'LaborTaskID').length > 0">
+                                            <i class="ts contract contract-icon" title="Contracted Service"></i>
+                                            <span class="ml-3 contracted px-2" title="">
+                                                {{(_sharedService.jobObj.PlanFeatures | filter : jt.LaborTaskID :
+                                                'LaborTaskID')[0].TotalUsage + '/' + (_sharedService.jobObj.PlanFeatures
+                                                | filter : jt.LaborTaskID : 'LaborTaskID')[0].NumberOfUnits }}
+                                            </span>
+                                        </ng-container>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>{{jt.JobTaskTypeID == 51 ?'Internal' : 'External' }}
+                                <small>({{jt.RepairTypeID == 70 ? 'Mechanical' : jt.RepairTypeID == 71 ? 'Electrical' :
+                                    jt.RepairTypeID == 73 ? 'Other' : 'Body Repair'}})</small>
+                            </td>
+                            <td>
+                                <div [ngClass]="jt.PriorityTypeID == 83? 'priority-med' : 'priority-high'"><span
+                                        class="badge"></span></div>{{jt.PriorityTypeID == 83 ?'Medium' : 'High' }}
+                            </td>
+                            <td>{{jt.ApprovalStatus}}</td>
+                            <td class="">
+                                <span appElseHyphen [elseHyphen]="jt.DiscountAmount"
+                                    *ngIf="jt.EditDiscount == false || jt.EditDiscount == undefined"> </span>
+                                <i class="fas fa-edit smaller-font ml-2 hover-color"
+                                    *ngIf="jt.EditDiscount == false || jt.EditDiscount == undefined"
+                                    (click)="jt.EditDiscount = true"></i>
+                                <div class="d-flex">
+                                    <div class="floating-label form-group mb-0 pb-0" *ngIf="jt.EditDiscount == true">
+                                        <input type="text" placeholder=" "
+                                            class="floating-input form-control discount-field"
+                                            name="discount{{jt.JobTaskID}}" id="discount{{jt.JobTaskID}}"
+                                            (change)="taskDiscount(jt); jt.IsModified = true;"
+                                            onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                            [(ngModel)]="jt.DiscountAmount" maxlength="6" />
+                                        <span class="highlight"></span>
+                                        
+                                    </div>
+                                    <i class="fas fa-check smaller-font ml-2 hover-color align-self-center"
+                                        *ngIf="jt.EditDiscount == true" (click)="jt.EditDiscount = false"></i>
+                                </div>
+                            </td>
+                            <td> {{jt.TotalAmount != undefined? ((jt.TotalAmount - jt.DiscountAmount) > 0
+                                ?(jt.TotalAmount - jt.DiscountAmount | number : '1.2-2') : jt.TotalAmount ):
+                                jt.TotalAmount}}
+                                JD <small *ngIf="jt.LaborTime != undefined">({{jt.LaborTime/60 | number : '1.2-2' }}
+                                    hrs)</small>
+                            </td>
+                        </tr>
+                        <tr scope="row">
+                            <td class="" colspan="11">
+                                <table class="table primary-dark-font page-animation mb-0">
+                                    <thead>
+                                        <tr class="hoverBackground">
+                                            <th scope="col">Part</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Discount Amount</th>
+                                            <th scope="col">Net Amount <small>(Exclusive of tax)</small></th>
+                                            <th scope="col">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container
+                                            *ngFor="let jp of _sharedService.jobObj.JobParts | filter : jt.JobTaskID : 'JobTaskID'; let i = index">
+                                            <tr>
+                                                <td>
+                                                    <div class="pl-0 form-check mt-0">
+                                                        <label class="d-flex form-check-label">
+                                                            <input class="form-check-input"
+                                                                id="part{{jp.AutomotivePartID}}" type="checkbox"
+                                                                name="part{{jp.AutomotivePartID}}_{{jt.JobTaskID}}"
+                                                                [checked]="jp.IsInclude == true"
+                                                                (change)="calcPartTotal($event.target.checked, jp); setAlternate(jp);"
+                                                                (click)="jp.IsInclude = !jp.IsInclude; jp.IsModified = true; "
+                                                                [(ngModel)]="jp.IsInclude" #part{{jp.AutomotivePartID}}
+                                                                ngModel>
+                                                            <span class="form-check-sign">{{jp.PartNameEnglish}}</span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                
+                                                <td>{{jp.Quantity}} <small
+                                                        *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                                                </td>
+                                                <td>{{jp.IsInclude == true ? (jp.SellingPrice | number : '1.2-2') : 0 }}
+                                                    JD</td>
+                                                <td>{{jp.IsInclude == true ? (jp.DiscountAmount | number : '1.2-2') :
+                                                    0}} JD</td>
+                                                <td>{{jp.IsInclude == true ? (jp.TotalAmount | number : '1.2-2') : 0}}
+                                                    JD
+                                                </td>
+                                                <td>{{jp.JobPartStatusName != undefined ? jp.JobPartStatusName :
+                                                    jp.IsInclude == true ? 'Approved' : 'Not Approved'}}
+                                                </td>
+                                            </tr>
+                                            <tr scope="row">
+                                                <td class="text-center" colspan="11">
+                                                    <table
+                                                        class="table text-left primary-font page-animation part-selection b-radius"
+                                                        *ngIf="(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID').length > 0">
+                                                        <thead>
+                                                            <tr class="primary-font">
+                                                                <th scope="col">Manufacturer</th>
+                                                                <th scope="col">Condition</th>
+                                                                <th scope="col">Price <span
+                                                                        class="primary-font">(JD)</span></th>
+                                                                <th scope="col">Discount</th>
+                                                                <th scope="col">Net Amount</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr
+                                                                *ngFor="let ap of _sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID'; let i = index">
+                                                                <td>
+                                                                    <div class="form-check form-check-radio mt-0">
+                                                                        <label class="form-check-label">
+                                                                            <input class="form-check-input" type="radio"
+                                                                                name="alternatePart{{ap.JobPartID}}"
+                                                                                (click)="altPartPriceCalc(ap)"
+                                                                                id="altPart{{id+1}}{{i}}"
+                                                                                [checked]="ap.IsApproved == true"
+                                                                                [disabled]="jp.IsInclude == false"
+                                                                                (change)="approvePart(ap); jp.JobPartAlternateID = ap.JobPartAlternateID; ap.IsApproved = true; ap.IsModified = true">
+                                                                            <span
+                                                                                class="form-check-sign dark-font">{{ap.BrandName}}
+                                                                                <small>({{ap.OrigionName}})</small></span>
+                                                                        </label>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                                        <span>{{ap.PartConditionID == 66? 'Used' :
+                                                                            'New'}}</span>
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                                        <span appElseHyphen
+                                                                            [elseHyphen]="ap.SellingPrice"></span>/{{jp.UnitTypeName}}
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                                        <span>{{ap.DiscountPercentage | number :
+                                                                            '1.2-2'}}%</span>
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                                        <span>{{ap.NetAmount | number : '1.2-2'}}
+                                                                            JD</span>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                    <table
+                                                        class="table text-center primary-font page-animation part-selection b-radius"
+                                                        *ngIf="(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID').length == 0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    No Alternate added!
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                    <tbody
+                                        *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : jt.JobTaskID : 'JobTaskID').length==0)">
+                                        <tr scope="row">
+                                            <td colspan="12" class="text-center">No part added!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>              
+            </table>
+        </div>
+        <div class="row w-100 mx-0"
+            *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : undefined : 'JobConcernID' | filter : undefined : 'JobTaskID').length>0)">
+            <hr class="w-100">
+            <h5 class="sub-heading  primary-font">Other Parts</h5>
+        </div>
+        <div class="col-12 card"
+            *ngIf="_sharedService.jobObj.JobParts== undefined || (_sharedService.jobObj.JobParts != undefined && (_sharedService.jobObj.JobParts | filter : undefined : 'JobConcernID' | filter : undefined : 'JobTaskID').length>0)">
+            <table class="table primary-dark-font page-animation">
+                <thead class="tbl-header">
+                    <tr>
+                        <th scope="col">Part</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Price <small>(Exclusive of tax)</small></th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container
+                        *ngFor="let jp of _sharedService.jobObj.JobParts | filter : undefined : 'JobTaskID'; let i = index">
+                        <tr>
+                            <td>
+                                <div class="pl-0 form-check mt-0">
+                                    <label class="d-flex form-check-label">
+                                        <input class="form-check-input" id="part{{jp.AutomotivePartID}}" type="checkbox"
+                                            name="part{{jp.AutomotivePartID}}" [checked]="jp.IsInclude == true"
+                                            (change)="calcPartTotal($event.target.checked, jp); setAlternate(jp);"
+                                            (click)="jp.IsInclude = !jp.IsInclude; jp.IsModified = true; "
+                                            [(ngModel)]="jp.IsInclude" #part{{jp.AutomotivePartID}} ngModel>
+                                        <span class="form-check-sign">{{jp.PartNameEnglish}}</span>
+                                    </label>
+                                </div>
+                            </td>                           
+                            <td>{{jp.Quantity}} <small
+                                    *ngIf="jp.UnitTypeName != undefined">({{jp.UnitTypeName}})</small>
+                            </td>
+                            <td>{{jp.SellingPrice | number : '1.2-2'}} JD</td>
+                            <td>{{jp.TotalAmount | number : '1.2-2'}} JD</td>
+                            <td>{{jp.ApprovalStatus}}</td>
+                        </tr>
+
+                        <tr scope="row">
+                            <td class="text-center" colspan="11">
+                                <table class="table text-left primary-font page-animation part-selection b-radius"
+                                    *ngIf="(_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID').length > 0">
+                                    <thead>
+                                        <tr class="primary-font">
+                                            <th scope="col">Manufacturer</th>
+                                            <th scope="col">Price <span class="primary-font">(JD)</span></th>
+                                            <th scope="col">Condition</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let ap of _sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID'; let i = index">
+                                            <td>
+                                                <div class="form-check form-check-radio mt-0">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="alternatePart{{ap.JobPartID}}"
+                                                            (click)="altPartPriceCalc(ap)" id="altPart{{id+1}}{{i}}"
+                                                            [checked]="ap.IsApproved == true"
+                                                            [disabled]="jp.IsInclude == false"
+                                                            (change)="approvePart(ap); jp.JobPartAlternateID = ap.JobPartAlternateID; ap.IsApproved = true; ap.IsModified = true">
+                                                        <span class="form-check-sign dark-font">{{ap.BrandName}}
+                                                            <small>({{ap.OrigionName}})</small></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="part-detail-box tbl-font my-0" title="">
+                                                    <span appElseHyphen [elseHyphen]="ap.SellingPrice"></span>/{{jp.UnitTypeName}}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="part-detail-box tbl-font my-0" title="">
+                                                    <span>{{ap.PartConditionID == 66? 'Used' : 'New'}}</span>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>            
+            </table>
+        </div>
+    </div> -->
+
+
+
+
+
+<!-- new -->
+    <div class="row card mx-0 p-3">
+      <div class="row">
+        <div class="col-6"> 
+          <div class="col-12 primary-dark-font">
+          <div class="row text-right justify-content-between">
+            <label class="px-3 col-6 d-flex">Internal Labor</label>
+            <label class="px-3 col-6">
+              {{
+                _sharedService.jobObj.JCBasicInfo.InternalTasksCost != undefined
+                  ? (_sharedService.jobObj.JCBasicInfo.InternalTasksCost
+                    | number: "1.2-2")
+                  : 0
+              }}
+              <span class="primary-font light-bold">JD</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-12 primary-dark-font">
+          <div class="row text-right justify-content-between">
+            <label class="px-3 col-6 d-flex">External Labor </label>
+            <label class="px-3 col-">
+              {{
+                _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+                  ? (_sharedService.jobObj.JCBasicInfo.ExternalTasksCost
+                    | number: "1.2-2")
+                  : 0
+              }}
+              <span class="primary-font light-bold">JD</span>
+            </label>
+          </div>
+        </div>
+        <div class="col-12 primary-dark-font">
+          <div class="row text-right justify-content-between">
+            <label class="px-3 col-8 d-flex">Total Task Discount </label>
+            <label class="px-3 col-4">
+              {{
+                _sharedService.jobObj.JCBasicInfo.TotalTasksDiscount != undefined
+                  ? (_sharedService.jobObj.JCBasicInfo.TotalTasksDiscount
+                    | number: "1.2-2")
+                  : 0
+              }}
+              <span class="primary-font light-bold">JD</span>
+            </label>
+          </div>
+        </div>
+        <div
+            class="col-12"
+            *ngIf="
+              _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != 0 ||
+              _sharedService.jobObj.JCBasicInfo.InternalTasksCost != 0
+            "
+          >
+            <div class="row text-right justify-content-between">
+              <label class="px-3 col-6 align-self-center d-flex">Labor Discount</label>
+              <div
+                class="floating-label form-group mb-0 pb-0 col-5 ttl-discount-field"
+              >
+                <input
+                  type="text"
+                  placeholder="Discount"
+                  class="floating-input form-control"
+                  name="ttlTaskDiscount"
+                  onkeypress="return (_sharedService.jobObj.JCBasicInfo.ExternalTasksCost + _sharedService.jobObj.JCBasicInfo.InternalTasksCost >
+                               sharedService.jobObj.JCBasicInfo.AdditionalTaskDiscount )"
+                  [(ngModel)]="
+                    _sharedService.jobObj.JCBasicInfo.AdditionalTaskDiscount
+                  "
+                  maxlength="6"
+                  (change)="CalculateCost()"
+                />
+              </div>
+              <!-- onkeypress='return ((event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' -->
+              <div class="input-group-append price-perpend">JD</div>
+            </div>
+          </div>
+          <div class="bold-font col-12 primary-dark-font">
+            <div class="row text-right justify-content-end">
+              <label class="px-3 col-6 d-flex">Total Labor cost</label>
+              <label class="px-3 col-6">
+                {{
+                  this._sharedService.jobObj.JCBasicInfo.ExternalTasksCost !=
+                    undefined &&
+                  this._sharedService.jobObj.JCBasicInfo.InternalTasksCost !=
+                    undefined
+                    ? (this._sharedService.jobObj.JCBasicInfo.ExternalTasksCost +
+                        this._sharedService.jobObj.JCBasicInfo.InternalTasksCost -
+                        this._sharedService.jobObj.JCBasicInfo.AdditionalTaskDiscount
+                      | number: "1.2-2")
+                    : 0
+                }}
+                <span class="primary-font light-bold">JD</span>
+              </label>
+            </div>
+          </div>
+        
+          <div class="col-12 primary-dark-font">
+            <div class="row text-right justify-content-between">
+              <label class="px-3 col-6 d-flex">16% Tasks Tax</label>
+              <label class="px-3 col-6 ">
+                <!-- {{(
+                          _sharedService.jobObj.JCBasicInfo.TotalPartsPrice
+                          
+                          ) * 0.16
+                          | number : '1.2-2'}} -->
+                         
+                <!-- {{
+                  _sharedService.jobObj.JCBasicInfo.InternalTasksCost != undefined &&
+                  _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+                    ? ((_sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                        _sharedService.jobObj.JCBasicInfo.ExternalTasksCost) *
+                        0.16 | number: "1.2-2")
+                    : 0
+                }} -->
+                {{
+                  _sharedService.jobObj.JCBasicInfo.TaskTaxAmount  != undefined 
+                    ? (_sharedService.jobObj.JCBasicInfo.TaskTaxAmount | number: "1.2-2")
+                    : 0
+                }}
+                <span class="primary-font light-bold">JD</span></label
+              >
+            </div>
+            <!-- - _sharedService.jobObj.JCBasicInfo.PartDiscount 
+                  - _sharedService.jobObj.JCBasicInfo.RepairDiscount 
+                  _sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                          _sharedService.jobObj.JCBasicInfo.ExternalTasksCost + -->
+          </div>
+      </div>
+      <div class="col-6">
+            
+        <div class="col-12 primary-dark-font">
+          <div class="row text-right justify-content-between">
+        <label class="px-3 col-8 d-flex">Total Parts Discount </label>
+        <label class="px-3 col-4">
+          <!-- {{_sharedService.jobObj.JCBasicInfo.TotalPartsPrice != undefined ?
+                    ((_sharedService.jobObj.JCBasicInfo.TotalPartsPrice -  _sharedService.jobObj.JCBasicInfo.TotalPartsTax) | number : '1.2-2') : 0}} -->
+          {{
+            (_sharedService.jobObj.JCBasicInfo.TotalPartsDiscount !=
+              undefined) !=
+            null
+              ? (_sharedService.jobObj.JCBasicInfo.TotalPartsDiscount
+                | number: "1.2-2")
+              : 0
+          }}
+          <span class="primary-font light-bold">JD</span>
+        </label>
+         </div>
+          </div>
+          <div
+          class="col-12"
+          *ngIf="
+            _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != 0 &&
+            _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != null
+          "
+        >
+          <div class="row text-right justify-content-between">
+            <label class="px-3 col-6 d-flex">Parts Discount  </label>
+            <div
+              class="floating-label form-group mb-0 pb-0 col-6 ttl-discount-field"
+            >
+              <input
+                type="text"
+                placeholder="Parts discount"
+                class="floating-input form-control"
+                name="ttlPartDiscount"
+                onkeypress="return ((event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))"
+                [(ngModel)]="
+                  _sharedService.jobObj.JCBasicInfo.AdditionalPartDiscount
+                "
+                maxlength="6"
+                (change)="CalculateCost()"
+              />
+            </div>
+            <div class="input-group-append price-perpend">JD</div>
+          </div>
+        </div>
+        <div class="bold-font col-12 primary-dark-font">
+         <div class="row text-right justify-content-between">
+        <label class="px-3 col-6 d-flex">Total Parts Cost </label>
+        <label class="px-3 col-3">
+          <!-- {{_sharedService.jobObj.JCBasicInfo.TotalPartsPrice != undefined ?
+                    (((_sharedService.jobObj.JCBasicInfo.TotalPartsPrice - _sharedService.jobObj.JCBasicInfo.TotalPartsTax) -
+                    _sharedService.jobObj.JCBasicInfo.PartDiscount) | number : '1.2-2') : 0}} -->
+          {{
+            _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined
+              ? ((_sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount)
+                | number: "1.2-2")
+              : 0
+          }}
+          <span class="primary-font light-bold">JD</span>
+        </label>
+      </div>
+    </div>
+   
+   
+    <div class="col-12 primary-dark-font">
+      <div class="row text-right justify-content-between">
+        <label class="px-3 col-6 d-flex">16% Parts Tax</label>
+        <label class="px-3 col-6">
+          <!-- {{(
+                    _sharedService.jobObj.JCBasicInfo.TotalPartsPrice
+                    
+                    ) * 0.16
+                    | number : '1.2-2'}} -->
+                   
+                    {{
+                      _sharedService.jobObj.JCBasicInfo.TotalPartsTaxAmount != undefined
+                        ? (_sharedService.jobObj.JCBasicInfo.TotalPartsTaxAmount 
+                          | number: "1.2-2")
+                        : 0
+                    }}
+          <!-- {{
+            _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined
+              ? (_sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount * 0.16
+                | number: "1.2-2")
+              : 0
+          }} -->
+          <span class="primary-font light-bold">JD</span></label
+        >
+      </div>
+      <!-- - _sharedService.jobObj.JCBasicInfo.PartDiscount 
+            - _sharedService.jobObj.JCBasicInfo.RepairDiscount 
+            _sharedService.jobObj.JCBasicInfo.InternalTasksCost +
+                    _sharedService.jobObj.JCBasicInfo.ExternalTasksCost + -->
+    </div>
+      </div>
+      </div>
+  
+ 
+     
+     
+     
+  
+      <br />
+      <!-- <div class="col-12 primary-dark-font">
+              <div class="row text-right justify-content-end">
+                  <label class="px-3 col-4"> Parts Cost </label>
+                  <label class="px-3 col-3">
+                      {{_sharedService.jobObj.JCBasicInfo.TotalPartsPrice != undefined ?
+                      ((_sharedService.jobObj.JCBasicInfo.TotalPartsPrice -  _sharedService.jobObj.JCBasicInfo.TotalPartsTax) | number : '1.2-2') : 0}} 
+                      {{_sharedService.jobObj.JCBasicInfo.TotalPartsPrice != undefined  != null ?
+                          ((_sharedService.jobObj.JCBasicInfo.TotalPartsPrice) | number : '1.2-2') : 0}}
+                      <span class="primary-font light-bold">JD</span>
+                  </label>
+              </div>
+          </div> -->
+   
+   
+    
+      <br />
+      
+      
+    </div>
+<!-- old -->
+
+  <div class="row card mx-0 p-3">
+    <!-- <div class="col-12">
+            <div class="row text-right justify-content-end">
+                <label class="bold-font px-3 col-2 align-self-center">Tax</label>
+                <div class="floating-label form-group mb-0 pb-0 col-2 ttl-discount-field">
+                    <input type="text" placeholder="Tax" class="floating-input form-control" name="tax"
+                        onkeypress='return ((event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))'
+                        (change)="addTax()" [(ngModel)]="_sharedService.jobObj.JCBasicInfo.Tax" maxlength="4" />
+                </div>
+                <div class="input-group-append price-perpend">%</div>
+            </div>
+        </div> -->
+
+    <!-- <div class="col-12">
+            <div class="bold-font row text-right justify-content-end">
+                <label class="px-3 col-4">Total Cost</label>
+                <label class="px-3 col-3">
+                    {{_sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined &&
+                         _sharedService.jobObj.JCBasicInfo.InternalTasksCost != undefined &&
+                         _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount != undefined? 
+                        (((_sharedService.jobObj.JCBasicInfo.ExternalTasksCost + _sharedService.jobObj.JCBasicInfo.InternalTasksCost) +
+                         _sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount) +
+                         ((_sharedService.jobObj.JCBasicInfo.InternalTasksCost + _sharedService.jobObj.JCBasicInfo.ExternalTasksCost) * 0.16) +
+                         (_sharedService.jobObj.JCBasicInfo.TotalPartsNetAmount * 0.16) | number: '1.2-2'  ): 0}} JD
+                </label>
+            </div>
+        </div> -->
+    <div class="col-12">
+      <div class="bold-font row text-right justify-content-end">
+        <label class="px-3 col-4">Total Cost</label>
+        <label class="px-3 col-3">
+          {{
+            _sharedService.jobObj.JCBasicInfo.ExternalTasksCost != undefined
+              ? (_sharedService.jobObj.JCBasicInfo.TotalCost | number: "1.2-2")
+              : 0
+          }}
+          JD
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row card mx-0 pb-3 pt-2">
+    <div class="col-12 row d-flex pr-0 mx-0">
+      <ng-container *ngIf="_sharedService.jobObj.Notes.length == 0">
+        <div
+          class="col-11 floating-label form-group mb-0 mt-3"
+          (click)="addNote()"
+        >
+          <input
+            class="floating-input form-control"
+            type="text"
+            maxlength="256"
+            name="note"
+            placeholder=" "
+            disabled
+            required
+          />
+          <span class="highlight"></span>
+          <label class="input-label px-3">Note</label>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngFor="
+          let note of _sharedService.jobObj.Notes | filter: 83:'ObjectTypeID';
+          let i = index
+        "
+      >
+        <div class="col-11 floating-label form-group mb-0 mt-3">
+          <input
+            class="floating-input form-control"
+            type="text"
+            [(ngModel)]="note.NoteInfo"
+            maxlength="2000"
+            id="note_value{{ note.NoteID }}"
+            name="note_value{{ note.NoteID }}"
+            placeholder=" "
+            (change)="note.IsModified = true"
+          />
+          <span class="highlight"></span>
+          <label class="input-label pl-2">Note</label>
+        </div>
+        <i
+          class="icon-right-d fas fa-times primary-dark-font pt-3 mb-0 mt-3"
+          (click)="removeNote(note)"
+        ></i>
+      </ng-container>
+      <div class="pl-1 mb-0 mt-3">
+        <button
+          type="button"
+          (click)="addNote()"
+          class="btn btn-round btn-simple btn-primary mb-0 mt-1"
+          title="Add Note"
+        >
+          <span class=""><i class="fas fa-plus primary-text-0"></i> </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row card mx-0 p-3">
+    <div
+      class="row col-12 text-center justify-content-center mx-0"
+      *ngIf="_sharedService.jobObj.JCBasicInfo.ApprovalStatusID == 17"
+    >
+      <label class="formGroupExampleInput mr-3 mb-0 align-self-center"
+        >Customer Signatures</label
+      >
+
+      <img
+        style="width: 200px"
+        class="align-self-center"
+        *ngIf="
+          _sharedService.jobObj.JCBasicInfo.ApprovalSignatureURL != undefined
+        "
+        src="{{ _sharedService.baseUrl }}{{
+          _sharedService.jobObj.JCBasicInfo.ApprovalSignatureURL
+        }}"
+      />
+    </div>
+
+    <div class="row mx-0">
+      <div
+        *ngIf="_sharedService.jobObj.JCBasicInfo.JobCloseDate == undefined"
+        class="row mx-0 w-100 justify-content-between mb-3"
+      >
+        <label class="mb-0 p-3">Do you want to close job card?</label>
+        <button
+          type="button"
+          (click)="closeJCModal(JCCloseModal)"
+          class="btn btn-round btn-simple btn-danger ml-auto"
+          title="Close job card"
+        >
+          Close job card
+        </button>
+      </div>
+      <div class="col-12 justify-content-end px-0">
+        <div class="text-right">
+          <button
+            type="button"
+            [routerLink]="[
+              '/',
+              'update-job',
+              _sharedService.jobObj.JCBasicInfo.JobCardID,
+              'view-approval'
+            ]"
+            class="btn btn-round btn-simple btn-primary py-2 my-0 mx-1"
+            title="Print Invoice"
+          >
+            Print
+          </button>
+          <button
+            type="button"
+            (click)="verifyApproval()"
+            class="btn btn-round btn-simple btn-primary py-2 my-0 ml-1"
+            title="Take Approval"
+          >
+            Approval
+          </button>
+        </div>
+      </div>
+      <!-- <div *ngIf="_sharedService.jobObj.JCBasicInfo.JobCloseDate == undefined">
+        <label class="mb-0 align-self-center px-3"
+          >Do you want to close job card?</label
+        >
+        <button
+          type="button"
+          (click)="closeJCModal(JCCloseModal)"
+          class="btn btn-round btn-simple btn-danger py-2 my-0"
+          title="Close job card"
+        >
+          Close job card
+        </button>
+      </div> -->
+
+      <!-- <div class="col-3 text-right">
+        <button
+          type="button"
+          [routerLink]="[
+            '/',
+            'update-job',
+            _sharedService.jobObj.JCBasicInfo.JobCardID,
+            'view-approval'
+          ]"
+          class="btn btn-round btn-simple btn-primary py-2 my-0"
+          title="Print Invoice"
+        >
+          Print
+        </button>
+        <button
+          type="button"
+          (click)="verifyApproval()"
+          class="btn btn-round btn-simple btn-primary py-2 my-0"
+          title="Take Approval"
+        >
+          Approval
+        </button>
+      </div> -->
+    </div>
+  </div>
+</form>
+
+<ng-template #JCCloseModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Close Job Card</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              On closing job card you would have to pay following price. Do you
+              want to continue?
+            </h5>
+            <div class="floating-label form-group col-lg-12 pb-0 col-sm-6">
+              <input
+                type="text"
+                placeholder=" "
+                class="floating-input form-control"
+                name="Reference"
+                [(ngModel)]="_sharedService.jobObj.JobInvoice.NetAmount"
+                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                maxlength="4"
+              />
+              <div class="input-group-append price-perpend">JD</div>
+              <span class="highlight"></span>
+              <label class="input-label">Amount</label>
+            </div>
+
+            <div class="form-check col-12 mb-3">
+              <label class="d-flex form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="key"
+                  (change)="_sharedService.jobObj.JCBasicInfo.KeyStatusID = 29"
+                  required
+                />
+                <span class="form-check-sign primary-dark-font"
+                  >Have you handed over Car's key to customer?</span
+                >
+                <!-- <small
+                                *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small> -->
+              </label>
+            </div>
+
+            <div class="form-check col-12 mb-3">
+              <label class="d-flex form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="printInvoice"
+                  (change)="
+                    _sharedService.jobObj.JobInvoice.PrintInvoice =
+                      !_sharedService.jobObj.JobInvoice.PrintInvoice
+                  "
+                />
+                <span class="form-check-sign primary-dark-font"
+                  >Do you want to print invoice?</span
+                >
+              </label>
+            </div>
+
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="closeJC()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- view concern -->
+<!-- <ng-template #concernPreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Concern</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <p class="primary-dark-font">{{concern.ConcernDescription}}</p>
+
+    </div>
+</ng-template> -->
+
+<button
+  type="button"
+  id="alternateMissingbtn"
+  class="d-none"
+  (click)="openAlternateMissingModal(alternateMissing)"
+></button>
+
+<ng-template #alternateMissing let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">
+        Please select manufacturer of these parts
+      </h5>
+      <button
+        type="button"
+        class="close"
+        (click)="closeAlternateMissingModal()"
+        title="Cancel"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <div class="row bottom_margins">
+          <div class="col-lg-12">
+            <table class="table primary-font page-animation">
+              <thead class="col-12">
+                <tr class="row w-100">
+                  <th scope="col" class="col-3 bb-0 text-center">#</th>
+                  <th scope="col" class="col-9 bb-0">Part</th>
+                </tr>
+              </thead>
+              <tbody
+                class="col-12"
+                *ngIf="
+                  missingAlternates != undefined || missingAlternates.length > 0
+                "
+              >
+                <!-- id 49 for External Task task0 -->
+                <tr
+                  class="row"
+                  *ngFor="let jp of missingAlternates; let i = index"
+                >
+                  <td class="col-3 bb-0 text-center">{{ i + 1 }}</td>
+                  <td class="col-9 bb-0">{{ jp.PartNameEnglish }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="col-12 float-left text-center">
+              <button
+                (click)="closeAlternateMissingModal()"
+                class="a-button btn btn-primary btn-round btn-simple col-6"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

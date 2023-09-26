@@ -1,0 +1,379 @@
+<div class="row mx-0 justify-content-center h-100 align-items-center mt-3">
+  <div class="col-lg-12 card">
+    <div class="card-body">
+      <h5 class="bold-font px-3">Vehicle Information</h5>
+      <div class="row">
+        <div class="col-9 row mx-0 br-1">
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">Car</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.EnglishMakeName }}
+                {{ _sharedService.jobObj.jcVehicleObj.EnglishModelName }}
+                {{ _sharedService.jobObj.jcVehicleObj.ProductionYear }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">License Plate Number</label>
+            <div class="detail-font">
+              <span>{{ _sharedService.jobObj.jcVehicleObj.PlateNumber }} </span>
+            </div>
+          </div>
+
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">VIN</label>
+            <div class="detail-font">
+              <span>{{ _sharedService.jobObj.jcVehicleObj.VIN }} </span>
+            </div>
+          </div>
+
+          <div
+            class="col-6 bb-1 py-3"
+            *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+          >
+            <label class="primary-font bold-font">Engine Number</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.EngineNumber }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">Color</label>
+            <div class="detail-font d-flex">
+              <span>{{ _sharedService.jobObj.jcVehicleObj.Color }} </span>
+              <div
+                class="color-box"
+                title="{{ _sharedService.jobObj.jcVehicleObj.ColorName }}"
+                [style.background]="
+                  '#' + _sharedService.jobObj.jcVehicleObj.ColorCode
+                "
+              ></div>
+            </div>
+          </div>
+
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">Vehicle Type</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.VehicleTypeName }}
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="col-6 bb-1 py-3"
+            *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+          >
+            <label class="primary-font bold-font">Engine Capacity</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.EngineCapacity }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-6 bb-1 py-3">
+            <label class="primary-font bold-font">Engine Type</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.EngineTypeName }}
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="col-6 py-3"
+            *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+          >
+            <label class="primary-font bold-font">Cylinder Type</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.jcVehicleObj.CylinderTypeName }}
+              </span>
+            </div>
+          </div>
+          <div class="col-6 py-3">
+            <label class="primary-font bold-font">Mileage</label>
+            <div class="detail-font">
+              <span
+                >{{ _sharedService.jobObj.JCBasicInfo.Mileage }}
+                {{ _sharedService.jobObj.JCBasicInfo.MileageUnitName }}
+              </span>
+            </div>
+          </div>
+          <div class="col-6 py-3">
+            <label class="primary-font bold-font">Fuel Tank</label>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-4 detail-font">
+                  <span>{{
+                    _sharedService.jobObj.JCBasicInfo.FuelTankReading
+                  }}</span>
+                </div>
+                <div class="col-8 picsum-img-wrapper">
+                  <img
+                    [src]="
+                      _sharedService.jobObj.JCBasicInfo.MileageImageURL !=
+                      undefined
+                        ? _sharedService.baseUrl +
+                          _sharedService.jobObj.JCBasicInfo.MileageImageURL
+                        : _sharedService.default_img
+                    "
+                    class="gallery-img fuelImage"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <ngb-carousel class="vehicle-image">
+            <ng-template ngbSlide>
+              <div class="picsum-img-wrapper">
+                <img
+                  [src]="
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                      ? _sharedService.baseUrl +
+                        _sharedService.jobObj.jcVehicleObj.LicensePlateFront
+                      : _sharedService.default_img
+                  "
+                  class="gallery-img"
+                />
+              </div>
+            </ng-template>
+            <ng-template ngbSlide>
+              <div class="picsum-img-wrapper">
+                <img
+                  [src]="
+                    _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                      ? _sharedService.baseUrl +
+                        _sharedService.jobObj.jcVehicleObj.LicensePlateBack
+                      : _sharedService.default_img
+                  "
+                  class="gallery-img"
+                />
+              </div>
+            </ng-template>
+          </ngb-carousel>
+
+          <div class="col-12 py-3">
+            <label class="primary-font bold-font">Check in Time</label>
+            <div class="detail-font">
+              <span
+                >{{
+                  _sharedService.jobObj.JCBasicInfo.JobOpenDate
+                    | date: "shortDate"
+                }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-12 py-3">
+            <label class="primary-font bold-font">Check out Time</label>
+            <div class="detail-font">
+              <span
+                >{{
+                  _sharedService.jobObj.JCBasicInfo.JobCloseDate
+                    | date: "shortDate"
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 card">
+    <div class="card-body">
+      <h5 class="bold-font px-3">Customer Information</h5>
+      <div class="row mx-0">
+        <div
+          class="col-4 bb-1 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+        >
+          <label class="primary-font bold-font">Name</label>
+          <div class="detail-font">
+            <span
+              >{{ _sharedService.jobObj.jcCustomerObj.FirstName }}
+              {{ _sharedService.jobObj.jcCustomerObj.LastName }}</span
+            >
+          </div>
+        </div>
+
+        <div
+          class="col-4 bb-1 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+        >
+          <label class="primary-font bold-font">Company Name</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.CompanyName"
+            ></span>
+          </div>
+        </div>
+
+        <div
+          class="col-4 bb-1 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+        >
+          <label class="primary-font bold-font">Contact Person</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="
+                _sharedService.jobObj.jcCustomerObj.ContactPersonName
+              "
+            >
+            </span>
+          </div>
+        </div>
+
+        <div class="col-4 bb-1 py-3">
+          <label class="primary-font bold-font">Mobile</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.ContactMobile"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div class="col-4 bb-1 py-3">
+          <label class="primary-font bold-font">City</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.CityName"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div class="col-4 bb-1 py-3">
+          <label class="primary-font bold-font">Country</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.CountryName"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="col-4 bb-1 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+        >
+          <label class="primary-font bold-font">Zip Code</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.Zipcode"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div class="col-4 bb-1 py-3">
+          <label class="primary-font bold-font">Email</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.ContactEmail"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="col-12 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 68"
+        >
+          <label class="primary-font bold-font">Address</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.Address1"
+            >
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="col-12 py-3"
+          *ngIf="_sharedService.jobObj.jcCustomerObj.CustomerTypeID == 67"
+        >
+          <label class="primary-font bold-font">Credit Limit</label>
+          <div class="detail-font">
+            <span
+              appElseHyphen
+              [elseHyphen]="_sharedService.jobObj.jcCustomerObj.MaxCreditLimit"
+            >
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 card">
+    <div class="card-body">
+      <h5 class="bold-font px-3">Job Information</h5>
+      <div class="row mx-0">
+        <div class="col-6 bb-1 py-3">
+          <label class="primary-font bold-font">Service Type</label>
+          <div class="detail-font">
+            <span
+              >{{ _sharedService.jobObj.JCBasicInfo.ServiceTypeName }}
+            </span>
+          </div>
+        </div>
+
+        <div
+          class="col-6 bb-1 py-3"
+          *ngIf="
+            _sharedService.logged_user_role_id == 1 ||
+            _sharedService.logged_user_role_id == 2
+          "
+        >
+          <label class="primary-font bold-font">Payment Option</label>
+          <div class="detail-font">
+            <span
+              >{{ _sharedService.jobObj.JCBasicInfo.PaymentMethodName }}
+            </span>
+          </div>
+        </div>
+
+        <!-- <div class="col-4 bb-1 py-3">
+                    <label class="primary-font bold-font">Priority</label>
+                    <div class="detail-font">
+                        <span>{{_sharedService.jobObj.JCBasicInfo.PriorityTypeName}} </span>
+                    </div>
+                </div> -->
+
+        <div class="col-12 primary-dark-font bold-font py-3 big-font">
+          <span>{{
+            _sharedService.jobObj.JCBasicInfo.IsRegularInspection == true
+              ? "- Customer wants periodic maintenance inspection"
+              : "- Customer does not want periodic maintenance inspection"
+          }}</span>
+        </div>
+        <div class="col-12 primary-dark-font bold-font py-3 big-font">
+          <span>{{
+            _sharedService.jobObj.JCBasicInfo.IsUsedParts == true
+              ? "- Customer wants old parts"
+              : "- Customer does not want old parts"
+          }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

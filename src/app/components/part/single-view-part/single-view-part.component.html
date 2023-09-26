@@ -1,0 +1,248 @@
+<div class="row justify-content-center h-50 align-items-center page-animation">
+    <div class="col-lg-10  mt-3">
+        <div class="row card-body pb-0 justify-content-center ">
+            <div class=" col-12">
+                <div class="row mx-0">
+                    <div class="row w-100 mx-0">
+                        <hr class="w-100">
+                        <h4 class="sub-heading">View Part</h4>
+                    </div>
+
+                    <div class="row card">
+                        <div class="row card-body">
+                            <div class="col-9 part-detail-box border-right">
+                                <div class="row">
+                                    <div class="col-4 px-0">
+                                        <div class="primary-font ml-3">
+                                            <span>Name</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.PartNameEnglish != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.PartNameEnglish}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class="primary-font ml-3">
+                                            <span>Main category</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.MainCategoryNameEng != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.MainCategoryNameEng}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class="primary-font ml-3">
+                                            <span>Manufacturer</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.ManufacturerNameEng != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.ManufacturerNameEng}}</p>
+                                        </div>
+                                        <hr>
+
+                                        <div class="primary-font ml-3">
+                                            <span>Net Price</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.NetPrice != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.NetPrice}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4 px-0">
+                                        <div class="primary-font">
+                                            <span>Part Code</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.ItemCode != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.ItemCode}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class="primary-font">
+                                            <span>Sub category</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.SubCategoryNameEng != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.SubCategoryNameEng}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class=" primary-font">
+                                            <span>Purchase Price</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.PurchasePrice != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.PurchasePrice}}</p>
+                                        </div>
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-4 px-0">
+                                        <div class=" primary-font">
+                                            <span>OEM Number</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.OEMNumber != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.OEMNumber}}</p>
+                                        </div>
+                                        <hr>
+                                        <div class="primary-font">
+                                            <span>Sub Sub category</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.SubSubCategoryNameEng != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.SubSubCategoryNameEng}} Brake lines</p>
+                                        </div>
+                                        <hr>
+                                        <div class=" primary-font">
+                                            <span>Tax</span>
+                                        </div>
+                                        <div class="">
+                                            <p class="part-detail-box  big-font bold-font primary-font my-0"
+                                                *ngIf="partInfoObj.AutomotivePart.Tax != undefined; else elseHyphen"
+                                                title="">
+                                                {{partInfoObj.AutomotivePart.Tax}}</p>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 align-self-center text-center">
+                                <img class="img-fluid"
+                                    [src]="partInfoObj.AutomotivePart.LogoImageURL ? _sharedService.baseUrl + partInfoObj.AutomotivePart.LogoImageURL : _sharedService.default_img">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row col-12 px-0">
+                        <ngb-tabset class="sub-tabset w-100">
+                            <ngb-tab title="Vendor part Price">
+                                <ng-template ngbTabContent>
+                                    <table class="table mb-5 mt-3 text-left">
+                                        <thead class="part-card-header text-white">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Vendor Name</th>
+                                                <th scope="col">Part Price</th>
+                                                <th scope="col">Purchase Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of partInfoObj.VendorPartPrice; let i = index"
+                                                class="bg-white primary-font">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.VendorName}}</td>
+                                                <td>{{item.Price}}</td>
+                                                <td>{{item.CostPrice}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody
+                                            *ngIf="partInfoObj.VendorPartPrice==undefined || (partInfoObj.VendorPartPrice!=undefined && partInfoObj.VendorPartPrice.length==0)">
+                                            <tr class="bg-white primary-font">
+                                                <td colspan="12" class="text-center">No vendor found!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </ngb-tab>
+
+                            <ngb-tab title="Vehicle Information">
+                                <ng-template ngbTabContent>
+
+                                    <table class="table mt-3 text-left">
+                                        <thead class="part-card-header text-white">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Make</th>
+                                                <th scope="col">Model</th>
+                                                <th scope="col">Production Year</th>
+                                                <th scope="col">Series Years</th>
+                                                <th scope="col">Engine Number</th>
+                                                <th scope="col">Engine Size</th>
+                                                <th scope="col">Required Quantity</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of partInfoObj.AutomotivePartVehicle ; let i = index"
+                                                class="bg-white primary-font">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.EnglishMakeName}}</td>
+                                                <td>{{item.EnglishModelName}}</td>
+                                                <td>{{item.ProductionYear}}</td>
+                                                <td>{{item.SeriesYearStart}}-{{item.SeriesYearEnd}}</td>
+                                                <td>{{item.EngineNumber}}</td>
+                                                <td>{{item.EngineSize}}</td>
+                                                <td>{{item.RequiredQuantity}}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody
+                                            *ngIf="partInfoObj.AutomotivePartVehicle==undefined || (partInfoObj.AutomotivePartVehicle!=undefined && partInfoObj.AutomotivePartVehicle.length==0)">
+                                            <tr class="bg-white primary-font">
+                                                <td colspan="12" class="text-center">No vehicle found!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </ngb-tab>
+
+                            <ngb-tab title="Substitute Part">
+                                <ng-template ngbTabContent>
+
+                                    <table class="table mt-3 text-left">
+                                        <thead class="part-card-header text-white">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Part Name</th>
+                                                <th scope="col">Item Code</th>
+                                                <th scope="col">Purchase Price</th>
+                                                <th scope="col">Selling Price</th>
+                                                <th scope="col">Vendors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of partInfoObj.SubstitutePart ; let i = index"
+                                                class="bg-white primary-font">
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.PartNameEnglish}}
+                                                <td>{{item.ItemCode}}
+                                                <td>{{item.PurchasePrice}}
+                                                <td>{{item.SellingPrice}}
+                                                <td>{{item.Vendors}}
+                                            </tr>
+                                        </tbody>
+                                        <tbody
+                                            *ngIf="partInfoObj.SubstitutePart==undefined || (partInfoObj.SubstitutePart!=undefined && partInfoObj.SubstitutePart.length==0)">
+                                            <tr class="bg-white primary-font">
+                                                <td colspan="12" class="text-center">No substitute part found!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </ng-template>
+                            </ngb-tab>
+                        </ngb-tabset>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #elseHyphen>
+    <span class="px-3">-</span>
+</ng-template>

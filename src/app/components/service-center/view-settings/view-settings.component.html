@@ -1,0 +1,112 @@
+<div class="row justify-content-center align-items-center">
+    <div class="row w-100 mt-3">
+        <hr class="w-100">
+        <h4 class="sub-heading">Settings</h4>
+    </div>
+    <div class="col-lg-10 col-12 card outer-card-shadow mt-3 px-0">
+        <!-- repairs discount  -->
+        <div class="row card-body m-0">
+            <div class="col-6 text-center align-self-center px-3 py-3">
+                <label class="form-check-label bold-font">
+                    Maximum Repairs Discount
+                </label>
+            </div>
+            <div class="col-6 align-self-center"
+                *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2">
+                <div class="row px-0">
+                    <!-- <span class="align-self-center mx-2"
+                        *ngIf="workshopSetting.MaximumRepairDiscount == undefined || workshopSetting.EditRepairDiscount == true">
+                        Repairs Discount
+                    </span> -->
+
+                    <ng-container *ngIf="workshopSetting.EditRepairDiscount == true">
+                        <div class="floating-label form-group col-6 mb-0 px-0 page-animation mt-2"
+                            *ngIf="_sharedService.logged_user_role_id != 8">
+                            <input type="text" value="" placeholder=" "
+                                class="floating-input form-control input-border-color" name="LaborPrice"
+                                [(ngModel)]="workshopSetting.MaximumRepairDiscount" #repairDiscount="ngModel"
+                                maxlength="5"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                            <div class="input-group-append price-perpend">%</div>
+                            <span class="highlight"></span>
+                        </div>
+                    </ng-container>
+
+                    <div class="ml-3">
+                        <p class="part-detail-box my-0 primary-dark-font" title=""
+                            *ngIf="workshopSetting.EditRepairDiscount == false && workshopSetting.MaximumRepairDiscount != undefined">
+                            <span *ngIf="workshopSetting.MaximumRepairDiscount != undefined; else elseHyphen">
+                                {{workshopSetting.MaximumRepairDiscount | number : '1.2-2'}} %
+                            </span>
+                        </p>
+                    </div>
+
+                    <span class="align-self-center primary-font">
+                        <i class="fas fa-edit pointer ml-2" (click)="workshopSetting.EditRepairDiscount = true"
+                            *ngIf="workshopSetting.EditRepairDiscount == false"></i>
+                        <i class="fas fa-check ml-2" (click)="workshopSetting.EditRepairDiscount = false;"
+                            *ngIf="workshopSetting.EditRepairDiscount == true"></i>
+                    </span>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- parts discount  -->
+        <div class="row card-body m-0 pt-0">
+            <div class="col-6 text-center align-self-center px-3 py-3">
+                <label class="form-check-label bold-font">
+                    Maximum Parts Discount
+                </label>
+            </div>
+            <div class="col-6 align-self-center"
+                *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2">
+                <div class="row px-0">
+                    <!-- <span class="align-self-center mx-2"
+                        *ngIf="workshopSetting.MaximumPartDiscount == undefined || workshopSetting.EditPartDiscount == true">Parts
+                        Discount
+                    </span> -->
+
+                    <ng-container *ngIf="workshopSetting.EditPartDiscount == true">
+                        <div class="floating-label form-group col-6 mb-0 px-0 page-animation mt-2">
+                            <input type="text" value="" placeholder=" "
+                                class="floating-input form-control input-border-color" name="partDiscount"
+                                [(ngModel)]="workshopSetting.MaximumPartDiscount" #partDiscount="ngModel" maxlength="5"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                            <div class="input-group-append price-perpend">%</div>
+                            <span class="highlight"></span>
+                        </div>
+                    </ng-container>
+
+                    <div class="ml-3">
+                        <p class="part-detail-box my-0 primary-dark-font" title=""
+                            *ngIf="workshopSetting.EditPartDiscount == false || workshopSetting.MaximumPartDiscount == undefined">
+                            <span *ngIf="workshopSetting.MaximumPartDiscount != undefined; else elseHyphen">
+                                {{workshopSetting.MaximumPartDiscount | number : '1.2-2'}} %
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                    <span class="align-self-center primary-font">
+                        <i class="fas fa-edit pointer ml-2" (click)="workshopSetting.EditPartDiscount = true"
+                            *ngIf="workshopSetting.EditPartDiscount == false"></i>
+                        <i class="fas fa-check ml-2" (click)="workshopSetting.EditPartDiscount = false;"
+                            *ngIf="workshopSetting.EditPartDiscount == true"></i>
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row col-10 justify-content-center">
+            <button type="button" (click)="saveSetting()" class="btn btn-primary btn-round mx-3">Save Settings</button>
+        </div>
+
+    </div>
+</div>

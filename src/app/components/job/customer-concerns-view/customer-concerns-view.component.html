@@ -1,0 +1,61 @@
+<div class="row w-100 mx-0">
+    <hr class="w-100">
+    <h5 class="sub-heading primary-dark-font">Customer Concerns</h5>
+</div>
+
+<div class="row card mx-0">
+
+    <div class="d-flex concern-tabset border-bottom radio-bg mb-4 px-3 pb-1">
+        <span *ngFor="let is of _sharedService._commonMeta.objectTypes | filter : 'JobConcern' : 'ObjectNameEnglish'">
+            <a class="">
+                <input class="radio-btn" type="radio" (click)="tabID = is.ObjectTypeID;" id="{{is.TypeNameEnglish}}"
+                    name="invoiceStatus" [checked]="is.ObjectTypeID === tabID" (change)="radioTab = true" value="0">
+                <label for="{{is.TypeNameEnglish}}" class="radio-tabset d-flex"><i class="ts {{is.Icon}}"></i>
+                    &nbsp;<span class="white-space"> {{is.TypeNameEnglish}} </span>
+                    <sup *ngIf="is.ObjectTypeID != 69 && (_sharedService.jobObj.JobConcerns | filter: is.ObjectTypeID : 'ConcernTypeID').length>0"
+                        class="sup font-9">{{(_sharedService.jobObj.JobConcerns | filter: is.ObjectTypeID : 'ConcernTypeID').length}}</sup>
+                    <sup *ngIf="is.ObjectTypeID == 69 && (_sharedService.jobObj.JobConcerns.length >0)"
+                        class="sup font-9">{{_sharedService.jobObj.JobConcerns.length}}</sup>
+                    <!-- <sup
+                class="sup">{{(customerConcerns | filter : is.ObjectTypeID : 'ConcernTypeID').length}}</sup> -->
+                </label>
+            </a>
+        </span>
+    </div>
+
+    <table class="table mx-lg-3 text-left primary-dark-font page-animation">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Concerns</th>
+                <th scope="col" *ngIf="tabID == 72">Part</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody *ngIf="tabID != 69">
+            <tr scope="row"
+                *ngFor="let item of _sharedService.jobObj.JobConcerns | filter: tabID : 'ConcernTypeID'; let i = index">
+                <td>{{i+1}}</td>
+                <td><i class="fas ts {{item.Icon}} mr-2 pl-2 border-right"></i> {{item.ConcernDescription =='' ? item.ConcernTypeName : item.ConcernDescription}}</td>
+                <td *ngIf="tabID == 72">
+                    {{(_sharedService.jobObj.JobParts | filter : item.JobConcernID : 'JobConcernID')[0].PartNameEnglish}}
+                </td>
+                <td>{{item.IsApproved == true? 'Approved' : 'Waiting Inspection'}}</td>
+            </tr>
+        </tbody>
+        <!-- for all concerns -->
+        <tbody *ngIf="tabID == 69">
+            <tr scope="row" *ngFor="let item of _sharedService.jobObj.JobConcerns; let i = index">
+                <td>{{i+1}}</td>
+                <td><i class="fas ts {{item.Icon}} mr-2 pl-2 border-right"></i>  {{item.ConcernDescription =='' ? item.ConcernTypeName : item.ConcernDescription}}</td>
+                <td>{{item.IsApproved == true? 'Approved' : 'Waiting Inspection'}}</td>
+            </tr>
+        </tbody>
+        <tbody
+            *ngIf="_sharedService.jobObj.JobConcerns.length == 0 || _sharedService.jobObj.JobConcerns == undefined || (_sharedService.jobObj.JobConcerns != undefined && _sharedService.jobObj.JobConcerns.length==0) || (tabID != 69 && (_sharedService.jobObj.JobConcerns | filter: tabID : 'ConcernTypeID').length == 0)">
+            <tr scope="row">
+                <td colspan="12" class="text-center">No concern found!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,67 @@
+import { Gallery } from "./Gallery";
+
+export class InspectionResult {
+    isOpened:boolean
+    JobTaskID: number;
+    JobCardID: number;
+    JobTaskTypeID: number = 51;
+    JobConcernID: number;
+    ConcernDescription: string;
+    TaskDescription: string;
+    LaborPrice: number;
+    LaborCost: number;
+    ExpectedCompletionTime: number;
+    DiscountPercentage: number;
+    NetAmount: number;
+    TaskCategoryID: number;
+    concern: string;
+    CreatedBy: number;
+    ModifiedBy: number;
+    CreatedOn: Date;
+    ModifiedOn: Date;
+    IsModified: boolean;
+    IsCompleted: boolean;
+    EmployeeID: number;
+    TaskTechnicianID: number;
+    CurrentUserID: number;
+    CurrentEmployeeID: number;
+    UserID: number;
+    IsAccepted: boolean;
+    QAVerify: boolean;
+    ActualTimeSpent: string;
+    QAComments: string;
+    RepairTypeID: number;
+    Icon: string;
+    IsInclude: boolean;
+    LaborTaskID: number;
+    LaborDescriptionEng: string;
+    LaborPricingID: number;
+    FixedPrice: number;
+    EmployeeFullName: string;
+    OldJobTaskID: number;
+    AcceptedDateTime: Date;
+    PriorityTypeID: number = 83;
+    TaskStatusID: number;
+    LaborTime: number;
+    Hours: number;
+    Minutes: number;
+    DiscountAmount: number;
+    JobTaskTypeName: string;
+    RepairTypeName: string;
+    StartDateTime: Date;
+    ApprovalStatus: string;
+    EditLabor: boolean = false;
+    EditTime: boolean = false;
+    EditDiscount: boolean = false;
+    TaxAmount: number = 0;
+    IsFree: boolean = false;
+    TotalAmount: number = 0;
+    IsContractTask: boolean = false;
+    IsCheckList: boolean = false;
+    ServiceTypeID : number = 0;
+    Gallery:Array<Gallery>;
+    EndDateTime : Date;
+    Location : string;
+    ConcernTypeName : string;
+    
+}

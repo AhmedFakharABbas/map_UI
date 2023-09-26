@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27" height="21" viewBox="0 0 27 21">
+  <g id="Group_1666" data-name="Group 1666" transform="translate(-245 -14923)">
+    <rect id="Rectangle_578" data-name="Rectangle 578" width="27" height="21" transform="translate(245 14923)" fill="#fff" opacity="0"/>
+    <g id="Group_1665" data-name="Group 1665" transform="translate(0.017 0.15)">
+      <g id="Group_1659" data-name="Group 1659" transform="translate(245.983 14927.779)">
+        <g id="car_2_" data-name="car (2)" transform="translate(0 0.07)">
+          <g id="Group_1658" data-name="Group 1658" transform="translate(0 0)">
+            <g id="Group_1657" data-name="Group 1657" transform="translate(0 0)">
+              <path id="Path_175" data-name="Path 175" d="M49.924,261.093a2.026,2.026,0,1,0,2.026,2.026A2.026,2.026,0,0,0,49.924,261.093Z" transform="translate(-45.314 -253.255)" fill="#8e99ad"/>
+              <path id="Path_176" data-name="Path 176" d="M360.939,336.177h0Z" transform="translate(-341.465 -324.288)" fill="#8e99ad"/>
+              <path id="Path_177" data-name="Path 177" d="M23.586,121.062l-2.258-1.031a.426.426,0,0,1-.187-.161l-1.956-3.119a1.975,1.975,0,0,0-1.691-.927H9.544a1.994,1.994,0,0,0-1.586.777l-2.516,3.3a.424.424,0,0,1-.227.155l-4.2,1.151A1.381,1.381,0,0,0,0,122.543v1.538a1.381,1.381,0,0,0,1.364,1.4h.366a2.888,2.888,0,0,1,5.759,0H16.6a2.888,2.888,0,0,1,5.759,0h.67a1.381,1.381,0,0,0,1.364-1.4v-1.755A1.378,1.378,0,0,0,23.586,121.062Z" transform="translate(0 -115.825)" fill="#8e99ad"/>
+              <path id="Path_178" data-name="Path 178" d="M325.423,261.093a2.026,2.026,0,1,0,2.026,2.026A2.026,2.026,0,0,0,325.423,261.093Z" transform="translate(-305.949 -253.255)" fill="#8e99ad"/>
+            </g>
+          </g>
+        </g>
+        <text id="VIN" transform="translate(9.017 5.221)" fill="#fff" font-size="5" font-family="OpenSans-Bold, Open Sans" font-weight="700"><tspan x="0" y="0">VIN</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

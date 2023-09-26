@@ -1,0 +1,527 @@
+<div class="row justify-content-center align-items-center page-animation mt-3">
+  <div class="col-lg-11 col-12">
+    <div class="row w-100">
+      <hr class="w-100" />
+      <h4 class="sub-heading">View User</h4>
+    </div>
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="card mb-3">
+          <div class="circle-picture row justify-content-center mt-3">
+            <img
+              class="img-fluid"
+              src="{{
+                employeeProfile.Employee.ImageURL
+                  ? _sharedService.baseUrl + employeeProfile.Employee.ImageURL
+                  : _sharedService.default_img
+              }}"
+            />
+          </div>
+          <div class="team-main">
+            <div class="text-center px-2 mt-3" title="Employee Name">
+              <h5 class="primary-color mb-0">
+                {{ employeeProfile.Employee.FirstName }}
+                {{ employeeProfile.Employee.LastName }}
+              </h5>
+            </div>
+
+            <hr />
+            <div class="text-center pt-0 px-3">
+              <ng-container *ngFor="let role of employeeProfile.UserRoles">
+                <span class="part-label-text">
+                  <!-- <i class="ts {{role.Icon}} large px-1"
+                                        title="{{role.RoleName}}"></i> -->
+                  {{ role.RoleName }} </span
+                ><span *ngIf="roles > 1">,</span>
+              </ng-container>
+            </div>
+            <hr />
+          </div>
+          <div class="team-sub pl-3 mb-3">
+            <p class="small-font mb-0">
+              <i class="fas fa-at primary-font px-2" title="Email"></i>
+              <span class="primary-dark-font bold-font">
+                {{ employeeProfile.Employee.Email }}</span
+              >
+            </p>
+
+            <p class="small-font mb-0">
+              <i class="fas fa-globe primary-font px-2" title="Location"></i>
+              <span class="primary-dark-font bold-font">
+                {{ employeeProfile.Employee.CityName }},
+                {{ employeeProfile.Employee.CountryName }}</span
+              >
+            </p>
+
+            <p class="small-font mb-0">
+              <i
+                class="fas fa-money-bill primary-font pl-1 pr-2"
+                title="Salary"
+              ></i>
+              <span class="primary-dark-font bold-font"
+                >{{ employeeProfile.Employee.Salary }} JOD</span
+              >
+            </p>
+
+            <p class="small-font mb-0">
+              <i class="fas fa-mobile-alt primary-font px-2" title="Mobile"></i>
+              <span class="primary-dark-font bold-font">
+                {{ employeeProfile.Employee.ContactMobile }}
+              </span>
+            </p>
+
+            <!-- <p class="small-font mb-0"> <i class="fas fa-phone primary-font pl-2 pr-1" title="Phone"></i>
+                            <span class="primary-color"> {{employeeProfile.Employee.ContactPhone}}</span></p> -->
+
+            <p class="small-font mb-0">
+              <i
+                class="fas fa-building primary-font px-2"
+                title="Address 1"
+              ></i>
+              <span class="primary-dark-font bold-font">
+                {{ employeeProfile.Employee.Address1 }}</span
+              >
+            </p>
+
+            <!-- <p class="small-font mb-0"> <i class="fas fa-building  primary-font px-2" title="Address 2"></i>
+                            <span class="primary-color"> {{employeeProfile.Employee.Address2}}</span></p> -->
+          </div>
+        </div>
+        <!-- current task or processes -->
+        <div class="card">
+          <h5 class="text-center mt-2 primary-color">Current Tasks</h5>
+          <div
+            class="card-body pt-0 active-process"
+            *ngIf="
+              employeeProfile.ActiveJobProcess != undefined &&
+              employeeProfile.ActiveJobProcess.length > 0
+            "
+          >
+            <ng-container *ngFor="let task of employeeProfile.ActiveJobProcess">
+              <hr />
+              <a>
+                <span class="primary-dark-font"
+                  >{{ task.JobCardNumber }} | {{ task.JobProcessStatusName }}
+                  <!-- <i class="fas fa-eye mr-2" title="" [routerLink]="['/' + '/update-job/' + task.JobCardID + '/parts']"></i> -->
+                </span>
+              </a>
+            </ng-container>
+          </div>
+          <div
+            class="card-body pt-0"
+            *ngIf="
+              employeeProfile.ActiveJobProcess == undefined ||
+              (employeeProfile.ActiveJobProcess != undefined &&
+                employeeProfile.ActiveJobProcess.length == 0)
+            "
+          >
+            <hr />
+            <a> <span class="primary-font">No current task!</span></a>
+            <hr />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="row">
+          <div class="col-4">
+            <div class="rad-info-box mb-3 px-3 py-2 card">
+              <div class="row my-2">
+                <div class="col-4 align-self-center br-1">
+                  <i class="ts inspections" title="Total Inspections"></i>
+                </div>
+                <div class="col-8">
+                  <div class="text-center">
+                    <label>Inspections</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    <span
+                      *ngIf="
+                        employeeProfile.ProcessCount.TotalTasks != undefined;
+                        else elseHyphen
+                      "
+                      >{{ employeeProfile.ProcessCount.TotalTasks }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="rad-info-box mb-3 px-3 py-2 card">
+              <div class="row my-2">
+                <div class="col-4 align-self-center br-1">
+                  <i class="ts working-hours" title="Working Hours"></i>
+                </div>
+                <div class="col-8">
+                  <div class="text-center">
+                    <label>Working Hours</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    <span
+                      *ngIf="
+                        employeeProfile.ProcessCount.TotalTimeSpent !=
+                          undefined;
+                        else elseHyphen
+                      "
+                      >{{ employeeProfile.ProcessCount.TotalTimeSpent }}</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="rad-info-box mb-3 px-3 py-2 card">
+              <div class="row my-2">
+                <div class="col-4 align-self-center br-1">
+                  <i class="ts earnings" title="Earnings"></i>
+                </div>
+                <div class="col-8">
+                  <div class="text-center">
+                    <label>Earnings</label>
+                  </div>
+                  <div class="text-center custom-font">
+                    0
+                    <!-- <span
+                                            *ngIf="employeeProfile.Employee.TechnicianStats.TotalCost != undefined; else elseHyphen">{{employeeProfile.Employee.TechnicianStats.TotalCost}}</span> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- <div class="col-12">
+                                <div class="row justify-content-end py-3">
+                                    
+                                    <div class="form-check form-check-radio m-0">
+                                        <label class="primary-font px-2"
+                                            (click)="isTableCollapsed = false ; isCardCollapsed = true"
+                                            [attr.aria-expanded]="isCardCollapsed" aria-controls="collapseExample"
+                                            [class.toggle-button-active]="isCardCollapsed==true">
+                                            <input class="form-check-input" type="radio" name="Internal Task"
+                                                id="internalTask" value="48" checked=true>
+                                            <span class="form-check-sign">Graphical</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-radio m-0">
+                                        <label class="primary-font px-2"
+                                            (click)="isCardCollapsed = false ; isTableCollapsed = true"
+                                            [attr.aria-expanded]="isTableCollapsed" aria-controls="collapseExample"
+                                            [class.toggle-button-active]="isTableCollapsed==true">
+                                            <input class="form-check-input" type="radio" name="Internal Task"
+                                                id="internalTask" value="48">
+                                            <span class="form-check-sign">Tabular</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <section  id="collapseExample" [ngbCollapse]="isTableCollapsed">
+                                    <ngb-tabset class="sub-tabset" *ngIf="employeeProfile.Employee.GraphData!=undefined"> 
+                                        <ngb-tab title="Monthly Activity">
+                                            <ng-template ngbTabContent>
+                                                <div class="drop-down-animation">
+                                                    <x-chartist class="py-5 my-5" [type]="type" [data]="data"
+                                                        [options]="options" [events]="events"></x-chartist>
+                                                </div>
+
+                                            </ng-template>
+                                        </ngb-tab>
+                                    </ngb-tabset>
+                                </section>
+                                <section id="collapseExample" [ngbCollapse]="isCardCollapsed">
+                                    <ngb-tabset class="sub-tabset">
+
+                                        <ngb-tab title="Completed Tasks">
+                                            <ng-template ngbTabContent>
+                                                <table class="table text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Id</th>
+                                                            <th scope="col">Plate Number</th>
+                                                            <th scope="col">Task Description</th>
+                                                            <th scope="col">End Time</th>
+                                                            <th scope="col">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="drop-down-animation"
+                                                        *ngIf="employeeProfile.Employee.CompletedTasks!= undefined && employeeProfile.Employee.CompletedTasks.length>0">
+                                                        <tr
+                                                            *ngFor="let task of employeeProfile.Employee.CompletedTasks; let idx=index">
+                                                            <td>{{idx + 1}}</td>
+                                                            <td>{{task.PlateNumber}}</td>
+                                                            <td>{{task.TaskDescription}}</td>
+                                                            <td>{{task.EndDateTime | date:'short'}}</td>
+                                                            <td>
+                                                                <i class="fas fa-eye mr-2" title=""
+                                                                    [routerLink]="['/' + '/update-job/' + task.JobCardID + '/parts']"></i>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody class="drop-down-animation"
+                                                        *ngIf="employeeProfile.Employee.CompletedTasks == undefined || (employeeProfile.Employee.CompletedTasks!= undefined && employeeProfile.Employee.CompletedTasks.length==0)">
+                                                        <tr>
+                                                            <td>No task found!</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ng-template>
+                                        </ngb-tab>
+                                    </ngb-tabset>
+                                </section>
+                            </div> -->
+
+          <div class="col-12">
+            <ng-container
+              *ngIf="
+                employeeProfile.JCBasicInfoList != undefined &&
+                employeeProfile.JCBasicInfoList.length > 0
+              "
+            >
+              <div
+                class="card inner-card-shadow mt-3 btm-border"
+                *ngFor="
+                  let jc of employeeProfile.JCBasicInfoList
+                    | slice
+                      : (cPage - 1) * _sharedService.pageSize
+                      : (cPage - 1) * _sharedService.pageSize +
+                          _sharedService.pageSize;
+                  let i = index
+                "
+              >
+                <div
+                  class="card-header list-card-header light-bold bg-white bb-0"
+                >
+                  <span class="card-number">{{ jc.JobCardNumber }}</span>
+                  <div class="row">
+                    <div class="col-12 pt-1 pl-4">
+                      <div class="row primary-font">
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-12 text-right">
+                              <i
+                                class="
+                                  py-2
+                                  fas
+                                  fa-eye
+                                  pointer
+                                  primary-dark-font
+                                "
+                                title="View"
+                                [routerLink]="['/', 'job', 'detail']"
+                                [queryParams]="{ JobCardID: jc.JobCardID }"
+                              ></i>
+                            </div>
+                            <div class="col-12">
+                              <div class="row">
+                                <div class="col-3">
+                                  <i class="fas fa-user mr-2" title="Name"></i>
+                                  <label class="primary-dark-font bold-font"
+                                    >{{ jc.CustomerFullName }}
+                                  </label>
+                                </div>
+
+                                <div
+                                  class="col-3 align-self-center pointer"
+                                  title="Make Model Year"
+                                >
+                                  <a
+                                    class="primary-font"
+                                    [routerLink]="['/', 'vehicle', 'view']"
+                                    [queryParams]="{ VehicleID: jc.VehicleID }"
+                                  >
+                                    <i
+                                      class="fas fa-car mr-2 fa-lg"
+                                      title="Make Model Year"
+                                    ></i>
+                                    <label
+                                      class="
+                                        pointer
+                                        primary-dark-font
+                                        bold-font
+                                      "
+                                      >{{ jc.EnglishMakeName }}
+                                      {{ jc.EnglishModelName }}
+                                      {{ jc.ProductionYear }}</label
+                                    >
+                                  </a>
+                                </div>
+
+                                <div class="col-3">
+                                  <i
+                                    class="fas fa-mobile-alt mr-2"
+                                    title="Phone"
+                                  ></i>
+                                  <label class="primary-dark-font bold-font">{{
+                                    jc.ContactPersonMobile
+                                  }}</label>
+                                </div>
+
+                                <div class="col-3 align-self-center">
+                                  <i
+                                    class="ts plate-number-icon mr-2"
+                                    title="Plate Number"
+                                  ></i>
+                                  <label class="primary-dark-font bold-font">{{
+                                    jc.PlateNumber
+                                  }}</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row w-100 mx-0 collapse-margin-top">
+                  <hr class="w-100" />
+                  <a
+                    class="btn collapse-tabset p-0"
+                    data-toggle="collapse"
+                    href="#card{{ jc.JobCardID }}"
+                    role="button"
+                    (click)="collapseJC($event, jc.JobCardID)"
+                    aria-expanded="false"
+                    aria-controls="jc.JobCardID"
+                  >
+                    <i
+                      class="fas fa-chevron-down hover-color px-3 pt-3 pb-2"
+                      id="{{ jc.JobCardID }}"
+                    ></i>
+                  </a>
+                </div>
+                <div class="collapse" id="card{{ jc.JobCardID }}">
+                  <div class="row card-body-font m-0 bb-1">
+                    <div class="col-lg-12 col-sm-12 px-2">
+                      <ngb-tabset class="jl-tabset">
+                        <ngb-tab title="Tasks">
+                          <ng-template ngbTabContent>
+                            <div class="card main-card no-border list-card">
+                              <div class="p-0 card-scroll card-height">
+                                <table class="table table-striped primary-font">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">ID</th>
+                                      <th scope="col">Name</th>
+                                      <th scope="col">Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody
+                                    *ngIf="
+                                      employeeProfile.JobTasks == undefined ||
+                                      (employeeProfile.JobTasks != undefined &&
+                                        (
+                                          employeeProfile.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                        ).length == 0)
+                                    "
+                                  >
+                                    <tr scope="row">
+                                      <td colspan="12" class="text-center">
+                                        No Task Added!
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                  <tbody>
+                                    <tr
+                                      class="hovered"
+                                      title="Task"
+                                      *ngFor="
+                                        let jt of employeeProfile.JobTasks
+                                          | filter: jc.JobCardID:'JobCardID'
+                                          | filter: 51:'JobTaskTypeID';
+                                        let idx = index
+                                      "
+                                    >
+                                      <td>{{ idx + 1 }}</td>
+                                      <td>{{ jt.TaskDescription }}</td>
+                                      <td>
+                                        <span *ngIf="jt.IsAccepted == true"
+                                          >Accepted</span
+                                        >
+                                        <span *ngIf="jt.IsAccepted != true"
+                                          >Not Accepted</span
+                                        >
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-tab>
+
+                        <!-- <ngb-tab title="Process">
+                                                            <ng-template ngbTabContent>
+                                                                <div class="p-0 card-scroll card-height">
+                                                                    <table class="table table-striped primary-font">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">ID</th>
+                                                                                <th scope="col">Process Name</th>
+                                                                            </tr>
+                                                                        </thead>
+
+                                                                        <tbody>
+                                                                            <tr class="hovered" title="In progress"
+                                                                                *ngFor="let process of employeeProfile.JobProcess | filter : jc.JobCardID : 'JobCardID'; let idx = index">
+                                                                                <td>{{idx + 1}}</td>
+                                                                                <td>{{process.StatusNameEnglish}}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                        <tbody
+                                                                            *ngIf="employeeProfile.JobProcess == undefined || (employeeProfile.jJobProcess != undefined && (employeeProfile.JobProcess | filter : jc.JobCardID : 'JobCardID').length == 0)">
+                                                                            <tr scope="row">
+                                                                                <td colspan="12" class="text-center">No
+                                                                                    Process Added!</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </ng-template>
+                                                        </ngb-tab> -->
+                      </ngb-tabset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div
+            class="col-12 my-3 text-center primary-font"
+            *ngIf="
+              employeeProfile.JCBasicInfoList == undefined ||
+              employeeProfile.JCBasicInfoList.length == 0
+            "
+          >
+            No job found
+          </div>
+
+          <div
+            *ngIf="
+              employeeProfile.JCBasicInfoList != undefined &&
+              employeeProfile.JCBasicInfoList.length > 10
+            "
+            class="row col-12 justify-content-center my-3"
+          >
+            <ngb-pagination
+              [(page)]="cPage"
+              [pageSize]="_sharedService.pageSize"
+              [collectionSize]="employeeProfile.JCBasicInfoList.length"
+              aria-label="Job List Pagination"
+              class="pagination-primary"
+            >
+            </ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #elseHyphen>
+  <span class="px-1">0</span>
+</ng-template>

@@ -1,0 +1,901 @@
+<div class="row justify-content-center align-items-center page-animation">
+  <form action="" class="col-lg-11 col-12">
+    <div class="card-body px-0">
+      <div class="row">
+        <!-- car info  -->
+        <div class="card mx-3" *ngIf="!_router.url.includes('/basic-info')">
+          <div
+            class="row card-body"
+            *ngIf="
+              _sharedService.jobObj != undefined &&
+              _sharedService.jobObj.JCBasicInfo.JobCardID > 0 &&
+              _sharedService.jobObj.JCBasicInfo.JobCardID != null
+            "
+          >
+            <div class="col-9">
+              <div class="row px-3">
+                <div class="col-12">
+                  <h3 class="primary-color bold-font col-12 mb-3">
+                    {{ _sharedService.jobObj.jcVehicleObj.EnglishMakeName }}
+                    {{ _sharedService.jobObj.jcVehicleObj.EnglishModelName }}
+                    {{ _sharedService.jobObj.jcVehicleObj.ProductionYear }}
+                    <span
+                      class="primary-font mx-3"
+                      *ngIf="
+                        _sharedService.jobObj.jcVehicleObj.ContractPlanID !=
+                        undefined
+                      "
+                    >
+                      <i
+                        class="ts contract_360 mx-3 hoverable"
+                        title="View Contract Details"
+                        (click)="ContractDetailsModal(contractDetails)"
+                      ></i>
+                    </span>
+                  </h3>
+                </div>
+                <!-- <div class="col-4">
+                  <span class="primary-font">
+                    <i class="ts contract_360 mx-3 hoverable" title="View Contract Details"
+                      (click)="ContractDetailsModal(contractDetails)"></i>
+                  </span>
+                </div> -->
+                <div class="col-4 pb-3">
+                  <div class="primary-font small-font">Plate Number</div>
+                  <div class="custom-font">
+                    {{ _sharedService.jobObj.jcVehicleObj.PlateNumber }}
+                  </div>
+                </div>
+                <div
+                  class="col-4 pb-3"
+                  *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID == 29"
+                >
+                  <div class="primary-font small-font">Fuel Type</div>
+                  <div class="custom-font">
+                    {{ _sharedService.jobObj.jcVehicleObj.EngineTypeName }}
+                  </div>
+                </div>
+                <div
+                  class="col-4 pb-3"
+                  *ngIf="_sharedService.jobObj.jcVehicleObj.EngineTypeID != 29"
+                >
+                  <div class="primary-font small-font">Engine Size</div>
+                  <div class="custom-font">
+                    <span
+                      *ngIf="
+                        _sharedService.jobObj.jcVehicleObj.EngineCapacity !=
+                        undefined
+                      "
+                    >
+                      {{ _sharedService.jobObj.jcVehicleObj.EngineCapacity }} cc
+                      <small
+                        >({{
+                          _sharedService.jobObj.jcVehicleObj.EngineTypeName
+                        }})</small
+                      ></span
+                    >
+                    <span
+                      *ngIf="
+                        _sharedService.jobObj.jcVehicleObj.EngineCapacity ==
+                        undefined
+                      "
+                      >-</span
+                    >
+                  </div>
+                </div>
+                <div class="col-4 pb-3">
+                  <div
+                    class="col-12"
+                    *ngIf="
+                      _sharedService.logged_user_role_id == 1 ||
+                      _sharedService.logged_user_role_id == 2 ||
+                      _sharedService.logged_user_role_id == 3
+                    "
+                  >
+                    <div class="primary-font small-font">Mileage</div>
+                    <div class="custom-font">
+                      {{ _sharedService.jobObj.JCBasicInfo.Mileage }}
+                    </div>
+                  </div>
+                  <!-- <div class="col-6">
+                    <div class="primary-font small-font">Contract</div>
+                    <span class="primary-font">
+                      <i class="ts contract_360 mx-3 hoverable" title="View Contract Details"
+                        (click)="ContractDetailsModal(contractDetails)"></i>
+                    </span>
+                  </div> -->
+                </div>
+                <div class="col-4 pb-3">
+                  <div class="primary-font small-font">SeriesID</div>
+                  <div class="d-flex">
+                    <p
+                      class="part-detail-box custom-font primary-font my-0"
+                      title=""
+                    >
+                      {{ _sharedService.jobObj.JCBasicInfo.SeriesID }}
+                    </p>
+                    <div
+                      class="color-box pointer"
+                      title="{{ _sharedService.jobObj.jcVehicleObj.ColorName }}"
+                      [style.background]="
+                        '#' + _sharedService.jobObj.jcVehicleObj.ColorCode
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-8 pb-3">
+                  <div class="primary-font small-font">VIN</div>
+                  <div class="custom-font">
+                    {{ _sharedService.jobObj.jcVehicleObj.VIN }}
+                  </div>
+                </div>
+                <div
+                  class="col-lg-4 col-md-8 pb-3"
+                  *ngIf="
+                    _sharedService.logged_user_role_id == 1 ||
+                    _sharedService.logged_user_role_id == 2 ||
+                    _sharedService.logged_user_role_id == 3
+                  "
+                >
+                  <div class="primary-font small-font">Customer Name</div>
+                  <div class="custom-font">
+                    {{ _sharedService.jobObj.JCBasicInfo.CustomerFullName }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-3 text-center align-self-center px-md-0 px-lg-3">
+              <ngb-carousel
+                class="results"
+                *ngIf="
+                  _sharedService.jobObj.Gallery != undefined &&
+                  _sharedService.jobObj.Gallery.length > 0
+                "
+              >
+                <ng-template
+                  ngbSlide
+                  *ngFor="
+                    let image of _sharedService.jobObj.Gallery
+                      | filter: JobCardID:'ObjectID';
+                    let idx = index
+                  "
+                >
+                  <div class="picsum-img-wrapper">
+                    <img
+                      [src]="
+                        image
+                          ? _sharedService.baseUrl + image.ImageURL
+                          : _sharedService.default_img
+                      "
+                      class="gallery-img"
+                    />
+                  </div>
+                </ng-template>
+              </ngb-carousel>
+              <div
+                *ngIf="
+                  _sharedService.jobObj.Gallery != undefined &&
+                  (_sharedService.jobObj.Gallery | filter: JobCardID:'ObjectID')
+                    .length == 0
+                "
+              >
+                <img
+                  [src]="_sharedService.default_img"
+                  class="gallery-img"
+                  alt="Vehicle Images"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- router-outlet -->
+        <div
+          class=""
+          [ngClass]="
+            _sharedService.logged_user_role_id == 6
+              ? 'col-12'
+              : 'col-lg-10 col-md-12 order-lg-1 order-2'
+          "
+        >
+          <div
+            class="tab-content"
+            id="myTabContent"
+            *ngIf="_sharedService.jobObj != undefined"
+          >
+            <div
+              class="tab-pane fade show active"
+              id="info"
+              role="tabpanel"
+              aria-labelledby="info-tab"
+            >
+              <router-outlet></router-outlet>
+
+              <div class="row w-100 sticky-bottom bg-white">
+                <div class="col-lg-3 col-md-3 text-right">
+                  <button
+                    *ngIf="
+                      _sharedService.currentRouteIndex > 0 &&
+                      (_sharedService.logged_user_role_id == 1 ||
+                        _sharedService.logged_user_role_id == 2 ||
+                        _sharedService.logged_user_role_id == 3 ||
+                        _sharedService.logged_user_role_id == 4 ||
+                        _sharedService.logged_user_role_id == 7)
+                    "
+                    type="button"
+                    [routerLink]=""
+                    class="btn btn-primary btn-round btn-simple arrow-btn"
+                    (click)="goToPreviousPage()"
+                  >
+                    <i class="fas fa-arrow-left"></i>
+                  </button>
+                </div>
+
+                <div
+                  class="col-lg-6 col-md-6 text-center"
+                  [ngClass]="
+                    _sharedService.logged_user_role_id == 5 ||
+                    _sharedService.logged_user_role_id == 6 ||
+                    _sharedService.logged_user_role_id == 8 ||
+                    _sharedService.logged_user_role_id == 9
+                      ? 'd-none'
+                      : ''
+                  "
+                >
+                
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round btn-simple mx-1"
+                    (click)="assignTo()"
+                    *ngIf="
+                      (_sharedService.jobObj.JCBasicInfo.JobCardID ==
+                        undefined ||
+                        _sharedService.jobObj.JCBasicInfo.JobCardID == 0) &&
+                      _sharedService.currentRouteIndex == 1
+                    "
+                  >
+                    Create
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round btn-simple mx-1"
+                    (click)="closeJC = true; onUpdateJob()"
+                    id="updateExitJob"
+                    *ngIf="
+                      _sharedService.jobObj.JCBasicInfo.JobCardID !=
+                        undefined &&
+                      _sharedService.jobObj.JCBasicInfo.JobCardID > 0 &&
+                      _sharedService.logged_user_role_id != 7
+                    "
+                  >
+                    Update & Exit
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round btn-simple mx-1"
+                    id="updateJob"
+                    (click)="onUpdateJob()"
+                    *ngIf="
+                      _sharedService.jobObj.JCBasicInfo.JobCardID !=
+                        undefined &&
+                      _sharedService.jobObj.JCBasicInfo.JobCardID > 0 &&
+                      _sharedService.logged_user_role_id != 7
+                    "
+                  >
+                    Update
+                  </button>
+
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-round btn-simple mx-1"
+                    id="submitForApproval"
+                    (click)="checkAlternates()"
+                    *ngIf="
+                      _sharedService.jobObj.JCBasicInfo.JobCardID !=
+                        undefined &&
+                      _sharedService.jobObj.JCBasicInfo.JobCardID > 0 &&
+                      _sharedService.logged_user_role_id == 7
+                    "
+                  >
+                    Submit for Approval
+                  </button>
+                </div>
+
+                <div class="col-md-3 col-lg-3 pr-0">
+                  <button
+                    type="button"
+                    *ngIf="
+                      _sharedService.currentRouteIndex <
+                        _sharedService.routesArray.length - 1 &&
+                      (_sharedService.logged_user_role_id == 1 ||
+                        _sharedService.logged_user_role_id == 2 ||
+                        _sharedService.logged_user_role_id == 3 ||
+                        _sharedService.logged_user_role_id == 4 ||
+                        _sharedService.logged_user_role_id == 7)
+                    "
+                    [routerLink]=""
+                    class="btn btn-primary btn-round btn-simple arrow-btn"
+                    (click)="goToNextPage()"
+                  >
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- right nav bar  -->
+        <div
+          class="
+            col-lg-2 col-md-12
+            order-lg-2 order-1
+            mt-lg-3
+            justify-content-end
+            left-nav-bar
+            pr-0
+            row
+            mx-0
+            mb-md-3
+          "
+          *ngIf="_sharedService.logged_user_role_id != 6"
+        >
+          <ul
+            class="
+              nav
+              d-flex
+              flex-column
+              text-center
+              nav-bg
+              col-lg-6 col-md-12
+              pr-lg-0
+              sticky-top
+              row
+              mx-0
+            "
+            id="myTab"
+            role="tablist"
+          >
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              href="#concerns-tab"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="info-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="info"
+                aria-selected="false"
+                [routerLink]="
+                  _sharedService.logged_user_role_id == 4
+                    ? ['./basic-info-view']
+                    : ['./basic-info']
+                "
+              >
+                <i class="fas fa-clipboard fa-2x py-3" title="Basic Info"></i>
+                <span class="nav-text small-font primary-font">Basic Info</span>
+              </a>
+            </li>
+
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 9
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="concerns-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="concerns"
+                aria-selected="false"
+                [routerLink]="
+                  _sharedService.logged_user_role_id == 4 ||
+                  _sharedService.logged_user_role_id == 5
+                    ? ['./customer-concerns-view']
+                    : ['./customer-concerns']
+                "
+                ><i
+                  class="fas fa-comment-alt fa-2x py-3"
+                  title="Customer Concerns"
+                ></i>
+                <span class="nav-text small-font primary-font"
+                  >Concerns</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JobConcerns?.length > 0"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 7
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="inspection-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="inspection"
+                aria-selected="false"
+                [routerLink]="
+                  _sharedService.logged_user_role_id == 4 ||
+                  _sharedService.logged_user_role_id == 5 ||
+                  _sharedService.logged_user_role_id == 7
+                    ? ['./inspection-view']
+                    : ['./inspection']
+                "
+              >
+                <i
+                  class="fas fa-cogs fa-2x py-3 icon-hover"
+                  title="Inspection"
+                ></i>
+                <span
+                  class="
+                    nav-text
+                    small-font
+                    primary-font
+                    text-left
+                    pl-md-4 pl-lg-0
+                  "
+                  >Visual <br class="d-lg-block d-md-none" />
+                  Inspection</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JCBasicInfo.VIStatusID == 17"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 7 ||
+                _sharedService.logged_user_role_id == 8
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="tasks-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="tasks"
+                aria-selected="false"
+                [routerLink]="['./inspection-results']"
+              >
+                <i
+                  class="fas fa-tasks fa-2x py-3 icon-hover"
+                  title="Inspection Results"
+                ></i>
+                <span class="nav-text small-font primary-font"
+                  >Services</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JCBasicInfo.IRStatusID == 17"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 7
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="pricing-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="parts-price"
+                aria-selected="false"
+                [routerLink]="['./part-price']"
+              >
+                <i
+                  class="fas fa-dollar-sign fa-2x py-4 icon-hover"
+                  title="Parts Pricing"
+                ></i>
+                <span class="nav-text small-font primary-font text-lg-left"
+                  >Parts <br class="d-lg-block d-md-none" />
+                  Pricing</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JCBasicInfo.PPStatusID == 17"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+            <!-- <li class="nav-item"
+              *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 3 || _sharedService.logged_user_role_id == 6">
+              <a class="nav-link vertical-nav" id="parts-tab" data-toggle="tab" routerLinkActive="active" role="tab"
+                aria-controls="parts" aria-selected="false" [routerLink]="['./parts']"><i
+                  class="fas fa-wrench fa-2x py-4" title="Parts"></i>
+                <span class="nav-text small-font primary-font">Parts</span></a>
+            </li> -->
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="approval-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="approval"
+                aria-selected="false"
+                [routerLink]="
+                  _sharedService.logged_user_role_id == 4
+                    ? ['./approval-view']
+                    : ['./approval']
+                "
+              >
+                <i class="fas fa-check-circle fa-2x py-3" title="Approval"></i>
+                <span class="nav-text small-font primary-font text-lg-left"
+                  >Quotation & <br class="d-lg-block d-md-none" />Approval</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JCBasicInfo.ApprovalStatusID == 17"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                _sharedService.logged_user_role_id == 1 ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 3 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 9
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="qa-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="qa"
+                aria-selected="false"
+                [routerLink]="
+                  _sharedService.logged_user_role_id == 3 ||
+                  _sharedService.logged_user_role_id == 4
+                    ? ['./qa-view']
+                    : ['./qa']
+                "
+                ><i
+                  class="fas fa-check fa-2x py-3"
+                  title="Quality Assurance"
+                ></i>
+                <span class="nav-text small-font primary-font text-lg-right"
+                  >QA</span
+                ></a
+              >
+              <i
+                *ngIf="_sharedService.jobObj.JCBasicInfo.QAStatusID == 17"
+                class="ml-1 hover-color check_status"
+              >
+                <i class="ts check-mark-filled" title="Job Done"></i>
+              </i>
+            </li>
+
+            <li
+              class="nav-item col-lg-12 col px-lg-0"
+              *ngIf="
+                (_sharedService.jobObj.JCBasicInfo.JobCardID != undefined &&
+                  _sharedService.logged_user_role_id == 1) ||
+                _sharedService.logged_user_role_id == 2 ||
+                _sharedService.logged_user_role_id == 4 ||
+                _sharedService.logged_user_role_id == 5 ||
+                _sharedService.logged_user_role_id == 8
+              "
+            >
+              <a
+                class="nav-link vertical-nav"
+                id="vehicleHistory-tab"
+                data-toggle="tab"
+                routerLinkActive="active"
+                role="tab"
+                aria-controls="vehicleHistory"
+                aria-selected="false"
+                [routerLink]="['./vehicle-history']"
+              >
+                <i class="fas fa-history fa-2x py-3" title="Approval"></i>
+                <span class="nav-text small-font primary-font text-lg-left"
+                  >Vehicle <br class="d-lg-block d-md-none" />History</span
+                ></a
+              >
+            </li>
+
+            <!-- <li class="nav-item">
+              <a class="nav-link vertical-nav" id="invoice-tab" data-toggle="tab" routerLinkActive="active" role="tab"
+                aria-controls="invoice" aria-selected="false" [routerLink]="['./invoice/create-invoice']"><i
+                  class="fas fa-file-invoice-dollar fa-2x" title="Generate Invoice"></i><br><span
+                  class="small-font">Generate Invoice</span></a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template #assignValet let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">
+        Assign valet for Visual Inspection
+      </h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <div
+              class="form-check col-12 mb-3"
+              *ngIf="
+                (_sharedService.jobObj.UserRoles | filter: '6':'RoleID')
+                  .length == 1
+              "
+            >
+              <label class="d-flex form-check-label">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="printInvoice"
+                  (change)="
+                    _sharedService.jobObj.JCBasicInfo.IsValetAssign =
+                      !_sharedService.jobObj.JCBasicInfo.IsValetAssign
+                  "
+                />
+                <span class="form-check-sign primary-font"
+                  >Do you want to auto assign valet?</span
+                >
+              </label>
+            </div>
+
+            <div
+              class="floating-label form-group col-12"
+              *ngIf="
+                (_sharedService.jobObj.UserRoles | filter: '6':'RoleID')
+                  .length > 1
+              "
+            >
+              <ng-select
+                placeholder="Valet"
+                class="custom"
+                name="Valet"
+                (change)="
+                  _sharedService.jobObj.JobProcess[0].IsModified = true;
+                  _sharedService.jobObj != undefined
+                    ? (_sharedService.jobObj.JCBasicInfo.IsModified = true)
+                    : ''
+                "
+                [(ngModel)]="_sharedService.jobObj.JobProcess[0].EmployeeID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService.jobObj.UserRoles
+                      | filter: '6':'RoleID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <div class="form-check col-12 mb-3">
+              <label class="d-flex form-check-label">
+                <!-- <input type="checkbox" class="form-check-input" name="key"
+                (click)="isCarKey = !isCarKey"
+                  (change)="_sharedService.jobObj.JCBasicInfo.KeyStatusID = 28" > -->
+
+                <input
+                  class="form-check-input"
+                  id=""
+                  type="checkbox"
+                  value=""
+                  name="key"
+                  [checked]="
+                    _sharedService.jobObj.JCBasicInfo.KeyStatusID == 28
+                  "
+                  (change)="
+                    isCarKey = !isCarKey;
+                    _sharedService.jobObj.JCBasicInfo.KeyStatusID = 28
+                  "
+                />
+                <span class="form-check-sign primary-font"
+                  >Have you recevied Car's key?</span
+                >
+                <!-- <small
+                  *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small> -->
+              </label>
+            </div>
+
+            <div class="form-check col-12 mb-3">
+              <label class="d-flex form-check-label">
+                <!-- <input type="checkbox" class="form-check-input" name="key"
+                (click)="isCarKey = !isCarKey"
+                  (change)="_sharedService.jobObj.JCBasicInfo.KeyStatusID = 28" > -->
+
+                <input
+                  class="form-check-input"
+                  id=""
+                  type="checkbox"
+                  value=""
+                  name="viCompleted"
+                  [checked]="viCompleted == true"
+                  (change)="onChangeVICompleted()"
+                />
+                <span class="form-check-sign primary-font"
+                  >Is Inspection Completed?</span
+                >
+                <!-- <small
+                  *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small> -->
+              </label>
+            </div>
+            <div *ngIf="isCarKey != true" class="col-12">
+              <p class="keywarning">Car keys are required*</p>
+            </div>
+
+            <div class="col-12 text-center">
+              <button
+                (click)="onSaveJobCard()"
+                [disabled]="isCarKey != true"
+                [ngClass]="isCarKey != true ? 'not-allowed' : ''"
+                class="a-button btn btn-primary btn-round btn-simple col-4"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #assignQS let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Assign Quick service Technician</h5>
+      <button type="button" class="close" (click)="closeModal()" title="Cancel">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12">
+            <!-- <div class="form-check col-12 mb-3"
+              *ngIf="(_sharedService.jobObj.UserRoles | filter: '8': 'RoleID' | filter : '146' : 'TechnicianTypeID').length == 1">
+              <label class="d-flex form-check-label">
+                <input type="checkbox" class="form-check-input" name="printInvoice"
+                  (change)="_sharedService.jobObj.JCBasicInfo.IsValetAssign = !_sharedService.jobObj.JCBasicInfo.IsValetAssign">
+                <span class="form-check-sign primary-font">Do you want to auto assign valet?</span>
+              </label>
+            </div> -->
+
+            <div
+              class="floating-label form-group col-12"
+              *ngIf="
+                (
+                  _sharedService.jobObj.UserRoles
+                  | filter: '8':'RoleID'
+                  | filter: '146':'TechnicianTypeID'
+                ).length > 1
+              "
+            >
+              <ng-select
+                placeholder="Quick Service Technician"
+                class="custom"
+                name="qs"
+                [(ngModel)]="_sharedService.jobObj.QSTechnicianID"
+              >
+                <ng-option
+                  *ngFor="
+                    let item of _sharedService.jobObj.UserRoles
+                      | filter: '6':'RoleID'
+                      | filter: '146':'TechnicianTypeID'
+                  "
+                  [value]="item.UserID"
+                  >{{ item.EmployeeFullName }}
+                </ng-option>
+              </ng-select>
+            </div>
+
+            <!-- <div class="form-check col-12 mb-3">
+              <label class="d-flex form-check-label"> -->
+            <!-- <input type="checkbox" class="form-check-input" name="key"
+                (click)="isCarKey = !isCarKey"
+                  (change)="_sharedService.jobObj.JCBasicInfo.KeyStatusID = 28" > -->
+
+            <!-- <input class="form-check-input" id="" type="checkbox" value="" name="key"
+                  [checked]="_sharedService.jobObj.JCBasicInfo.KeyStatusID == 28"
+                  (change)="isCarKey = !isCarKey; _sharedService.jobObj.JCBasicInfo.KeyStatusID = 28">
+                <span class="form-check-sign primary-font">Have you recevied Car's key?</span> -->
+            <!-- <small
+                  *ngIf="(customerConcernForm.submitted || Quantity.touched) && Quantity.errors?.required">*Required</small> -->
+            <!-- </label>
+            </div> -->
+
+            <div class="col-12 text-center">
+              <button
+                (click)="onSaveJobCard()"
+                [disabled]="isCarKey != true"
+                [ngClass]="isCarKey != true ? 'not-allowed' : ''"
+                class="a-button btn btn-primary btn-round btn-simple col-4"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #contractDetails let-c="close" let-d="dismiss">
+  <app-contract-consumption
+    [vehicleID]="_sharedService.jobObj.jcVehicleObj.VehicleID"
+    [contractPlanID]="_sharedService.jobObj.jcVehicleObj.ContractPlanID"
+    (closeContractDetails)="closeContractDetailsModal($event)"
+  ></app-contract-consumption>
+</ng-template>

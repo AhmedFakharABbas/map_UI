@@ -1,0 +1,111 @@
+<div class="row justify-content-center h-100 align-items-center">
+    <form (ngSubmit)="updateFeedback()" #feedbackForm="ngForm"
+        class="col-lg-10 col-12 card outer-card-shadow outercard">
+        <h1 class=" mt-3 text-center">Customer Feedback</h1>
+        <ng-container *ngIf="feedbackObj != undefined && feedbackObj.Vehicle != undefined">
+
+            <div class="row mx-3">
+                <div class="col-2 bold-font">
+                    <label>Customer Name</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.CustomerFullName}}</div>
+                <div class="col-2 bold-font">
+                    <label>Mobile</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.ContactMobile}}</div>
+
+                <div class="col-2 bold-font">
+                    <label>Plate Number</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.PlateNumber}}</div>
+
+                <div class="col-2 bold-font">
+                    <label>Make</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.EnglishMakeName}}</div>
+
+                <div class="col-2 bold-font">
+                    <label>Model</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.EnglishModelName}}</div>
+
+                <div class="col-2 bold-font">
+                    <label>Year</label>
+                </div>
+                <div class="col-4">{{feedbackObj.Vehicle.ProductionYear}}</div>
+            </div>
+            <div class="row text-left pt-3">
+                <div class="col-12 d-flex">
+                    <div class="offset-5 col-3">
+                        <p class="bold-font">Good</p>
+                    </div>
+                    <div class="col-3">
+                        <p class="bold-font">Need Improvement</p>
+                    </div>
+                </div>
+                <ng-container *ngFor="let feedback of feedbackObj.CustomerFeedback">
+                    <div class="col-12 d-flex mb-3">
+                        <div class="offset-1 col-4 align-self-center">
+                            <label class="form-check-label mt-3">
+                                {{feedback.Question}}
+                            </label>
+                        </div>
+                        <ng-container *ngIf="feedback.InputTypeID == 51">
+                            <!-- checkbox -->
+                            <div class="col-3 form-check form-check-radio mt-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="{{feedback.Question}}"
+                                        id="{{feedback.Answer}}1"
+                                        (change)="feedback.IsModified = true; feedback.Answer = 1"
+                                        [checked]="feedback.Answer === '1'">
+                                    <span class="form-check-sign"></span>
+                                </label>
+                            </div>
+                            <!-- checkbox -->
+                            <div class="col-3 form-check form-check-radio mt-0">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="{{feedback.Question}}"
+                                        id="{{feedback.Answer}}2"
+                                        (change)="feedback.IsModified = true; feedback.Answer = 0"
+                                        [checked]="feedback.Answer === '0'">
+                                    <span class="form-check-sign"></span>
+                                </label>
+
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="feedback.InputTypeID == 52">
+                            <div class="floating-label form-group mb-0 mt-3 col-lg-7 col-sm-6">
+                                <input type="text" placeholder=" " class="floating-input form-control" name="last_name"
+                                    [(ngModel)]="feedback.Answer" #q1=ngModel required/>
+                                <span class="highlight"></span>
+                                <label class="input-label">Answer</label>
+                                <div class="error-block-append text-danger">
+                                    <small
+                                      *ngIf="
+                                        (feedbackForm.submitted || q1.touched) &&
+                                        q1.errors?.required
+                                      "
+                                      >*Required</small
+                                    >
+                                  </div>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="feedback.InputTypeID == 53">
+                            <textarea class="form-control mx-3 px-2" name="name" rows="4" cols="80"
+                                placeholder="You can write task here..." [(ngModel)]="feedback.Answer"
+                                #concern="ngModel">
+                            </textarea>
+
+                        </ng-container>
+
+                    </div>
+                </ng-container>
+            </div>
+
+            <div class=" col-12 text-center px-0">
+                <button type="submit" class="btn btn-primary btn-round btn-simple">Create</button>
+            </div>
+        </ng-container>
+
+    </form>
+</div>

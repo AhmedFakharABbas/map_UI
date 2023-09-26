@@ -1,0 +1,145 @@
+#crumbs {
+  text-align: center;
+  h1 {
+    padding: 0 0 30px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01rem;
+    color: $primary-color;
+  }
+  ul {
+    list-style: none;
+    // display: flex;
+    display: contents;
+    width: 100%;
+    padding: 0;
+    li {
+      flex-grow: 1;
+      a {
+        display: block;
+        // height: 46px;
+        height: 57px;
+        background: $white-color; 
+        text-align: center;
+        position: relative;
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px !important;
+        font-size: 11px;
+        position: relative;
+        text-decoration: none;
+        // color: $primary-color;
+
+// arrow style
+        // &:after {
+        //   content: "";
+        //   border-top: 18px solid transparent;
+        //   border-bottom: 18px solid transparent;
+        //   border-left: 17px solid #e9ecef;
+        //   position: absolute;
+        //   right: -17px;
+        //   top: 0;
+        //   z-index: 1;
+        // }
+        // &:before {
+        //   content: "";
+        //   border-top: 18px solid transparent;
+        //   border-bottom: 18px solid transparent;
+        //   border-left: 17px solid #fff;
+        //   position: absolute;
+        //   left: 0;
+        //   top: 0;
+        // }
+
+      }
+    }
+  }
+}
+
+// #crumbs ul li:first-child a {
+//   border-top-left-radius: 10px;
+//   border-bottom-left-radius: 10px;
+// }
+#crumbs ul li:first-child a:before {
+  display: none;
+}
+
+// #crumbs ul li:last-child a {
+//   padding-right: 20px;
+//   border-top-right-radius: 10px;
+//   border-bottom-right-radius: 10px;
+// }
+#crumbs ul li:last-child a:after {
+  display: none;
+}
+
+#crumbs ul li a:hover {
+  // background: $primary-color;
+  color: $hover-color;
+}
+
+// #crumbs ul li a:hover:after {
+//   border-left-color: $primary-color;
+//   color: #fff;
+// }
+
+.selected {
+  // background: $primary-color !important;
+  // color: #fff !important;
+  box-shadow: 0px 1px 11px 2px #cecece;
+}
+
+a.selected { 
+  color: $hover-color !important;
+  padding: 0px 0px 0px 0px !important;
+}
+a.selected:after {
+  border-left-color: $primary-color !important;
+  color: #fff;
+}
+
+// .completed {
+  
+//   background: $breadcrumb-secondary !important;
+//   color: #fff !important;
+// }
+
+// a.completed {
+//   background: $breadcrumb-secondary !important;
+//   color: #fff !important;
+// }
+// a.completed:after {
+//   border-left-color: $breadcrumb-secondary !important;
+//   color: #fff !important;
+// }
+
+a.completed .ts.car-inspection {
+  fill: $input-field-color !important;
+}
+  
+// a.completed .fas {
+//   color: $white-color;
+// }
+
+// a.selected .fas {
+//   color: $white-color;
+// }
+.crumbs-footer {
+  padding: 0px !important;
+  background-color: white !important; 
+}
+
+.crumbs-footer ol,
+ul,
+dl {
+  margin-top: 0;
+  margin-bottom: 1px !important;
+}
+
+.list-card-header {
+  padding: 12px !important;
+}
+
+.list-card-header h5 {
+  margin-bottom: 0px !important;
+}

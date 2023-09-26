@@ -1,0 +1,434 @@
+<div class="row justify-content-center h-100 align-items-center">
+
+    <div class="col-lg-11 col-12 card outer-card-shadow mt-3">
+
+        <div class="row card-body pb-0 justify-content-center ">
+            <h1 class=" text-center">Search Parts</h1>
+           <i class="fas fa-search search-icon" (click)="openFilter()"></i>
+            <div class="row col-12 ">
+               
+                <div class="col-md-3 col-sm-5 p-2 Filters" id="filter">
+                    <div class="row w-100 m-0">
+                        <hr class="w-100">
+                        <h4 class="sub-heading mb-2">Filters</h4>
+                        <div id="close-sidebar"class="btn-primary btn-round" (click)="closeFilter()">
+                            <i class="fas fa-times"></i>
+                          </div>
+                    </div>
+
+                    <div id="accordion_category" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#category">
+                                <a class="card-title">
+                                    <span class="filter_title ">Category</span>
+                                </a>
+                            </div>
+                            <div id="category" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_category">
+                                <div class="bg accordian-padding">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Ignition, Tune Up And Routine Maintenance
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="">
+                                                Brakes And Traction Control
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="">
+                                                Electrical And Lighting
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_subcategory" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#subcategory">
+                                <a class="card-title">
+                                    <span class="filter_title ">Sub Category</span>
+                                </a>
+                            </div>
+                            <div id="subcategory" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_subcategory">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Oil Filter
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Air Filter
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Thermostat
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_make" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#make">
+                                <a class="card-title">
+                                    <span class="filter_title">Make</span>
+                                </a>
+                            </div>
+                            <div id="make" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_make">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Honda
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_model" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#model">
+                                <a class="card-title">
+                                    <span class="filter_title">Model</span>
+                                </a>
+                            </div>
+                            <div id="model" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_model">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                City
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_year" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#year">
+                                <a class="card-title">
+                                    <span class="filter_title">Year</span>
+                                </a>
+                            </div>
+                            <div id="year" class="panel card-body collapse p-0" data-parent="#accordion_year">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <ng5-slider [(value)]="yearValue" [options]="yearRange"></ng5-slider>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_series" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#series">
+                                <a class="card-title">
+                                    <span class="filter_title">Series</span>
+                                </a>
+                            </div>
+                            <div id="series" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_series">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb d-flex">
+                                        <input type="text" class=" mr-1  form-control" value="" placeholder="Series" />
+                                        <button type="button" class="btn btn-primary btn-round p-1 m-0">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_series_year" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#series_year">
+                                <a class="card-title">
+                                    <span class="filter_title">Series Year</span>
+                                </a>
+                            </div>
+                            <div id="series_year" class="panel card-body collapse p-0"
+                                data-parent="#accordion_series_year">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <ng5-slider [(value)]="seriesValue" [options]="seriesRange"></ng5-slider>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_manufacturer" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#manufacturer">
+                                <a class="card-title">
+                                    <span class="filter_title">Manufacturer</span>
+                                </a>
+                            </div>
+                            <div id="manufacturer" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_manufacturer">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Bosch
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_origin" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#origin">
+                                <a class="card-title">
+                                    <span class="filter_title">Manufacturer Origin</span>
+                                </a>
+                            </div>
+                            <div id="origin" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_origin">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <div class="form-check m-0">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" value="" checked>
+                                                Germany
+                                                <span class="form-check-sign custom-checkbox"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row smaller-font">
+                                        <a href="" class="px-3 pt-3">show more...</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_price" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#price">
+                                <a class="card-title">
+                                    <span class="filter_title">Price Range</span>
+                                </a>
+                            </div>
+                            <div id="price" class="panel card-body collapse p-0" data-parent="#accordion_price">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb">
+                                        <ng5-slider [(value)]="priceValue" [(highValue)]="highValue"
+                                            [options]="priceRange"></ng5-slider>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion_engine" class="accordion">
+                        <div class="card mb-0 mt-2 heading-accordion-padding">
+                            <div class="card-header collapsed accordian-container p-2 arrow" aria-expanded="false"
+                                data-toggle="collapse" href="#engine">
+                                <a class="card-title">
+                                    <span class="filter_title">Engine</span>
+                                </a>
+                            </div>
+                            <div id="engine" class="panel card-body collapse p-0 small-font"
+                                data-parent="#accordion_engine">
+                                <div class="bg accordian-padding ">
+                                    <div class="chiller_cb d-flex">
+                                        <input type="text" class=" mr-1  form-control" value="" placeholder="Engine" />
+                                        <button type="button" class="btn btn-primary btn-round p-1 m-0">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+  
+                <div class="col-md-9 col-sm-12">
+                    <div class="row justify-content-end">
+                        <div class="floating-label form-group col-3 my-2">
+                            <ng-select class="custom  " id="applications" name="models" placeholder="Sort By">
+                                <ng-option [value]="true">Price Asc</ng-option>
+                                <ng-option [value]="false">Price Desc</ng-option>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let arr of array">
+                        <div class="card  inner-card-shadow">
+                            <div class="card-header list-card-header">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4 col-4" title="Part Name">
+                                        <h5><i class="fas fa-car"></i> Oil Filter</h5>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-4 text-center align-self-center" title="Vendor">
+                                        <i class="ts smaller ts-l user"></i> Abu Hamdah
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-4 text-right align-self-center">
+                                        <!-- <i class="fa fa-plus mr-2" title="Add to Comparison"></i>
+                                        <i class="far fa-eye mr-2" title="View"
+                                            [routerLink]="['/admin/search-parts']"></i>
+                                        <i class="far fa-edit mr-2" title="Edit"
+                                            [routerLink]="['/admin/search-parts']"></i> -->
+                                        <i class="far fa-trash-alt" title="Delete"
+                                            (click)="openModal(warningDelete)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body card-body-padding small-font">
+                                <div class="row">
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Item Code </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title=" ">16815</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2">
+                                        <span class="small bold-font">Manufacturer </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title=" ">Bosch</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Origin Name </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title=" ">Germany</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Part Type </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title="">New</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Purchase Price </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title="">Rs. 1000</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Tax </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title="">17%</p>
+                                    </div>
+
+                                    <div class="col-6 col-lg-2 ">
+                                        <span class="small bold-font">Net Price </span>:
+                                    </div>
+                                    <div class="col-6 col-lg-4 p-0">
+                                        <p class="m-0" title="">Rs. 1200</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+    <div class="adOptionModel" id="adOptionModel" role="document">
+        <div class="modal-body">
+            <div class="fluid-container modal_container ">
+                <div class="row justify-content-between bottom_margins">
+                    <div class="col-lg-12 mt-4 ">
+                        <h5 class="text-center col-12 heading-20 bold text-primary-0 m-b-10">
+                            Are you sure you want to delete this part?
+                        </h5>
+                        <div class="col-6 float-left text-left ">
+                            <button (click)="closeModal()" class="a-button col-8"> No</button>
+                        </div>
+                        <div class="col-6 float-left text-right">
+                            <button (click)="closeModal()" class="a-button col-8">Yes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,2301 @@
+<div class="row" id="part">
+  <div class="row w-100">
+    <hr class="w-100" />
+    <h5 class="sub-heading primary-font">Parts</h5>
+
+    <!-- <div class="row justify-content-end sub-heading-btn"
+            *ngIf="_sharedService.jobObj.JCBasicInfo.JobCardID != undefined">
+            <input class="tgl tgl-flip" id="part-pricing" type="checkbox" value=""
+                *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 7"
+                name="PpStatusID" [checked]="_sharedService.jobObj.JCBasicInfo.PPStatusID == 17"
+                [disabled]=""
+                (click)="_sharedService.jobObj.JCBasicInfo.PPStatusID = 17; completeJobProcess(_sharedService.jobObj.JCBasicInfo.PPStatusID)" />
+            <label class="tgl-btn" data-tg-off="Mark complete" data-tg-on="Completed!" for="part-pricing"></label>
+
+        </div> -->
+
+    <!-- <div class="row justify-content-end sub-heading-btn"
+            *ngIf="_sharedService.jobObj.JCBasicInfo.JobCardID != undefined && (_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2 || _sharedService.logged_user_role_id == 7)">
+
+            <button type="submit" class="btn btn-primary btn-simple btn-round mark-complete-btn py-1"
+                *ngIf="((_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2) && _sharedService.jobObj.JCBasicInfo.PPStatusID != 17) ? true : _sharedService.jobObj.JCBasicInfo.PPStatusID == 16"
+                (click)="_sharedService.jobObj.JCBasicInfo.PPStatusID = 17; completeJobProcess(_sharedService.jobObj.JCBasicInfo.PPStatusID)">
+                Mark Complete
+            </button>
+
+            <button type="button" class="btn btn-success btn-simple btn-round mark-complete-btn py-1"
+                *ngIf="_sharedService.jobObj.JCBasicInfo.PPStatusID == 17">
+                Completed
+            </button>
+        </div> -->
+  </div>
+
+  <div class="row mx-4 w-100">
+    <div
+      class="card col-12"
+      *ngFor="let jp of _sharedService.jobObj.JobParts; let i = index"
+    >
+      <div class="row py-3">
+        <div class="row col-12 mx-0">
+          <div class="col-3 pr-0">
+            <div
+              class="ribbon_3"
+              *ngIf="
+                jp.IsInclude == true ||
+                (_sharedService.jobObj.JobTasks
+                  | filter: jp.JobTaskID:'JobTaskID'
+                  | filter: true:IsInclude) == true
+              "
+            >
+              <span> Approved </span>
+            </div>
+            <!-- <div class="ribbon_3"
+                            *ngIf="_sharedService.jobObj.JobTasks | filter : jp.JobTaskID : 'JobTaskID' | filter : true : IsInclude">
+                            <span>
+                                Approved
+                            </span>
+                        </div> -->
+            <div
+              class="ribbon_3"
+              *ngIf="
+                jp.IsInclude == false &&
+                (_sharedService.jobObj.JobTasks
+                  | filter: jp.JobTaskID:'JobTaskID'
+                  | filter: false: IsInclude) == false
+              "
+            >
+              <span> Not Approved </span>
+            </div>
+            <ngb-carousel
+              class="results"
+              *ngIf="
+                _sharedService.jobObj.Gallery != undefined &&
+                _sharedService.jobObj.Gallery.length > 0
+              "
+            >
+              <ng-template
+                ngbSlide
+                *ngFor="
+                  let image of _sharedService.jobObj.Gallery
+                    | filter: jp.JobTaskID:'ObjectID'
+                    | filter: 50:'GalleryTypeID';
+                  let idx = index
+                "
+              >
+                <div class="picsum-img-wrapper">
+                  <div *ngIf="image.IsVideo == false">
+                    <img
+                      [src]="
+                        image
+                          ? _sharedService.baseUrl + image.ImageURL
+                          : _sharedService.default_img
+                      "
+                      class="result-img default-image b-radius"
+                    />
+                  </div>
+                  <div *ngIf="image.IsVideo == true">
+                    <video
+                      class="video"
+                      controls
+                      multiple
+                      [src]="_sharedService.baseUrl + image.ImageURL"
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-carousel>
+            <div
+              *ngIf="
+                _sharedService.jobObj.Gallery == undefined ||
+                (
+                  _sharedService.jobObj.Gallery
+                  | filter: jp.JobTaskID:'ObjectID'
+                  | filter: 50:'GalleryTypeID'
+                ).length == 0
+              "
+            >
+              <img
+                class="default-image b-radius"
+                [src]="_sharedService.default_img"
+                alt="Results Images"
+              />
+            </div>
+          </div>
+          <div class="col-9 py-md-0">
+            <div class="row">
+              <div class="col-md-3 col-lg-3 col-6 px-0">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Name</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box font-16 my-0 bold-font" title="">
+                    {{ jp.PartNameEnglish }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- <div class="col-2 px-0 pb-3">
+                            <div class="primary-font ml-3 smaller-font">
+                                <span>Total Quantity</span>
+                            </div>
+                            <div class="ml-3">
+                            <p class="part-detail-box custom-font primary-color my-0" title="">
+                                {{jp.Quantity}}</p>
+                            </div>
+                            </div> -->
+              <!-- *ngIf="_sharedService.jobObj.jcVehicleObj.IsContractVehicle == true" -->
+
+              <!-- <div class="col-lg-4 col-md-6 order-md-4 order-lg-2 px-0 align-self-center" >
+                                <div class="floating-label form-group mb-0 status-size pb-0">
+                                    <input type="text" placeholder=" " class="floating-input form-control"
+                                        name="discountPercentage" maxlength="2" id="discountPercentage{{jp.JobPartID}}"
+                                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                        [(ngModel)]="jp.DiscountPercentage" #discountPercentage="ngModel" />
+                                    <div class="input-group-append price-perpend">%</div>
+                                    <span class="highlight"></span>
+                                    <label class="input-label">Discount</label> 
+                                </div>
+                            </div> -->
+              <!-- 
+                            <div class="col-lg-2 col-md-6 order-md-5 order-lg-3 px-0 align-self-center" style="right: -15px;">
+                                <div class="floating-label form-group mb-0 status-size pb-0">
+                                    <input type="text" placeholder=" " class="floating-input form-control"
+                                        name="quantity" maxlength="4" (change)="jp.IsModified = true; checkQuantity(jp)"
+                                        id="quantity{{jp.JobPartID}}"
+                                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                        [(ngModel)]="jp.Quantity" #Quantity="ngModel" required />
+                                    <div class="input-group-append price-perpend">{{jp.UnitTypeName}}</div>
+                                    <span class="highlight"></span>
+                                    <label class="input-label">Quantity</label>
+                                    <div class="error-block-append qty-append text-danger">
+                                        <small *ngIf="Quantity.touched && Quantity.errors?.required">*Required</small>
+                                </div>
+                            </div> -->
+
+              <div class="col-md-4 col-lg-3 col-6 px-0" style="right: -15px">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Quantity</span>
+                </div>
+                <div class="ml9-3">
+                  <p
+                    class="part-detail-box my-0 primary-dark-font"
+                    title=""
+                    *ngIf="
+                      jp.EditQuantity == false || jp.EditQuantity == undefined
+                    "
+                  >
+                    <span *ngIf="jp.Quantity != undefined; else elseHyphen"
+                      >{{ jp.Quantity | number: "1.2-2" }}
+                      {{ jp.UnitTypeName }}
+                      <i
+                        class="fas fa-edit pointer ml-2 hover-color"
+                        (click)="jp.EditQuantity = true"
+                        *ngIf="
+                          jp.EditQuantity == false ||
+                          jp.EditQuantity == undefined
+                        "
+                      ></i
+                    ></span>
+                  </p>
+                  <ng-container *ngIf="jp.EditQuantity == true">
+                    <div
+                      class="
+                        floating-label
+                        form-group
+                        col
+                        mb-0
+                        px-0
+                        page-animation
+                        mt-2
+                      "
+                      *ngIf="_sharedService.logged_user_role_id == 7"
+                    >
+                      <input
+                        type="text"
+                        value=""
+                        placeholder=" "
+                        class="floating-input form-control "
+                        name="quantity"
+                        maxlength="4"
+                        (change)="jp.IsModified = true; checkQuantity(jp)"
+                        id="quantity{{ jp.JobPartID }}"
+                        [(ngModel)]="jp.Quantity"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      />
+                      <div class="input-group-append price-perpend">
+                          Pieces
+                        <i
+                          class="fas fa-check ml-2 fa-lg pt-1 hover-color"
+                          (click)="onUpdatePartJob(jp)"
+                        >
+                        </i>
+                      </div>
+                      <span class="highlight"></span>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-3 col-lg-3 col-6 px-0">
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Concern</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box font-14 my-0" title="">
+                    {{
+                      jp.ConcernTypeEnglish != undefined &&
+                      jp.ConcernTypeEnglish != ""
+                        ? jp.ConcernTypeEnglish
+                        : 'Other'
+                    }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-md-2 col-lg-3 col-6 px-0">
+                <div class="primary-font ml-2 smaller-font">
+                  <span>Available?</span>
+                </div>
+
+                <div class="row status-bg ml-1 pl-2">
+                  <div class="toggle-switch" id="change-status">
+                    <input
+                      type="checkbox"
+                      (click)="onClickToggle(jp.JobPartID)"
+                      id="{{ i }}"
+                      name="{{ i }}"
+                      [checked]="jp.IsAvailable == true"
+                    />
+                    <label for="{{ i }}" class="mb-0">
+                      <span
+                        class="mt-1 toggle-track"
+                        [ngClass]="
+                          jp.IsAvailable == true
+                            ? 'toggle-track-active toggle-track-1'
+                            : 'toggle-track-inActive toggle-track-2'
+                        "
+                      ></span>
+                    </label>
+                  </div>
+                  <div class="pl-3">
+                    <span>
+                      <ng-container *ngIf="jp.IsAvailable == true"
+                        ><span class="smaller-font hover-color">Yes</span>
+                      </ng-container>
+                      <ng-container *ngIf="jp.IsAvailable == false"
+                        ><span class="smaller-font">No</span>
+                      </ng-container>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="col-md-3 col-lg-3 col-6 order-md-3 order-lg-5"
+                *ngIf="jp.Notes != undefined && jp.Notes != ''"
+              >
+                <div class="primary-font ml-3 smaller-font">
+                  <span>Note</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box font-14 my-0" title="">
+                    {{ jp.Notes }}
+                  </p>
+                </div>
+              </div>
+
+              <div
+                class="col-md-12 col-lg-12 col-12 px-0 order-md-3 order-lg-6"
+              >
+                <ng-container
+                  *ngIf="
+                    _sharedService.logged_user_role_id != 3 &&
+                    _sharedService.logged_user_role_id != 5
+                  "
+                >
+                  <button
+                    type="button"
+                    [disabled]="jp.IsAvailable == false"
+                    class="
+                      btn btn-round btn-simple btn-primary
+                      my-0
+                      add-part-btn
+                      px-2
+                      py-1
+                      my-4
+                    "
+                    title="Add Alternate Part"
+                    (click)="openPartModal(partModal, jp.JobPartID, false)"
+                  >
+                    <i class="fas fa-plus"></i> Add Part
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- <form class="col-12"
+                    (ngSubmit)="partAlternateForm.valid ? ( jp.PartAlternate.EditMode != true ? addPart(jp.PartAlternate, jp.JobPartID, partAlternateForm) : onEditAltPart(jp.PartAlternate, partAlternateForm) ):''"
+                    #partAlternateForm="ngForm">
+
+                    <div class="row mx-0 my-5 collapse" id="alt-part{{i}}">
+                        <div
+                            class="col-lg-3 col-md-6 px-0 form-check form-check-radio mt-0 align-self-center pl-3 order-lg-1 order-md-1">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="part-location{{jp.JobPartID}}"
+                                    id="internal{{i}}"
+                                    (click)="jp.PartAlternate.PartLocation = 137; setDiscount(jp.PartAlternate);"
+                                    [checked]="jp.PartAlternate.PartLocation == 137">
+                                <span class="form-check-sign dark-font">Internal</span>
+                            </label>
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="part-location{{jp.JobPartID}}"
+                                    id="external{{i}}"
+                                    (click)="jp.PartAlternate.PartLocation = 138; setDiscount(jp.PartAlternate);"
+                                    [checked]="jp.PartAlternate.PartLocation == 138">
+                                <span class="form-check-sign dark-font">External</span>
+                            </label>
+                        </div>
+
+                        <div *ngIf="jp.PartAlternate.PartLocation == 138"
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-2 order-md-3">
+                            <ng-select class="custom" placeholder="Vendor" name="vendor"
+                                id="vendor{{jp.PartAlternate.VendorID}}"
+                                (change)="jp.PartAlternate.IsModified = true; setAlternatePrice(jp.JobPartID, jp.PartAlternate.VendorID)"
+                                [(ngModel)]="jp.PartAlternate.VendorID" appendTo="#part" [addTag]="true"
+                                #vendorID="ngModel" required>
+                                <ng-option disabled>Vendor</ng-option>
+                                <ng-option *ngFor="let pp of _sharedService.PartVendors" [value]="pp.VendorID">
+                                    {{pp.VendorName}}
+                                </ng-option>
+                            </ng-select>
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || brand.touched) && brand.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-3 order-md-4">
+                            <ng-select class="custom" placeholder="Brand" name="brand" id="{{jp.JobPartID}}"
+                                (change)="jp.PartAlternate.IsModified = true" [(ngModel)]="jp.PartAlternate.BrandName"
+                                appendTo="#part" [addTag]="true" #brand="ngModel" required>
+                                <ng-option disabled>Brand</ng-option>
+                                <ng-option *ngFor="let pb of _sharedService.jobObj.PartBrands" [value]="pb.BrandName">
+                                    {{pb.BrandName}}
+                                </ng-option>
+                            </ng-select>
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || brand.touched) && brand.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-4 order-md-5">
+                            <ng-select class="custom" placeholder="Origin" name="origin"
+                                [(ngModel)]="jp.PartAlternate.OrigionName" appendTo="#part" [addTag]="true"
+                                (change)="jp.PartAlternate.IsModified = true" id="{{jp.JobPartID}}" #origin="ngModel"
+                                required>
+                                <ng-option *ngFor="let item of _sharedService.jobObj.BrandOrigins"
+                                    [value]="item.OriginName">{{item.OriginName}}
+                                </ng-option>
+                            </ng-select>
+                            <div class="error-block-ng-select text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || origin.touched) && origin.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-5 order-md-6">
+                            <ng-select placeholder="Status" class="custom" name="part" id="{{jp.PartNameEnglish}}"
+                                appendTo="#part" (change)="jp.PartAlternate.IsModified = true"
+                                [(ngModel)]="jp.PartAlternate.JobPartStatusID" #partStatus="ngModel" required>
+                                <ng-container
+                                    *ngIf="_sharedService.logged_user_role_id == 1 || _sharedService.logged_user_role_id == 2">
+                                    <ng-option
+                                        *ngFor="let item of _sharedService._commonMeta.ObjectStatus | filter: 'PartDelivery': 'ObjectNameEnglish'"
+                                        [value]="item.ObjectStatusID">{{item.StatusNameEnglish}}
+                                    </ng-option>
+                                </ng-container>
+                                <ng-container
+                                    *ngIf="_sharedService.logged_user_role_id != 1 && _sharedService.logged_user_role_id != 2">
+                                    <ng-option
+                                        *ngFor="let item of _sharedService._commonMeta.ObjectStatus | filter: 'PartDelivery': 'ObjectNameEnglish' | notFilter : 'Delivered' : 'StatusNameEnglish'"
+                                        [value]="item.ObjectStatusID">{{item.StatusNameEnglish}}
+                                    </ng-option>
+                                </ng-container>
+                            </ng-select>
+                            <div class="error-block text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || partStatus.touched) && partStatus.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-6 order-md-7">
+                            <input type="text" placeholder=" " class="floating-input form-control" name="price"
+                                maxlength="4" (change)="jp.PartAlternate.IsModified = true" id="{{jp.JobPartID}}"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                [(ngModel)]="jp.PartAlternate.SellingPrice" #Price="ngModel" required />
+                            <div class="input-group-append price-perpend">JOD</div>
+                            <span class="highlight"></span>
+                            <label class="input-label">Price</label>
+                            <div class="error-block-append text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || Price.touched) && Price.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-7 order-md-8">
+                            <span class="pt-2 per">/</span>
+                            <ng-select class="custom" placeholder="Unit" name="unit"
+                                [(ngModel)]="jp.PartAlternate.UnitTypeID" appendTo="#part"
+                                (change)="jp.PartAlternate.IsModified = true" id="{{jp.PartAlternate.UnitTypeID}}"
+                                #unit="ngModel" required>
+                                <ng-option
+                                    *ngFor="let item of _sharedService._commonMeta.objectTypes | filter: 'PartUnit' : 'ObjectNameEnglish'"
+                                    [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                            </ng-select>
+                            <div class="error-block text-danger">
+                                <small
+                                    *ngIf="(partAlternateForm.submitted || unit.touched) && unit.errors?.required">*Required</small>
+                            </div>
+                        </div>
+
+
+                        <div
+                            class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-8 order-md-9">
+                            <input type="text" placeholder=" " class="floating-input form-control"
+                                name="discountPercentage" maxlength="2" id="discountPercentage{{jp.JobPartID}}"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                                [(ngModel)]="jp.PartAlternate.DiscountPercentage" #discountPercentage="ngModel" />
+                            <div class="input-group-append price-perpend">%</div>
+                            <span class="highlight"></span>
+                            <label class="input-label">Discount</label>
+                        </div>
+
+
+                        <div
+                            class="col-lg-3 col-md-6 px-0 form-check form-check-radio mt-0 align-self-center pl-3 order-lg-10 order-md-2">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="part-type{{jp.JobPartID}}"
+                                    id="New{{i}}" (click)="jp.PartAlternate.PartConditionID = 65"
+                                    [checked]="jp.PartAlternate.PartConditionID == 65">
+                                <span class="form-check-sign dark-font">New</span>
+                            </label>
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="part-type{{jp.JobPartID}}"
+                                    id="Used{{i}}" (click)="jp.PartAlternate.PartConditionID = 66"
+                                    [checked]="jp.PartAlternate.PartConditionID == 66">
+                                <span class="form-check-sign dark-font">Used</span>
+                            </label>
+                        </div>
+
+
+                        <div class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0 order-lg-9 order-md-10"
+                            *ngIf="jp.PartAlternate.JobPartStatusID == 27 || jp.PartAlternate.JobPartStatusID == 3">
+                            <div
+                                class="floating-label form-group time-div floating-input form-control input-border-color mt-2 mb-0">
+                                <div class="input-group-append Country-code-prepend">
+                                    <div class="custom custom-append">Time <small>(hour)</small></div>
+                                </div>
+                                <div class="time">
+                                    <input id="time" class="time-input ml-1" type="text" name="hour" min="0" max="99"
+                                        [(ngModel)]="jp.PartAlternate.Hours">
+                                    <span class="align-self-center"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12 text-center col-sm-6 align-self-center mb-0 order-lg-11 order-md-11">
+                            <button type="submit" class="btn btn-round btn-simple btn-primary px-5 align-self-center"
+                                title="Add More" *ngIf="jp.PartAlternate.EditMode != true">Add</button>
+                            <button type="submit" class="btn btn-round btn-simple2 btn-primarypx-5 align-self-center"
+                                title="Add More" *ngIf="jp.PartAlternate.EditMode == true">Update</button>
+                        </div>
+
+
+                    </div>
+
+                            </form> -->
+
+        <div class="col-12">
+          <div class="row bt-1">
+            <div
+              class="col-12 row mx-0 align-self-center"
+              *ngFor="
+                let p of _sharedService.jobObj.JobPartAlternates
+                  | filter: jp.JobPartID:'JobPartID';
+                let idx = index
+              "
+            >
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>ItemCode</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.ItemCode"></span>
+                  </p>
+                </div>
+              </div>
+              <div class="col-3 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Brand</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.BrandName"
+                      >({{ p.OrigionName }})</span
+                    >
+                    &nbsp;
+                    <span
+                      appElseHyphen
+                      [elseHyphen]="p.Viscosity"
+                      *ngIf="jp.SubCategoryID == 20"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- <div class="col-3 px-0 py-3">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Brand</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span appElseHyphen [elseHyphen]="p.BrandName"></span>
+                                        <small> ({{p.OrigionName}})</small>
+                                    </p>
+                                </div>
+                            </div> -->
+
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Price</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.SellingPrice"></span>
+                    JOD <small>/ {{ jp.UnitTypeName }}</small>
+                  </p>
+                </div>
+              </div>
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Vendor</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span *ngIf="jp.Quantity > p.StockQuantity">{{
+                      p.VendorName
+                    }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- <div class="col-2 px-0 py-3">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Condition</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span>{{p.PartConditionID == 66? 'Used' : 'New'}}</span>
+                                    </p>
+                                </div>
+                            </div> -->
+
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Status</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span>{{ p.JobPartStatusName }}</span>
+                    <span *ngIf="p.OrderTime > 0"
+                      >({{ p.OrderTime | hourToMin }})</span
+                    >
+                  </p>
+                </div>
+              </div>
+
+              <!-- 
+                            <div class="col-2 px-0 py-3">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Time</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span>{{p.OrderTime | hourToMin}}</span>
+                                    </p>
+                                </div>
+                            </div> -->
+
+              <div class="col-1 px-0 align-self-center primary-font">
+                <i
+                  *ngIf="
+                    _sharedService.logged_user_role_id != 3 &&
+                    _sharedService.logged_user_role_id != 5
+                  "
+                  class="col-6 py-2 fas fa-edit pointer hover-color"
+                  title="Edit"
+                  (click)="
+                    jp.PartAlternate.EditMode = true;
+                    editAltPart(p, jp.JobPartID, updateAlternatePartModal)
+                  "
+                ></i>
+
+                <i
+                  class="
+                    col-6
+                    py-2
+                    fas
+                    fa-trash-alt
+                    pointer pointer
+                    hover-color
+                  "
+                  title="Delete"
+                  (click)="openModal(warningDelete, p.JobPartAlternateID)"
+                ></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="row bt-1">
+            <div
+              class="col-12 row mx-0 align-self-center"
+              style="background-color: #e7ecff"
+              *ngFor="
+                let p of _sharedService.jobObj.SuggestedJobPartAlternates
+                  | filter: jp.JobPartID:'JobPartID';
+                let idx = index
+              "
+            >
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>ItemCode</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.ItemCode"></span>
+                  </p>
+                </div>
+              </div>
+              <div class="col-3 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Brand</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.BrandName"
+                      >({{ p.OrigionName }})</span
+                    >
+                    &nbsp;
+                    <span
+                      appElseHyphen
+                      [elseHyphen]="p.Viscosity"
+                      *ngIf="jp.SubCategoryID == 20"
+                    ></span>
+                  </p>
+                </div>
+              </div>
+              <!-- <div class="col-1 px-0 py-3" *ngIf="jp.SubCategoryID == 20">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Viscosity</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span appElseHyphen [elseHyphen]="p.Viscosity"></span>
+                                    </p>
+                                </div>
+                            </div> -->
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Price</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span appElseHyphen [elseHyphen]="p.SellingPrice"></span> JD
+                    /
+                    {{ jp.UnitTypeName }}
+                  </p>
+                </div>
+              </div>
+              <!-- 
+                            <div class="col-2 px-0 py-3">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Condition</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span>{{p.PartConditionID == 66? 'Used' : 'New'}}</span>
+                                    </p>
+                                </div>
+                            </div> -->
+              <div class="col-1 px-0 py-3" *ngIf="jp.SubCategoryID == 20">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Unit Quantity</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span>{{ p.UnitQuantity }}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="col-1 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Stock</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <span>{{ p.StockQuantity }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <!-- <div class="col-2 px-0 py-3">
+                                <div class="primary-font ml-3 smaller-font" *ngIf="idx ==0">
+                                    <span>Status</span>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="part-detail-box tbl-font my-0" title="">
+                                        <span>{{p.JobPartStatusName}}</span>
+                                    </p>
+                                </div>
+                            </div> -->
+
+              <div class="col-2 px-0 py-3">
+                <div class="primary-font ml-3 smaller-font" *ngIf="idx == 0">
+                  <span>Vendor</span>
+                </div>
+                <div class="ml-3">
+                  <p class="part-detail-box tbl-font my-0" title="">
+                    <!-- <span *ngIf="jp.Quantity > p.StockQuantity; else elseHyphen"> -->
+                    <span *ngIf="p.VendorName != undefined; else elseHyphen">
+                      {{
+                      p.VendorName
+                    }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-2 px-0 align-self-center primary-font mb-3">
+                <a
+                  type="button"
+                  class="
+                    btn btn-round btn-simple btn-primary
+                    my-0
+                    add-part-btn
+                    px-2
+                    py-1
+                  "
+                  title="Add Alternate Part Suggestion"
+                  (click)="
+                    jp.PartAlternate.UnitTypeID = jp.UnitTypeID;
+                    jp.Quantity > p.StockQuantity
+                      ? onChoosePart(partModal, p, jp)
+                      : askPrice(p, jp, confirmPartPriceModal)
+                  "
+                  aria-controls="alt-part"
+                  ><i class="fas fa-plus"></i> Choose</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="col-12 align-self-center text-center primary-font p-3"
+                        *ngIf="_sharedService.jobObj.JobPartAlternates == undefined || (_sharedService.jobObj.JobPartAlternates | filter : jp.JobPartID : 'JobPartID').length == 0">
+                        No part added so far!
+                    </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-12 text-center primary-font p-3"
+    *ngIf="_sharedService.jobObj.JobParts.length == 0"
+  >
+    No part added so far.
+  </div>
+</div>
+<!-- button for manager to submit -->
+<!-- <div class="row col-12 justify-content-center" *ngIf="_sharedService.logged_user_role_id == 7">
+    <button type="submit" class="btn btn-primary btn-round btn-simple" (click)="onUpdatePart()">Submit</button>
+</div> -->
+
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Part</h5>
+      <button type="button" class="close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this part?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="a-button btn btn-primary btn-round col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="removePart(AltPartID)"
+                class="a-button btn btn-primary btn-round col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #partModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header px-0 pb-0" style="display: block">
+      <h5 class="modal-title text-center">
+        {{ selectedJobPart.PartNameArabic }}
+      </h5>
+
+      <p class="text-center">
+        {{ selectedJobPart.MainCategoryNameArabic }} ({{
+          selectedJobPart.SubCategoryNameArabic
+        }})
+      </p>
+      <button type="button" class="close" (click)="closePartModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <!-- <div class="row card mx-0 my-2"> -->
+
+        <!-- <div class="row"> -->
+
+        <!-- <form class="col-12"
+                        (ngSubmit)="partAlternateForm.valid ? ( automotivePart.PartAlternate.EditMode != true ? addPart(automotivePart.PartAlternate, automotivePart.JobPartID, partAlternateForm) : onEditAltPart(automotivePart.PartAlternate, partAlternateForm) ):''"
+                        #partAlternateForm="ngForm">
+                    
+
+                    
+                        <a type="button" class="btn btn-round btn-simple btn-primary my-0 add-part-btn px-2 py-1"
+                            title="Add Alternate Part" data-toggle="collapse" href="#alt-part{{i}}" aria-expanded="false"
+                            (click)="automotivePart.PartAlternate.UnitTypeID = altaltPart.UnitTypeID" aria-controls="alt-part"><i
+                                class="fas fa-plus"></i> Add Part</a>
+                    
+                        </form> -->
+
+        <form #partForm="ngForm" (ngSubmit)="partForm.valid ? addPart() : 0">
+          <div class="row" id="alt-part">
+            <div
+              class="col-lg-12 col-md-12 col-sm-12 mb-4"
+              *ngIf="!isSuggestedPart"
+            >
+              <ng-select
+                class="custom input-border-color"
+                [items]="partSuggessions$ | async"
+                name="select-part"
+                bindLabel="PartNameArabic"
+                [addTag]="true"
+                [hideSelected]="true"
+                [trackByFn]="trackByFn"
+                [closeOnSelect]="true"
+                [loading]="loading"
+                typeToSearchText="Please enter 2 or more characters"
+                [typeahead]="itemCodeInput"
+                (change)="onCheckPart()"
+                [(ngModel)]="automotivePart"
+              >
+              </ng-select>
+            </div>
+            <hr />
+            <ng-container *ngIf="automotivePart != undefined">
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="col-12 row mx-0 align-self-center">
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>ItemCode</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="automotivePart.ItemCode"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Brand</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <ng-container
+                          *ngIf="
+                            automotivePart.BrandName == undefined ||
+                            (automotivePart.BrandName != undefined &&
+                              automotivePart.BrandName.label == undefined)
+                          "
+                        >
+                          <span
+                            appElseHyphen
+                            [elseHyphen]="automotivePart.BrandName"
+                          >
+                          </span>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="
+                            automotivePart.BrandName != undefined &&
+                            automotivePart.BrandName.label != undefined
+                          "
+                        >
+                          <span
+                            appElseHyphen
+                            [elseHyphen]="automotivePart.BrandName.label"
+                          >
+                          </span>
+                        </ng-container>
+                        &nbsp;
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="automotivePart.Viscosity"
+                          *ngIf="automotivePart.SubCategoryID == 20"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Origin</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <ng-container
+                          *ngIf="
+                            automotivePart.OriginName == undefined ||
+                            (automotivePart.OriginName != undefined &&
+                              automotivePart.OriginName.label == undefined)
+                          "
+                        >
+                          <span>{{ automotivePart.OriginName }}</span>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="
+                            automotivePart.OriginName != undefined &&
+                            automotivePart.OriginName.label != undefined
+                          "
+                        >
+                          <span>{{ automotivePart.OriginName.label }}</span>
+                        </ng-container>
+                        &nbsp;
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="automotivePart.Viscosity"
+                          *ngIf="automotivePart.SubCategoryID == 20"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <!-- <div class="col-1 px-0 py-3" *ngIf="jp.SubCategoryID == 20">
+                                                <div class="primary-font ml-3 smaller-font" >
+                                                    <span>Viscosity</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                        <span appElseHyphen [elseHyphen]="p.Viscosity"></span>
+                                                    </p>
+                                                </div>
+                                            </div> -->
+
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Price</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="automotivePart.SellingPrice"
+                        ></span>
+                        JD/Piece
+                        {{ automotivePart.UnitTypeName }}
+                      </p>
+                    </div>
+                  </div>
+                  <!-- 
+                                            <div class="col-2 px-0 py-3">
+                                                <div class="primary-font ml-3 smaller-font" >
+                                                    <span>Condition</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                        <span>{{p.PartConditionID == 66? 'Used' : 'New'}}</span>
+                                                    </p>
+                                                </div>
+                                            </div> -->
+
+                  <div
+                    class="col-1 px-0 py-3"
+                    *ngIf="automotivePart.SubCategoryID == 20"
+                  >
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Unit Quantity</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span>{{ automotivePart.UnitQuantity }}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>PartName</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="automotivePart.PartNameEnglish"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="col-1 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Stock</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          *ngIf="
+                            automotivePart.StockQuantity != null ||
+                            automotivePart.StockQuantity != undefined
+                          "
+                          >{{ automotivePart.StockQuantity }}</span
+                        >
+                        <span
+                          *ngIf="
+                            automotivePart.StockQuantity == null ||
+                            automotivePart.StockQuantity == undefined
+                          "
+                          >0</span
+                        >
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-2 px-0 py-3">
+                                                <div class="primary-font ml-3 smaller-font" >
+                                                    <span>Status</span>
+                                                </div>
+                                                <div class="ml-3">
+                                                    <p class="part-detail-box tbl-font my-0" title="">
+                                                        <span>{{p.JobPartStatusName}}</span>
+                                                    </p>
+                                                </div>
+                                            </div> -->
+
+                  <!-- <div class="col-2 px-0 py-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Vendor</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box tbl-font my-0" title="">
+                                                <span>{{automotivePart?.VendorName}}</span>
+                                            </p>
+                                        </div>
+                                    </div> -->
+
+                  <!-- <div class="col-1 px-0 align-self-center primary-font">
+                                        <a type="button" (click)="onAddPurchaseOrder()"
+                                            class="btn btn-round btn-simple btn-primary my-0 add-part-btn px-2 py-1"
+                                            title="Add Alternate Part Suggestion" aria-controls="alt-part"><i
+                                                class="fas fa-plus"></i> Order</a>
+                                    </div> -->
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-container
+              *ngIf="
+                automotivePart != undefined &&
+                (selectedJobPart.quantity > automotivePart.StockQuantity ||
+                  automotivePart.StockQuantity == null)
+              "
+            >
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <h5>Part Detail</h5>
+
+                <hr />
+
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <ng-select
+                      class="custom"
+                      placeholder="Brand"
+                      name="brand"
+                      id="brand"
+                      [(ngModel)]="automotivePart.BrandName"
+                      appendTo="body"
+                      [addTag]="true"
+                      #brand="ngModel"
+                      required
+                    >
+                      <ng-option disabled>Brand</ng-option>
+                      <ng-option
+                        *ngFor="let pb of _sharedService.jobObj.PartBrands"
+                        [value]="pb.BrandName"
+                      >
+                        {{ pb.BrandName }}
+                      </ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || brand.touched) &&
+                          brand.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <ng-select
+                      class="custom"
+                      placeholder="Origin"
+                      name="origin"
+                      appendTo="body"
+                      [(ngModel)]="automotivePart.OriginName"
+                      [addTag]="true"
+                      id="origin"
+                      #origin="ngModel"
+                      required
+                    >
+                      <ng-option
+                        *ngFor="let item of _sharedService.jobObj.BrandOrigins"
+                        [value]="item.OriginName"
+                        >{{ item.OriginName }}
+                      </ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || origin.touched) &&
+                          origin.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="discountPercentage"
+                      maxlength="2"
+                      id="discountPercentage"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="automotivePart.DiscountPercentage"
+                      #discountPercentage="ngModel"
+                    />
+                    <div class="input-group-append price-perpend">%</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Discount</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <ng-select
+                      placeholder="Status"
+                      class="custom"
+                      name="part"
+                      id="{{ automotivePart.PartNameEnglish }}"
+                      appendTo="body"
+                      [(ngModel)]="automotivePart.JobPartStatusID"
+                      #partStatus="ngModel"
+                      required
+                    >
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id == 1 ||
+                          _sharedService.logged_user_role_id == 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id != 1 &&
+                          _sharedService.logged_user_role_id != 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                              | notFilter: 'Delivered':'StatusNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                    </ng-select>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || partStatus.touched) &&
+                          partStatus.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="purchase_price"
+                      maxlength="5"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="automotivePart.PurchasePrice"
+                      #PurchasePrice="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Purchase Price</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || PurchasePrice.touched) &&
+                          PurchasePrice.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="selling_price"
+                      maxlength="5"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="automotivePart.SellingPrice"
+                      #SellingPrice="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Selling Price</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || SellingPrice.touched) &&
+                          SellingPrice.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div
+                  class="
+                    floating-label
+                    form-group
+                    col-lg-3 col-sm-6
+                    align-self-center
+                    mb-0
+                  "
+                >
+                  <input
+                    type="text"
+                    placeholder=" "
+                    class="floating-input form-control"
+                    name="Part Name"
+                    maxlength="200"
+                    [(ngModel)]="automotivePart.PartNameEnglish"
+                    #PartName="ngModel"
+                    required
+                  />
+                  <span class="highlight"></span>
+                  <label class="input-label">Part Name</label>
+                  <div class="error-block text-danger">
+                    <small
+                      *ngIf="
+                        (partForm.submitted || PartName.touched) &&
+                        PartName.errors?.required
+                      "
+                      >*Required</small
+                    >
+                  </div>
+                </div>
+
+                <div
+                class="
+                  floating-label
+                  form-group
+                  col-lg-3 col-sm-6
+                  align-self-center
+                  mb-0
+                "
+              >
+                <input
+                  type="text"
+                  placeholder=" "
+                  class="floating-input form-control"
+                  name="Item Code"
+                  maxlength="200"
+                  [(ngModel)]="automotivePart.ItemCode"
+                  (blur)="checkItemCode(automotivePart.ItemCode)"
+                  #ItemCode="ngModel"
+                  required
+                />
+                <span class="highlight"></span>
+                <label class="input-label">Item Code</label>
+                <div class="error-block text-danger">
+                  <small
+                    *ngIf="
+                      (partForm.submitted || ItemCode.touched) &&
+                      ItemCode.errors?.required
+                    "
+                    >*Required</small
+                  >
+                </div>
+              </div>
+
+
+                  <!-- <div class="col-lg-3 col-sm-6 mb-0 order-lg-4 order-md-5">
+                                      
+                                        <label>Net Price</label>: {{ automotivePart.SellingPrice - (automotivePart.SellingPrice * 0.16) | number :
+                                        '1.2-2'}}
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 mb-0 order-lg-4 order-md-5">
+                                      
+                                        <label>Tax</label>: {{ automotivePart.SellingPrice - (automotivePart.SellingPrice * 0.16) * 0.16 | number :
+                                        '1.2-2'}}
+                                    </div> -->
+
+                  <!-- <div class="floating-label form-group col-lg-3 col-sm-6 align-self-center mb-0"
+                                        *ngIf="automotivePart.JobPartStatusID == 27 || automotivePart.JobPartStatusID == 3">
+                                        <div
+                                            class="floating-label form-group time-div floating-input form-control input-border-color mt-2 mb-0">
+                                            <div class="input-group-append Country-code-prepend">
+                                                <div class="custom custom-append">Time <small>(hour)</small></div>
+                                            </div>
+                                            <div class="time">
+                                                <input id="time" class="time-input ml-1" type="text" name="hour" min="0"
+                                                    max="99" [(ngModel)]="automotivePart.Hours">
+                                                <span class="align-self-center"></span>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                </div>
+
+                <div class="row">
+                  <div
+                    class="
+                      col-lg-3 col-md-6
+                      px-0
+                      form-check form-check-radio
+                      mt-0
+                      align-self-center
+                      pl-3
+                    "
+                  >
+                    <label class="form-check-label">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="new"
+                        id="New"
+                        (change)="automotivePart.IsNew = true"
+                        [checked]="automotivePart.IsNew == true"
+                      />
+                      <span class="form-check-sign dark-font">New</span>
+                    </label>
+                    <label class="form-check-label">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="used"
+                        id="Used"
+                        (change)="automotivePart.IsNew = false"
+                        [checked]="automotivePart.IsNew == false"
+                      />
+                      <span class="form-check-sign dark-font">Used</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <hr />
+
+            <ng-container
+              *ngIf="
+                purchaseOrder != undefined &&
+                automotivePart != undefined &&
+                (automotivePart.JobPartStatusID == 27 ||
+                  automotivePart.JobPartStatusID == 3)
+              "
+            >
+              <div class="col-lg-12 col-md-12 col-sm-12 mb-4">
+                <hr />
+                <h6>Purchase Order</h6>
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-2 order-md-3
+                    "
+                  >
+                    <ng-select
+                      class="custom"
+                      placeholder="Vendor"
+                      name="vendor"
+                      id="vendor"
+                      [(ngModel)]="purchaseOrder.VendorName"
+                      appendTo="body"
+                      [addTag]="true"
+                      (change)="onChangeVendor()"
+                      #vendorID="ngModel"
+                      required
+                    >
+                      <ng-option disabled>Vendor</ng-option>
+                      <ng-option
+                        *ngFor="let pp of _sharedService.PartVendors"
+                        [value]="pp.VendorName"
+                      >
+                        {{ pp.VendorName }}
+                      </ng-option>
+                    </ng-select>
+                    <!-- <div class="error-block-ng-select text-danger">
+                                                    <small
+                                                        *ngIf="(partForm.submitted || brand.touched) && brand.errors?.required">*Required</small>
+                                                </div> -->
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-8 order-md-9
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="fname"
+                      maxlength="140"
+                      id="fname"
+                      [(ngModel)]="vendor.CPFirstName"
+                      #name="ngModel"
+                    />
+
+                    <span class="highlight"></span>
+                    <label class="input-label">First Name</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-8 order-md-9
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="lname"
+                      maxlength="140"
+                      id="lname"
+                      [(ngModel)]="vendor.CPLastName"
+                      #lname="ngModel"
+                    />
+
+                    <span class="highlight"></span>
+                    <label class="input-label">Last Name</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-8 order-md-9
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="phone"
+                      maxlength="25"
+                      id="phone"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="vendor.CPPhone"
+                      #phone="ngModel"
+                    />
+
+                    <span class="highlight"></span>
+                    <label class="input-label">Phone</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-8 order-md-9
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="address"
+                      maxlength="1500"
+                      id="address"
+                      [(ngModel)]="vendor.Address1"
+                      #addrsss="ngModel"
+                    />
+                    <!-- <div class="input-group-append price-perpend">%</div> -->
+                    <span class="highlight"></span>
+                    <label class="input-label">Address</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                      order-lg-8 order-md-9
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="dtime"
+                      maxlength="1500"
+                      id="dtime"
+                      [(ngModel)]="purchaseOrder.DeliveryTime"
+                      #dtime="ngModel"
+                    />
+                    <!-- <div class="input-group-append price-perpend">%</div> -->
+                    <span class="highlight"></span>
+                    <label class="input-label">Delivery Time <small>(hour)</small> </label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="prquantity"
+                      maxlength="5"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="purchaseOrder.PurchaseQuantity"
+                      #prquantity="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Purchase Qaunatity</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || prquantity.touched) &&
+                          prquantity.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="pprice"
+                      maxlength="5"
+                      id="pprice"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="purchaseOrder.PurchasePrice"
+                      #pprice="ngModel"
+                    />
+
+                    <span class="highlight"></span>
+                    <label class="input-label">Purchase Price</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="sellingPrice"
+                      maxlength="5"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="purchaseOrder.SellingPrice"
+                      #sellingPrice="ngModel"
+                      required
+                    />
+                    <span class="highlight"></span>
+                    <label class="input-label">Selling Price</label>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (partForm.submitted || sellingPrice.touched) &&
+                          sellingPrice.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="row" *ngIf="automotivePart != undefined">
+                <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                  <button
+                    type="submit"
+                    class="
+                      btn btn-round btn-simple btn-primary
+                      px-5
+                      align-self-center
+                    "
+                    [title]="
+                      automotivePart.JobPartAlternateID == undefined
+                        ? 'Add Part'
+                        : 'Update Part'
+                    "
+                  >
+                    {{
+                      automotivePart.JobPartAlternateID == undefined
+                        ? "Add"
+                        : "Update"
+                    }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- </div> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #updateAlternatePartModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="updateAlternateModel" role="document">
+    <div class="modal-header px-0 pb-0" style="display: block">
+      <h5 class="modal-title text-center">
+        {{ alternatePart.PartNameArabic }}
+      </h5>
+      <p class="text-center">
+        {{ alternatePart.MainCategoryNameArabic }} ({{
+          alternatePart.SubCategoryNameArabic
+        }})
+      </p>
+      <button type="button" class="close" (click)="activatedModalRef.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <form
+          #editPartForm="ngForm"
+          (ngSubmit)="editPartForm.valid ? onEditAltPart(alternatePart) : 0"
+        >
+          <div class="row" id="edit-alt-part">
+            <ng-container>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="col-12 row mx-0 align-self-center">
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>ItemCode</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.ItemCode"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-3 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Brand</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.BrandName"
+                          >({{ alternatePart.OriginName }})</span
+                        >
+                        &nbsp;
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.Viscosity"
+                          *ngIf="alternatePart.SubCategoryID == 20"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="col-1 px-0 py-3"
+                    *ngIf="alternatePart.SubCategoryID == 20"
+                  >
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Unit Quantity</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span>{{ alternatePart.UnitQuantity }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <!-- <div class="col-2 px-0 py-3">
+                                        <div class="primary-font ml-3 smaller-font">
+                                            <span>Vendor</span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="part-detail-box tbl-font my-0" title="">
+                                                <span>{{alternatePart.VendorName}}</span>
+                                            </p>
+                                        </div>
+                                    </div> -->
+                  <!-- <div class="col-1 px-0 align-self-center primary-font">
+                                        <a type="button" (click)="onAddPurchaseOrder()"
+                                            class="btn btn-round btn-simple btn-primary my-0 add-part-btn px-2 py-1"
+                                            title="Add Alternate Part Suggestion" aria-controls="alt-part"><i
+                                                class="fas fa-plus"></i> Order</a>
+                                    </div> -->
+                </div>
+              </div>
+            </ng-container>
+            <ng-container>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-4 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="price"
+                      maxlength="4"
+                      (change)="alternatePart.IsModified = true"
+                      id="{{ alternatePart.JobPartID }}"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="alternatePart.SellingPrice"
+                      #Price="ngModel"
+                      required
+                    />
+                    <div class="input-group-append price-perpend">JOD</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Price</label>
+                    <div class="error-block-append text-danger">
+                      <small
+                        *ngIf="
+                          (editPartForm.submitted || Price.touched) &&
+                          Price.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-4 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="discountPercentage"
+                      maxlength="2"
+                      id="discountPercentage"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="alternatePart.DiscountPercentage"
+                      #discountPercentage="ngModel"
+                    />
+                    <div class="input-group-append price-perpend">%</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Discount</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-4 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <ng-select
+                      placeholder="Status"
+                      class="custom"
+                      name="part"
+                      id="{{ alternatePart.PartNameEnglish }}"
+                      appendTo="body"
+                      [(ngModel)]="alternatePart.JobPartStatusID"
+                      #partStatus="ngModel"
+                      required
+                    >
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id == 1 ||
+                          _sharedService.logged_user_role_id == 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id != 1 &&
+                          _sharedService.logged_user_role_id != 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                              | notFilter: 'Delivered':'StatusNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                    </ng-select>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (editPartForm.submitted || partStatus.touched) &&
+                          partStatus.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                  <button
+                    type="submit"
+                    class="
+                      btn btn-round btn-simple btn-primary
+                      px-5
+                      align-self-center
+                    "
+                    title="Update Part"
+                  >
+                    Update Part
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- </div> -->
+        <!-- </div> -->
+      </div>
+    </div>
+    <!-- PURCHASE ORDER -->
+  </div>
+</ng-template>
+
+<ng-template #confirmPartPriceModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="updateAlternateModel" role="document">
+    <div class="modal-header px-0 pb-0" style="display: block">
+      <h5 class="modal-title text-center">
+        {{ alternatePart.PartNameArabic }}
+      </h5>
+      <p class="text-center">
+        {{ alternatePart.MainCategoryNameArabic }} ({{
+          alternatePart.SubCategoryNameArabic
+        }})
+      </p>
+      <button type="button" class="close" (click)="activatedModalRef.dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <form
+          #confirmPartPrice="ngForm"
+          (ngSubmit)="
+            confirmPartPrice.valid ? saveSuggestedAltPart(alternatePart) : 0
+          "
+        >
+          <div class="row" id="edit-alt-part">
+            <ng-container>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div
+                  class="col-12 row mx-0 align-self-center"
+                  style="margin-top: 15px"
+                >
+                  <div class="col-2 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>ItemCode</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.ItemCode"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-3 px-0 py-3">
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Brand</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.BrandName"
+                          >({{ alternatePart.OriginName }})</span
+                        >
+                        &nbsp;
+                        <span
+                          appElseHyphen
+                          [elseHyphen]="alternatePart.Viscosity"
+                          *ngIf="alternatePart.SubCategoryID == 20"
+                        ></span>
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="col-1 px-0 py-3"
+                    *ngIf="alternatePart.SubCategoryID == 20"
+                  >
+                    <div class="primary-font ml-3 smaller-font">
+                      <span>Unit Quantity</span>
+                    </div>
+                    <div class="ml-3">
+                      <p class="part-detail-box tbl-font my-0" title="">
+                        <span>{{ alternatePart.UnitQuantity }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-container>
+              <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="row">
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="price"
+                      maxlength="4"
+                      (change)="alternatePart.IsModified = true"
+                      id="{{ alternatePart.JobPartID }}"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="alternatePart.SellingPrice"
+                      #Price="ngModel"
+                      required
+                    />
+                    <div class="input-group-append price-perpend">JOD</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Price</label>
+                    <div class="error-block-append text-danger">
+                      <small
+                        *ngIf="
+                          (confirmPartPrice.submitted || Price.touched) &&
+                          Price.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <input
+                      type="text"
+                      placeholder=" "
+                      class="floating-input form-control"
+                      name="discountPercentage"
+                      maxlength="2"
+                      id="discountPercentage"
+                      onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"
+                      [(ngModel)]="alternatePart.DiscountPercentage"
+                      #discountPercentage="ngModel"
+                    />
+                    <div class="input-group-append price-perpend">%</div>
+                    <span class="highlight"></span>
+                    <label class="input-label">Discount</label>
+                  </div>
+
+                  <div
+                    class="
+                      floating-label
+                      form-group
+                      col-lg-3 col-sm-6
+                      align-self-center
+                      mb-0
+                    "
+                  >
+                    <ng-select
+                      placeholder="Status"
+                      class="custom"
+                      name="part"
+                      id="{{ alternatePart.PartNameEnglish }}"
+                      appendTo="body"
+                      [(ngModel)]="alternatePart.JobPartStatusID"
+                      #partStatus="ngModel"
+                      required
+                    >
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id == 1 ||
+                          _sharedService.logged_user_role_id == 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                      <ng-container
+                        *ngIf="
+                          _sharedService.logged_user_role_id != 1 &&
+                          _sharedService.logged_user_role_id != 2
+                        "
+                      >
+                        <ng-option
+                          *ngFor="
+                            let item of _sharedService._commonMeta.ObjectStatus
+                              | filter: 'PartDelivery':'ObjectNameEnglish'
+                              | notFilter: 'Delivered':'StatusNameEnglish'
+                          "
+                          [value]="item.ObjectStatusID"
+                          >{{ item.StatusNameEnglish }}
+                        </ng-option>
+                      </ng-container>
+                    </ng-select>
+                    <div class="error-block text-danger">
+                      <small
+                        *ngIf="
+                          (confirmPartPrice.submitted || partStatus.touched) &&
+                          partStatus.errors?.required
+                        "
+                        >*Required</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 text-right">
+                  <button
+                    type="submit"
+                    class="
+                      btn btn-round btn-simple btn-primary
+                      px-5
+                      align-self-center
+                    "
+                    title="Update Part"
+                  >
+                    Update Part Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- </div> -->
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <span class="px-3">-</span>
+</ng-template>

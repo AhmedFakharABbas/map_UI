@@ -1,0 +1,222 @@
+<div class="row justify-content-center h-100 align-items-center page-animation">
+    <div class="col-lg-11 col-12 ">
+        <form (ngSubmit)="vendorForm.valid ? ( vendorObj.VendorID == undefined? onSaveVendor(): onUpdateVendor()) : ''"
+            #vendorForm="ngForm" *ngIf="vendorObj">
+            <!-- <h1 class="mt-3 mb-2 text-center">Vendor</h1> -->
+            <div class="row  justify-content-around mt-3">
+                <div class="row w-100 mx-0">
+                    <hr class="w-100">
+                    <h4 class="sub-heading">General Information</h4>
+                </div>
+
+                <div class="col-12 d-flex justify-content-center mb-4">
+
+                    <div class="our-team col-md-5 col-sm-5">
+                        <!-- <div class="picture"> -->
+                        <!-- <img class="img-fluid" src="https://picsum.photos/900/900?random&t=${Math.random()}`"> -->
+                        <label class="hoverable">
+                            <img class="upload-image"
+                                [src]="vendorObj.LogoURL ? _sharedService.baseUrl + vendorObj.LogoURL : _sharedService.default_img">
+                            <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png"
+                                (change)="uploadImage($event)">
+                            <div class="hover-text" for="files">
+                                Choose file
+                                <!-- <h4 class="success-message" *ngIf="url"> Uploaded Successfully </h4> -->
+                            </div>
+                            <div class="background"></div>
+                        </label>
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="vendor_name"
+                        (keypress)="_sharedService.CheckInputCharacters($event)" maxlength="200"
+                        [(ngModel)]="vendorObj.VendorName" #vendor_name="ngModel" required minlength="4" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Name</label>
+                    <div class="error-block text-danger">
+                        <small
+                            *ngIf="(vendorForm.submitted || vendor_name.touched) && vendor_name.errors?.required">*Required</small>
+                        <small *ngIf="vendor_name.errors?.minlength">*Atleast 4 characters are allowed</small>
+                    </div>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="zipcode"
+                        [(ngModel)]="vendorObj.Zipcode" maxlength="5"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                    <span class="highlight"></span>
+                    <label class="input-label">ZIP Code</label>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <ng-select class="custom " placeholder="Country" name="country" [(ngModel)]="vendorObj.CountryID"
+                        #country="ngModel" required>
+                        <ng-option *ngFor="let country of _sharedService._commonMeta.Countries"
+                            [value]="country.CountryID">
+                            {{country.CountryName}}</ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                        <small
+                            *ngIf="(vendorForm.submitted || country.touched) && country.errors?.required">*Required</small>
+
+                    </div>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <ng-select class="custom  " placeholder="City" name="city" [(ngModel)]="vendorObj.CityID"
+                        #city="ngModel" required>
+                        <ng-option
+                            *ngFor="let city of _sharedService._commonMeta.Cities | filter: vendorObj.CountryID : 'CountryID'"
+                            [value]="city.CityID">{{city.CityName}}</ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                        <small *ngIf="(vendorForm.submitted || city.touched) && city.errors?.required">*Required</small>
+
+                    </div>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="address1"
+                        [(ngModel)]="vendorObj.Address1" maxlength="100" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Address 1</label>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="address2"
+                        [(ngModel)]="vendorObj.Address2" maxlength="100" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Address 2</label>
+                </div>
+
+                <div class="col-12 ">
+                    <div class="row col-6 ml-3">
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <p class="input-label">Sell Type</p>
+                        </div>
+                        <div class="form-check col-lg-3 col-md-3 col-sm-3 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellNew"
+                                    [(ngModel)]="vendorObj.IsSellNew">
+                                <span class="form-check-sign">New</span>
+                            </label>
+                        </div>
+                        <div class="form-check col-lg-3 col-md-3 col-sm-3 mt-0 mb-2">
+                            <label class="d-flex form-check-label">
+                                <input class="form-check-input" type="checkbox" name="IsSellUsed"
+                                    [(ngModel)]="vendorObj.IsSellUsed">
+                                <span class="form-check-sign">Used</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row w-100 mx-0">
+                    <hr class="w-100">
+                    <h4 class="sub-heading">Contact Person</h4>
+                </div>
+                <div class="col-lg-5 col-sm-6 floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="cp_first_name"
+                        [(ngModel)]="vendorObj.CPFirstName" #fName="ngModel" required maxlength="50"
+                        (keypress)="_sharedService.CheckInputCharacters($event)" />
+                    <span class="highlight"></span>
+                    <label class="input-label">First Name</label>
+                    <div class="error-block text-danger">
+                        <small *ngIf="(fName.touched || vendorForm.submitted ) && !fName.valid">
+                            Required
+                        </small>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-sm-6 floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="cp_last_name"
+                        [(ngModel)]="vendorObj.CPLastName" maxlength="100"
+                         />
+                    <span class="highlight"></span>
+                    <label class="input-label">Last Name</label>
+                </div>
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <ng-select class="custom  " placeholder="Position" name="cp_position"
+                        [(ngModel)]="vendorObj.CPPositionID" #cpPosition="ngModel" required>
+                        <ng-option
+                            *ngFor="let item of _sharedService._commonMeta.objectTypes| filter: 'VendorPosition' : 'ObjectNameEnglish'"
+                            [value]="item.ObjectTypeID">{{item.TypeNameEnglish}}</ng-option>
+                    </ng-select>
+                    <div class="error-block-ng-select text-danger">
+                        <small *ngIf="(vendorForm.submitted || cpPosition.touched) && cpPosition.errors?.required">
+                            Required
+                        </small>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-4 col-sm-6 floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="cp_phone"
+                        [(ngModel)]="vendorObj.CPPhone" maxlength="15"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57"/>
+                    <span class="highlight"></span>
+                    <label class="input-label">Phone</label>
+                </div> -->
+
+                <div class="col-sm-6 col-lg-5 floating-label form-group">
+                    <div class="input-group-append Country-code-prepend">
+                        <div class="custom custom-append"
+                            *ngFor="let code of _sharedService._commonMeta.Countries | filter: vendorObj.CountryID : 'CountryID'">
+                            {{code.CountryCode}}
+                        </div>
+                    </div>
+                    <input type="text" PhoneMask placeholder=" "
+                        class="floating-input form-control phone-number-prepend" name="phone"
+                        [(ngModel)]="vendorObj.CPPhone" maxlength="11" onCopy="return false" onDrag="return false"
+                        onDrop="return false" onPaste="return false"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 46 && event.charCode != 47 && event.charCode <= 57" />
+                    <span class="highlight"></span>
+                    <label class="input-label text-prepend">Phone</label>
+                </div>
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+                    <input type="text" placeholder=" " class="floating-input form-control" name="cp_email"
+                        [(ngModel)]="vendorObj.CPEmail" #email="ngModel" maxlength="30"
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" />
+                    <span class="highlight"></span>
+                    <label class="input-label">Email</label>
+
+                    <div class="error-block-ng-select text-danger">
+                        <small class="text-danger ml-3" *ngIf=" email.errors?.pattern">*Invalid Format</small>
+
+                    </div>
+                </div>
+
+
+                <div class="floating-label form-group col-lg-5 col-sm-6">
+
+                </div>
+
+                <div class="row col-12 mr-4">
+                    <div class=" col-12 text-right">
+                        <button type="submit" class="btn btn-primary btn-round btn-simple"
+                            *ngIf="vendorObj.VendorID == undefined">Create</button>
+                        <button type="submit" class="btn btn-primary btn-round btn-simple"
+                            *ngIf="vendorObj.VendorID != undefined">Update</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+
+<!-- preview image modal -->
+<!-- <ng-template #imagePreview let-d="dismiss('Cross click')">
+    <div class="modal-header">
+        <h5 class="modal-title text-center">Vendor Image</h5>
+        <button type="button" class="close" (click)="d">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body text-center">
+        <img class="img-fluid"
+            [src]="vendorObj.LogoURL ? _sharedService.baseUrl + vendorObj.LogoURL : _sharedService.default_img">
+    </div>
+    <div class="row footer-buttons">
+        <input type='file' class="file-choose" id="files" accept="image/jpeg,image/png" (change)="uploadImage($event)">
+        <label for="files" class="btn btn-primary btn-sm btn-round btn-simple upl-btn">Upload</label>
+        <button class="btn btn-primary btn-round btn-sm btn-simple dlt-btn" *ngIf="vendorObj.LogoURL"
+            (click)="delete()">delete</button>
+    </div>
+</ng-template> -->

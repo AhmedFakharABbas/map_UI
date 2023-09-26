@@ -1,0 +1,40 @@
+// .fixed-icon{
+//     position: fixed;
+//     top: 150px;
+//     width: 50px;
+//     background: grey;
+//     z-index: 3;
+//     text-align: center;
+//     left: 292px;
+//     border-radius: 0px 10px 10px 0px;
+
+// }
+// .search-sidebar{
+//     display: none;;
+// }
+// .icon{
+//     position: fixed;
+//     top: 50%;
+// }
+.card-height {
+  height: 405px !important;
+  overflow-x: auto !important;
+}
+
+label.input-label {
+  left: 25px !important;
+}
+
+@media screen and(max-width:1050px) {
+  label.input-label {
+    left: 12px !important;
+    font-size: 13px;
+  }
+  .floating-label {
+    position: relative;
+    margin-bottom: 0px;
+  }
+  .tableresponsive {
+    overflow-x: auto;
+  }
+}

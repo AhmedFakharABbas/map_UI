@@ -1,0 +1,567 @@
+<div class="row w-100">
+  <hr class="w-100" />
+  <h4 class="sub-heading">Purchase Order</h4>
+</div>
+
+<div class="row justify-content-center align-items-center page-animation">
+  <!-- <div class="col-11 mt-3">
+        <div class="row">
+            <div class="col-3">
+                <div class="floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control"
+                        name="SearchQuery" maxlength="200" 
+                        required />
+                    <span class="highlight"></span>
+                    <label class="input-label">Vendor</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control"
+                        name="SearchQuery" maxlength="200"  required />
+                    <span class="highlight"></span>
+                    <label class="input-label">Vendor</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control"
+                        name="SearchQuery" maxlength="200"  required />
+                    <span class="highlight"></span>
+                    <label class="input-label">Vendor</label>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="floating-label form-group">
+                    <input type="text" placeholder=" " class="floating-input form-control"
+                        name="SearchQuery" maxlength="200"  required />
+                    <span class="highlight"></span>
+                    <label class="input-label">Vendor</label>
+                </div>
+            </div>
+           
+        </div>
+    </div> -->
+
+  <div class="col-lg-11 col-12 mt-3 rounded">
+
+    <!-- <ngb-tabset class="sub-tabset tabset-border">
+      <ngb-tab title="Pending" class="primary-dark-font">
+        <ng-template ngbTabTitle>
+        
+          >
+        </ng-template>
+        <ng-template ngbTabTitle>
+          <span (click)="selectedTab = 35;onGetAllPurchaseOrders(selectedTab,PageNo)"
+            class="badge badge-light ml-2"
+          >
+            {{
+              ApprovedCount > 0 ? ApprovedCount : ''
+            }}</span
+          >
+        </ng-template>
+        <ng-template ngbTabTitle>
+          <span (click)="selectedTab = 36;onGetAllPurchaseOrders(selectedTab,PageNo)"
+           
+            class="badge badge-light ml-2"
+          >
+          {{
+            CancelledAccount > 0 ? CancelledAccount : ''
+          }}</span
+          >
+        </ng-template>
+        <ng-template ngbTabContent>
+         
+        </ng-template>
+      </ngb-tab>
+   
+    </ngb-tabset> -->
+<!-- <div>
+  <span
+  (click)="selectedTab = 34;onGetAllPurchaseOrders(selectedTab,PageNo)"
+
+    class="badge badge-light ml-2"
+  >
+    {{
+       PendingCount > 0 ? PendingCount : ''
+    }}</span>
+    <span (click)="selectedTab = 35;onGetAllPurchaseOrders(selectedTab,PageNo)"
+    class="badge badge-light ml-2"
+  >
+    {{
+      ApprovedCount > 0 ? ApprovedCount : ''
+    }}</span
+  >
+    <span (click)="selectedTab = 36;onGetAllPurchaseOrders(selectedTab,PageNo)"
+           
+    class="badge badge-light ml-2"
+  >
+  {{
+    CancelledCount > 0 ? CancelledCount : ''
+  }}</span
+  >
+  
+ 
+</div> -->
+
+
+<div class="row rr mx-0 ">
+  <div class="col-lg-12 ">
+    <div class="row mx-0 rr bg-green">
+      <div class="col-lg-9 col-md-12 d-flex purchase-order-tab">
+        <a (click)="selectedTab = 34;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 34 ? 'selected-tab' : '' ">Pending <small class="font-14">({{PendingCount}})</small></a>
+        <a (click)="selectedTab = 35;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 35 ? 'selected-tab' : ''">Approved<small class="font-14">({{ApprovedCount}})</small></a>
+        <a (click)="selectedTab = 36;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 36 ? 'selected-tab' : ''">Cancelled<small class="font-14">({{CancelledCount}})</small></a>
+        <a (click)="selectedTab = 37;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 37 ? 'selected-tab' : '' ">Received<small class="font-14">({{RecievedCount}})</small></a>
+        <a (click)="selectedTab = 38;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 38 ? 'selected-tab' : '' ">Rejected <small class="font-14">({{RejectedCount}})</small></a>
+        <a (click)="selectedTab = 39;PageNo = 1;onGetAllPurchaseOrders(selectedTab,PageNo)" class="p-2 mr-2 cursor text-nowrap" [ngClass]="selectedTab == 39 ? 'selected-tab' : '' ">Returned <small class="font-14">({{ReturnedCount}})</small></a>
+
+      </div>
+  </div>
+  </div>
+</div>
+    <div class="row pb-0 justify-content-center mt-2">
+      <div class="row col-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="row">
+            <div class="col-12 bg-white card-shadow">
+              <div class="">
+                <div class="card-body px-0 pt-0 pb-0 purchaseOrderTable">
+                  <table class="table table-responsive-md m-0 w-100">
+                    <thead>
+                      <tr>
+                        <th class="text-center Vendor">Vendor</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-nowrap text-center">Total Amount</th>
+                        <th class="text-nowrap text-center">Tax Amount</th>
+                        <th class="text-center">Discount</th>
+                        <th class="text-nowrap text-center">Net Amount</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-nowrap text-center">Total Parts</th>
+                        <th class="text-nowrap text-center">Ordered On</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="
+                          let or of purchaseOrders | filter: selectedTab:'StatusID'  |  paginate: { itemsPerPage: 10, totalItems:TotalPurchaseOrders, currentPage: PageNo }
+                        "
+                      >
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.VendorName != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.VendorName }}
+                        </td>
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.PurchaseOrderID != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.PurchaseOrderID }}
+                        </td>
+                        <td class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.TotalAmount != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.TotalAmount }}
+                        </td>
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.TaxAmount != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ (or.TaxAmount.toFixed(2)) }}
+                        </td>
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.Discount != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.Discount }}
+                        </td>
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.NetAmount != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.NetAmount | number: "1.0-2" }}
+                        </td>
+                        <!-- <td>{{or.StatusName}}</td> -->
+
+                        <td>
+                          <!-- <ng-container>  -->
+                          <div class="dropdown btn-group" ngbDropdown>
+                            <button
+                              type="button"
+                              class="btn p-1 dropdown-toggle"
+                              ngbDropdownToggle
+                            >
+                              {{ or.StatusName }}
+                              <!-- <span class="caret"></span> -->
+                            </button>
+                            <div
+                              ngbDropdownMenu
+                              placement="top"
+                              class="
+                                dropdown-menu
+                                text-center
+                                status-drop-down
+                              "
+                              role="menu"
+                            >
+                              <span *ngFor="let status of statuses">
+                                <a
+                                  class="dropdown-item"
+                                  *ngIf="
+                                    or.StatusID != status.ObjectStatusID
+                                  "
+                                  (click)="
+                                    onChangeorderStatus(
+                                      or,
+                                      purchaseOrderModal,
+                                      status.ObjectStatusID
+                                    )
+                                  "
+                                  value="status.ObjectStatusID"
+                                  >{{ status.StatusNameEnglish }}</a
+                                >
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.NoOfParts != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.NoOfParts }}
+                        </td>
+                        <td
+                        class="text-center"
+                          (click)="
+                            onChangeorderStatus(or, purchaseOrderModal)
+                          "
+                          *ngIf="
+                            or.CreatedOn != undefined;
+                            else elseHyphen
+                          "
+                        >
+                          {{ or.CreatedOn | date }}
+                        </td>
+                      </tr>
+
+                      <tr
+                        *ngIf="
+                          purchaseOrders == undefined ||
+                          (purchaseOrders != undefined &&
+                            (purchaseOrders | filter: 34:'StatusID')
+                              .length == 0)
+                        "
+                      >
+                        <td colspan="9">
+                          <!-- <p class="text-center">No result found!</p> -->
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <div class="mb-md-5">
+    <pagination-controls 
+    *ngIf="TotalPurchaseOrders > 10" 
+    class="pagination no-print p-2 justify-content-center mb-md-5"
+    style="cursor: pointer;" 
+    (pageChange)="PageNo = $event;onGetAllPurchaseOrders(selectedTab,PageNo)">
+    </pagination-controls>
+</div>
+
+
+    <!-- <div class="row justify-content-center mt-3 mb-3" *ngIf="partArray != undefined && partArray.length > 0">
+            <ngb-pagination [(page)]="cPage" [pageSize]="_sharedService.pageSize" [maxSize]="5"
+                [collectionSize]="partArray[0].TotalPages" [rotate]="true" [ellipses]="false" [boundaryLinks]="true"
+                aria-label="customer List Pagination" class="pagination-primary" (pageChange) ="getAllParts()">
+            </ngb-pagination>
+
+        </div> -->
+  </div>
+</div>
+
+<ng-template #purchaseOrderModal let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header mb-3">
+      <h5 class="modal-title text-center">
+        Purchase Order
+        <span *ngIf="vendorName != undefined"> ({{ vendorName }}) </span>
+      </h5>
+
+      <!-- <p class="text-center">{{selectedJobPart.MainCategoryNameArabic}}
+                ({{selectedJobPart.SubCategoryNameArabic}})</p> -->
+      <button type="button" class="close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body pt-0">
+      <div class="fluid-container modal_container">
+        <div class="row col-12">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="row">
+              <div class="col-12 bg-white model-shadow mb-3">
+                <div class="">
+                  <div class="card-body">
+                    <table class="table table-responsive-md m-0 w-100">
+                      <thead>
+                        <tr class="text-center">
+                          <th class="text-nowrap">ID</th>
+                          <th>Part</th>
+                          <th>Unit</th>
+                          <th class="text-nowrap">Order Qty</th>
+                          <th class="text-nowrap">Received Qty</th>
+                          <th class="text-nowrap">Purchase Price</th>
+                          <th class="text-nowrap">Sell Price</th>
+                          <th >Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let pr of purchaseOrderItems"
+                          class="text-center"
+                        >
+                          <td
+                            *ngIf="
+                              pr.PurchaseOrderItemID != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.PurchaseOrderItemID }}
+                          </td>
+                          <td
+                            *ngIf="
+                              pr.AutomotivePartName != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.AutomotivePartName }}
+                          </td>
+
+                          <td
+                            *ngIf="
+                              pr.UnitQuantity != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.UnitQuantity }}
+                          </td>
+                          <td
+                            *ngIf="
+                              pr.PurchaseQuantity != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.PurchaseQuantity }}
+                          </td>
+
+                          <td *ngIf="pr.StatusID == 37">
+                            <div class="row justify-content-center">
+                              <div class="col-6">
+                                <input
+                                  class="
+                                    form-control
+                                    floating-input
+                                    round
+                                    w-quantity-auto
+                                    mx-1
+                                    text-center
+                                  "
+                                  type="text"
+                                  id="multiplePartsCheckbox{{
+                                    pr.ReceivedQuantity
+                                  }}"
+                                  name="multiplePartsCheckbox{{
+                                    pr.ReceivedQuantity
+                                  }}"
+                                  #multiplePartsCheck="ngModel"
+                                  [(ngModel)]="pr.ReceivedQuantity"
+                                  (blur)="
+                                    getEnteredQuantity(pr.ReceivedQuantity, pr)
+                                  "
+                                />
+                              </div>
+                            </div>
+                          </td>
+
+                          <td *ngIf="pr.StatusID != 37">
+                            <div
+                              *ngIf="
+                                pr.ReceivedQuantity != undefined;
+                                else elseHyphen
+                              "
+                            >
+                              {{ pr.ReceivedQuantity }}
+                            </div>
+                          </td>
+
+                          <td
+                            *ngIf="
+                              pr.PurchasePrice != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.PurchasePrice }}
+                          </td>
+
+                          <td
+                            *ngIf="
+                              pr.SellingPrice != undefined;
+                              else elseHyphen
+                            "
+                          >
+                            {{ pr.SellingPrice }}
+                          </td>
+                          <!-- <td>{{or.StatusName}}</td> -->
+
+                          <td *ngIf="pr.StatusID != 37">
+                            <!-- <ng-container > -->
+
+                            <div
+                              class="dropdown btn-group"
+                              ngbDropdown
+                              [ngClass]="
+                                pr.StatusID == 37 ? 'pointer-disbale' : ''
+                              "
+                            >
+                              <button
+                                type="button"
+                                class="btn p-1 dropdown-toggle"
+                                ngbDropdownToggle
+                              >
+                                {{ pr.StatusName }}
+                                <!-- <span class="caret"></span> -->
+                              </button>
+                              <div
+                                ngbDropdownMenu
+                                placement="top"
+                                class="
+                                  dropdown-menu
+                                  text-center
+                                  status-drop-down
+                                "
+                                role="menu"
+                              >
+                                <span *ngFor="let status of statuses">
+                                  <a
+                                    class="dropdown-item"
+                                    *ngIf="pr.StatusID != status.ObjectStatusID"
+                                    (click)="
+                                      pr.StatusID = status.ObjectStatusID;
+                                      pr.StatusName = status.StatusNameEnglish
+                                    "
+                                    value="status.ObjectStatusID"
+                                    >{{ status.StatusNameEnglish }}</a
+                                  >
+                                </span>
+                              </div>
+                            </div>
+                          </td>
+
+                          <td
+                            *ngIf="pr.StatusID == 37"
+                            style="border-top: transparent"
+                          >
+                            {{ pr.StatusName }}
+                          </td>
+                        </tr>
+
+                        <tr
+                          *ngIf="
+                            purchaseOrders == undefined ||
+                            (purchaseOrders != undefined &&
+                              purchaseOrders.length == 0)
+                          "
+                        >
+                          <td colspan="9">
+                            <!-- <p class="text-center">No result found!</p> -->
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12 px-0">
+                <div class="col-6 px-0 float-left text-left">
+                  <button
+                    (click)="closeModal()"
+                    class="btn-simple btn btn-primary btn-round col-3"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <div
+                  class="col-6 px-0 float-left text-right"
+                  *ngIf="statusID != undefined"
+                >
+                  <button
+                    (click)="onUpdatePurchaseOrder()"
+                    class="btn-simple btn btn-primary btn-round col-3"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <td>-</td>
+</ng-template>

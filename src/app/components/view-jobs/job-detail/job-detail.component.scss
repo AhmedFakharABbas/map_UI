@@ -1,0 +1,293 @@
+@import "variables";
+
+.ng-select.custom {
+  width: 62% !important;
+}
+
+.navbar-brand {
+  color: white !important;
+}
+
+.list-item {
+  border-right: 1px solid $primary-color;
+  padding: 0 17px;
+}
+
+.small-sub-heading {
+  margin-top: -1.9em;
+  margin-left: 5%;
+  background-color: white;
+  z-index: 1;
+  padding: 0px 15px 0px 15px;
+  margin-bottom: 1em;
+  color: $primary-color;
+}
+
+.sub-heading {
+  color: $primary-color !important;
+}
+
+.damage-image {
+  width: 100%;
+  background: white;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 180px;
+  background-position: center center;
+  // background: url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+  background-color: #fff;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: inline-block;
+  box-shadow: 2px 3px 4px 0px rgba(0, 0, 0, 0.2);
+}
+
+.tbl-header {
+  background-color: $secondary-color;
+  color: white;
+}
+
+.tbl-header-alt {
+  background-color: $light-gray;
+  color: white;
+}
+
+//sidebar
+.active > i:hover {
+  color: $white-color !important;
+}
+
+a {
+  color: #808080;
+}
+
+// .nav-item .active {
+//   background-color: $primary-color;
+//   color: $white-color;
+//   border-radius: 7px;
+//   margin-right: 0px;
+// }
+
+//crumbs
+// @media only screen and (max-width: 1420px) {
+//   .progress-heading {
+//     display: none;
+//   }
+//   #crumbs ul li a {
+//     height: 52px;
+//   }
+// }
+
+//badge
+.badge-border {
+  border: 1px solid $primary-color;
+  font-weight: 400;
+}
+
+//nav-bar
+.arrow-right {
+  position: absolute;
+  top: -22px;
+  left: 97%;
+  color: $primary-color;
+}
+
+.card {
+  overflow: unset !important;
+}
+
+.card-footer {
+  overflow: hidden !important;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.card-header {
+  background-color: unset !important;
+}
+
+// .nav-item .active::before {
+//   content: "\f0da";
+//   position: absolute;
+//   left: 99%;
+//   color: $primary-color;
+//   font-weight: 900;
+//   font-size: 2.6em;
+//   font-family: "Font Awesome 5 Free", sans-serif;
+// }
+
+// new design right side-bar
+
+.nav-item {
+  position: relative;
+  height: 83px;
+}
+
+.nav-item > .nav-link {
+  transition: all ease-in-out 0.5s;
+}
+
+.nav-item .active {
+  background-color: $hover-color;
+  color: $white-color;
+  border-radius: 8px;
+  margin: 5px 5px;
+  height: 80px;
+  transition: all ease-in-out 0.5s;
+}
+
+// .nav-item > #info-tab.active {
+//   transform: translate(0px, -10px);
+// }
+
+// .nav-item > #concerns-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item > #inspection-tab.active {
+//   transform: translate(0px, 8px);
+// }
+
+// .nav-item > #tasks-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item > #parts-tab.active {
+//   transform: translate(0px, 10px);
+// }
+
+// .nav-item > #qa-tab.active {
+//   transform: translate(0px, 8px);
+// }
+
+.nav-item .active i {
+  color: $white-color !important;
+}
+
+.nav-item .active .nav-text {
+  color: $hover-color !important;
+}
+
+.nav-link {
+  padding: 0.2rem 0px !important;
+}
+
+.active > i:hover {
+  color: $white-color !important;
+}
+
+a {
+  color: #808080;
+}
+
+.left-nav-bar ul li:active {
+  border-right: none;
+}
+
+.nav-bg {
+  background: $input-field-color;
+  border-radius: 8px;
+  height: fit-content;
+  max-width: 50px;
+}
+
+.arrow-btn {
+  padding: 8px 11px;
+}
+
+.nav-text {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  left: -70px;
+}
+
+ul {
+  scroll-behavior: smooth;
+}
+
+//less effect of hove
+.icon-hover:hover {
+  transform: scale(1.2) !important;
+}
+
+.tbl-header-alt {
+  background-color: $primary-font;
+}
+
+.table-bg {
+  background: white;
+}
+
+.bad-icon {
+  color: red;
+}
+
+.good-icon {
+  color: green;
+}
+
+.payment-font {
+  font-size: 16px;
+  font-weight: 600;
+  color: $dark-font;
+}
+
+.car-title {
+  color: $primary-color !important;
+  font-weight: 500;
+}
+
+.plate-Number {
+  align-self: center;
+  border-radius: 5px;
+  background-color: $dark-font;
+  color: white !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.icon-pd {
+  padding: 20px 0px;
+  // border-bottom: 1px dashed gray;
+  // border-right: 1px dashed gray;
+}
+
+//asignment dropdown
+.assign-select {
+  transform: scale(0.8);
+}
+
+.card-number {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 0px 4px;
+  background: coral;
+  color: white;
+  border-bottom-right-radius: 35% 100%;
+  border-top-right-radius: 0% 100%;
+}
+
+.ng-select.assign-dropdown {
+  width: 100% !important;
+  min-width: 100px;
+}
+
+thead tr:first-child th:first-child {
+  border-radius: 0.6em 0 0 0;
+}
+/* the last 'th' within the first 'tr' of the 'thead': */
+thead tr:first-child th:last-child {
+  border-radius: 0 0.6em 0 0;
+}
+/* the first 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:first-child {
+  border-radius: 0 0 0 0.6em;
+}
+/* the last 'td' within the last 'tr' of the 'tbody': */
+tbody tr:last-child td:last-child {
+  border-radius: 0 0 0.6em 0;
+}

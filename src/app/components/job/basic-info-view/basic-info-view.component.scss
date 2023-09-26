@@ -1,0 +1,18 @@
+@import "variables";
+.detail-font {
+    font-size: 16px;
+    font-weight: 600;
+    color: $primary-dark-font;
+  }
+
+  .color-box {
+    width: 30px;
+    height: 30px;
+    margin-right: 13px;
+    margin-left: 13px;
+    border: 1px solid lightgray;
+    box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
+  }
+  .fuelImage{
+    width: 120px;
+  }

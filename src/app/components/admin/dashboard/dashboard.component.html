@@ -1,0 +1,174 @@
+<div class="row justify-content-center page-animation">
+  <div class="col-11">
+    <div class="mt-3 card outer-card">
+      <div class="container-fluid">
+        <div class="row nav-row">
+
+          <div>
+            <h3 class="ml-3">Admin Dashboard</h3>
+          </div>
+          <div class="floating-label form-group col-4">
+            <ng-select placeholder="Select Workshop" class="custom" name="JobCardTypeID">
+              <ng-option [value]="true" id="old">Wokshop 1</ng-option>
+              <ng-option [value]="false">Workshop 2</ng-option>
+
+            </ng-select>
+
+          </div>
+
+        </div>
+
+        <div class="row workrow">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-warning card-header-icon">
+                <div class="icon-box">
+                    <div class="card-icon content-icon">
+                      <i class="material-icons material-content text-white">content_copy</i>
+                </div> 
+                </div>
+             
+                <p class="card-category">Total Orders</p>
+                <h4 class="card-title">-</h4>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons text-danger">warning</i>
+                  <a>Get More ...</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-success card-header-icon">
+                <div class="icon-box">
+                <div class="card-icon revenue-icon">
+                  <i class="material-icons text-white">store</i>
+                </div>
+                </div>
+                <p class="card-category">Revenue</p>
+                <h4 class="card-title">-</h4>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">date_range</i> Last 24 Hours
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-danger card-header-icon">
+                <div class="icon-box">
+                <div class="card-icon info-icon">
+                  <i class="material-icons text-white">info_outline</i>
+                </div>
+                </div>
+                <p class="card-category">Fixed Issues</p>
+                <h3 class="card-title">-</h3>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">local_offer</i> Tracked from Github
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+              <div class="card-header card-header-info card-header-icon">
+                <div class="icon-box">
+                <div class="card-icon follower-icon">
+                  <i class="material-icons material-content text-white">content_copy</i>
+
+                </div>
+                </div>
+                <p class="card-category">Followers</p>
+                <h3 class="card-title">-</h3>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">update</i> Just Updated
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-8">
+            <div class="card card-chart">
+              <!-- <div class="col-12 col-sm-12 col-md-12 col-lg-9"> -->
+              <div class="row px-3">
+                <div class="card inner-card-shadow">
+
+                  <div class="row card-body-font m-0">
+
+                    <div class="col-12">
+                      <div class="col-12 d-flex small my-3">
+                        <div class="legend-text a" (click)="toggleRedFun()">IC </div><span class="legend-a"
+                          (click)="toggleRedFun()" title="IC">&nbsp;</span>
+                        <div class="legend-text b" (click)="toggleGreenFun()">PS</div> <span class="legend-b"
+                          (click)="toggleGreenFun()" title="PS">&nbsp;</span>
+                        <div class="legend-text c" (click)="toggleBlackFun()">Requests </div>
+                        <span class="legend-c" (click)="toggleBlackFun()" title="Requests">&nbsp;</span>
+                        <div class="legend-text d" (click)="toggleBlueFun()">Demands</div> <span class="legend-d"
+                          (click)="toggleBlueFun()" title="Demands">&nbsp;</span>
+                      </div>
+
+                      <x-chartist [type]="type" [data]="data" [options]="options" [events]="events"></x-chartist>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="card-body">
+                <h4 class="card-title">Daily Sales</h4>
+                <p class="card-category">
+                  <span class="text-success"><i class="fa fa-long-arrow-up"></i> -% </span> increase in today sales.
+                </p>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">access_time</i> updated 4 minutes ago
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card card-chart">
+              <div class="card-header card-header-danger">
+                <div class="col-12 d-flex small my-3">
+                  <div class="legend-text a" (click)="toggleRedFun()">IC </div><span class="legend-a"
+                    (click)="toggleRedFun()" title="IC">&nbsp;</span>
+                  <div class="legend-text b" (click)="toggleGreenFun()">PS</div> <span class="legend-b"
+                    (click)="toggleGreenFun()" title="PS">&nbsp;</span>
+                  <div class="legend-text c" (click)="toggleBlackFun()">Requests </div>
+                  <span class="legend-c" (click)="toggleBlackFun()" title="Requests">&nbsp;</span>
+                  <div class="legend-text d" (click)="toggleBlueFun()">Demands</div> <span class="legend-d"
+                    (click)="toggleBlueFun()" title="Demands">&nbsp;</span>
+                </div>
+                <x-chartist [type]="'Bar'" [data]="data" [options]="options" [events]="events"></x-chartist>
+                <!-- <img src="../../../../assets/img/graph1.png" class="grphimg"> -->
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">Completed Tasks</h4>
+                <p class="card-category">Last Campaign Performance</p>
+              </div>
+              <div class="card-footer">
+                <div class="stats">
+                  <i class="material-icons">access_time</i> campaign sent 2 days ago
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

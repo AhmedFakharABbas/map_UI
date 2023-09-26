@@ -1,0 +1,773 @@
+<div class="row w-100">
+  <hr class="w-100" />
+  <h4 class="sub-heading">Part List</h4>
+</div>
+
+<!-- <div class="row justify-content-center align-items-center page-animation"> -->
+
+<!-- bootstrap code  -->
+
+<a
+  class="btn btn-primary ml-5"
+  data-toggle="collapse"
+  href="#filter"
+  role="button"
+  aria-expanded="false"
+  aria-controls="collapseExample"
+>
+  Filter
+  <i aria-hidden="true" class="fa fa-filter hover-none ml-2"></i>
+</a>
+
+<!-- bootstrap code -->
+<div class="col-lg-12 col-12 mt-3 pl-5">
+  <div class="row collapse" id="filter">
+    <div class="col-lg-10 col-12">
+      <div class="row">
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group mb-0">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="SearchQuery"
+              maxlength="200"
+              [(ngModel)]="filter.SearchQuery"
+              #SearchQuery="ngModel"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Item Name Or Code</label>
+          </div>
+        </div>
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Main Category"
+              name="maincategory"
+              [(ngModel)]="filter.MainCategoryID"
+              #maincategory="ngModel"
+            >
+              <ng-option
+                *ngFor="let item of _meta.MainCategories"
+                [value]="item.MainCategoryID"
+              >
+                {{ item.MainCategoryNameArabic }}</ng-option
+              >
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Sub Category"
+              name="subcategory"
+              [(ngModel)]="filter.SubCategoryID"
+            >
+              <ng-option
+                *ngFor="
+                  let item of _meta.SubCategories
+                    | filter: filter.MainCategoryID:'MainCategoryID'
+                "
+                [value]="item.SubCategoryID"
+                >{{ item.SubCategoryNameArabic }}</ng-option
+              >
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Brand Name"
+              name="BrandName"
+              [(ngModel)]="filter.BrandID"
+              #BrandName="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="let item of _meta.PartManufacturer"
+                [value]="item.PartManufacturerID"
+                >{{ item.PartManufacturerName }}</ng-option
+              >
+            </ng-select>
+          </div>
+        </div>
+
+        <!-- <div class="col-3"> 
+         <div class="floating-label form-group">
+        <button type="button" class="btn btn-primary m-0"
+                                (click)="getAllParts()" title="Apply Filter">Apply</button>
+
+                                <button type="button" class="btn btn-primary m-0"
+                                (click)="getAllParts()" title="Apply Filter">Apply</button>
+                            </div>
+   
+</div> -->
+        <!-- </div>
+
+<div class="row"> -->
+
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <ng-select
+              class="custom"
+              placeholder="Origin"
+              name="origin"
+              [(ngModel)]="filter.OriginID"
+              #origin="ngModel"
+              required
+            >
+              <ng-option
+                *ngFor="
+                  let item of _meta.BrandOrigins
+                    | filter: filter.BrandID:'BrandID'
+                "
+                [value]="item.BrandOriginID"
+                >{{ item.OriginName }}</ng-option
+              >
+            </ng-select>
+
+            <!-- <input type="text" placeholder=" " class="floating-input form-control"
+                name="Origin" maxlength="200" [(ngModel)]="filter.Origin"
+                #Origin="ngModel" required />
+            <span class="highlight"></span>
+            <label class="input-label">Origin</label> -->
+          </div>
+        </div>
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="Stock"
+              maxlength="200"
+              [(ngModel)]="filter.Stock"
+              #Stock="ngModel"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Stock</label>
+          </div>
+        </div>
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="PurchasePrice"
+              maxlength="200"
+              [(ngModel)]="filter.PurchasePrice"
+              #PurchasePrice="ngModel"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Purchase Price</label>
+          </div>
+        </div>
+        <div class="col-lg-3 col-4">
+          <div class="floating-label form-group">
+            <input
+              type="text"
+              placeholder=" "
+              class="floating-input form-control"
+              name="SellingPrice"
+              maxlength="200"
+              [(ngModel)]="filter.SellingPrice"
+              #SellingPrice="ngModel"
+              required
+            />
+            <span class="highlight"></span>
+            <label class="input-label">Selling Price</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-2 col-12 px-lg-0 mb-lg-0 mb-3 text-center">
+      <button
+        type="button"
+        class="btn btn-primary m-0 mr-2"
+        (click)="getAllParts()"
+        title="Apply Filter"
+      >
+        Apply
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-primary m-0"
+        (click)="clearFilters()"
+        title="Apply Filter"
+      >
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- <div class="row col-12">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-12 card-responsive">
+                            <div class="card mb-auto ">
+                                <table class="table  table-responsive-md m-0 w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Part Code</th>
+                                            <th >OEM Number</th>
+                                            <th >Main Category</th>
+                                            <th >Origin</th>
+                                            <th>Purchase Price</th>
+                                            <th>Tax</th>
+                                            <th>Net Price</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    </table>
+                                </div>
+                                </div>
+                                </div>
+
+
+                </div>
+            </div> -->
+
+  <!-- <div class="col-md-3 col-sm-5 p-2" id="myfilter">
+                    <div class="sticky-top pt-3">
+                        <div class="row w-100 mx-0">
+                            <hr class="w-100">
+                            <h4 class="sub-heading mb-2">Filter</h4>
+                            <button type="button" class="btn btn-primary btn-round sub-heading-btn"
+                                (click)="clearFilters()" title="Clear">x</button>
+                        </div>
+
+                        <div id="accordion_PartName" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header  accordian-container p-2  arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#PartName">
+                                    <a class="card-title">
+                                        <span class="filter_title">Part Name</span>
+                                    </a>
+                                </div>
+                                <div id="PartName" class="panel card-body  p-0 small-font"
+                                    data-parent="#accordion_PartName">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb d-flex">
+                                            <input type="text" class="mr-1 form-control" placeholder="Part Name"
+                                                name="part_name" [(ngModel)]="filter.AutomotivePartNameEng"
+                                                #automotivePartNameEng="ngModel"
+                                                (keyup.enter)="filter.AutomotivePartNameEng != undefined && filter.AutomotivePartNameEng != '' ? getAllParts() : ''" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="accordion_OEMNumber" class="accordion">
+                            <div class="card mb-0 mt-2 heading-accordion-padding">
+                                <div class="card-header accordian-container p-2  arrow" aria-expanded="false"
+                                    data-toggle="collapse" href="#OEMNumber">
+                                    <a class="card-title">
+                                        <span class="filter_title">OEM Number</span>
+                                    </a>
+                                </div>
+                                <div id="OEMNumber" class="panel card-body p-0 small-font"
+                                    data-parent="#accordion_OEMNumber">
+                                    <div class="bg accordian-padding ">
+                                        <div class="chiller_cb d-flex">
+                                            <input type="text" class="mr-1 form-control" placeholder="OEM Number"
+                                                name="OEMNumber" [(ngModel)]="filter.OEMNumber"
+                                                #automotivePartNameEng="ngModel"
+                                                (keyup.enter)="filter.OEMNumber != undefined && filter.OEMNumber != '' ? getAllParts() : ''" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row w-100 m-0">
+                            <hr class="w-100">
+                            <button type="button" class="btn btn-primary btn-round sub-heading-btn"
+                                (click)="getAllParts()" title="Apply Filter">Apply</button>
+                        </div>
+                    </div>
+                </div> -->
+  <div class="col-lg-12 col-md-12 col-sm-12">
+    <!-- <div class="row justify-content-center mt-4"
+                        *ngIf="partArray == undefined || ( partArray!= undefined && partArray.length == 0)">
+                        <div class="col-lg-12 no-record-error">No record found!</div>
+                    </div> -->
+    <!-- <ng-container *ngIf="partArray != undefined && partArray.length > 0">
+                        <div class="card inner-card-shadow"
+                            *ngFor="let arr of partArray | slice: (cPage-1) * _sharedService.pageSize : (cPage-1) * _sharedService.pageSize + _sharedService.pageSize">
+                            <div class="card-header list-card-header">
+                                <div class="row"> -->
+    <!-- <div class="col-4" title="Customer">
+                                        <h5>Part ID</h5>
+                                    </div> -->
+    <!-- <div class="col-md-6 col-sm-6 col-6" title="Part Name">
+                                        <h5><i class="ts smaller ts-l user"></i> {{arr.PartNameEnglish}}</h5>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-6 text-right align-self-center">
+                                        <i class="far fa-eye" title="View" 
+                                        [routerLink]="['/','part','view']"
+                                            [queryParams]="{ partID: arr.AutomotivePartID}"></i>
+                                        <i class="far fa-edit mx-2" title="Edit"
+                                            [routerLink]="['/','part','create-part']"
+                                            [queryParams]="{PartID: arr.AutomotivePartID}"></i>
+                                        <i class="far fa-trash-alt" title="Delete"
+                                            (click)="openModal(warningDelete, arr.AutomotivePartID)"></i>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body card-body-padding small-font">
+                                <div class="row">
+
+
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Part Code</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.ItemCode}}</p>
+                                    </div>
+
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Main category</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.MainCategoryNameEng}}</p>
+                                    </div>
+
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Sub Category</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.SubCategoryNameEng}}</p>
+                                    </div> -->
+    <!-- <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Sub Sub category</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.SubSubCategoryNameEng}}</p>
+                                    </div> -->
+    <!-- <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Site</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.SiteNameEng}}</p>
+                                    </div> -->
+    <!-- <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Manufacturer</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.ManufacturerNameEng}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Origion</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.OriginName}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Purchase Price</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.PurchasePrice}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Tax</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.Tax}}</p>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-6 col-6 px-1">
+                                        <span class="small bold-font">Net Price</span>
+                                    </div>
+                                    <div class="col-lg-4 col-sm-6 col-6">
+                                        <p class="m-0" title="">{{arr.NetPrice}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                    </ng-container> -->
+
+    <div class="row">
+      <div class="col-12 card card-responsive inner-card-shadow ml-0">
+        <div class="">
+          <div class="card-body px-0 pt-0 pb-0 tableresponsive">
+            <table class="table table-responsive-md m-0 w-100">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Part Code</th>
+                  <!-- <th >OEM Number</th> -->
+                  <th>Main Category</th>
+                  <th>Subcategory</th>
+                  <!-- <th>Origin</th>
+                  <th>Stock</th> -->
+                  <th>Purchase Price</th>
+                  <th>Selling Price</th>
+
+                  <!-- <th>Tax</th> -->
+                  <th>Net Price</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let arr of partArray">
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.PartNameEnglish != undefined; else elseHyphen"
+                    title="{{ arr.PartNameEnglish }}"
+                  >
+                    {{ arr.PartNameEnglish }}
+                    <span *ngIf="arr.SubCategoryID == 20">
+                      ({{ arr.UnitQuantity }} {{ arr.Viscosity }} )
+                    </span>
+                  </td>
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.ItemCode != undefined; else elseHyphen"
+                    title="{{ arr.ItemCode }}"
+                  >
+                    {{ arr.ItemCode }}
+                  </td>
+                  <!-- <td *ngIf="arr.OEMNumber != undefined ; else elseHyphen" title="{{arr.OEMNumber}}">{{arr.OEMNumber}}</td> -->
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="
+                      arr.MainCategoryNameEng != undefined;
+                      else elseHyphen
+                    "
+                    title="{{ arr.MainCategoryNameEng }}"
+                  >
+                    {{ arr.MainCategoryNameEng }}
+                  </td>
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="
+                      arr.SubCategoryNameArabic != undefined;
+                      else elseHyphen
+                    "
+                    title="{{ arr.SubCategoryNameArabic }}"
+                  >
+                    {{ arr.SubCategoryNameArabic }}
+                  </td>
+                  <!-- 
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.OriginName != undefined; else elseHyphen"
+                    title="{{ arr.OriginName }}"
+                  >
+                    {{ arr.OriginName }}
+                  </td> -->
+                  <!-- <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.Quantity != undefined; else elseHyphen"
+                    title="{{ arr.Quantity }}"
+                  >
+                    {{ arr.Quantity }}
+                  </td> -->
+
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.PurchasePrice != undefined; else elseHyphen"
+                    title="{{ arr.PurchasePrice }}"
+                  >
+                    {{ arr.PurchasePrice }}
+                  </td>
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.SellingPrice != undefined; else elseHyphen"
+                    title="{{ arr.SellingPrice }}"
+                  >
+                    {{ arr.SellingPrice }}
+                  </td>
+
+                  <!-- <td *ngIf="arr.Tax != undefined ; else elseHyphen" title="{{arr.Tax}}">{{arr.Tax}}%</td> -->
+                  <td
+                    [routerLink]="['/', 'part', 'view']"
+                    [queryParams]="{ partID: arr.AutomotivePartID }"
+                    *ngIf="arr.NetPrice != undefined; else elseHyphen"
+                    title="{{ arr.OEMNumber }}"
+                  >
+                    {{ arr.NetPrice }}
+                  </td>
+                  <td>
+                    <!-- <i class="far fa-eye primary-font px-1 pointer" title="View"
+                                                [routerLink]="['/','part','view']"
+                                                [queryParams]="{ partID: arr.AutomotivePartID}"></i> -->
+
+                    <i
+                      class="far fa-edit primary-font px-1 pointer"
+                      title="Edit"
+                      [routerLink]="['/', 'part', 'create-part']"
+                      [queryParams]="{ PartID: arr.AutomotivePartID }"
+                    ></i>
+
+                    <i
+                      class="far fa-trash-alt primary-font px-1 pointer"
+                      title="Delete"
+                      (click)="openModal(warningDelete, arr.AutomotivePartID)"
+                    ></i>
+                  </td>
+                </tr>
+
+                <tr
+                  *ngIf="
+                    partArray == undefined ||
+                    (partArray != undefined && partArray.length == 0)
+                  "
+                >
+                  <td colspan="9">
+                    <p class="text-center">No result found!</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <ng-container *ngIf="partArray != undefined && partArray.length > 0">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-6 mb-card card-responsive"
+                                *ngFor="let arr of partArray">
+                                <div class="card inner-card-shadow card-list">
+                                    <div class="list-card-header">
+                                        <div class="row just justify-content-center mt-3">
+                                            <div title="Plate Number">
+                                                <h5 class="">
+                                                    <span class="list-color">{{arr.PartNameArabic}}</span> </h5>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row justify-content-center">
+                                            <i class="fas fa-info ts-l primary-font px-1" title="info"></i>
+                                            <sup>
+                                                <div class="row col-3 text-center">
+                    
+                                                    <div class="col-12 p-0">
+                                                        <ng-template #tipContent>
+                                                            <b
+                                                                *ngFor="let pv of partInfoObj.AutomotivePartVehicle | filter: arr.AutomotivePartID : 'AutomotivePartID'">{{pv.EnglishMakeName}}
+                                                                {{pv.EnglishModelName}}<br></b>
+                                                        </ng-template>
+                                                        <u placement="right"
+                                                            [ngbTooltip]="tipContent">{{(partInfoObj.AutomotivePartVehicle | filter: arr.AutomotivePartID : 'AutomotivePartID').length}}</u>
+
+                                                    </div>
+                                                </div>
+                                            </sup>
+                                            <i class="far fa-eye primary-font px-1 pointer" title="View"
+                                                [routerLink]="['/','part','view']"
+                                                [queryParams]="{ partID: arr.AutomotivePartID}"></i>
+
+                                            <i class="far fa-edit mx-2 primary-font px-1 pointer" title="Edit"
+                                                [routerLink]="['/','part','create-part']"
+                                                [queryParams]="{PartID: arr.AutomotivePartID}"></i>
+
+                                            <i class="far fa-trash-alt primary-font px-1 pointer" title="Delete"
+                                                (click)="openModal(warningDelete, arr.AutomotivePartID)"></i>
+
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="card-body card-body-padding small-font">
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font ">Part Code</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.ItemCode != undefined ; else elseHyphen"
+                                                        title="{{arr.ItemCode}}">{{arr.ItemCode}}</span>
+                                                </div>
+                                        
+                                            </div>
+
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">OEM Number</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.OEMNumber != undefined ; else elseHyphen"
+                                                        title="{{arr.OEMNumber}}">{{arr.OEMNumber}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">Main Category</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0 "
+                                                        *ngIf="arr.MainCategoryNameEng != undefined ; else elseHyphen"
+                                                        title="{{arr.MainCategoryNameEng}}">{{arr.MainCategoryNameEng}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right ">
+                                                    <span class="small bold-font">Origin</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.OriginName != undefined ; else elseHyphen"
+                                                        title="{{arr.OrigionName}}">{{arr.OriginName}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">Manufacturer</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.ManufacturerNameEng != undefined ; else elseHyphen"
+                                                        title="{{arr.ManufacturerNameEng}}">{{arr.ManufacturerNameEng}}</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">Purchase Price</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.PurchasePrice != undefined ; else elseHyphen"
+                                                        title="{{arr.PurchasePrice}}">{{arr.PurchasePrice}}</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">Tax</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.Tax != undefined ; else elseHyphen"
+                                                        title="{{arr.Tax}}">{{arr.Tax}}%</span>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-lg-6 col-sm-6 col-6 text-right">
+                                                    <span class="small bold-font">Net Price</span>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-6 col-6 px-0">
+                                                    <span class="col-10 px-0"
+                                                        *ngIf="arr.NetPrice != undefined ; else elseHyphen"
+                                                        title="{{arr.NetPrice}}">{{arr.NetPrice}}</span>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> -->
+  </div>
+
+  <div
+    class="row justify-content-center mt-lg-3 mb-lg-3 mb-5 "
+    *ngIf="partArray != undefined"
+  >
+
+    <ngb-pagination
+      [(page)]="cPage"
+      [pageSize]="_sharedService.pageSize"
+      [maxSize]="5"
+      [collectionSize]="TotalPages"
+      [rotate]="true"
+      [ellipses]="false"
+      [boundaryLinks]="true"
+      aria-label="customer List Pagination"
+      class="pagination-primary"
+      (pageChange)="getAllParts((filter.PageNumber = $event))"
+    >
+    </ngb-pagination>
+  </div>
+</div>
+
+<!-- </div> -->
+<ng-template #warningDelete let-c="close" let-d="dismiss">
+  <div class="adOptionModel" id="adOptionModel" role="document">
+    <div class="modal-header">
+      <h5 class="modal-title text-center">Delete Part</h5>
+      <button type="button" class="close" (click)="closeModal()">
+        <span aria-hidden="true" title="Cancel">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="fluid-container modal_container">
+        <div class="row justify-content-between bottom_margins">
+          <div class="col-lg-12 mt-4">
+            <h5
+              class="text-center col-12 heading-20 bold text-primary-0 m-b-10"
+            >
+              Are you sure you want to delete this Part?
+            </h5>
+            <div class="col-6 float-left text-left">
+              <button
+                (click)="closeModal()"
+                class="btn-simple btn btn-primary btn-round col-6"
+              >
+                No
+              </button>
+            </div>
+            <div class="col-6 float-left text-right">
+              <button
+                (click)="deletePart(partID)"
+                class="btn-simple btn btn-primary btn-round col-6"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #elseHyphen>
+  <td>-</td>
+</ng-template>
